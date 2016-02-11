@@ -155,18 +155,18 @@ namespace ThreeOneSevenBee.Framework
         // = TEXT
         // ==========
         public static void DrawString(this CanvasRenderingContext2D context2D, double left, double bottom, string text, string font,
-            string strokeStyle)
+            string fillStyle)
         {
             context2D.Save();
 
-            context2D.StrokeStyle = strokeStyle;
+            context2D.FillStyle = fillStyle;
             context2D.Font = font;
             context2D.FillText(text, (int)left, (int)bottom);
 
             context2D.Restore();
         }
 
-        public static  void StrokeString(this CanvasRenderingContext2D context2D, double left, double bottom, string text, string font,
+        public static void StrokeString(this CanvasRenderingContext2D context2D, double left, double bottom, string text, string font,
             string strokeStyle)
         {
             context2D.Save();

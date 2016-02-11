@@ -22,9 +22,14 @@ namespace ThreeOneSevenBee.Prototype
 
             Context2D.DrawString(50, 50, "Hello, World!", "20px Arial", HTMLColor.Black);
 
-            Context2D.DrawString(50, 70, deltaTime.ToString("0.00"), "20px Arial", HTMLColor.Black);
+            Context2D.DrawString(50, 70, "Delta: " + deltaTime.ToString("0.00") + "ms", "20px Arial", HTMLColor.Black);
 
-            Context2D.DrawString(50, 90, totalTime.ToString("0.00"), "20px Arial", HTMLColor.Black);
+            Context2D.DrawString(50, 90, "Total: " + totalTime.ToString("0.00") + "ms", "20px Arial", HTMLColor.Black);
+
+            if (Input.IsMouseOver == true) // == true is needed because of issue #933 in Bridge.Net.
+                Context2D.DrawString(50, 110, Input.Mouse.ToString(), "20px Arial", HTMLColor.Black);
+            else
+                Context2D.DrawString(50, 110, Input.Mouse.ToString(), "20px Arial", HTMLColor.LightGray);
 
             base.Draw(deltaTime, totalTime);
         }

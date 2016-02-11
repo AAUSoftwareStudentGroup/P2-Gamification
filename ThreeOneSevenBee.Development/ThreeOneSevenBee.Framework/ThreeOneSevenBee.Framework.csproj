@@ -38,6 +38,7 @@
     <Compile Include="Euclidean\Rectangle.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Euclidean\Vector2.cs" />
+    <Compile Include="Html\ElementInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bridge.Html5;
+using ThreeOneSevenBee.Framework.Html;
 
 namespace ThreeOneSevenBee.Framework
 {
@@ -15,6 +16,7 @@ namespace ThreeOneSevenBee.Framework
         {
             Canvas = canvas;
             Context2D = canvas.GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D);
+            Input = new ElementInput(Canvas);
         }
 
         public bool IsRunning { get; set; }
@@ -22,6 +24,8 @@ namespace ThreeOneSevenBee.Framework
         public CanvasElement Canvas { get; private set; }
 
         public CanvasRenderingContext2D Context2D { get; private set; }
+
+        public ElementInput Input { get; private set; }
 
         public void Run()
         {

@@ -46,5 +46,10 @@
             X = x;
             Y = y;
         }
+
+        public override string ToString()
+        {
+            return "{" + X.ToString("0.00") + ", " + Y.ToString("0.00") + "}";
+        }
     }
 }
