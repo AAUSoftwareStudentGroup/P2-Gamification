@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CanvasRenderingContext2DExtensions.cs" />
+    <Compile Include="Euclidean\Circle.cs" />
+    <Compile Include="Euclidean\Rectangle.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Euclidean\Vector2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

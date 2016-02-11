@@ -18,14 +18,13 @@ namespace ThreeOneSevenBee.Prototype
 
         public override void Draw(double deltaTime, double totalTime)
         {
-            Context2D.ClearRect(0, 0, 800, 600);
+            Context2D.Clear(HTMLColor.CornflowerBlue);
 
-            Context2D.FillStyle = HTMLColor.CornflowerBlue;
-            Context2D.FillRect(0, 0, 800, 600);
+            Context2D.DrawString(50, 50, "Hello, World!", "20px Arial", HTMLColor.Black);
 
-            Context2D.FillStyle = HTMLColor.Black;
-            Context2D.Font = "20px Arial";
-            Context2D.FillText("Hello, World!", 50, 50);
+            Context2D.DrawString(50, 70, deltaTime.ToString("0.00"), "20px Arial", HTMLColor.Black);
+
+            Context2D.DrawString(50, 90, totalTime.ToString("0.00"), "20px Arial", HTMLColor.Black);
 
             base.Draw(deltaTime, totalTime);
         }
