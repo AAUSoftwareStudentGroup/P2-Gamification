@@ -13,11 +13,15 @@ namespace ThreeOneSevenBee.Prototype
     {
         private Circle circleA;
 
+        private Vector2 circleVelocity;
+
         private Rectangle rectangleA;
 
         public PrototypeGame(CanvasElement canvas)
             : base(canvas)
         {
+            circleVelocity = new Vector2(0.4, 0.4);
+
             circleA = new Circle
             {
                 Center = new Vector2(200, 200),
@@ -30,6 +34,19 @@ namespace ThreeOneSevenBee.Prototype
                 Width = 96,
                 Height = 96
             };
+        }
+
+        public override void Update(double deltaTime, double totalTime)
+        {
+            if (circleA.Center.X >= Canvas.ClientWidth - circleA.Radius || circleA.Center.X <= circleA.Radius)
+                circleVelocity.X *= -1;
+
+            if (circleA.Center.Y >= Canvas.ClientHeight - circleA.Radius || circleA.Center.Y <= circleA.Radius)
+                circleVelocity.Y *= -1;
+
+            circleA.Center += circleVelocity * deltaTime;
+
+            base.Update(deltaTime, totalTime);
         }
 
         public override void Draw(double deltaTime, double totalTime)
