@@ -5,11 +5,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C4E652D3-217B-4816-9CD6-FAAB0BDD27DE}</ProjectGuid>
+    <ProjectGuid>{2739664C-8046-443D-8E0D-689DEFC0ECBF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ThreeOneSevenBee.Prototype</RootNamespace>
-    <AssemblyName>ThreeOneSevenBee.Prototype</AssemblyName>
+    <RootNamespace>ThreeOneSevenBee.Framework.Tests</RootNamespace>
+    <AssemblyName>ThreeOneSevenBee.Framework.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -35,7 +35,6 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PrototypeGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Bridge, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -44,6 +43,10 @@
     </Reference>
     <Reference Include="Bridge.Html5, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bridge.1.10.4\lib\net40\Bridge.Html5.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Bridge.QUnit, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bridge.QUnit.1.7.0\lib\net40\Bridge.QUnit.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

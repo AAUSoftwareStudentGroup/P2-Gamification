@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game.cs" />
-    <Compile Include="Math\Vector2.cs" />
+    <Compile Include="Euclidean\Vector2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -46,7 +46,6 @@
       <HintPath>..\packages\Bridge.1.10.4\lib\net40\Bridge.Html5.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

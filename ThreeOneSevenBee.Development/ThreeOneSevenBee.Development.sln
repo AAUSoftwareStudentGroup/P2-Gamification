@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeOneSevenBee.Prototype"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeOneSevenBee.Framework", "ThreeOneSevenBee.Framework\ThreeOneSevenBee.Framework.csproj", "{AC61706B-FFEA-476A-A1C8-7A3912560339}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeOneSevenBee.Framework.Tests", "ThreeOneSevenBee.Framework.Tests\ThreeOneSevenBee.Framework.Tests.csproj", "{2739664C-8046-443D-8E0D-689DEFC0ECBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{AC61706B-FFEA-476A-A1C8-7A3912560339}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC61706B-FFEA-476A-A1C8-7A3912560339}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC61706B-FFEA-476A-A1C8-7A3912560339}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2739664C-8046-443D-8E0D-689DEFC0ECBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2739664C-8046-443D-8E0D-689DEFC0ECBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2739664C-8046-443D-8E0D-689DEFC0ECBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2739664C-8046-443D-8E0D-689DEFC0ECBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
