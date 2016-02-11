@@ -57,7 +57,7 @@ namespace ThreeOneSevenBee.Framework
 
             context2D.StrokeStyle = strokeStyle;
             context2D.BeginPath();
-            context2D.ArcTo(centerX, centerY, 0.00, 2 * Math.PI, radius);
+            context2D.Arc(centerX, centerY, radius, 0.00, 2 * Math.PI);
             context2D.ClosePath();
             context2D.Stroke();
 
@@ -81,7 +81,7 @@ namespace ThreeOneSevenBee.Framework
 
             context2D.FillStyle = fillStyle;
             context2D.BeginPath();
-            context2D.ArcTo(centerX, centerY, 0.00, 2 * Math.PI, radius);
+            context2D.Arc(centerX, centerY, radius, 0.00, 2 * Math.PI);
             context2D.ClosePath();
             context2D.Fill();
 

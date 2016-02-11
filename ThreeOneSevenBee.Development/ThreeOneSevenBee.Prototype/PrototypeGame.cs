@@ -5,15 +5,31 @@ using System.Text;
 using System.Threading.Tasks;
 using Bridge.Html5;
 using ThreeOneSevenBee.Framework;
+using ThreeOneSevenBee.Framework.Euclidean;
 
 namespace ThreeOneSevenBee.Prototype
 {
     class PrototypeGame : Game
     {
+        private Circle circleA;
+
+        private Rectangle rectangleA;
+
         public PrototypeGame(CanvasElement canvas)
             : base(canvas)
         {
+            circleA = new Circle
+            {
+                Center = new Vector2(200, 200),
+                Radius = 48
+            };
 
+            rectangleA = new Rectangle()
+            {
+                Location = new Vector2(400, 400),
+                Width = 96,
+                Height = 96
+            };
         }
 
         public override void Draw(double deltaTime, double totalTime)
@@ -30,6 +46,14 @@ namespace ThreeOneSevenBee.Prototype
                 Context2D.DrawString(50, 110, Input.Mouse.ToString(), "20px Arial", HTMLColor.Black);
             else
                 Context2D.DrawString(50, 110, Input.Mouse.ToString(), "20px Arial", HTMLColor.LightGray);
+
+            if (circleA.Contains(Input.Mouse))
+                Context2D.FillCircle(circleA, HTMLColor.Red);
+            Context2D.DrawCircle(circleA, HTMLColor.Black);
+
+            if (rectangleA.Contains(Input.Mouse))
+                Context2D.FillRectangle(rectangleA, HTMLColor.Red);
+            Context2D.DrawRectangle(rectangleA, HTMLColor.Black);
 
             base.Draw(deltaTime, totalTime);
         }
