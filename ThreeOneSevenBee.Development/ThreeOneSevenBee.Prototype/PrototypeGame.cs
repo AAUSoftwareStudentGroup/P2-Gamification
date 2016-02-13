@@ -51,7 +51,7 @@ namespace ThreeOneSevenBee.Prototype
 
         public override void Draw(double deltaTime, double totalTime)
         {
-            Context2D.Clear(HTMLColor.Aquamarine);
+            Context2D.Clear(HTMLColor.Green);
 
             Context2D.DrawString(50, 50, "Hello, World!", "20px Arial", HTMLColor.Black);
 
