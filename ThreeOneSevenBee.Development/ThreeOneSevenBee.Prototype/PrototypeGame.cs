@@ -16,6 +16,8 @@ namespace ThreeOneSevenBee.Prototype
 
         private Vector2 circleVelocity;
 
+        private Circle circleB;
+
         private Rectangle rectangleA;
 
         private bool isDraggingRectangle = false;
@@ -31,6 +33,12 @@ namespace ThreeOneSevenBee.Prototype
             {
                 Center = new Vector2(200, 200),
                 Radius = 48
+            };
+
+            circleB = new Circle
+            {
+                Center = new Vector2(400, 400),
+                Radius = 128
             };
 
             rectangleA = new Rectangle()
@@ -92,8 +100,14 @@ namespace ThreeOneSevenBee.Prototype
                 Context2D.DrawString(50, 110, Input.Mouse.ToString(), "20px Arial", HTMLColor.LightGray);
 
             if (circleA.Contains(Input.Mouse))
-                Context2D.FillCircle(circleA, HTMLColor.Red);
+                Context2D.FillCircle(circleA, HTMLColor.Lime);
             Context2D.DrawCircle(circleA, HTMLColor.Black);
+
+            if (circleB.Contains(rectangleA))
+                Context2D.FillCircle(circleB, HTMLColor.Lime);
+            else
+                Context2D.FillCircle(circleB, HTMLColor.Red);
+            Context2D.DrawCircle(circleB, HTMLColor.Black);
 
             if (isDraggingRectangle == true) // == true is needed because of issue #933 in Bridge.Net.
             {
@@ -102,7 +116,9 @@ namespace ThreeOneSevenBee.Prototype
             }
 
             if (rectangleA.Contains(Input.Mouse))
-                Context2D.FillRectangle(rectangleA, HTMLColor.Red);
+                Context2D.FillRectangle(rectangleA, HTMLColor.Lime);
+            else
+                Context2D.FillRectangle(rectangleA, HTMLColor.Yellow);
             Context2D.DrawRectangle(rectangleA, HTMLColor.Black);
 
             base.Draw(deltaTime, totalTime);
