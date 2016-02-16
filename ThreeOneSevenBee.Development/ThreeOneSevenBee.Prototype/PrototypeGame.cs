@@ -18,6 +18,8 @@ namespace ThreeOneSevenBee.Prototype
 
         private Circle circleB;
 
+        private ImageElement mormot;
+
         private Rectangle rectangleA;
 
         private bool isDraggingRectangle = false;
@@ -46,6 +48,11 @@ namespace ThreeOneSevenBee.Prototype
                 Location = new Vector2(400, 400),
                 Width = 96,
                 Height = 96
+            };
+
+            mormot = new ImageElement
+            {
+                Src = "http://i.imgur.com/5RNWLm5.jpg"
             };
 
             Input.MouseDown += InputOnMouseDown;
@@ -87,6 +94,8 @@ namespace ThreeOneSevenBee.Prototype
         public override void Draw(double deltaTime, double totalTime)
         {
             Context2D.Clear(HTMLColor.Aquamarine);
+
+            Context2D.DrawImage(mormot, Canvas.Width - (mormot.Width / 2), Canvas.Height - (mormot.Height / 2));
 
             Context2D.DrawString(50, 50, "Hello, World!", "20px Arial", HTMLColor.Black);
 
