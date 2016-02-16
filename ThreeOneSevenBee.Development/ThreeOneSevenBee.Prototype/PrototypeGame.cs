@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Bridge.Html5;
 using ThreeOneSevenBee.Framework;
 using ThreeOneSevenBee.Framework.Euclidean;
+using ThreeOneSevenBee.Framework.Html;
 
 namespace ThreeOneSevenBee.Prototype
 {
@@ -16,6 +17,10 @@ namespace ThreeOneSevenBee.Prototype
         private Vector2 circleVelocity;
 
         private Rectangle rectangleA;
+
+        private bool isDraggingRectangle = false;
+
+        private Vector2 rectangleDragOffset;
 
         public PrototypeGame(CanvasElement canvas)
             : base(canvas)
@@ -34,6 +39,28 @@ namespace ThreeOneSevenBee.Prototype
                 Width = 96,
                 Height = 96
             };
+
+            Input.MouseDown += InputOnMouseDown;
+            Input.MouseUp += InputOnMouseUp;
+        }
+
+        private void InputOnMouseDown(MouseButton mouseButton)
+        {
+            if (rectangleA.Contains(Input.Mouse) && isDraggingRectangle == false)
+            {
+                Console.WriteLine("Drag begin");
+                rectangleDragOffset = rectangleA.Location - Input.Mouse;
+                isDraggingRectangle = true;
+            }
+        }
+
+        private void InputOnMouseUp(MouseButton mouseButton)
+        {
+            if (isDraggingRectangle == true)
+            {
+                Console.WriteLine("Drag end");
+                isDraggingRectangle = false;
+            }
         }
 
         public override void Update(double deltaTime, double totalTime)
@@ -67,6 +94,12 @@ namespace ThreeOneSevenBee.Prototype
             if (circleA.Contains(Input.Mouse))
                 Context2D.FillCircle(circleA, HTMLColor.Red);
             Context2D.DrawCircle(circleA, HTMLColor.Black);
+
+            if (isDraggingRectangle == true) // == true is needed because of issue #933 in Bridge.Net.
+            {
+                rectangleA.Location = Input.Mouse + rectangleDragOffset;
+                Console.WriteLine("dragging");
+            }
 
             if (rectangleA.Contains(Input.Mouse))
                 Context2D.FillRectangle(rectangleA, HTMLColor.Red);
