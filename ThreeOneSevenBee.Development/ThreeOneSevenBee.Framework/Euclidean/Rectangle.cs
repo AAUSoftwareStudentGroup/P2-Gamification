@@ -23,5 +23,10 @@
         {
             return (point.X >= Left && point.X <= Right && point.Y >= Top && point.Y <= Bottom);
         }
+
+        public bool Contains(Circle circle)
+        {
+            return (circle.Left >= Left && circle.Right <= Right && circle.Top >= Top && circle.Bottom <= Bottom);
+        }
     }
 }

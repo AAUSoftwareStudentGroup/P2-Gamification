@@ -9,6 +9,14 @@
 
         public double Radius;
 
+        public double Left { get { return Center.X - Radius; } }
+
+        public double Top { get { return Center.Y - Radius; } }
+
+        public double Right { get { return Center.X + Radius; } }
+
+        public double Bottom { get { return Center.Y + Radius; } }
+
         public bool Contains(Vector2 point)
         {
             var dx = point.X - Center.X;
@@ -17,16 +25,16 @@
             var squareDist = dx * dx + dy * dy;
             var squareRadius = Radius * Radius;
 
-            return squareDist < squareRadius;
+            return squareDist <= squareRadius;
         }
 
         public bool Contains(Rectangle rectangle)
         {
             return
-                Contains(new Vector2(rectangle.Top, rectangle.Left)) &&
-                Contains(new Vector2(rectangle.Top, rectangle.Right)) &&
-                Contains(new Vector2(rectangle.Bottom, rectangle.Right)) &&
-                Contains(new Vector2(rectangle.Bottom, rectangle.Left));
+                Contains(new Vector2(rectangle.Left, rectangle.Top)) &&
+                Contains(new Vector2(rectangle.Right, rectangle.Top)) &&
+                Contains(new Vector2(rectangle.Right, rectangle.Bottom)) &&
+                Contains(new Vector2(rectangle.Left, rectangle.Bottom));
         }
     }
 }
