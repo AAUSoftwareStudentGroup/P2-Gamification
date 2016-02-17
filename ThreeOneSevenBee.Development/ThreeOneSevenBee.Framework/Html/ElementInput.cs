@@ -31,8 +31,8 @@ namespace ThreeOneSevenBee.Framework.Html
 
         private void OnMouseMove(MouseEvent mouseEvent)
         {
-            var pageX = (int)mouseEvent["pageX"];
-            var pageY = (int)mouseEvent["pageY"];
+            var pageX = (Double)mouseEvent["pageX"];
+            var pageY = (Double)mouseEvent["pageY"];
             var relativeX = pageX - Element.OffsetLeft;
             var relativeY = pageY - Element.OffsetTop;
             Mouse = new Vector2(relativeX, relativeY);
