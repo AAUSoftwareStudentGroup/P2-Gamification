@@ -11,7 +11,6 @@ namespace www
     /// <summary>
     /// Summary description for GameWebService
     /// </summary>
-    [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     
@@ -29,6 +28,7 @@ namespace www
         public int GetCount()
         {
             var connection = GetConnection();
+			int count = -1;
 
             connection.Open();
 
@@ -37,13 +37,13 @@ namespace www
             {
                 while (reader.Read())
                 {
-                    return (int)reader["counter"];
+                    count = (int)reader["counter"];
                 }
             }
 
             connection.Close();
 
-            return -1;
+            return count;
         }
 
         [WebMethod]
@@ -56,19 +56,19 @@ namespace www
 
             var count = -1;
 
-            using (var command = new MySqlCommand("SELECT * FROM test WHERE id = 1;", connection))
-            using (var reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    count = (int)reader["counter"];
-                }
-            }
-
             using (var command = new MySqlCommand("UPDATE test SET counter = counter + 1 WHERE id = 1;", connection))
             {
                 command.ExecuteNonQuery();
             }
+
+			using (var command = new MySqlCommand("SELECT * FROM test WHERE id = 1;", connection))
+			using (var reader = command.ExecuteReader())
+			{
+				while (reader.Read())
+				{
+					count = (int)reader["counter"];
+				}
+			}
 
             connection.Close();
 
