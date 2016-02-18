@@ -138,13 +138,22 @@ namespace ThreeOneSevenBee.Prototype
             Context2D.DrawRectangle(rectangleA, HTMLColor.Black);
 
             Context2D.DrawString(5, 400, "Place the smaller shapes in the larger shapes of the opposite type.", "20px Arial", HTMLColor.Black);
-            if (circleB.Contains(rectangleA) && rectangleB.Contains(circleA)) {
+            if (circleB.Contains(rectangleA) && rectangleB.Contains(circleA))
+            {
                 Context2D.DrawString(200, 420, "You did it!", "20px Arial", HTMLColor.Black);
                 didIt = true;
             }
-            else if(didIt == true) {
+            else if (didIt == true)
+            {
                 Context2D.DrawString(200, 420, "You undid it! Tanner Helland you fuck!", "20px Arial", HTMLColor.Black);
-            } 
+            }
+
+            var i = 1;
+            Context2D.DrawString(2, 2 + 20 * i++, "Touches", "20px Arial", HTMLColor.Black);
+            foreach (var id in Input.Identifier)
+            {
+                Context2D.DrawString(2, 2 + 20 * i++, id.ToString(), "20px Arial", HTMLColor.Black);
+            }
 
             base.Draw(deltaTime, totalTime);
         }

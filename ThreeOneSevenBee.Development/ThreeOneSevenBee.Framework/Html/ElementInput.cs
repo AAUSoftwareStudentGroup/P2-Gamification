@@ -22,7 +22,13 @@ namespace ThreeOneSevenBee.Framework.Html
             Element.OnMouseLeave = OnMouseLeave;
             Element.OnMouseDown = OnMouseDown;
             Element.OnMouseUp = OnMouseUp;
+
+            Element.AddEventListener("touchstart", OnTouchStart);
+            Element.AddEventListener("touchmove", OnTouchMove);
+            Element.AddEventListener("touchend", OnTouchEnd);
         }
+
+        public List<int> Identifier = new List<int>();
 
         private void OnMouseEnter(MouseEvent mouseEvent)
         {
@@ -57,6 +63,29 @@ namespace ThreeOneSevenBee.Framework.Html
             var mouseUp = this.MouseUp;
             if (mouseUp != null)
                 mouseUp((MouseButton)mouseEvent.Button);
+        }
+
+        private void OnTouchStart(Event e)
+        {
+            var touchEvent = (e as TouchEvent);
+            foreach (var touch in touchEvent.ChangedTouches)
+            {
+                Identifier.Add(touch.Identifier);
+            }
+        }
+
+        private void OnTouchMove(Event touchEvent)
+        {
+
+        }
+
+        private void OnTouchEnd(Event e)
+        {
+            var touchEvent = (e as TouchEvent);
+            foreach (var touch in touchEvent.ChangedTouches)
+            {
+                Identifier.Remove(touch.Identifier);
+            }
         }
 
         public Element Element { get; private set; }
