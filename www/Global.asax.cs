@@ -1,5 +1,5 @@
 
-namespace test
+namespace www
 {
 	using System;
 	using System.Collections;
