@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bridge.Html5;
+using Bridge.jQuery2;
 using ThreeOneSevenBee.Framework;
 using ThreeOneSevenBee.Framework.Euclidean;
 using ThreeOneSevenBee.Framework.Html;
@@ -13,25 +14,17 @@ namespace ThreeOneSevenBee.Prototype
     class PrototypeGame : Game
     {
         private Circle circleA;
-
         private Circle circleB;
-
         private Rectangle rectangleA;
-
         private Rectangle rectangleB;
-
         private bool isDraggingRectangle = false;
-
         private Vector2 rectangleDragOffset;
-
         private bool isDraggingCircle = false;
-
         private bool didIt = false;
-
         private Vector2 circleDragOffset;
+        private int globalCounter = 0;
 
-        public PrototypeGame(CanvasElement canvas)
-            : base(canvas)
+        public PrototypeGame(CanvasElement canvas): base(canvas)
         {
             rectangleA = new Rectangle()
             {
@@ -89,6 +82,22 @@ namespace ThreeOneSevenBee.Prototype
             {
                 isDraggingCircle = false;
             }
+
+            if(circleB.Contains(Input.Mouse)) {
+                jQuery.Ajax(
+                    new AjaxOptions()
+                    {
+                        Url = "/api/?func=AddCount",
+                        Cache = false,
+                        Success = delegate(object data, string textStatus, jqXHR request)
+                        {
+                            int tempCounter;
+                            int.TryParse( (string)data, out tempCounter);
+                            globalCounter = tempCounter;
+                        }
+                    }
+                );
+            }
         }
 
         public override void Update(double deltaTime, double totalTime)
@@ -137,6 +146,7 @@ namespace ThreeOneSevenBee.Prototype
                 Context2D.FillRectangle(rectangleA, HTMLColor.Yellow);
             Context2D.DrawRectangle(rectangleA, HTMLColor.Black);
 
+            Context2D.DrawString(5, 200, "Counter: "+globalCounter, "20px Arial", HTMLColor.Black);
             Context2D.DrawString(5, 400, "Place the smaller shapes in the larger shapes of the opposite type.", "20px Arial", HTMLColor.Black);
             if (circleB.Contains(rectangleA) && rectangleB.Contains(circleA))
             {

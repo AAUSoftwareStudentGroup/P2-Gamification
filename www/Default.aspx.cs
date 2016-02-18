@@ -1,4 +1,3 @@
-
 namespace www
 {
     using System;
@@ -9,11 +8,6 @@ namespace www
     {
         protected override void OnLoad(EventArgs e)
         {
-            var service = new GameWebService();
-
-            Response.Write("Count: " + service.GetCount());
-            service.AddCount();
-
             base.OnLoad(e);
         }
     }

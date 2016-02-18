@@ -1,6 +1,6 @@
 mcs	/nostdlib \
 	/warn:0 \
-	/reference:"build/Bridge.dll;build/Bridge.Html5.dll;build/Bridge.QUnit.dll" \
+	/reference:"build/Bridge.dll;build/Bridge.jQuery2.dll;build/Bridge.Html5.dll;build/Bridge.QUnit.dll" \
 	/out:build/framework.dll \
 	/recurse:*.cs
 
