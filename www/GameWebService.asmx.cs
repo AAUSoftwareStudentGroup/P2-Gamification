@@ -44,11 +44,22 @@ namespace www
         }
 
         [WebMethod]
-        public void AddCount()
+        public int AddCount()
         {
             var connection = GetConnection();
 
             connection.Open();
+
+            var count = -1;
+
+            using (var command = new MySqlCommand("SELECT * FROM test WHERE id = 1;", connection))
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    count = (int)reader["counter"];
+                }
+            }
 
             using (var command = new MySqlCommand("UPDATE test SET counter = counter + 1 WHERE id = 1;", connection))
             {
@@ -56,6 +67,8 @@ namespace www
             }
 
             connection.Close();
+
+            return count;
         }
     }
 }
