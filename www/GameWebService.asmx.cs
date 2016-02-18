@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Web;
+using System.Web.Script.Services;
 using System.Web.Services;
 
 namespace www
@@ -13,6 +14,7 @@ namespace www
     [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
+    
     public class GameWebService : System.Web.Services.WebService
     {
         private static string connectionString = "server=antonchristensen.net; database=gamedb; uid=gamedb; pwd=1374;";
@@ -23,6 +25,7 @@ namespace www
         }
 
         [WebMethod]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
         public int GetCount()
         {
             var connection = GetConnection();
@@ -44,6 +47,7 @@ namespace www
         }
 
         [WebMethod]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
         public int AddCount()
         {
             var connection = GetConnection();
