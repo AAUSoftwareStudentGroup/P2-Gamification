@@ -1,13 +1,11 @@
+<%@ Page Language="C#" Inherits="www.Default" %>
 <!-- The following disables warning when running locally in IE -->
 <!-- saved from url=(0014)about:internet -->
 <!DOCTYPE html>
-
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta name="viewport" content="user-scalable=no" />
+<head runat="server">
     <meta charset="utf-8" />
-    <title>Bridge ThreeOneSevenBee.Prototype</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <title>317B</title>
     <script src="js/bridge.js"></script>
     <script src="js/threeOneSevenBee.framework.euclidean.js"></script>
     <script src="js/threeOneSevenBee.framework.html.js"></script>
