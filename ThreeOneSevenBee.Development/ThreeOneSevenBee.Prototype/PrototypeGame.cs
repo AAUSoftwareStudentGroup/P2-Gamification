@@ -73,15 +73,8 @@ namespace ThreeOneSevenBee.Prototype
 
         private void InputOnMouseUp(MouseButton mouseButton)
         {
-            if (isDraggingRectangle == true)
-            {
-                isDraggingRectangle = false;
-            }
-
-            if (isDraggingCircle == true)
-            {
-                isDraggingCircle = false;
-            }
+            isDraggingRectangle = false;
+            isDraggingCircle = false;
 
             if(circleB.Contains(Input.Mouse)) {
                 jQuery.Ajax(
