@@ -62,7 +62,7 @@ namespace ThreeOneSevenBee.Framework.Html
             this.PageY = e.PageY;
             this.Target = e.Target;
             this.RelativeX = e.PageX - relativeTo.OffsetLeft;
-            this.RelativeX = e.PageY - relativeTo.OffsetTop;
+            this.RelativeY = e.PageY - relativeTo.OffsetTop;
         }
 
         internal void Update(Touch e, Element relativeTo)
@@ -78,7 +78,7 @@ namespace ThreeOneSevenBee.Framework.Html
             this.PageY = e.PageY;
             this.Target = e.Target;
             this.RelativeX = e.PageX - relativeTo.OffsetLeft;
-            this.RelativeX = e.PageY - relativeTo.OffsetTop;
+            this.RelativeY = e.PageY - relativeTo.OffsetTop;
         }
 
         public int Id { get; private set; }
