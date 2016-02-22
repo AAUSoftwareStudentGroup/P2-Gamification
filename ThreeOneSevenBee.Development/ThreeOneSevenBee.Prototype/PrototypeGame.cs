@@ -52,11 +52,11 @@ namespace ThreeOneSevenBee.Prototype
                 Radius = 100
             };
 
-            Input.MouseDown += InputOnMouseDown;
-            Input.MouseUp += InputOnMouseUp;
+            //Input.MouseDown += InputOnMouseDown;
+            //Input.MouseUp += InputOnMouseUp;
         }
 
-        private void InputOnMouseDown(MouseButton mouseButton)
+        /*private void InputOnMouseDown(MouseButton mouseButton)
         {
             if (rectangleA.Contains(Input.Mouse) && isDraggingRectangle == false)
             {
@@ -92,7 +92,7 @@ namespace ThreeOneSevenBee.Prototype
                     }
                 );
             }
-        }
+        }*/
 
         public override void Update(double deltaTime, double totalTime)
         {
@@ -107,12 +107,12 @@ namespace ThreeOneSevenBee.Prototype
 
             if (isDraggingRectangle == true) // == true is needed because of issue #933 in Bridge.Net.
             {
-                rectangleA.Location = Input.Mouse + rectangleDragOffset;
+                //rectangleA.Location = Input.Mouse + rectangleDragOffset;
             }
 
             if (isDraggingCircle == true) // == true is needed because of issue #933 in Bridge.Net.
             {
-                circleA.Center = Input.Mouse + circleDragOffset;
+                //circleA.Center = Input.Mouse + circleDragOffset;
             }
 
 
@@ -128,15 +128,15 @@ namespace ThreeOneSevenBee.Prototype
                 Context2D.FillRectangle(rectangleB, HTMLColor.Red);
             Context2D.DrawRectangle(rectangleB, HTMLColor.Black);
 
-            if (circleA.Contains(Input.Mouse))
+            /*if (circleA.Contains(Input.Mouse))
                 Context2D.FillCircle(circleA, HTMLColor.Lime);
-            else
+            else*/
                 Context2D.FillCircle(circleA, HTMLColor.Yellow);
             Context2D.DrawCircle(circleA, HTMLColor.Black);
 
-            if (rectangleA.Contains(Input.Mouse))
+            /*if (rectangleA.Contains(Input.Mouse))
                 Context2D.FillRectangle(rectangleA, HTMLColor.Lime);
-            else
+            else*/
                 Context2D.FillRectangle(rectangleA, HTMLColor.Yellow);
             Context2D.DrawRectangle(rectangleA, HTMLColor.Black);
 
@@ -154,10 +154,10 @@ namespace ThreeOneSevenBee.Prototype
 
             var i = 1;
             Context2D.DrawString(2, 2 + 20 * i++, "Touches", "20px Arial", HTMLColor.Black);
-            foreach (var id in Input.Identifier)
+            /*foreach (var id in Input.Identifier)
             {
                 Context2D.DrawString(2, 2 + 20 * i++, id.ToString(), "20px Arial", HTMLColor.Black);
-            }
+            }*/
 
             base.Draw(deltaTime, totalTime);
         }
