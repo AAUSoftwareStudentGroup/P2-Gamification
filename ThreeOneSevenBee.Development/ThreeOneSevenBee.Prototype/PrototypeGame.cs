@@ -17,9 +17,9 @@ namespace ThreeOneSevenBee.Prototype
         private Circle circleB;
         private Rectangle rectangleA;
         private Rectangle rectangleB;
-        private bool isDraggingRectangle = false;
+        private int draggingRectangle = -1;
         private Vector2 rectangleDragOffset;
-        private bool isDraggingCircle = false;
+        private int draggingCircle = -1;
         private bool didIt = false;
         private Vector2 circleDragOffset;
         private int globalCounter = 0;
@@ -52,31 +52,36 @@ namespace ThreeOneSevenBee.Prototype
                 Radius = 100
             };
 
-            //Input.MouseDown += InputOnMouseDown;
-            //Input.MouseUp += InputOnMouseUp;
+            Input.PointerDown += Input_PointerDown;
+            Input.PointerUp += Input_PointerUp;
         }
 
-        /*private void InputOnMouseDown(MouseButton mouseButton)
+        private void Input_PointerDown(Pointer arg)
         {
-            if (rectangleA.Contains(Input.Mouse) && isDraggingRectangle == false)
+            var point = new Vector2(arg.RelativeX, arg.RelativeY);
+            if (rectangleA.Contains(point))
             {
-                rectangleDragOffset = rectangleA.Location - Input.Mouse;
-                isDraggingRectangle = true;
+                rectangleDragOffset = rectangleA.Location - point;
+                draggingRectangle = arg.Id;
             }
 
-            if (circleA.Contains(Input.Mouse) && isDraggingCircle == false)
+            if (circleA.Contains(point))
             {
-                circleDragOffset = circleA.Center - Input.Mouse;
-                isDraggingCircle = true;
+                circleDragOffset = circleA.Center - point;
+                draggingCircle = arg.Id;
             }
         }
 
-        private void InputOnMouseUp(MouseButton mouseButton)
+        private void Input_PointerUp(Pointer arg)
         {
-            isDraggingRectangle = false;
-            isDraggingCircle = false;
+            var point = new Vector2(arg.RelativeX, arg.RelativeY);
 
-            if (circleB.Contains(Input.Mouse))
+            if (arg.Id == draggingRectangle)
+                draggingRectangle = -1;
+            if (arg.Id == draggingCircle)
+                draggingCircle = -1;
+
+            if (circleB.Contains(point))
             {
                 jQuery.Ajax(
                     new AjaxOptions()
@@ -92,7 +97,7 @@ namespace ThreeOneSevenBee.Prototype
                     }
                 );
             }
-        }*/
+        }
 
         public override void Update(double deltaTime, double totalTime)
         {
@@ -105,14 +110,18 @@ namespace ThreeOneSevenBee.Prototype
         {
             Context2D.Clear(HTMLColor.CornflowerBlue);
 
-            if (isDraggingRectangle == true) // == true is needed because of issue #933 in Bridge.Net.
+            if (draggingRectangle >= 0)
             {
-                //rectangleA.Location = Input.Mouse + rectangleDragOffset;
+                var pointer = Input.Pointers.FirstOrDefault(p => p.Id == draggingRectangle);
+                if (pointer != null)
+                    rectangleA.Location = new Vector2(pointer.RelativeX, pointer.RelativeY) + rectangleDragOffset;
             }
 
-            if (isDraggingCircle == true) // == true is needed because of issue #933 in Bridge.Net.
+            if (draggingCircle >= 0)
             {
-                //circleA.Center = Input.Mouse + circleDragOffset;
+                var pointer = Input.Pointers.FirstOrDefault(p => p.Id == draggingCircle);
+                if (pointer != null)
+                    circleA.Center = new Vector2(pointer.RelativeX, pointer.RelativeY) + circleDragOffset;
             }
 
 
@@ -131,13 +140,13 @@ namespace ThreeOneSevenBee.Prototype
             /*if (circleA.Contains(Input.Mouse))
                 Context2D.FillCircle(circleA, HTMLColor.Lime);
             else*/
-                Context2D.FillCircle(circleA, HTMLColor.Yellow);
+            Context2D.FillCircle(circleA, HTMLColor.Yellow);
             Context2D.DrawCircle(circleA, HTMLColor.Black);
 
             /*if (rectangleA.Contains(Input.Mouse))
                 Context2D.FillRectangle(rectangleA, HTMLColor.Lime);
             else*/
-                Context2D.FillRectangle(rectangleA, HTMLColor.Yellow);
+            Context2D.FillRectangle(rectangleA, HTMLColor.Yellow);
             Context2D.DrawRectangle(rectangleA, HTMLColor.Black);
 
             Context2D.DrawString(5, 200, "Counter: " + globalCounter, "20px Arial", HTMLColor.Black);
@@ -154,10 +163,10 @@ namespace ThreeOneSevenBee.Prototype
 
             var i = 1;
             Context2D.DrawString(2, 2 + 20 * i++, "Touches", "20px Arial", HTMLColor.Black);
-            /*foreach (var id in Input.Identifier)
+            foreach (var pointer in Input.Pointers)
             {
-                Context2D.DrawString(2, 2 + 20 * i++, id.ToString(), "20px Arial", HTMLColor.Black);
-            }*/
+                Context2D.DrawString(2, 2 + 20 * i++, pointer.Id.ToString(), "20px Arial", HTMLColor.Black);
+            }
 
             base.Draw(deltaTime, totalTime);
         }
