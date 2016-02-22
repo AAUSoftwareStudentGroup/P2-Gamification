@@ -47,7 +47,10 @@ namespace ThreeOneSevenBee.Framework.Html
         {
             Pointer pointer;
             if (!pointers.TryGetValue(MOUSE_ID, out pointer))
-                pointers[MOUSE_ID] = pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+
+            pointers[MOUSE_ID] = pointer;
+
             pointer.Update(e, Element);
 
             var pointerEnter = PointerEnter;
@@ -59,7 +62,10 @@ namespace ThreeOneSevenBee.Framework.Html
         {
             Pointer pointer;
             if (!pointers.TryGetValue(MOUSE_ID, out pointer))
-                pointers[MOUSE_ID] = pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+
+            pointers[MOUSE_ID] = pointer;
+
             pointer.Update(e, Element);
 
             var pointerDown = PointerDown;
@@ -71,19 +77,24 @@ namespace ThreeOneSevenBee.Framework.Html
         {
             Pointer pointer;
             if (!pointers.TryGetValue(MOUSE_ID, out pointer))
-                pointers[MOUSE_ID] = pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+
+            pointers[MOUSE_ID] = pointer;
+
             pointer.Update(e, Element);
 
             var pointerMove = PointerMove;
             if (pointerMove != null)
                 pointerMove(pointer);
+
+
         }
 
         private void OnMouseUp(MouseEvent e)
         {
             Pointer pointer;
             if (!pointers.TryGetValue(MOUSE_ID, out pointer))
-                pointers[MOUSE_ID] = pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
             pointer.Update(e, Element);
 
             var pointerUp = PointerUp;
@@ -97,7 +108,7 @@ namespace ThreeOneSevenBee.Framework.Html
         {
             Pointer pointer;
             if (!pointers.TryGetValue(MOUSE_ID, out pointer))
-                pointers[MOUSE_ID] = pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
             pointer.Update(e, Element);
 
             var pointerLeave = PointerLeave;
@@ -114,7 +125,10 @@ namespace ThreeOneSevenBee.Framework.Html
             {
                 Pointer pointer;
                 if (!pointers.TryGetValue(touch.Identifier, out pointer))
-                    pointers[touch.Identifier] = pointer = new Pointer(touch.Identifier, PointerTypes.Touch);
+                    pointer = new Pointer(touch.Identifier, PointerTypes.Touch);
+
+                pointers[touch.Identifier] = pointer;
+
                 pointer.Update(touch, Element);
 
                 var pointerDown = PointerDown;
@@ -130,7 +144,10 @@ namespace ThreeOneSevenBee.Framework.Html
             {
                 Pointer pointer;
                 if (!pointers.TryGetValue(touch.Identifier, out pointer))
-                    pointers[touch.Identifier] = pointer = new Pointer(touch.Identifier, PointerTypes.Mouse);
+                    pointer = new Pointer(touch.Identifier, PointerTypes.Mouse);
+
+                pointers[touch.Identifier] = pointer;
+
                 pointer.Update(touch, Element);
 
                 var pointerMove = PointerMove;
