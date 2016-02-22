@@ -47,7 +47,7 @@ namespace ThreeOneSevenBee.Framework.Html
         {
             Pointer pointer;
             if (!pointers.TryGetValue(MOUSE_ID, out pointer))
-                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+                pointers[MOUSE_ID] = pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
             pointer.Update(e, Element);
 
             var pointerEnter = PointerEnter;
@@ -59,7 +59,7 @@ namespace ThreeOneSevenBee.Framework.Html
         {
             Pointer pointer;
             if (!pointers.TryGetValue(MOUSE_ID, out pointer))
-                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+                pointers[MOUSE_ID] = pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
             pointer.Update(e, Element);
 
             var pointerDown = PointerDown;
@@ -71,7 +71,7 @@ namespace ThreeOneSevenBee.Framework.Html
         {
             Pointer pointer;
             if (!pointers.TryGetValue(MOUSE_ID, out pointer))
-                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+                pointers[MOUSE_ID] = pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
             pointer.Update(e, Element);
 
             var pointerMove = PointerMove;
@@ -83,24 +83,28 @@ namespace ThreeOneSevenBee.Framework.Html
         {
             Pointer pointer;
             if (!pointers.TryGetValue(MOUSE_ID, out pointer))
-                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+                pointers[MOUSE_ID] = pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
             pointer.Update(e, Element);
 
             var pointerUp = PointerUp;
             if (pointerUp != null)
                 pointerUp(pointer);
+
+            pointers.Remove(MOUSE_ID);
         }
 
         private void OnMouseLeave(MouseEvent e)
         {
             Pointer pointer;
             if (!pointers.TryGetValue(MOUSE_ID, out pointer))
-                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+                pointers[MOUSE_ID] = pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
             pointer.Update(e, Element);
 
             var pointerLeave = PointerLeave;
             if (pointerLeave != null)
                 pointerLeave(pointer);
+
+            pointers.Remove(MOUSE_ID);
         }
 
         private void OnTouchStart(Event e)
@@ -110,7 +114,7 @@ namespace ThreeOneSevenBee.Framework.Html
             {
                 Pointer pointer;
                 if (!pointers.TryGetValue(touch.Identifier, out pointer))
-                    pointer = new Pointer(touch.Identifier, PointerTypes.Touch);
+                    pointers[touch.Identifier] = pointer = new Pointer(touch.Identifier, PointerTypes.Touch);
                 pointer.Update(touch, Element);
 
                 var pointerDown = PointerDown;
@@ -126,7 +130,7 @@ namespace ThreeOneSevenBee.Framework.Html
             {
                 Pointer pointer;
                 if (!pointers.TryGetValue(touch.Identifier, out pointer))
-                    pointer = new Pointer(touch.Identifier, PointerTypes.Mouse);
+                    pointers[touch.Identifier] = pointer = new Pointer(touch.Identifier, PointerTypes.Mouse);
                 pointer.Update(touch, Element);
 
                 var pointerMove = PointerMove;
@@ -142,12 +146,14 @@ namespace ThreeOneSevenBee.Framework.Html
             {
                 Pointer pointer;
                 if (!pointers.TryGetValue(touch.Identifier, out pointer))
-                    pointer = new Pointer(touch.Identifier, PointerTypes.Mouse);
+                    pointers[touch.Identifier] = pointer = new Pointer(touch.Identifier, PointerTypes.Mouse);
                 pointer.Update(touch, Element);
 
                 var pointerUp = PointerUp;
                 if (pointerUp != null)
                     pointerUp(pointer);
+
+                pointers.Remove(touch.Identifier);
             }
         }
     }
