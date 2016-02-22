@@ -19,7 +19,7 @@ namespace ThreeOneSevenBee.Framework.Html
             this.Type = type;
         }
 
-        internal Pointer(MouseEvent e, HtmlElement relativeTo)
+        internal Pointer(MouseEvent e, Element relativeTo)
             : this(0, PointerTypes.Touch)
         {
             // mouse id is always 0
@@ -34,7 +34,7 @@ namespace ThreeOneSevenBee.Framework.Html
             this.RelativeX = e.PageY - relativeTo.OffsetTop;
         }
 
-        internal Pointer(Touch e, HtmlElement relativeTo)
+        internal Pointer(Touch e, Element relativeTo)
             : this(e.Identifier, PointerTypes.Touch)
         {
             // touch id is browser controlled
@@ -49,7 +49,7 @@ namespace ThreeOneSevenBee.Framework.Html
             this.RelativeX = e.PageY - relativeTo.OffsetTop;
         }
 
-        internal void Update(MouseEvent e, HtmlElement relativeTo)
+        internal void Update(MouseEvent e, Element relativeTo)
         {
             if (!(this.Type == PointerTypes.Mouse))
                 throw new InvalidOperationException("Tried to update " + this.Type + " pointer with mouse data.");
@@ -65,7 +65,7 @@ namespace ThreeOneSevenBee.Framework.Html
             this.RelativeX = e.PageY - relativeTo.OffsetTop;
         }
 
-        internal void Update(Touch e, HtmlElement relativeTo)
+        internal void Update(Touch e, Element relativeTo)
         {
             if (!(this.Type == PointerTypes.Touch))
                 throw new InvalidOperationException("Tried to update " + this.Type + " pointer with touch data.");
