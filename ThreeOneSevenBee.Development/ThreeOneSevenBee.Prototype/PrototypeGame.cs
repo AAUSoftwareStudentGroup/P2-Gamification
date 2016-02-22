@@ -24,7 +24,7 @@ namespace ThreeOneSevenBee.Prototype
         private Vector2 circleDragOffset;
         private int globalCounter = 0;
 
-        public PrototypeGame(CanvasElement canvas): base(canvas)
+        public PrototypeGame(CanvasElement canvas) : base(canvas)
         {
             rectangleA = new Rectangle()
             {
@@ -76,17 +76,18 @@ namespace ThreeOneSevenBee.Prototype
             isDraggingRectangle = false;
             isDraggingCircle = false;
 
-            if(circleB.Contains(Input.Mouse)) {
+            if (circleB.Contains(Input.Mouse))
+            {
                 jQuery.Ajax(
                     new AjaxOptions()
                     {
                         Url = "/api/?func=AddCount",
                         Cache = false,
-                        Success = delegate(object data, string textStatus, jqXHR request)
+                        Success = (data, textStatus, request) =>
                         {
                             int tempCounter;
-                            int.TryParse( (string)data, out tempCounter);
-                            globalCounter = tempCounter;
+                            if (Int32.TryParse((string)data, out tempCounter))
+                                globalCounter = tempCounter;
                         }
                     }
                 );
@@ -139,7 +140,7 @@ namespace ThreeOneSevenBee.Prototype
                 Context2D.FillRectangle(rectangleA, HTMLColor.Yellow);
             Context2D.DrawRectangle(rectangleA, HTMLColor.Black);
 
-            Context2D.DrawString(5, 200, "Counter: "+globalCounter, "20px Arial", HTMLColor.Black);
+            Context2D.DrawString(5, 200, "Counter: " + globalCounter, "20px Arial", HTMLColor.Black);
             Context2D.DrawString(5, 400, "Place the smaller shapes in the larger shapes of the opposite type.", "20px Arial", HTMLColor.Black);
             if (circleB.Contains(rectangleA) && rectangleB.Contains(circleA))
             {
