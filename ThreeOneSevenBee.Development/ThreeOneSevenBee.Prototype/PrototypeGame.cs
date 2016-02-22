@@ -58,7 +58,10 @@ namespace ThreeOneSevenBee.Prototype
 
         private void Input_PointerDown(Pointer arg)
         {
+            Console.WriteLine("Input_PointerDown");
             var point = new Vector2(arg.RelativeX, arg.RelativeY);
+            Console.WriteLine(point);
+
             if (rectangleA.Contains(point))
             {
                 rectangleDragOffset = rectangleA.Location - point;
@@ -74,7 +77,9 @@ namespace ThreeOneSevenBee.Prototype
 
         private void Input_PointerUp(Pointer arg)
         {
+            Console.WriteLine("Input_PointerUp");
             var point = new Vector2(arg.RelativeX, arg.RelativeY);
+            Console.WriteLine(point);
 
             if (arg.Id == draggingRectangle)
                 draggingRectangle = -1;
@@ -112,16 +117,22 @@ namespace ThreeOneSevenBee.Prototype
 
             if (draggingRectangle >= 0)
             {
+                Console.WriteLine("draggingRectangle: " + draggingRectangle);
                 var pointer = Input.Pointers.FirstOrDefault(p => p.Id == draggingRectangle);
                 if (pointer != null)
                     rectangleA.Location = new Vector2(pointer.RelativeX, pointer.RelativeY) + rectangleDragOffset;
+                else
+                    Console.WriteLine("Didn't find pointer");
             }
 
             if (draggingCircle >= 0)
             {
+                Console.WriteLine("draggingCircle: " + draggingCircle);
                 var pointer = Input.Pointers.FirstOrDefault(p => p.Id == draggingCircle);
                 if (pointer != null)
                     circleA.Center = new Vector2(pointer.RelativeX, pointer.RelativeY) + circleDragOffset;
+                else
+                    Console.WriteLine("Didn't find pointer");
             }
 
 
