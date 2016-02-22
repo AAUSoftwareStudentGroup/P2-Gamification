@@ -86,11 +86,6 @@ namespace ThreeOneSevenBee.Framework.Html
         public PointerTypes Type { get; private set; }
 
         /// <summary>
-        /// Returns a unique identifier for this <see cref="Pointer"/> object. A given pointer will have the same identifier for the duration of its movement around the surface. This lets you ensure that you're tracking the same pointer all the time.
-        /// </summary>
-        public int Identifier { get; private set; }
-
-        /// <summary>
         /// Returns the X coordinate of the pointer relative to the left edge of the screen.
         /// </summary>
         public int ScreenX { get; private set; }
