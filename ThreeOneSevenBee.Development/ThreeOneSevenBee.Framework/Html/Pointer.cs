@@ -30,6 +30,8 @@ namespace ThreeOneSevenBee.Framework.Html
             this.PageX = e.PageX;
             this.PageY = e.PageY;
             this.Target = e.Target;
+            this.RelativeX = e.PageX - relativeTo.OffsetLeft;
+            this.RelativeX = e.PageY - relativeTo.OffsetTop;
         }
 
         internal Pointer(Touch e, HtmlElement relativeTo)
@@ -43,6 +45,8 @@ namespace ThreeOneSevenBee.Framework.Html
             this.PageX = e.PageX;
             this.PageY = e.PageY;
             this.Target = e.Target;
+            this.RelativeX = e.PageX - relativeTo.OffsetLeft;
+            this.RelativeX = e.PageY - relativeTo.OffsetTop;
         }
 
         public int Id { get; private set; }
@@ -83,6 +87,10 @@ namespace ThreeOneSevenBee.Framework.Html
         /// Returns the Y coordinate of the pointer relative to the top of the document. Unlike clientY, this value includes the vertical scroll offset, if any.
         /// </summary>
         public int PageY { get; private set; }
+
+        public int RelativeX { get; private set; }
+
+        public int RelativeY { get; private set; }
 
         /// <summary>
         /// Returns the <see cref="Bridge.Html5.Element"/> on which the pointer started when it was first placed on the surface, even if the pointer has since moved outside the interactive area of that element or even been removed from the document.
