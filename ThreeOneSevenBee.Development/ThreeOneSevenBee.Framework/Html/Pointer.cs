@@ -49,6 +49,38 @@ namespace ThreeOneSevenBee.Framework.Html
             this.RelativeX = e.PageY - relativeTo.OffsetTop;
         }
 
+        internal void Update(MouseEvent e, HtmlElement relativeTo)
+        {
+            if (!(this.Type == PointerTypes.Mouse))
+                throw new InvalidOperationException("Tried to update " + this.Type + " pointer with mouse data.");
+
+            this.ScreenX = e.ScreenX;
+            this.ScreenY = e.ScreenY;
+            this.ClientX = e.ClientX;
+            this.ClientY = e.ClientY;
+            this.PageX = e.PageX;
+            this.PageY = e.PageY;
+            this.Target = e.Target;
+            this.RelativeX = e.PageX - relativeTo.OffsetLeft;
+            this.RelativeX = e.PageY - relativeTo.OffsetTop;
+        }
+
+        internal void Update(Touch e, HtmlElement relativeTo)
+        {
+            if (!(this.Type == PointerTypes.Touch))
+                throw new InvalidOperationException("Tried to update " + this.Type + " pointer with touch data.");
+
+            this.ScreenX = e.ScreenX;
+            this.ScreenY = e.ScreenY;
+            this.ClientX = e.ClientX;
+            this.ClientY = e.ClientY;
+            this.PageX = e.PageX;
+            this.PageY = e.PageY;
+            this.Target = e.Target;
+            this.RelativeX = e.PageX - relativeTo.OffsetLeft;
+            this.RelativeX = e.PageY - relativeTo.OffsetTop;
+        }
+
         public int Id { get; private set; }
 
         public PointerTypes Type { get; private set; }
