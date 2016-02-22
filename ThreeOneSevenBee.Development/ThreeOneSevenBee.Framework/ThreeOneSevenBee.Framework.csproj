@@ -40,6 +40,7 @@
     <Compile Include="Game.cs" />
     <Compile Include="Euclidean\Vector2.cs" />
     <Compile Include="Html\ElementInput.cs" />
+    <Compile Include="Html\Pointer.cs" />
     <Compile Include="Html\Touch.cs" />
     <Compile Include="Html\TouchEvent.cs" />
     <Compile Include="Html\TouchList.cs" />
