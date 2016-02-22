@@ -47,6 +47,10 @@
       <HintPath>..\packages\Bridge.1.10.4\lib\net40\Bridge.Html5.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Bridge.jQuery2, Version=2.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bridge.jQuery.2.8.0\lib\net40\Bridge.jQuery2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Bridge\bridge.json" />
@@ -57,6 +61,9 @@
       <Project>{ac61706b-ffea-476a-a1c8-7a3912560339}</Project>
       <Name>ThreeOneSevenBee.Framework</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Readme\Bridge.NET\README.jQuery.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Bridge.1.10.4\build\Bridge.targets" Condition="Exists('..\packages\Bridge.1.10.4\build\Bridge.targets')" />
