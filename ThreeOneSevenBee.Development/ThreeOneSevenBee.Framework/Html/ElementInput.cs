@@ -10,12 +10,23 @@ namespace ThreeOneSevenBee.Framework.Html
 {
     public class ElementInput
     {
-        public event Action<MouseButton> MouseDown;
+        public const int MOUSE_ID = 0;
 
-        public event Action<MouseButton> MouseUp;
+        public event Action<Pointer> PointerEnter;
+
+        public event Action<Pointer> PointerDown;
+
+        public event Action<Pointer> PointerMove;
+
+        public event Action<Pointer> PointerUp;
+
+        public event Action<Pointer> PointerLeave;
+
+        private Dictionary<int, Pointer> pointers;
 
         public ElementInput(Element element)
         {
+            pointers = new Dictionary<int, Pointer>();
             Element = element;
             Element.OnMouseEnter = OnMouseEnter;
             Element.OnMouseMove = OnMouseMove;
@@ -28,41 +39,68 @@ namespace ThreeOneSevenBee.Framework.Html
             Element.AddEventListener("touchend", OnTouchEnd);
         }
 
-        public List<int> Identifier = new List<int>();
+        public Element Element { get; private set; }
 
-        private void OnMouseEnter(MouseEvent mouseEvent)
+        public IEnumerable<Pointer> Pointers { get { return pointers.Values; } }
+
+        private void OnMouseEnter(MouseEvent e)
         {
-            IsMouseOver = true;
+            Pointer pointer;
+            if (!pointers.TryGetValue(MOUSE_ID, out pointer))
+                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+            pointer.Update(e, Element);
+
+            var pointerEnter = PointerEnter;
+            if (pointerEnter != null)
+                pointerEnter(pointer);
         }
 
-        private void OnMouseMove(MouseEvent mouseEvent)
+        private void OnMouseDown(MouseEvent e)
         {
-            var pageX = (Double)mouseEvent["pageX"];
-            var pageY = (Double)mouseEvent["pageY"];
-            var relativeX = pageX - Element.OffsetLeft;
-            var relativeY = pageY - Element.OffsetTop;
-            Mouse = new Vector2(relativeX, relativeY);
+            Pointer pointer;
+            if (!pointers.TryGetValue(MOUSE_ID, out pointer))
+                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+            pointer.Update(e, Element);
+
+            var pointerDown = PointerDown;
+            if (pointerDown != null)
+                pointerDown(pointer);
         }
 
-        private void OnMouseLeave(MouseEvent mouseEvent)
+        private void OnMouseMove(MouseEvent e)
         {
-            IsMouseOver = false;
+            Pointer pointer;
+            if (!pointers.TryGetValue(MOUSE_ID, out pointer))
+                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+            pointer.Update(e, Element);
+
+            var pointerMove = PointerMove;
+            if (pointerMove != null)
+                pointerMove(pointer);
         }
 
-        private void OnMouseDown(MouseEvent mouseEvent)
+        private void OnMouseUp(MouseEvent e)
         {
-            MouseButtonState = (MouseButtons)mouseEvent.Buttons;
-            var mouseDown = this.MouseDown;
-            if (mouseDown != null)
-                mouseDown((MouseButton)mouseEvent.Button);
+            Pointer pointer;
+            if (!pointers.TryGetValue(MOUSE_ID, out pointer))
+                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+            pointer.Update(e, Element);
+
+            var pointerUp = PointerUp;
+            if (pointerUp != null)
+                pointerUp(pointer);
         }
 
-        private void OnMouseUp(MouseEvent mouseEvent)
+        private void OnMouseLeave(MouseEvent e)
         {
-            MouseButtonState = (MouseButtons)mouseEvent.Buttons;
-            var mouseUp = this.MouseUp;
-            if (mouseUp != null)
-                mouseUp((MouseButton)mouseEvent.Button);
+            Pointer pointer;
+            if (!pointers.TryGetValue(MOUSE_ID, out pointer))
+                pointer = new Pointer(MOUSE_ID, PointerTypes.Mouse);
+            pointer.Update(e, Element);
+
+            var pointerLeave = PointerLeave;
+            if (pointerLeave != null)
+                pointerLeave(pointer);
         }
 
         private void OnTouchStart(Event e)
@@ -70,13 +108,31 @@ namespace ThreeOneSevenBee.Framework.Html
             var touchEvent = (e as TouchEvent);
             foreach (var touch in touchEvent.ChangedTouches)
             {
-                Identifier.Add(touch.Identifier);
+                Pointer pointer;
+                if (!pointers.TryGetValue(touch.Identifier, out pointer))
+                    pointer = new Pointer(touch.Identifier, PointerTypes.Touch);
+                pointer.Update(touch, Element);
+
+                var pointerDown = PointerDown;
+                if (pointerDown != null)
+                    pointerDown(pointer);
             }
         }
 
-        private void OnTouchMove(Event touchEvent)
+        private void OnTouchMove(Event e)
         {
+            var touchEvent = (e as TouchEvent);
+            foreach (var touch in touchEvent.ChangedTouches)
+            {
+                Pointer pointer;
+                if (!pointers.TryGetValue(touch.Identifier, out pointer))
+                    pointer = new Pointer(touch.Identifier, PointerTypes.Mouse);
+                pointer.Update(touch, Element);
 
+                var pointerMove = PointerMove;
+                if (pointerMove != null)
+                    pointerMove(pointer);
+            }
         }
 
         private void OnTouchEnd(Event e)
@@ -84,33 +140,15 @@ namespace ThreeOneSevenBee.Framework.Html
             var touchEvent = (e as TouchEvent);
             foreach (var touch in touchEvent.ChangedTouches)
             {
-                Identifier.Remove(touch.Identifier);
+                Pointer pointer;
+                if (!pointers.TryGetValue(touch.Identifier, out pointer))
+                    pointer = new Pointer(touch.Identifier, PointerTypes.Mouse);
+                pointer.Update(touch, Element);
+
+                var pointerUp = PointerUp;
+                if (pointerUp != null)
+                    pointerUp(pointer);
             }
         }
-
-        public Element Element { get; private set; }
-
-        public bool IsMouseOver { get; private set; }
-
-        public Vector2 Mouse { get; private set; }
-
-        public MouseButtons MouseButtonState;
-    }
-
-    public enum MouseButton
-    {
-        Left = 0,
-        Middle = 1,
-        Right = 2
-    }
-
-    [Flags]
-    public enum MouseButtons
-    {
-        Left = 1 << 0,
-        Right = 1 << 1,
-        Middle = 1 << 2,
-        X1 = 1 << 3,
-        X2 = 1 << 4
     }
 }
