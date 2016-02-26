@@ -51,6 +51,41 @@ namespace api
             return GetCount();
         }
 
+        public string GetUser() {
+            var connection = GetConnection();
+
+            connection.Open();
+
+            var userid = Request.QueryString["id"];
+
+            string result = "<html><head><meta charset=\"UTF-8\"></head><table><tr><th>Brugernavn</th><th>Kode Hash</th><th>Lære Email</th><th>Klassenavn</th><th>Skolenavn</th></tr>";
+            using (var command = new MySqlCommand(
+                "SELECT user.name, user.password_hash, supervisor.email, class.name AS class_name, school.name AS school_name "+
+                "FROM gamedb.user "+
+                "LEFT JOIN gamedb.supervisor ON user.id = supervisor.user_id "+
+                "LEFT JOIN gamedb.class ON user.class_id = class.id "+
+                "LEFT JOIN gamedb.school ON user.school_id = school.id;", 
+                connection))
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    result += "<tr>";
+                    result += "<td>"+reader["name"]+"</td>";
+                    result += "<td>"+reader["password_hash"]+"</td>";
+                    result += "<td>"+reader["email"]+"</td>";
+                    result += "<td>"+reader["class_name"]+"</td>";
+                    result += "<td>"+reader["school_name"]+"</td>";
+                    result += "</tr>";
+                }
+            }
+            result += "</table>";
+
+            connection.Close();
+
+            return result;
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             Type type = this.GetType();
