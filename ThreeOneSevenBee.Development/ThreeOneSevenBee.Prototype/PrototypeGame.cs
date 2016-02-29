@@ -88,15 +88,17 @@ namespace ThreeOneSevenBee.Prototype
 
             if (circleB.Contains(point))
             {
+                
                 jQuery.Ajax(
                     new AjaxOptions()
                     {
+                        DataType = "json",
                         Url = "/api/?func=AddCount",
                         Cache = false,
                         Success = (data, textStatus, request) =>
                         {
                             int tempCounter;
-                            if (Int32.TryParse((string)data, out tempCounter))
+                            if (Int32.TryParse((string)data["counter"], out tempCounter))
                                 globalCounter = tempCounter;
                         }
                     }

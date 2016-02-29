@@ -70,7 +70,8 @@ namespace P2Backend
         }   
 
         private string AddCount() {
-            return QueryGetJson("UPDATE test SET counter = counter + 1 WHERE id = 1;");
+            QueryGetJson("UPDATE test SET counter = counter + 1 WHERE id = 1;");
+            return GetCount();
         }
 
         private string GetUser() {
