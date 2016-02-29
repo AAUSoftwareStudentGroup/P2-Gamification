@@ -1,1 +1,1 @@
-<%@ Page Language="C#" Inherits="api.Default" %>
+<%@ Page Language="C#" Inherits="P2Backend.Default" %>
