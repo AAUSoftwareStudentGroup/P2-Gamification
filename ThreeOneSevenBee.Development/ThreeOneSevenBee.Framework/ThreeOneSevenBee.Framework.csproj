@@ -35,6 +35,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CanvasRenderingContext2DExtensions.cs" />
+    <Compile Include="Composite\IContext.cs" />
+    <Compile Include="Composite\IControllable.cs" />
+    <Compile Include="Composite\IDrawable.cs" />
+    <Compile Include="Composite\View.cs" />
+    <Compile Include="Composite\ViewContainer.cs" />
     <Compile Include="Euclidean\Circle.cs" />
     <Compile Include="Euclidean\Rectangle.cs" />
     <Compile Include="Game.cs" />

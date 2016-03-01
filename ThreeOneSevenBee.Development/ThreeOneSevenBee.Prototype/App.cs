@@ -16,6 +16,9 @@ namespace ThreeOneSevenBee.Prototype
 
             var canvas = Document.GetElementById<CanvasElement>("canvas");
             var game = new PrototypeGame(canvas);
+
+            var 
+
             game.Run();
         }
     }

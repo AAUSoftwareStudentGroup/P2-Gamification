@@ -100,6 +100,7 @@ namespace ThreeOneSevenBee.Prototype
                             int tempCounter;
                             if (Int32.TryParse((string)data["counter"], out tempCounter))
                                 globalCounter = tempCounter;
+                            
                         }
                     }
                 );
