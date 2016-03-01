@@ -37,6 +37,15 @@
     <Compile Include="CanvasRenderingContext2DExtensions.cs" />
     <Compile Include="Euclidean\Circle.cs" />
     <Compile Include="Euclidean\Rectangle.cs" />
+    <Compile Include="Expression.cs" />
+    <Compile Include="ExpressionAnalyzer.cs" />
+    <Compile Include="ExpressionRule.cs" />
+    <Compile Include="ExpressionSerializer.cs" />
+    <Compile Include="Expressions\BinaryExpression.cs" />
+    <Compile Include="Expressions\DelimiterExpression.cs" />
+    <Compile Include="Expressions\NumericExpression.cs" />
+    <Compile Include="Expressions\OperatorExpression.cs" />
+    <Compile Include="Expressions\VariableExpression.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Euclidean\Vector2.cs" />
     <Compile Include="Html\ElementInput.cs" />
@@ -44,6 +53,7 @@
     <Compile Include="Html\Touch.cs" />
     <Compile Include="Html\TouchEvent.cs" />
     <Compile Include="Html\TouchList.cs" />
+    <Compile Include="IExpression.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -55,7 +65,6 @@
       <HintPath>..\packages\Bridge.1.10.4\lib\net40\Bridge.Html5.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
