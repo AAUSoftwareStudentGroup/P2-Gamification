@@ -66,6 +66,10 @@
       <HintPath>..\packages\Bridge.1.10.4\lib\net40\Bridge.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Bridge.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bridge.Collections.1.0.1\lib\net40\Bridge.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Bridge.Html5, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bridge.1.10.4\lib\net40\Bridge.Html5.dll</HintPath>
       <Private>True</Private>
