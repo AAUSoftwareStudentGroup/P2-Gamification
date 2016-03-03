@@ -2,9 +2,9 @@
 
 namespace ThreeOneSevenBee.Framework.Expressions
 {
-    public class DelimiterExpression : Expression
+    public class UnaryMinusExpression : Expression
     {
-        public DelimiterExpression(Expression expression)
+        public UnaryMinusExpression(Expression expression)
         {
             Expression = expression;
         }
@@ -15,7 +15,7 @@ namespace ThreeOneSevenBee.Framework.Expressions
         {
             get
             {
-                return "(" + Expression.ToString() + ")";
+                return "-" + Expression.ToString();
             }
         }
 
@@ -26,7 +26,7 @@ namespace ThreeOneSevenBee.Framework.Expressions
 
         public override double? Calculate()
         {
-            return Expression.Calculate();
+            return -Expression.Calculate();
         }
 
         public override IEnumerable<Expression> GetNodesRecursive()

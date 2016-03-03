@@ -46,10 +46,12 @@
     <Compile Include="ExpressionAnalyzer.cs" />
     <Compile Include="ExpressionRule.cs" />
     <Compile Include="ExpressionSerializer.cs" />
-    <Compile Include="Expressions\BinaryExpression.cs" />
+    <Compile Include="Expressions\ConstantExpression.cs" />
     <Compile Include="Expressions\DelimiterExpression.cs" />
+    <Compile Include="Expressions\FunctionExpression.cs" />
     <Compile Include="Expressions\NumericExpression.cs" />
     <Compile Include="Expressions\OperatorExpression.cs" />
+    <Compile Include="Expressions\UnaryMinusExpression.cs" />
     <Compile Include="Expressions\VariableExpression.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Euclidean\Vector2.cs" />

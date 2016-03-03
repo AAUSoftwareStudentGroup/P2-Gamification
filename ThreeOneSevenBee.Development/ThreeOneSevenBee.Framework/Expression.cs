@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ThreeOneSevenBee.Framework
 {
-    public abstract class Expression : IExpression
+    public abstract class Expression : IEquatable<Expression>
     {
         public abstract string Value { get; }
+
+        public abstract IEnumerable<Expression> GetNodesRecursive();
+
+        public virtual bool CanCalculate() { return false; }
+
+        public virtual double? Calculate() { return null; }
 
         public override bool Equals(object other)
         {
