@@ -213,20 +213,26 @@ namespace ThreeOneSevenBee.Framework
                     }
                     else // if not unary then it is binary
                     {
-                        while (operators.Any())
+                       while (operators.Any())
                         {
 
                             //var op2 = operators.Peek().Data as Operator;
 
                             var precedence = 0;
                             if (operators.Peek().Data is Operator)
+                            {
                                 precedence = (operators.Peek().Data as Operator).Precedence;
-
+                            }
                             if ((op1.Associativity == OperatorAssociativity.Left && op1.Precedence <= precedence) ||
                                 (op1.Associativity == OperatorAssociativity.Right && op1.Precedence < precedence))
                             {
                                 this.output.Enqueue(operators.Pop());
                                 continue;
+                            }
+
+                            else if (operators.Peek().Type == TokenType.Function)
+                            {
+                                this.output.Enqueue(operators.Pop());
                             }
 
                             break;
