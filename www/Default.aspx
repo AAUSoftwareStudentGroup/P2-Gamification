@@ -10,6 +10,7 @@
     <script src="js/bridge.js"></script>
     <script src="js/threeOneSevenBee.framework.euclidean.js"></script>
     <script src="js/threeOneSevenBee.framework.html.js"></script>
+    <script src="js/threeOneSevenBee.framework.ui.js"></script>
     <script src="js/threeOneSevenBee.framework.js"></script>
     <script src="js/threeOneSevenBee.prototype.js"></script>
 </head>
