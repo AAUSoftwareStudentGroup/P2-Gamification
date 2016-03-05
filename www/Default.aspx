@@ -8,7 +8,10 @@
     <title>317B</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="js/bridge.js"></script>
+    <script src="js/bridge.collections.js"></script>
+    <script src="js/threeOneSevenBee.framework.composite.js"></script>
     <script src="js/threeOneSevenBee.framework.euclidean.js"></script>
+    <script src="js/threeOneSevenBee.framework.expressions.js"></script>
     <script src="js/threeOneSevenBee.framework.html.js"></script>
     <script src="js/threeOneSevenBee.framework.ui.js"></script>
     <script src="js/threeOneSevenBee.framework.js"></script>

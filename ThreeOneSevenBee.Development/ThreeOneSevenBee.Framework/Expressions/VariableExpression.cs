@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Framework.Expressions
 {
@@ -18,6 +14,16 @@ namespace ThreeOneSevenBee.Framework.Expressions
         public override string Value
         {
             get { return value; }
+        }
+
+        public void SetValue(string value)
+        {
+            this.value = value;
+        }
+
+        public override IEnumerable<Expression> GetNodesRecursive()
+        {
+            yield return this;
         }
     }
 }

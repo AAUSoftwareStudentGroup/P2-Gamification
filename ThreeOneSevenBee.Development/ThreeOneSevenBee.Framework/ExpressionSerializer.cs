@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ThreeOneSevenBee.Framework
+﻿namespace ThreeOneSevenBee.Framework
 {
     public class ExpressionSerializer
     {
+        private ExpressionParser parser = new ExpressionParser();
+
         public string Serialize(Expression expression)
         {
-            throw new NotImplementedException();
+            return expression.ToString();
         }
 
         public Expression Deserialize(string expression)
         {
-            throw new NotImplementedException();
+            return parser.Parse(expression);
         }
     }
 }
