@@ -27,8 +27,8 @@ namespace ThreeOneSevenBee.Framework
 
         public ProgressbarStar(int progress, int maxValue, params int[] stars)
         {
-            this.CurrentProgress = progress;
-            this.MaxProgress = maxValue;
+            this._currentProgress = progress;
+            this._maxProgress = maxValue;
             _stars = new List<int>(stars);
             GetStars();
         }
@@ -57,7 +57,7 @@ namespace ThreeOneSevenBee.Framework
             foreach (int i in _stars)
             {
                 totalStars++;
-                if (i <= CurrentProgress)
+                if (i <= _currentProgress)
                 {
                     starsCount++;
                 }
