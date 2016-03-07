@@ -31,7 +31,7 @@ namespace ThreeOneSevenBee.Framework.UI
             _contentView.DrawWithContext(this);
         }
 
-        public abstract void Draw(ButtonView buttonView);
+        //public abstract void Draw(ButtonView buttonView);
 
         public abstract void Draw(LabelView labelView);
 
