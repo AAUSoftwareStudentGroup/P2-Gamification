@@ -54,7 +54,6 @@
     <Compile Include="Html\TouchEvent.cs" />
     <Compile Include="Html\TouchList.cs" />
     <Compile Include="IExpression.cs" />
-    <Compile Include="ProgressbarBase.cs" />
     <Compile Include="ProgressbarCircle.cs" />
     <Compile Include="ProgressbarStar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

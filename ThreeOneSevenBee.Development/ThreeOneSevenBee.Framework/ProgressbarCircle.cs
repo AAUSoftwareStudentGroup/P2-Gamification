@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ThreeOneSevenBee.Framework
 {
-    class ProgressbarCircle : ProgressbarBase
+    class ProgressbarCircle
     {
         public List<ProgressbarStar> StarLevels;
 
@@ -17,11 +17,18 @@ namespace ThreeOneSevenBee.Framework
 
         public void Add(ProgressbarStar level)
         {
-            StarLevels.Add(level);
+            if (!StarLevels.Contains(level))
+            {
+                StarLevels.Add(level);
+            }
         }
+
         public void Remove(ProgressbarStar level)
         {
-            StarLevels.Remove(level);
+            if (StarLevels.Contains(level))
+            {
+                StarLevels.Remove(level);
+            }
         }
     }
 }

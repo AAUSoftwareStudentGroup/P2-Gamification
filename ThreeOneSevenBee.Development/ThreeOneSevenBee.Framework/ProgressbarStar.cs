@@ -6,18 +6,21 @@ using System.Threading.Tasks;
 
 namespace ThreeOneSevenBee.Framework
 {
-    public class ProgressbarStar : ProgressbarBase
+    public class ProgressbarStar
     {
+        private int _maxProgress;
+        private int _currentProgress;
+
         public int GetProgress
         {
-            get { return CurrentProgress; }
-            set { CurrentProgress = value; }
+            get { return _currentProgress; }
+            set { _currentProgress = value; }
         }
 
         public int GetMaxProgress
         {
-            get { return MaxProgress; }
-            set { MaxProgress = value; }
+            get { return _maxProgress; }
+            set { _maxProgress = value; }
         }
 
         private List<int> _stars;
@@ -40,7 +43,10 @@ namespace ThreeOneSevenBee.Framework
 
         public void Remove(int star)
         {
-            _stars.Remove(star);
+            if (_stars.Contains(star))
+            {
+                _stars.Remove(star);
+            }
         }
 
         public int GetStars()
