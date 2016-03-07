@@ -39,6 +39,7 @@
     <Compile Include="Euclidean\Rectangle.cs" />
     <Compile Include="Expression.cs" />
     <Compile Include="ExpressionAnalyzer.cs" />
+    <Compile Include="ExpressionParser.cs" />
     <Compile Include="ExpressionRule.cs" />
     <Compile Include="ExpressionSerializer.cs" />
     <Compile Include="Expressions\BinaryExpression.cs" />
