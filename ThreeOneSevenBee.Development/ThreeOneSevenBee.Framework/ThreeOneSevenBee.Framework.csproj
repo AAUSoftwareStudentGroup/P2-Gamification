@@ -43,9 +43,12 @@
     <Compile Include="ExpressionRule.cs" />
     <Compile Include="ExpressionSerializer.cs" />
     <Compile Include="Expressions\BinaryExpression.cs" />
+    <Compile Include="Expressions\ConstantExpression.cs" />
     <Compile Include="Expressions\DelimiterExpression.cs" />
+    <Compile Include="Expressions\FunctionExpression.cs" />
     <Compile Include="Expressions\NumericExpression.cs" />
     <Compile Include="Expressions\OperatorExpression.cs" />
+    <Compile Include="Expressions\UnaryMinusExpression.cs" />
     <Compile Include="Expressions\VariableExpression.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Euclidean\Vector2.cs" />
@@ -55,9 +58,11 @@
     <Compile Include="Html\TouchEvent.cs" />
     <Compile Include="Html\TouchList.cs" />
     <Compile Include="IExpression.cs" />
+    <Compile Include="Operator.cs" />
     <Compile Include="ProgressbarCircle.cs" />
     <Compile Include="ProgressbarStar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Token.cs" />
     <Compile Include="UI\ButtonView.cs" />
     <Compile Include="UI\CompositeView.cs" />
     <Compile Include="UI\Context.cs" />
