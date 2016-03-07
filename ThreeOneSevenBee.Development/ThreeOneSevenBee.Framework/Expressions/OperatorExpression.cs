@@ -30,9 +30,8 @@ namespace ThreeOneSevenBee.Framework.Expressions
         {
             get
             {
-                string symbol;
-                if (symbols.TryGetValue(Type, out symbol))
-                    return Left.ToString() + symbol + Right.ToString();
+                if (symbols.ContainsKey(Type))
+                    return Left.ToString() + symbols[Type] + Right.ToString();
                 throw new InvalidOperationException("Invalid operator type: " + Type);
             }
         }
