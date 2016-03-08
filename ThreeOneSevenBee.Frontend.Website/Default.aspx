@@ -7,10 +7,12 @@
     <title>317B</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="js/bridge.js"></script>
+    <script src="js/threeonesevenbee.model.UI.js"></script>
     <script src="js/threeonesevenbee.model.js"></script>
     <script src="js/threeonesevenbee.frontend.js"></script>
 </head>
 <body>
+    <canvas id="canvas" width="600" height="400"></canvas>
     <form id="form1" runat="server">
         <div>
 

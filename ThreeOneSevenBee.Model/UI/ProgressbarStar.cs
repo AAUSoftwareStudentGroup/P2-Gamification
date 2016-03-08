@@ -11,13 +11,18 @@ namespace ThreeOneSevenBee.Model.UI
         private int _maxProgress;
         private int _currentProgress;
 
-        public int GetProgress
+        public int Progress
         {
             get { return _currentProgress; }
             set { _currentProgress = value; }
         }
 
-        public int GetMaxProgress
+        public double Percentage
+        {
+            get { return (double)_currentProgress / _maxProgress; }
+        }
+
+        public int MaxProgress
         {
             get { return _maxProgress; }
             set { _maxProgress = value; }

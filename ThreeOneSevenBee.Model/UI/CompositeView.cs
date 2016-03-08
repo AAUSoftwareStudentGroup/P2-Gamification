@@ -1,11 +1,9 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ThreeOneSevenBee.Model.UI
 {
-    public class CompositeView : View
+    public class CompositeView : View, IEnumerable<View>
     {
         public CompositeView(double width, double height)
         {
@@ -34,6 +32,21 @@ namespace ThreeOneSevenBee.Model.UI
                 }
             }
             base.OnClick();
+        }
+
+        public IEnumerator<View> GetEnumerator()
+        {
+            return Children.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Add(View view)
+        {
+            Children.Add(view);
         }
     }
 }

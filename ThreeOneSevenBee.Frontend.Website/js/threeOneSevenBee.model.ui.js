@@ -39,6 +39,9 @@
         draw: function () {
             this.clear();
             this._contentView.drawWithContext(this);
+        },
+        draw$1: function (view) {
+            this.draw$2(Bridge.as(view, ThreeOneSevenBee.Model.UI.LabelView));
         }
     });
     
@@ -71,16 +74,19 @@
             this._stars = new Bridge.List$1(Bridge.Int)(stars);
             this.getStars();
         },
-        getGetProgress: function () {
+        getProgress: function () {
             return this._currentProgress;
         },
-        setGetProgress: function (value) {
+        setProgress: function (value) {
             this._currentProgress = value;
         },
-        getGetMaxProgress: function () {
+        getPercentage: function () {
+            return Bridge.cast(this._currentProgress, Number) / this._maxProgress;
+        },
+        getMaxProgress: function () {
             return this._maxProgress;
         },
-        setGetMaxProgress: function (value) {
+        setMaxProgress: function (value) {
             this._maxProgress = value;
         },
         add: function (star) {
@@ -111,8 +117,25 @@
         }
     });
     
-    Bridge.define('ThreeOneSevenBee.Model.UI.CompositeView', {
+    Bridge.define('ThreeOneSevenBee.Model.UI.LabelView', {
         inherits: [ThreeOneSevenBee.Model.UI.View],
+        config: {
+            properties: {
+                Text: null
+            }
+        },
+        constructor: function (text) {
+            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this);
+    
+            this.setText(text);
+        },
+        drawWithContext: function (context) {
+            context.draw$2(this);
+        }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.UI.CompositeView', {
+        inherits: [ThreeOneSevenBee.Model.UI.View,Bridge.IEnumerable$1(ThreeOneSevenBee.Model.UI.View)],
         children: null,
         constructor: function (width, height) {
             ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this);
@@ -139,23 +162,15 @@
                 }
             }
             this.onClick();
-        }
-    });
-    
-    Bridge.define('ThreeOneSevenBee.Model.UI.LabelView', {
-        inherits: [ThreeOneSevenBee.Model.UI.View],
-        config: {
-            properties: {
-                Text: null
-            }
         },
-        constructor: function (text) {
-            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this);
-    
-            this.setText(text);
+        getEnumerator$1: function () {
+            return this.children.getEnumerator();
         },
-        drawWithContext: function (context) {
-            context.draw$1(this);
+        getEnumerator: function () {
+            return this.getEnumerator$1();
+        },
+        add: function (view) {
+            this.children.add(view);
         }
     });
     
@@ -168,7 +183,19 @@
             this.progressbar = new ThreeOneSevenBee.Model.UI.ProgressbarStar(50, 100);
         },
         drawWithContext: function (context) {
-            context.draw$2(this);
+            context.draw$3(this);
+        }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.UI.ButtonView', {
+        inherits: [ThreeOneSevenBee.Model.UI.LabelView],
+        constructor: function (text, onClick) {
+            ThreeOneSevenBee.Model.UI.LabelView.prototype.$constructor.call(this, text);
+    
+            this.onClick = onClick;
+        },
+        drawWithContext: function (context) {
+            context.draw$1(this);
         }
     });
     

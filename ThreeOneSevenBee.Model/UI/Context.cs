@@ -20,7 +20,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public abstract void Clear();
 
-        public void SetContentView(View view)
+        public virtual void SetContentView(View view)
         {
             _contentView = view;
         }
@@ -31,8 +31,13 @@ namespace ThreeOneSevenBee.Model.UI
             _contentView.DrawWithContext(this);
         }
 
-        public abstract void Draw(LabelView labelView);
+        public abstract void Draw(LabelView view);
 
-        public abstract void Draw(ProgressbarStarView progressbarStarView);
+        public abstract void Draw(ProgressbarStarView view);
+
+        public virtual void Draw(ButtonView view)
+        {
+            Draw(view as LabelView);
+        }
     }
 }
