@@ -1,1 +1,0 @@
-xbuild ../www/www.csproj
