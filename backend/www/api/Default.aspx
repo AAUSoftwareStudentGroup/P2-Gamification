@@ -1,1 +1,0 @@
-<%@ Page Language="C#" Inherits="P2Backend.Default" %>
