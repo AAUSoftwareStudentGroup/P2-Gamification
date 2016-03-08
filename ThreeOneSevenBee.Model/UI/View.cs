@@ -14,6 +14,16 @@ namespace ThreeOneSevenBee.Model.UI
 
         public abstract void DrawWithContext(Context context);
 
+        public virtual void Click(int x, int y)
+        {
+            if(ContainsPoint(x, y))
+            {
+                OnClick();
+            }
+        }
+
+        public Action OnClick;
+        
         public virtual bool ContainsPoint(int x, int y)
         {
             return x >= X && y >= Y && x <= X + Width && y <= Y + Height;

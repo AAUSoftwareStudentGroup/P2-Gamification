@@ -31,8 +31,6 @@ namespace ThreeOneSevenBee.Model.UI
             _contentView.DrawWithContext(this);
         }
 
-        //public abstract void Draw(ButtonView buttonView);
-
         public abstract void Draw(LabelView labelView);
 
         public abstract void Draw(ProgressbarStarView progressbarStarView);

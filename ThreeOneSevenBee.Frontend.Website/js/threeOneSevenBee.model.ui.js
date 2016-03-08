@@ -2,12 +2,18 @@
     "use strict";
 
     Bridge.define('ThreeOneSevenBee.Model.UI.View', {
+        onClick: null,
         config: {
             properties: {
                 Width: 0,
                 Height: 0,
                 X: 0,
                 Y: 0
+            }
+        },
+        click: function (x, y) {
+            if (this.containsPoint(x, y)) {
+                this.onClick();
             }
         },
         containsPoint: function (x, y) {
@@ -122,6 +128,17 @@
                 var child = $t.getCurrent();
                 child.drawWithContext(context);
             }
+        },
+        click: function (x, y) {
+            var $t;
+            if (ThreeOneSevenBee.Model.UI.View.prototype.containsPoint.call(this, x, y)) {
+                $t = Bridge.getEnumerator(this.children);
+                while ($t.moveNext()) {
+                    var child = $t.getCurrent();
+                    child.click(x, y);
+                }
+            }
+            this.onClick();
         }
     });
     

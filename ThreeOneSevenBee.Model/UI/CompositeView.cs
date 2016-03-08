@@ -19,7 +19,21 @@ namespace ThreeOneSevenBee.Model.UI
         public override void DrawWithContext(Context context)
         {
             foreach (var child in Children)
+            {
                 child.DrawWithContext(context);
+            }
+        }
+
+        public override void Click(int x, int y)
+        {
+            if (base.ContainsPoint(x, y))
+            {
+                foreach (View child in Children)
+                {
+                    child.Click(x, y);
+                }
+            }
+            base.OnClick();
         }
     }
 }
