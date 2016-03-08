@@ -63,8 +63,18 @@
     <Content Include="js\bridge.min.js" />
     <Content Include="js\threeonesevenbee.frontend.js" />
     <Content Include="js\threeonesevenbee.frontend.min.js" />
+    <Content Include="js\threeonesevenbee.model.collections.js" />
+    <Content Include="js\threeonesevenbee.model.collections.min.js" />
+    <Content Include="js\threeonesevenbee.model.euclidean.js" />
+    <Content Include="js\threeonesevenbee.model.euclidean.min.js" />
+    <Content Include="js\threeonesevenbee.model.expression.expressions.js" />
+    <Content Include="js\threeonesevenbee.model.expression.expressions.min.js" />
+    <Content Include="js\threeonesevenbee.model.expression.js" />
+    <Content Include="js\threeonesevenbee.model.expression.min.js" />
     <Content Include="js\threeonesevenbee.model.js" />
     <Content Include="js\threeonesevenbee.model.min.js" />
+    <Content Include="js\threeOneSevenBee.model.ui.js" />
+    <Content Include="js\threeOneSevenBee.model.ui.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
