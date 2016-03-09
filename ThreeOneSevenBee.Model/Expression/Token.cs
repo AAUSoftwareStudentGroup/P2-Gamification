@@ -34,7 +34,7 @@ namespace ThreeOneSevenBee.Model.Expression
             return new Token(TokenType.Function, function);
         }
 
-        public static Token LeftBracket()
+        /*public static Token LeftBracket()
         {
             return new Token(TokenType.LeftBracket, "(");
         }
@@ -42,7 +42,7 @@ namespace ThreeOneSevenBee.Model.Expression
         public static Token RightBracket()
         {
             return new Token(TokenType.RightBracket, ")");
-        }
+        }*/
 
 
         public Token(TokenType type, object data)

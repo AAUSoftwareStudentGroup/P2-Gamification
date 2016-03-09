@@ -17,7 +17,9 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         public OperatorExpression(ExpressionBase left, ExpressionBase right, OperatorType type)
         {
             Left = left;
+            Left.Parent = this;
             Right = right;
+            Right.Parent = this;
             Type = type;
         }
         public ExpressionBase Left { get; private set; }

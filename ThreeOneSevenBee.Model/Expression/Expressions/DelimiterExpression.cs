@@ -7,6 +7,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         public DelimiterExpression(ExpressionBase expression)
         {
             Expression = expression;
+            Expression.Parent = this;
         }
 
         public ExpressionBase Expression { get; protected set; }

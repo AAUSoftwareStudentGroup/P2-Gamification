@@ -5,6 +5,8 @@ namespace ThreeOneSevenBee.Model.Expression
 {
     public abstract class ExpressionBase : IEquatable<ExpressionBase>
     {
+        public ExpressionBase Parent { get; set; }
+
         public abstract string Value { get; }
 
         public abstract IEnumerable<ExpressionBase> GetNodesRecursive();

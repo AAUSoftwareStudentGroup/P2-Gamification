@@ -19,6 +19,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         public FunctionExpression(ExpressionBase expression, string function)
         {
             Expression = expression;
+            Expression.Parent = this;
             Function = function.ToLower();
         }
 
