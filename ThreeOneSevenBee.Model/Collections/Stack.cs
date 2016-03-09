@@ -8,29 +8,44 @@ namespace ThreeOneSevenBee.Model.Collections
 {
     public class Stack<T> : IEnumerable<T>
     {
-        public void Push(T value)
+        private List<T> list;
+
+        public Stack()
         {
-            throw new NotImplementedException();
+            list = new List<T>();
+        }
+
+        public void Push(T item)
+        {
+            list.Add(item);
         }
 
         public T Peek()
         {
-            throw new NotImplementedException();
+            if (list.Count == 0)
+                throw new InvalidOperationException("The Queue is empty.");
+
+            return list[list.Count - 1];
         }
 
         public T Pop()
         {
-            throw new NotImplementedException();
+            if (list.Count == 0)
+                throw new InvalidOperationException("The Queue is empty.");
+
+            var item = list[list.Count - 1];
+            list.RemoveAt(list.Count - 1);
+            return item;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return list.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return list.GetEnumerator();
         }
     }
 }

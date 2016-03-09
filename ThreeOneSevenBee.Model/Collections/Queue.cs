@@ -8,24 +8,35 @@ namespace ThreeOneSevenBee.Model.Collections
 {
     public class Queue<T> : IEnumerable<T>
     {
-        public void Enqueue(T value)
+        private List<T> list;
+
+        public Queue()
         {
-            throw new NotImplementedException();
+            list = new List<T>();
+        }
+
+        public void Enqueue(T item)
+        {
+            list.Add(item);
         }
 
         public T Dequeue()
         {
-            throw new NotImplementedException();
+            if (list.Count == 0)
+                throw new InvalidOperationException("The Queue is empty.");
+            var item = list[0];
+            list.RemoveAt(0);
+            return item;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return list.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return list.GetEnumerator();
         }
     }
 }
