@@ -12,7 +12,7 @@
     Bridge.define('ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer', {
         rules: null,
         constructor: function () {
-            this.rules = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionRule)();
+            this.rules = new Bridge.List$1(Function)();
         },
         add: function (rule) {
             this.rules.add(rule);
@@ -20,15 +20,55 @@
         remove: function (rule) {
             this.rules.remove(rule);
         },
-        getIdentities: function (expression) {
+        getCommonParent: function (selection) {
+            var $t;
+            if (selection.getCount() === 0) {
+                return null;
+            }
+            else  {
+                if (selection.getCount() === 1) {
+                    return selection.getItem(0);
+                }
+                else  {
+                    var intersection = selection.getItem(0).getParentPath();
+                    $t = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(selection).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f1));
+                    while ($t.moveNext()) {
+                        var path = $t.getCurrent();
+                        intersection = Bridge.Linq.Enumerable.from(intersection).intersect(path);
+                    }
+                    return Bridge.Linq.Enumerable.from(intersection).first();
+                }
+            }
+        },
+        getIdentities: function (expression, selection) {
+            var $t;
             var identities = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
     
-            // e is always identical to itself
-            identities.add(expression);
+            if (Bridge.Linq.Enumerable.from(selection).count() === 0) {
+                return identities;
+            }
     
-            // check additional rules here
+            $t = Bridge.getEnumerator(this.rules);
+            while ($t.moveNext()) {
+                var rule = $t.getCurrent();
+                var commonParent = this.getCommonParent(selection);
+                var identity = { };
+                if (rule(commonParent, selection, identity)) {
+                    identities.add(identity.v);
+                }
+            }
     
             return identities;
+        }
+    });
+    
+    var $_ = {};
+    
+    Bridge.ns("ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer, {
+        f1: function (expr) {
+            return expr.getParentPath();
         }
     });
     
@@ -38,6 +78,15 @@
             properties: {
                 Parent: null
             }
+        },
+        getParentPath: function () {
+            var $yield = [];
+            var currentParent = this.getParent();
+            while (Bridge.hasValue(currentParent)) {
+                $yield.push(currentParent);
+                currentParent = currentParent.getParent();
+            }
+            return Bridge.Array.toEnumerable($yield);
         },
         canCalculate: function () {
             return false;
@@ -57,6 +106,72 @@
         toString: function () {
             return this.getValue();
         }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.Expression.ExpressionModel', {
+        expression: null,
+        selectionParent: null,
+        selection: null,
+        identities: null,
+        analyzer: null,
+        serializer: null,
+        config: {
+            events: {
+                OnIdentitiesChanged: null,
+                OnSelectionChanged: null
+            }
+        },
+        constructor: function (expression, rules) {
+            var $t;
+            if (rules === void 0) { rules = []; }
+            this.selectionParent = null;
+            this.selection = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
+            this.identities = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
+            this.serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
+            this.analyzer = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer();
+            this.expression = this.serializer.deserialize(expression);
+            $t = Bridge.getEnumerator(rules);
+            while ($t.moveNext()) {
+                var rule = $t.getCurrent();
+                this.analyzer.add(rule);
+            }
+    },
+    getExpression: function () {
+        return this.expression;
+    },
+    getIdentities: function () {
+        return this.identities;
+    },
+    getSelection: function () {
+        return this.selection;
+    },
+    getSelected: function () {
+        return this.selectionParent;
+    },
+    select: function (expression) {
+        if (!this.selection.contains(expression)) {
+            this.selection.add(expression);
+        }
+        else  {
+            this.selection.remove(expression);
+        }
+        this.selectionParent = this.analyzer.getCommonParent(this.selection);
+        this.identities = this.analyzer.getIdentities(expression, this.selection);
+        this.OnIdentitiesChanged(this);
+        this.OnSelectionChanged(this);
+    },
+    unSelectAll: function () {
+        this.selection.clear();
+        this.identities.clear();
+        this.OnIdentitiesChanged(this);
+        this.OnSelectionChanged(this);
+    },
+    applyIdentity: function (identity) {
+        if (this.identities.contains(identity)) {
+            this.selectionParent = identity;
+        }
+        this.unSelectAll();
+    }
     });
     
     Bridge.define('ThreeOneSevenBee.Model.Expression.ExpressionParser', {
@@ -436,23 +551,6 @@
         },
         parse$1: function (inFix) {
             return this.parse(this.inFixToPostFix(inFix));
-        }
-    });
-    
-    /**
-     * A generel representation of an expression rule.
-     *
-     * @public
-     * @class ThreeOneSevenBee.Model.Expression.ExpressionRule
-     */
-    Bridge.define('ThreeOneSevenBee.Model.Expression.ExpressionRule', {
-        statics: {
-            fromExpression: function (expression) {
-                throw new Bridge.NotImplementedException();
-            },
-            fromString: function (rule) {
-                throw new Bridge.NotImplementedException();
-            }
         }
     });
     

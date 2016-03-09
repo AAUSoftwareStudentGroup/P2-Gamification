@@ -27,14 +27,45 @@ namespace ThreeOneSevenBee.Model.Expression
             rules.Remove(rule);
         }
 
-        public IList<ExpressionBase> GetIdentities(ExpressionBase expression)
+        public ExpressionBase GetCommonParent(List<ExpressionBase> selection)
+        {
+            if(selection.Count == 0)
+            {
+                return null;
+            }
+            else if(selection.Count == 1)
+            {
+                return selection[0];
+            }
+            else
+            {
+                var intersection = selection[0].GetParentPath();
+                foreach (var path in selection.Select((expr) => expr.GetParentPath()))
+                {
+                    intersection = intersection.Intersect(path);
+                }
+                return intersection.First();
+            }
+        }
+
+        public List<ExpressionBase> GetIdentities(ExpressionBase expression, List<ExpressionBase> selection)
         {
             var identities = new List<ExpressionBase>();
+            
+            if(selection.Count() == 0)
+            {
+                return identities;
+            }
 
-            // e is always identical to itself
-            identities.Add(expression);
-
-            // check additional rules here
+            foreach(ExpressionRule rule in rules)
+            {
+                ExpressionBase commonParent = GetCommonParent(selection);
+                ExpressionBase identity;
+                if (rule(commonParent, selection, out identity))
+                {
+                    identities.Add(identity);
+                }
+            }
 
             return identities;
         }

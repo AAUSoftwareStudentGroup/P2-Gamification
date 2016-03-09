@@ -13,6 +13,16 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public abstract IEnumerable<ExpressionBase> GetNodesRecursive();
 
+        public IEnumerable<ExpressionBase> GetParentPath()
+        {
+            ExpressionBase currentParent = Parent;
+            while (currentParent != null)
+            {
+                yield return currentParent;
+                currentParent = currentParent.Parent;
+            }
+        }
+
         public virtual bool CanCalculate() { return false; }
 
         public virtual double? Calculate() { return null; }

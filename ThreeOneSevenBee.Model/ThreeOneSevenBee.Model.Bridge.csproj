@@ -40,8 +40,10 @@
     <Compile Include="Euclidean\Vector2.cs" />
     <Compile Include="Expression\ExpressionAnalyzer.cs" />
     <Compile Include="Expression\ExpressionBase.cs" />
+    <Compile Include="Expression\ExpressionModel.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
     <Compile Include="Expression\ExpressionRule.cs" />
+    <Compile Include="Expression\ExpressionRules\Rules.cs" />
     <Compile Include="Expression\ExpressionSerializer.cs" />
     <Compile Include="Expression\Expressions\ConstantExpression.cs" />
     <Compile Include="Expression\Expressions\DelimiterExpression.cs" />
@@ -78,6 +80,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Bridge.1.11.1\build\Bridge.targets" Condition="Exists('..\packages\Bridge.1.11.1\build\Bridge.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

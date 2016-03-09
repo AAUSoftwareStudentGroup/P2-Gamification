@@ -46,8 +46,10 @@
     <Compile Include="Euclidean\Vector2.cs" />
     <Compile Include="Expression\ExpressionBase.cs" />
     <Compile Include="Expression\ExpressionAnalyzer.cs" />
+    <Compile Include="Expression\ExpressionModel.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
     <Compile Include="Expression\ExpressionRule.cs" />
+    <Compile Include="Expression\ExpressionRules\Rules.cs" />
     <Compile Include="Expression\ExpressionSerializer.cs" />
     <Compile Include="Expression\Expressions\ConstantExpression.cs" />
     <Compile Include="Expression\Expressions\DelimiterExpression.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="UI\ProgressbarStarView.cs" />
     <Compile Include="UI\View.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
