@@ -34,6 +34,11 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Expression.ExpressionBase', {
         inherits: function () { return [Bridge.IEquatable$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)]; },
+        config: {
+            properties: {
+                Parent: null
+            }
+        },
         canCalculate: function () {
             return false;
         },
@@ -253,16 +258,11 @@
         },
         inFixToPostFix: function (inFix) {
             var i = { v : 0 };
-            //var n = 0;
             var lastToken = null;
             while (i.v < inFix.length) {
                 if (this.isWhiteSpace(inFix, i)) {
                     continue;
                 }
-                //Console.WriteLine("Step " + n++);
-                //Console.WriteLine("output:    " + this.output.Aggregate("", (s, t) => s + t.Data + " "));
-                //Console.WriteLine("operators: " + this.operators.Aggregate("", (s, t) => s + t.Data + " "));
-    
                 var number = { };
                 if (this.isNumber(inFix, i, number)) {
                     lastToken = Bridge.get(ThreeOneSevenBee.Model.Expression.Token).number(number.v);
@@ -292,7 +292,6 @@
     
                 var op1 = { };
                 if (this.isOperator(inFix, i, op1)) {
-                    //Console.WriteLine("last: " + lastToken.Data);
                     // unary check
                     if (op1.v.getSymbol() === "-" && (!Bridge.hasValue(lastToken) || lastToken.getType() === ThreeOneSevenBee.Model.Expression.TokenType.operator)) {
                         lastToken = Bridge.get(ThreeOneSevenBee.Model.Expression.Token).operator(new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "~", 5, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.right));
@@ -334,7 +333,7 @@
                 if (inFix.charCodeAt(i.v) === 41) {
                     while (Bridge.Linq.Enumerable.from(this.operators).any()) {
                         var tok = this.operators.pop();
-                        if (tok.getType() === ThreeOneSevenBee.Model.Expression.TokenType.operator && Bridge.equals((Bridge.as(tok.getData(), ThreeOneSevenBee.Model.Expression.Operator)), "(")) {
+                        if (tok.getType() === ThreeOneSevenBee.Model.Expression.TokenType.operator && Bridge.String.equals((Bridge.as(tok.getData(), ThreeOneSevenBee.Model.Expression.Operator)).getSymbol(), "(")) {
                             break;
                         }
                         this.output.enqueue(tok);
@@ -347,10 +346,6 @@
     
                 throw new Bridge.InvalidOperationException("Unexpected token: " + String.fromCharCode(inFix.charCodeAt(i.v)));
             }
-    
-            //Console.WriteLine("Final");
-            //Console.Write("output:    " + this.output.Aggregate("", (s, t) => s + t.Data + " "));
-            //Console.WriteLine(this.operators.Aggregate("", (s, t) => s + t.Data + " "));
     
             var output = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.Token)();
             while (Bridge.Linq.Enumerable.from(this.output).any()) {
@@ -529,12 +524,6 @@
             },
             $function: function ($function) {
                 return new ThreeOneSevenBee.Model.Expression.Token(ThreeOneSevenBee.Model.Expression.TokenType.$function, $function);
-            },
-            leftBracket: function () {
-                return new ThreeOneSevenBee.Model.Expression.Token(ThreeOneSevenBee.Model.Expression.TokenType.leftBracket, "(");
-            },
-            rightBracket: function () {
-                return new ThreeOneSevenBee.Model.Expression.Token(ThreeOneSevenBee.Model.Expression.TokenType.rightBracket, ")");
             }
         },
         config: {

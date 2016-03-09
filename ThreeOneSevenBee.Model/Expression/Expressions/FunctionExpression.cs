@@ -50,6 +50,11 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return base.Calculate();
         }
 
+        public override ExpressionBase Clone()
+        {
+            return new FunctionExpression(Expression.Clone(), Function);
+        }
+
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
         {
             yield return this;

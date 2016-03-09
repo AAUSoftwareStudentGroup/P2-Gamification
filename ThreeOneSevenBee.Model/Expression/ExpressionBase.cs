@@ -9,6 +9,8 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public abstract string Value { get; }
 
+        public abstract ExpressionBase Clone();
+
         public abstract IEnumerable<ExpressionBase> GetNodesRecursive();
 
         public virtual bool CanCalculate() { return false; }

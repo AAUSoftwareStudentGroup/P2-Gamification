@@ -17,6 +17,11 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             get { return value.ToString(); }
         }
 
+        public override ExpressionBase Clone()
+        {
+            return new ConstantExpression(value);
+        }
+
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
         {
             yield return this;

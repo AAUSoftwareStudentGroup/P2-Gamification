@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
@@ -19,6 +20,11 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         public void SetValue(string value)
         {
             this.value = value;
+        }
+
+        public override ExpressionBase Clone()
+        {
+            return new VariableExpression(Value);
         }
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
@@ -28,6 +29,11 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         public override double? Calculate()
         {
             return -Expression.Calculate();
+        }
+
+        public override ExpressionBase Clone()
+        {
+            return new UnaryMinusExpression(Expression.Clone());
         }
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()

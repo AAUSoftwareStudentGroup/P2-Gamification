@@ -30,6 +30,9 @@
         getValue: function () {
             return Bridge.Enum.toString(ThreeOneSevenBee.Model.Expression.Expressions.ConstantType, this.value);
         },
+        clone: function () {
+            return new ThreeOneSevenBee.Model.Expression.Expressions.ConstantExpression(this.value);
+        },
         getNodesRecursive: function () {
             var $yield = [];
             $yield.push(this);
@@ -64,6 +67,7 @@
             ThreeOneSevenBee.Model.Expression.ExpressionBase.prototype.$constructor.call(this);
     
             this.setExpression(expression);
+            this.getExpression().setParent(this);
         },
         getValue: function () {
             return "(" + this.getExpression().toString() + ")";
@@ -73,6 +77,9 @@
         },
         calculate: function () {
             return this.getExpression().calculate();
+        },
+        clone: function () {
+            return new ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression(this.getExpression().clone());
         },
         getNodesRecursive: function () {
             var $t;
@@ -112,6 +119,7 @@
             ThreeOneSevenBee.Model.Expression.ExpressionBase.prototype.$constructor.call(this);
     
             this.setExpression(expression);
+            this.getExpression().setParent(this);
             this.setFunction($function.toLowerCase());
         },
         getValue: function () {
@@ -129,6 +137,9 @@
                 return func.v(Bridge.Nullable.getValue(this.getExpression().calculate()));
             }
             return ThreeOneSevenBee.Model.Expression.ExpressionBase.prototype.calculate.call(this);
+        },
+        clone: function () {
+            return new ThreeOneSevenBee.Model.Expression.Expressions.FunctionExpression(this.getExpression().clone(), this.getFunction());
         },
         getNodesRecursive: function () {
             var $t;
@@ -154,6 +165,9 @@
         },
         getValue: function () {
             return Bridge.Int.format(this.value, 'G');
+        },
+        clone: function () {
+            return new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(this.value);
         },
         getNodesRecursive: function () {
             var $yield = [];
@@ -194,7 +208,9 @@
             ThreeOneSevenBee.Model.Expression.ExpressionBase.prototype.$constructor.call(this);
     
             this.setLeft(left);
+            this.getLeft().setParent(this);
             this.setRight(right);
+            this.getRight().setParent(this);
             this.setType(type);
         },
         getValue: function () {
@@ -229,6 +245,9 @@
     
             return ThreeOneSevenBee.Model.Expression.ExpressionBase.prototype.calculate.call(this);
         },
+        clone: function () {
+            return new ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression(this.getLeft().clone(), this.getRight().clone(), this.getType());
+        },
         getNodesRecursive: function () {
             var $t, $t1;
             var $yield = [];
@@ -259,6 +278,7 @@
             ThreeOneSevenBee.Model.Expression.ExpressionBase.prototype.$constructor.call(this);
     
             this.setExpression(expression);
+            this.getExpression().setParent(this);
         },
         getValue: function () {
             return "-" + this.getExpression().toString();
@@ -268,6 +288,9 @@
         },
         calculate: function () {
             return Bridge.Nullable.neg(this.getExpression().calculate());
+        },
+        clone: function () {
+            return new ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression(this.getExpression().clone());
         },
         getNodesRecursive: function () {
             var $t;
@@ -296,6 +319,9 @@
         },
         setValue: function (value) {
             this.value = value;
+        },
+        clone: function () {
+            return new ThreeOneSevenBee.Model.Expression.Expressions.VariableExpression(this.getValue());
         },
         getNodesRecursive: function () {
             var $yield = [];
