@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define DEBUG_PRINT
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ThreeOneSevenBee.Model.Expression.Expressions;
@@ -171,16 +173,19 @@ namespace ThreeOneSevenBee.Model.Expression
         public List<Token> InFixToPostFix(string inFix)
         {
             var i = 0;
-            //var n = 0;
+#if DEBUG_PRINT
+            var n = 0;
+#endif
             Token lastToken = null;
             while (i < inFix.Length)
             {
                 if (IsWhiteSpace(inFix, ref i))
                     continue;
-                //Console.WriteLine("Step " + n++);
-                //Console.WriteLine("output:    " + this.output.Aggregate("", (s, t) => s + t.Data + " "));
-                //Console.WriteLine("operators: " + this.operators.Aggregate("", (s, t) => s + t.Data + " "));
-
+#if DEBUG_PRINT
+                Console.WriteLine("Step " + n++);
+                Console.WriteLine("output:    " + this.output.Aggregate("", (s, t) => s + t.Data + " "));
+                Console.WriteLine("operators: " + this.operators.Aggregate("", (s, t) => s + t.Data + " "));
+#endif
                 double number;
                 if (IsNumber(inFix, ref i, out number))
                 {
@@ -215,7 +220,9 @@ namespace ThreeOneSevenBee.Model.Expression
                 Operator op1;
                 if (IsOperator(inFix, ref i, out op1))
                 {
-                    //Console.WriteLine("last: " + lastToken.Data);
+#if DEBUG_PRINT
+                    Console.WriteLine("last: " + lastToken.Data);
+#endif
                     // unary check
                     if (op1.Symbol == "-" && (lastToken == null || lastToken.Type == TokenType.Operator))
                     {
@@ -265,7 +272,7 @@ namespace ThreeOneSevenBee.Model.Expression
                     while (operators.Any())
                     {
                         var tok = operators.Pop();
-                        if (tok.Type == TokenType.Operator && (tok.Data as Operator).Equals("("))
+                        if (tok.Type == TokenType.Operator && (tok.Data as Operator).Symbol.Equals("("))
                             break;
                         this.output.Enqueue(tok);
                     }
@@ -278,10 +285,11 @@ namespace ThreeOneSevenBee.Model.Expression
                 throw new InvalidOperationException("Unexpected token: " + inFix[i]);
             }
 
-            //Console.WriteLine("Final");
-            //Console.Write("output:    " + this.output.Aggregate("", (s, t) => s + t.Data + " "));
-            //Console.WriteLine(this.operators.Aggregate("", (s, t) => s + t.Data + " "));
-
+#if DEBUG_PRINT
+            Console.WriteLine("Final");
+            Console.Write("output:    " + this.output.Aggregate("", (s, t) => s + t.Data + " "));
+            Console.WriteLine(this.operators.Aggregate("", (s, t) => s + t.Data + " "));
+#endif
             var output = new List<Token>();
             while (this.output.Any())
                 output.Add(this.output.Dequeue());
