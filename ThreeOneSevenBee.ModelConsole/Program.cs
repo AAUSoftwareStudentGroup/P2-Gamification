@@ -8,7 +8,7 @@ namespace ThreeOneSevenBee.ModelConsole
 {
     class Program
     {
-        static void UpdateIdentities(ExpressionModel model)
+        static void Update(ExpressionModel model)
         {
             Console.Write("Identities: ");
             foreach (ExpressionBase identity in model.Identities)
@@ -16,10 +16,7 @@ namespace ThreeOneSevenBee.ModelConsole
                 Console.Write("|" + identity + "|");
             }
             Console.WriteLine();
-        }
-
-        static void UpdateSelection(ExpressionModel model)
-        {
+            Console.WriteLine("Selected: " + model.Selected);
             Console.Write("Selection: ");
             foreach (ExpressionBase selected in model.Selection)
             {
@@ -33,19 +30,14 @@ namespace ThreeOneSevenBee.ModelConsole
 
         static void Main(string[] args)
         {
-            ExpressionModel model = new ExpressionModel("a+b*2", Rules.ItselfRule, Rules.CommunicativeRule);
+            ExpressionModel model = new ExpressionModel("a+b*2/5", Rules.ItselfRule, Rules.CommunicativeRule);
 
-            model.OnIdentitiesChanged += UpdateIdentities;
-            model.OnSelectionChanged += UpdateSelection;
+            model.OnChanged += Update;
 
-            model.Select(model.Expression);
-            Console.ReadKey();
-            model.Select(model.Expression);
-            Console.ReadKey();
-            model.Select(model.Expression.GetNodesRecursive().ElementAt(2));
-            Console.ReadKey();
-            model.Select(model.Expression.GetNodesRecursive().ElementAt(1));
-            Console.ReadKey();
+            model.Select(model.Expression.GetNodesRecursive().ElementAt(4));
+            model.Select(model.Expression.GetNodesRecursive().ElementAt(5));
+
+            model.ApplyIdentity(model.Identities[1]);
         }
     }
 }

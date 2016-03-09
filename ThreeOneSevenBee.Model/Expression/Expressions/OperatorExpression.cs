@@ -22,9 +22,9 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             Right.Parent = this;
             Type = type;
         }
-        public ExpressionBase Left { get; private set; }
+        public ExpressionBase Left { get; set; }
 
-        public ExpressionBase Right { get; private set; }
+        public ExpressionBase Right { get; set; }
 
         public OperatorType Type { get; private set; }
 

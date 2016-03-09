@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using ThreeOneSevenBee.Model.Expression.Expressions;
 
 namespace ThreeOneSevenBee.Model.Expression
 {
@@ -46,9 +47,7 @@ namespace ThreeOneSevenBee.Model.Expression
             get { return selectionParent; }
         }
 
-        public event Action<ExpressionModel> OnIdentitiesChanged;
-
-        public event Action<ExpressionModel> OnSelectionChanged;
+        public event Action<ExpressionModel> OnChanged;
 
         public void Select(ExpressionBase expression)
         {
@@ -62,23 +61,37 @@ namespace ThreeOneSevenBee.Model.Expression
             }
             selectionParent = analyzer.GetCommonParent(selection);
             identities = analyzer.GetIdentities(expression, selection);
-            OnIdentitiesChanged(this);
-            OnSelectionChanged(this);
+            OnChanged(this);
         }
 
         public void UnSelectAll()
         {
             selection.Clear();
             identities.Clear();
-            OnIdentitiesChanged(this);
-            OnSelectionChanged(this);
+            selectionParent = null;
+            OnChanged(this);
         }
 
         public void ApplyIdentity(ExpressionBase identity)
         {
             if (identities.Contains(identity))
             {
-                selectionParent = identity;
+                if(selectionParent.Parent == null)
+                {
+                    expression = identity;
+                }
+                else
+                {
+                    var parent = (selectionParent.Parent as OperatorExpression);
+                    if(parent.Left == selectionParent)
+                    {
+                        parent.Left = identity;
+                    }
+                    else
+                    {
+                        parent.Right = identity;
+                    }
+                }
             }
             UnSelectAll();
         }
