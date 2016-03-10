@@ -11,6 +11,8 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public abstract ExpressionBase Clone();
 
+        public abstract bool Replace(ExpressionBase old, ExpressionBase replacement);
+
         public abstract IEnumerable<ExpressionBase> GetNodesRecursive();
 
         public IEnumerable<ExpressionBase> GetParentPath()
