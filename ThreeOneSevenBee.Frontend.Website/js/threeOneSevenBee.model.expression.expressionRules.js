@@ -4,7 +4,7 @@
     Bridge.define('ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules', {
         statics: {
             itselfRule: function (expression, selection, identity) {
-                identity.v = expression;
+                identity.v = expression.clone();
                 return true;
             },
             commutativeRule: function (expression, selection, identity) {

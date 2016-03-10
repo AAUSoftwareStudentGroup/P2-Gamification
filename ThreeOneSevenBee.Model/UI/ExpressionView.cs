@@ -21,7 +21,7 @@ namespace ThreeOneSevenBee.Model.UI
                 {
                     Width = 20,
                     Height = 20,
-                    Selected = model.Selection.Contains(expression)
+                    Selected = model.SelectionIndex(expression) != -1
                 };
             }
             OperatorExpression operatorExpression;

@@ -11,7 +11,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
     {
         public static bool ItselfRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            identity = expression;
+            identity = expression.Clone();
             return true;
         }
 

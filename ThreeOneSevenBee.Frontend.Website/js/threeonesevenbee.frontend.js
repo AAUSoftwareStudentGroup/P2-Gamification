@@ -16,7 +16,7 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a+b", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commutativeRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).fractionVariableMultiplyRule]);
+                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("b+a+a", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commutativeRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).fractionVariableMultiplyRule]);
     
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(model, 600, 20), {

@@ -223,7 +223,7 @@
                     }), {
                         setWidth: 20,
                         setHeight: 20,
-                        setSelected: model.getSelection().contains(expression)
+                        setSelected: model.selectionIndex(expression) !== -1
                     } );
                 }
                 var operatorExpression;
