@@ -182,6 +182,7 @@
                 else  {
                     parent.setRight(identity);
                 }
+                identity.setParent(parent);
             }
         }
         this.unSelectAll();

@@ -104,6 +104,7 @@ namespace ThreeOneSevenBee.Model.Expression
                     {
                         parent.Right = identity;
                     }
+                    identity.Parent = parent;
                 }
             }
             UnSelectAll();
