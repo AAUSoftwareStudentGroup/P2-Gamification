@@ -16,7 +16,10 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
+                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("4+4", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commutativeRule]);
+    
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), [
+                    [new ThreeOneSevenBee.Model.UI.ExpressionView(model, 400, 400)],
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView("Click on a Button!"), {
                         setX: 100,
                         setY: 60,

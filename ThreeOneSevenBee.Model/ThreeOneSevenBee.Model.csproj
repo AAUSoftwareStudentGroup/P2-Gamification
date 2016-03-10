@@ -66,6 +66,7 @@
     <Compile Include="UI\ButtonView.cs" />
     <Compile Include="UI\CompositeView.cs" />
     <Compile Include="UI\Context.cs" />
+    <Compile Include="UI\ExpressionView.cs" />
     <Compile Include="UI\LabelView.cs" />
     <Compile Include="UI\ProgressbarCircle.cs" />
     <Compile Include="UI\ProgressbarStar.cs" />

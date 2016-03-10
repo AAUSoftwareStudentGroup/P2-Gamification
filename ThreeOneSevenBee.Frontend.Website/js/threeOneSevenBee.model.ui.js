@@ -161,7 +161,6 @@
                     child.click(x, y);
                 }
             }
-            this.onClick();
         },
         getEnumerator$1: function () {
             return this.children.getEnumerator();
@@ -196,6 +195,38 @@
         },
         drawWithContext: function (context) {
             context.draw$1(this);
+        }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.UI.ExpressionView', {
+        inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
+        constructor: function (model, width, height) {
+            ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
+    
+            this.build(model.getExpression(), model);
+            model.addOnChanged($_.ThreeOneSevenBee.Model.UI.ExpressionView.f1);
+        },
+        build: function (expression, model) {
+            this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
+            this.children.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView(expression.toString(), function () {
+                model.select(expression);
+            }), {
+                setX: 20,
+                setY: 20,
+                setWidth: 100,
+                setHeight: 100
+            } ));
+            return this;
+        }
+    });
+    
+    var $_ = {};
+    
+    Bridge.ns("ThreeOneSevenBee.Model.UI.ExpressionView", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Model.UI.ExpressionView, {
+        f1: function (m) {
+            console.log(m.getExpression().toString());
         }
     });
     

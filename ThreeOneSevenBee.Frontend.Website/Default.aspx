@@ -8,6 +8,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="js/bridge.js"></script>
     <script src="js/threeonesevenbee.model.UI.js"></script>
+    <script src="js/threeonesevenbee.model.Expression.js"></script>
+    <script src="js/threeonesevenbee.model.Expression.expressionrules.js"></script>
+    <script src="js/threeonesevenbee.model.collections.js"></script>
+    <script src="js/threeonesevenbee.model.Expression.Expressions.js"></script>
     <script src="js/threeonesevenbee.model.js"></script>
     <script src="js/threeonesevenbee.frontend.js"></script>
 </head>

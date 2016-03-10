@@ -7,7 +7,7 @@
                 identity.v = expression;
                 return true;
             },
-            communicativeRule: function (expression, selection, identity) {
+            commutativeRule: function (expression, selection, identity) {
                 var $t;
                 var operatorExpression;
                 var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
