@@ -325,5 +325,23 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             identity = null;
             return false;
         }
+
+        // --b = b
+        public static bool DoubleMinusEqualsPlus(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            UnaryMinusExpression operatorExpression;
+            UnaryMinusExpression unary1;
+            ExpressionSerializer serializer = new ExpressionSerializer();
+            if ((operatorExpression = expression as UnaryMinusExpression) != null)
+            {
+                if ((unary1 = operatorExpression.Expression as UnaryMinusExpression) != null )
+                {
+                    identity = serializer.Deserialize(serializer.Serialize(unary1.Expression));
+                    return true;
+                }
+            }
+            identity = null;
+            return false;
+        }
     }
 }
