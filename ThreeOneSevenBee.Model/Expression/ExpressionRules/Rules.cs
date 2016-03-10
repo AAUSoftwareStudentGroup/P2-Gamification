@@ -222,12 +222,12 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         {
             FunctionExpression functionExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
+            OperatorExpression operatorExpression;
             if ((functionExpression = expression as FunctionExpression) != null)
             {
                 if(functionExpression.Function == "sqrt")
                 {
-                    OperatorExpression operatorExpression;
-                    if((operatorExpression = expression as OperatorExpression) != null)
+                    if((operatorExpression = functionExpression.Expression as OperatorExpression) != null)
                     {
                         if(operatorExpression.Type == OperatorType.Power && operatorExpression.Right.Value.Equals("2"))
                         {
