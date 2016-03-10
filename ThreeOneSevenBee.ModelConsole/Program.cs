@@ -38,6 +38,7 @@ namespace ThreeOneSevenBee.ModelConsole
             model.Select(model.Expression.GetNodesRecursive().ElementAt(5));
 
             model.ApplyIdentity(model.Identities[1]);
+            Console.ReadKey(true);
         }
     }
 }
