@@ -64,7 +64,7 @@ namespace ThreeOneSevenBee.ModelConsole
 
 			/*******/
 
-			model = new ExpressionModel("1*a+1*b", Rules.ItselfRule, Rules.MultiplyingWith1Rule);
+			model = new ExpressionModel("1*a+1*b", Rules.ItselfRule, Rules.MultiplyingWithOneRule);
 
 			model.OnChanged += Update;
 
