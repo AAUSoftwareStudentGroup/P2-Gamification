@@ -125,6 +125,36 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             identity = null;
             return false;
         }
+        public static bool SameVariableDifferentExpMultiplyRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            OperatorExpression operatorExpression;
+            ExpressionSerializer serializer = new ExpressionSerializer();
+            if ((operatorExpression = expression as OperatorExpression) != null)
+            {
+                if (operatorExpression.Type == OperatorType.Multiply)
+                {
+                    OperatorExpression lefthand, righthand;
+                    if((lefthand = operatorExpression.Left as OperatorExpression) != null && 
+                        (righthand = operatorExpression.Right as OperatorExpression) != null)
+                    {
+                        if(lefthand.Type == OperatorType.Power && righthand.Type == OperatorType.Power)
+                        {
+                            if(lefthand.Left == righthand.Left)
+                            {
+                                // May be missing parenthesis 
+                                identity = serializer.Deserialize(serializer.Serialize(lefthand.Left) + "^" + 
+                                           serializer.Serialize(lefthand.Right) + "+" + 
+                                           serializer.Serialize(righthand.Right));
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            identity = null;
+            return false;
+        }
 
         public static bool FractionVariableMultiplyRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
