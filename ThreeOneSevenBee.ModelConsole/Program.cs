@@ -30,7 +30,7 @@ namespace ThreeOneSevenBee.ModelConsole
 
         static void Main(string[] args)
         {
-            ExpressionModel model = new ExpressionModel("a+b*2/5", Rules.ItselfRule, Rules.CommunicativeRule);
+            ExpressionModel model = new ExpressionModel("a+b*2/5", Rules.ItselfRule, Rules.CommutativeRule);
 
             model.OnChanged += Update;
 

@@ -15,7 +15,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return true;
         }
 
-        public static bool CommunicativeRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        public static bool CommutativeRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
@@ -25,7 +25,8 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 {
                     identity = serializer.Deserialize(serializer.Serialize(operatorExpression.Right) + "+" + serializer.Serialize(operatorExpression.Left));
                     return true;
-                }else if(operatorExpression.Type == OperatorType.Multiply)
+                }
+                else if(operatorExpression.Type == OperatorType.Multiply)
                 {
                     identity = serializer.Deserialize(serializer.Serialize(operatorExpression.Right) + "*" + serializer.Serialize(operatorExpression.Left));
                     return true;

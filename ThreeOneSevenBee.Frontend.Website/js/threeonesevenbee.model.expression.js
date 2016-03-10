@@ -117,8 +117,7 @@
         serializer: null,
         config: {
             events: {
-                OnIdentitiesChanged: null,
-                OnSelectionChanged: null
+                OnChanged: null
             }
         },
         constructor: function (expression, rules) {
@@ -157,18 +156,28 @@
         }
         this.selectionParent = this.analyzer.getCommonParent(this.selection);
         this.identities = this.analyzer.getIdentities(expression, this.selection);
-        this.OnIdentitiesChanged(this);
-        this.OnSelectionChanged(this);
+        this.OnChanged(this);
     },
     unSelectAll: function () {
         this.selection.clear();
         this.identities.clear();
-        this.OnIdentitiesChanged(this);
-        this.OnSelectionChanged(this);
+        this.selectionParent = null;
+        this.OnChanged(this);
     },
     applyIdentity: function (identity) {
         if (this.identities.contains(identity)) {
-            this.selectionParent = identity;
+            if (!Bridge.hasValue(this.selectionParent.getParent())) {
+                this.expression = identity;
+            }
+            else  {
+                var parent = (Bridge.as(this.selectionParent.getParent(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression));
+                if (parent.getLeft() === this.selectionParent) {
+                    parent.setLeft(identity);
+                }
+                else  {
+                    parent.setRight(identity);
+                }
+            }
         }
         this.unSelectAll();
     }
