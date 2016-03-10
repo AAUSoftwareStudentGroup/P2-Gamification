@@ -73,6 +73,31 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new OperatorExpression(Left.Clone(), Right.Clone(), Type);
         }
 
+        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
+        {
+            var leftReplaced = false;
+            var rightReplaced = false;
+
+            if (Left == old)
+            {
+                Left = replacement;
+                leftReplaced = true;
+            }
+            if (Right == old)
+            {
+                Right = replacement;
+                rightReplaced = true;
+            }
+
+            if (leftReplaced || rightReplaced)
+                return true;
+
+            leftReplaced |= Left.Replace(old, replacement);
+            rightReplaced |= Right.Replace(old, replacement);
+
+            return leftReplaced || rightReplaced;
+        }
+
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
         {
             yield return this;
