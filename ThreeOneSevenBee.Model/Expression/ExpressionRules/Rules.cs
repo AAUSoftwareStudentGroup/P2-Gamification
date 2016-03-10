@@ -151,7 +151,82 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     }
                 }
             }
-
+            identity = null;
+            return false;
+        }
+        public static bool VaribleWithTwoExponent(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            OperatorExpression operatorExpression;
+            ExpressionSerializer serializer = new ExpressionSerializer();
+            if((operatorExpression = expression as OperatorExpression) != null)
+            {
+                if(operatorExpression.Type == OperatorType.Power)
+                {
+                    OperatorExpression lefthand;
+                    if((lefthand = operatorExpression.Left as OperatorExpression) != null)
+                    {
+                        if(lefthand.Type == OperatorType.Power)
+                        {
+                            identity = serializer.Deserialize(serializer.Serialize(lefthand.Left) + "^" + 
+                                       serializer.Serialize(lefthand.Right) + "*" + 
+                                       serializer.Serialize(operatorExpression.Right));
+                            return true;
+                        }
+                    }
+                }
+            }
+            identity = null;
+            return false;
+        }
+        // (a+b)^2 = a^2+b^2+2ab
+        public static bool SquareSentenceRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            OperatorExpression operatorExpression;
+            ExpressionSerializer serializer = new ExpressionSerializer();
+            if ((operatorExpression = expression as OperatorExpression) != null)
+            {
+                if (operatorExpression.Type == OperatorType.Power && operatorExpression.Right.Value.Equals("2"))
+                {
+                    OperatorExpression lefthand;
+                    if ((lefthand = operatorExpression.Left as OperatorExpression) != null)
+                    {
+                        if(lefthand.Type == OperatorType.Add)
+                        {
+                            identity = serializer.Deserialize(serializer.Serialize(lefthand.Left) + "^" + 
+                                       serializer.Serialize(operatorExpression.Right) + "+" + 
+                                       serializer.Serialize(lefthand.Right) + "^" + 
+                                       serializer.Serialize(operatorExpression.Right) + "+" +
+                                       serializer.Serialize(operatorExpression.Right) + "*" + 
+                                       serializer.Serialize(lefthand.Left) + "*" + 
+                                       serializer.Serialize(lefthand.Right));
+                            return true;
+                        }
+                    }
+                }
+            }
+            identity = null;
+            return false;
+        }
+        // sqrt(a^2) = a
+        public static bool SquareRootAndPowerRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            FunctionExpression functionExpression;
+            ExpressionSerializer serializer = new ExpressionSerializer();
+            if ((functionExpression = expression as FunctionExpression) != null)
+            {
+                if(functionExpression.Function == "sqrt")
+                {
+                    OperatorExpression operatorExpression;
+                    if((operatorExpression = expression as OperatorExpression) != null)
+                    {
+                        if(operatorExpression.Type == OperatorType.Power && operatorExpression.Right.Value.Equals("2"))
+                        {
+                            identity = serializer.Deserialize(serializer.Serialize(operatorExpression.Left));
+                            return true;
+                        }
+                    }
+                }
+            }
             identity = null;
             return false;
         }
