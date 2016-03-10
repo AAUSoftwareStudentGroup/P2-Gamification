@@ -31,7 +31,6 @@ namespace ThreeOneSevenBee.Model.UI
                     child.Click(x, y);
                 }
             }
-            base.OnClick();
         }
 
         public IEnumerator<View> GetEnumerator()
