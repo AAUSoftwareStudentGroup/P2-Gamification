@@ -34,5 +34,25 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             identity = null;
             return false;
         }
+
+		public static bool InversePowerRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+		{
+			OperatorExpression operatorExpression;
+			ExpressionSerializer serializer = new ExpressionSerializer();
+			identity = null;
+
+			if ((operatorExpression = expression as OperatorExpression) != null)
+			{
+				if (operatorExpression.Type == OperatorType.Power)
+				{
+					if (operatorExpression.Right is UnaryMinusExpression) {
+						UnaryMinusExpression power = operatorExpression.Right as UnaryMinusExpression;
+						identity = serializer.Deserialize ("1/" + serializer.Serialize (operatorExpression.Left) + "^(" + power.Expression + ")");
+						return true;
+					}
+				}
+			}
+			return false;
+		}
     }
 }
