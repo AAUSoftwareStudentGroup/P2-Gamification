@@ -75,6 +75,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
         }
 
+        // a/c + b/c = (a+b)/c
         public static bool FractionAddRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
@@ -91,7 +92,8 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         {
                             if(lefthand.Right == righthand.Right)
                             {
-                                identity = serializer.Deserialize("(" + serializer.Serialize(lefthand.Left) + "+" + serializer.Serialize(righthand.Left) + ")/" + serializer.Serialize(lefthand.Right));
+                                identity = serializer.Deserialize("(" + serializer.Serialize(lefthand.Left) + "+" + 
+                                serializer.Serialize(righthand.Left) + ")/" + serializer.Serialize(lefthand.Right));
                                 return true;
                             }
                         }
@@ -102,6 +104,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
         }
 
+        // a/b * c/d = a*c/(b*d)
         public static bool FractionMultiplyRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
@@ -116,7 +119,8 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     {
                         if (lefthand.Type == OperatorType.Divide && righthand.Type == OperatorType.Divide)
                         {
-                            identity = serializer.Deserialize(serializer.Serialize(lefthand.Left) + "*" + serializer.Serialize(righthand.Left) + "/(" + serializer.Serialize(lefthand.Right) + "*" + serializer.Serialize(righthand.Right) + ")");
+                            identity = serializer.Deserialize(serializer.Serialize(lefthand.Left) + "*" + serializer.Serialize(righthand.Left) + 
+                            "/(" + serializer.Serialize(lefthand.Right) + "*" + serializer.Serialize(righthand.Right) + ")");
                             return true;
                         }
                     }
@@ -126,6 +130,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
         }
 
+        // a * b/c = a*b/c
         public static bool FractionVariableMultiplyRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
@@ -135,11 +140,13 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 if(operatorExpression.Type == OperatorType.Multiply)
                 {
                     OperatorExpression righthand;
-                    if ((righthand = operatorExpression.Right as OperatorExpression) != null && operatorExpression.Left is VariableExpression)
+                    // Skal der ikke tjekkes for:  && operatorExpression.Left is VariableExpression i nedenstående?
+                    if ((righthand = operatorExpression.Right as OperatorExpression) != null)
                     {
                         if(righthand.Type == OperatorType.Divide)
                         {
-                            identity = serializer.Deserialize(serializer.Serialize(operatorExpression.Left) + "*" + serializer.Serialize(righthand.Left) + "/" + serializer.Serialize(righthand.Left));
+                            identity = serializer.Deserialize(serializer.Serialize(operatorExpression.Left) + "*" + serializer.Serialize(righthand.Left) + 
+                            "/" + serializer.Serialize(righthand.Left));
                             return true;
                         }
                     }
@@ -149,26 +156,57 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
         }
 
+        // a * (b + c) = a*b + a*c
         public static bool MultiplyVariableIntoParentheses(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
             if ((operatorExpression = expression as OperatorExpression) != null)
             {
-
+                if(operatorExpression.Type == OperatorType.Multiply)
+                {
+                    OperatorExpression righthand;
+                    if ((righthand = operatorExpression.Right as OperatorExpression) != null)
+                    {
+                        if(righthand.Type == OperatorType.Multiply)
+                        {
+                            identity = serializer.Deserialize(serializer.Serialize(operatorExpression.Left) + "*" + serializer.Serialize(righthand.Left) + 
+                            "+" + serializer.Serialize(operatorExpression.Left) + "*" + serializer.Serialize(righthand.Right));
+                            return true;
+                        }
+                    }
+                }
             }
-
-
-                identity = null;
+            identity = null;
             return false;
         }
 
+        // (a * b)^n = a^n + b^n
+        public static bool PowerOfVariablesMultiplied(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            OperatorExpression operatorExpression;
+            ExpressionSerializer serializer = new ExpressionSerializer();
+            if ((operatorExpression = expression as OperatorExpression) != null)
+            {
+                if(operatorExpression.Type == OperatorType.Power)
+                {
+                    OperatorExpression lefthand;
+                    if ((lefthand = operatorExpression.Right as OperatorExpression) != null)
+                    {
+                        if(lefthand.Type == OperatorType.Multiply)
+                        {
+                            identity = serializer.Deserialize(serializer.Serialize(lefthand.Left) + "^" + serializer.Serialize(operatorExpression.Right) + 
+                            "+" + serializer.Serialize(lefthand.Right) + "^" + serializer.Serialize(operatorExpression.Right));
+                            return true;
+                        }
+                    }
+                }
+            }
+            identity = null;
+            return false;
+        }
 
-
-
-
-
-        public static bool MultiplyingWith1Rule(ExpressionBase expression, List<ExpressionBase> seclection, out ExpressionBase identity)
+        public static bool MultiplyingWith1Rule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
