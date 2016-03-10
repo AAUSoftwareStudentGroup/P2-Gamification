@@ -40,10 +40,17 @@ namespace ThreeOneSevenBee.Model.Expression
             else
             {
                 var intersection = selection[0].GetParentPath();
-                foreach (var path in selection.Select((expr) => expr.GetParentPath()))
+
+                foreach (var expression in selection)
                 {
+                    var path = expression.GetParentPath();
+                    if (path.Count() == 0)
+                    {
+                        return expression;
+                    }
                     intersection = intersection.Intersect(path);
                 }
+
                 return intersection.First();
             }
         }

@@ -31,11 +31,17 @@
                 }
                 else  {
                     var intersection = selection.getItem(0).getParentPath();
-                    $t = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(selection).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f1));
+    
+                    $t = Bridge.getEnumerator(selection);
                     while ($t.moveNext()) {
-                        var path = $t.getCurrent();
+                        var expression = $t.getCurrent();
+                        var path = expression.getParentPath();
+                        if (Bridge.Linq.Enumerable.from(path).count() === 0) {
+                            return expression;
+                        }
                         intersection = Bridge.Linq.Enumerable.from(intersection).intersect(path);
                     }
+    
                     return Bridge.Linq.Enumerable.from(intersection).first();
                 }
             }
@@ -59,16 +65,6 @@
             }
     
             return identities;
-        }
-    });
-    
-    var $_ = {};
-    
-    Bridge.ns("ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer", $_)
-    
-    Bridge.apply($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer, {
-        f1: function (expr) {
-            return expr.getParentPath();
         }
     });
     
