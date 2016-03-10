@@ -27,6 +27,11 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new VariableExpression(Value);
         }
 
+        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
+        {
+            return false;
+        }
+
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
         {
             yield return this;
