@@ -15,6 +15,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return true;
         }
 
+        // Commutative Rule: a + b = b + a
         public static bool CommutativeRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
@@ -36,6 +37,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
         }
 
+        // a^-n = 1/(a)^n
 		public static bool InversePowerRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
 		{
 			OperatorExpression operatorExpression;
@@ -57,6 +59,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
         }
 
+        // a^0 = 1
         public static bool PowerZeroRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
@@ -130,6 +133,8 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             identity = null;
             return false;
         }
+
+        // (a)^n * (a)^p = a^(n+p)
         public static bool SameVariableDifferentExpMultiplyRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
@@ -237,7 +242,8 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
         }
 
-        public static bool MultiplyingWith1Rule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        // 1 * a = a V a * 1 = a
+        public static bool MultiplyingWithOneRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
@@ -258,6 +264,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
         }
 
+        // b/1 = b
         public static bool DenumeratorIsOneRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
@@ -277,6 +284,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
         }
 
+        // 0/b = 0
         public static bool NumeratorIsZero(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
@@ -296,6 +304,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
         }
 
+        // -a/-b = a/b
         public static bool RemovingUnaryMinusInDivisionRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
@@ -308,7 +317,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     {
                         UnaryMinusExpression terminal = operatorExpression.Left as UnaryMinusExpression;
                         UnaryMinusExpression terminal2 = operatorExpression.Right as UnaryMinusExpression;
-                        identity = serializer.Deserialize(serializer.Serialize(terminal.Expression) + "/" + terminal.Expression);
+                        identity = serializer.Deserialize(serializer.Serialize(terminal.Expression) + "/" + terminal2.Expression);
                         return true;
                     }
                 }
