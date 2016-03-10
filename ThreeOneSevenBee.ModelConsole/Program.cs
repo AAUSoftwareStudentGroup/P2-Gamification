@@ -33,7 +33,7 @@ namespace ThreeOneSevenBee.ModelConsole
             ExpressionModel model;
 	
 			/*******/
-			model = new ExpressionModel("a+b*2/5", Rules.ItselfRule, Rules.CommunicativeRule);
+			model = new ExpressionModel("a+b*2/5", Rules.ItselfRule, Rules.CommutativeRule);
 
 			model.OnChanged += Update;
 
@@ -46,11 +46,21 @@ namespace ThreeOneSevenBee.ModelConsole
 
 			model = new ExpressionModel("a^-1", Rules.ItselfRule, Rules.InversePowerRule);
 
-            model.OnChanged += Update;
+			model.OnChanged += Update;
 
-            model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[1]);
+			model.ApplyIdentity(model.Identities[1]);
+
+			/*******/
+
+			model = new ExpressionModel("a^0", Rules.ItselfRule, Rules.PowerZeroRule);
+
+			model.OnChanged += Update;
+
+			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
+			model.ApplyIdentity(model.Identities[1]);
 
         }
     }
