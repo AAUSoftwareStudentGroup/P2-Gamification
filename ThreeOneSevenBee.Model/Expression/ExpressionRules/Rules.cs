@@ -36,23 +36,24 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
         }
 
-		public static bool InversePowerRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
-		{
-			OperatorExpression operatorExpression;
-			ExpressionSerializer serializer = new ExpressionSerializer();
-			identity = null;
+        public static bool InversePowerRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            OperatorExpression operatorExpression;
+            ExpressionSerializer serializer = new ExpressionSerializer();
+            identity = null;
 
-			if ((operatorExpression = expression as OperatorExpression) != null)
-			{
-				if (operatorExpression.Type == OperatorType.Power)
-				{
-					if (operatorExpression.Right is UnaryMinusExpression) {
-						UnaryMinusExpression power = operatorExpression.Right as UnaryMinusExpression;
-						identity = serializer.Deserialize ("1/" + serializer.Serialize (operatorExpression.Left) + "^(" + power.Expression + ")");
-						return true;
-					}
-				}
-			}
+            if ((operatorExpression = expression as OperatorExpression) != null)
+            {
+                if (operatorExpression.Type == OperatorType.Power)
+                {
+                    if (operatorExpression.Right is UnaryMinusExpression)
+                    {
+                        UnaryMinusExpression power = operatorExpression.Right as UnaryMinusExpression;
+                        identity = serializer.Deserialize("1/" + serializer.Serialize(operatorExpression.Left) + "^(" + power.Expression + ")");
+                        return true;
+                    }
+                }
+            }
             return false;
         }
 
@@ -79,15 +80,15 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         {
             OperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as OperatorExpression) != null)
             {
-                if(operatorExpression.Type == OperatorType.Multiply && operatorExpression.Left.Value.Equals(1))
+                if (operatorExpression.Type == OperatorType.Multiply && operatorExpression.Left.Value.Equals("1"))
                 {
                     identity = operatorExpression.Right;
                     return true;
                 }
-                else if((operatorExpression.Type == OperatorType.Multiply && operatorExpression.Right.Value.Equals(1)))
-                { 
+                else if ((operatorExpression.Type == OperatorType.Multiply && operatorExpression.Right.Value.Equals("1")))
+                {
                     identity = operatorExpression.Left;
                     return true;
                 }
@@ -96,5 +97,63 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
         }
 
+        public static bool DenumeratorIsOneRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            OperatorExpression operatorExpression;
+            ExpressionSerializer serializer = new ExpressionSerializer();
+            if ((operatorExpression = expression as OperatorExpression) != null)
+            {
+                if (operatorExpression.Type == OperatorType.Divide)
+                {
+                    if (operatorExpression.Right.Value.Equals("1"))
+                    {
+                        identity = operatorExpression.Left;
+                        return true;
+                    }
+                }
+            }
+            identity = null;
+            return false;
+        }
+
+        public static bool NumeratorIsZero(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            OperatorExpression operatorExpression;
+            ExpressionSerializer serializer = new ExpressionSerializer();
+            if ((operatorExpression = expression as OperatorExpression) != null)
+            {
+                if (operatorExpression.Type == OperatorType.Divide)
+                {
+                    if (operatorExpression.Left.Value.Equals("0"))
+                    {
+                        identity = serializer.Deserialize("0");
+                        return true;
+                    }
+                }
+            }
+            identity = null;
+            return false;
+        }
+
+        public static bool RemovingUnaryMinusInDivisionRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            OperatorExpression operatorExpression;
+            ExpressionSerializer serializer = new ExpressionSerializer();
+            if ((operatorExpression = expression as OperatorExpression) != null)
+            {
+                if (operatorExpression.Type == OperatorType.Divide)
+                {
+                    if ((operatorExpression.Left is UnaryMinusExpression) && operatorExpression.Right is UnaryMinusExpression)
+                    {
+                        UnaryMinusExpression terminal = operatorExpression.Left as UnaryMinusExpression;
+                        UnaryMinusExpression terminal2 = operatorExpression.Right as UnaryMinusExpression;
+                        identity = serializer.Deserialize(serializer.Serialize(terminal.Expression) + "/" + terminal.Expression);
+                        return true;
+                    }
+                }
+            }
+            identity = null;
+            return false;
+        }
     }
 }
