@@ -51,7 +51,12 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     if (operatorExpression.Right is UnaryMinusExpression)
                     {
 						UnaryMinusExpression power = operatorExpression.Right as UnaryMinusExpression;
-                        identity = serializer.Deserialize("1/" + serializer.Serialize(operatorExpression.Left) + "^(" + power.Expression + ")");
+						OperatorExpression newDivision = serializer.Deserialize ("1/b") as OperatorExpression;
+						OperatorExpression newPower = serializer.Deserialize ("a^b") as OperatorExpression;
+						newPower.Left = operatorExpression.Left;
+						newPower.Right = power.Expression;
+						newDivision.Right = newPower;
+						identity = newDivision;
 						return true;
 					}
 				}
@@ -96,8 +101,13 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         {
                             if(lefthand.Right == righthand.Right)
                             {
-                                identity = serializer.Deserialize("(" + serializer.Serialize(lefthand.Left) + "+" + 
-                                serializer.Serialize(righthand.Left) + ")/" + serializer.Serialize(lefthand.Right));
+								OperatorExpression newDivision = serializer.Deserialize ("a/b") as OperatorExpression;
+								OperatorExpression newAddition = serializer.Deserialize ("a+b") as OperatorExpression;
+								newAddition.Left = lefthand.Left;
+								newAddition.Right = righthand.Left;
+								newDivision.Left = newAddition;
+								newDivision.Right = lefthand.Right;
+								identity = newDivision;
                                 return true;
                             }
                         }
@@ -123,9 +133,12 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     {
                         if (lefthand.Type == OperatorType.Divide && righthand.Type == OperatorType.Divide)
                         {
-                            identity = serializer.Deserialize(serializer.Serialize(lefthand.Left) + "*" + serializer.Serialize(righthand.Left) + 
-                            "/(" + serializer.Serialize(lefthand.Right) + "*" + serializer.Serialize(righthand.Right) + ")");
-                            return true;
+							OperatorExpression division = serializer.Deserialize ("a/b") as OperatorExpression;
+
+							division.Left = (serializer.Deserialize(serializer.Serialize (lefthand.Left) + "*" + serializer.Serialize (righthand.Left)));
+							division.Right = (serializer.Deserialize(serializer.Serialize (lefthand.Right) + "*" + serializer.Serialize (righthand.Right)));
+							identity = division;
+							return true;
                         }
                     }
                 }
@@ -256,8 +269,8 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     {
                         if(righthand.Type == OperatorType.Divide)
                         {
-                            identity = serializer.Deserialize(serializer.Serialize(operatorExpression.Left) + "*" + serializer.Serialize(righthand.Left) + 
-                            "/" + serializer.Serialize(righthand.Left));
+							identity = serializer.Deserialize("a/"+serializer.Serialize(righthand.Left));
+							identity.Replace (serializer.Deserialize ("a"), serializer.Deserialize (serializer.Serialize (operatorExpression.Left) + "*" + serializer.Serialize (righthand.Left)));
                             return true;
                         }
                     }
@@ -395,6 +408,24 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         identity = serializer.Deserialize(serializer.Serialize(terminal.Expression) + "/" + terminal2.Expression);
                         return true;
                     }
+                }
+            }
+            identity = null;
+            return false;
+        }
+
+        // --b = b
+        public static bool DoubleMinusEqualsPlus(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            UnaryMinusExpression operatorExpression;
+            UnaryMinusExpression unary1;
+            ExpressionSerializer serializer = new ExpressionSerializer();
+            if ((operatorExpression = expression as UnaryMinusExpression) != null)
+            {
+                if ((unary1 = operatorExpression.Expression as UnaryMinusExpression) != null )
+                {
+                    identity = serializer.Deserialize(serializer.Serialize(unary1.Expression));
+                    return true;
                 }
             }
             identity = null;
