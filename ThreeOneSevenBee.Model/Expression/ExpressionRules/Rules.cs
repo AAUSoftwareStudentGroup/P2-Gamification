@@ -177,7 +177,8 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             identity = null;
             return false;
         }
-        public static bool VaribleWithTwoExponent(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        // a^n^n
+        public static bool VariableWithTwoExponent(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             OperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
