@@ -40,7 +40,8 @@ namespace ThreeOneSevenBee.ModelConsole
             model.Select(model.Expression.GetNodesRecursive().ElementAt(4));
             model.Select(model.Expression.GetNodesRecursive().ElementAt(5));
 
-			model.ApplyIdentity(model.Identities[1]);
+			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
+			Console.WriteLine(model.Expression.Value.Equals("a+2*b/5")+"\n-----\n");
 
 			/*******/
 
@@ -50,7 +51,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
 			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[1]);
+			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
+			Console.WriteLine(model.Expression.Value.Equals("1/a^1")+"\n-----\n");
 
 			/*******/
 
@@ -60,17 +62,63 @@ namespace ThreeOneSevenBee.ModelConsole
 
 			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-			model.ApplyIdentity(model.Identities[1]);
+			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
+			Console.WriteLine(model.Expression.Value.Equals("1")+"\n-----\n");
 
 			/*******/
 
-			model = new ExpressionModel("1*a+1*b", Rules.ItselfRule, Rules.MultiplyingWith1Rule);
+			model = new ExpressionModel("a/c+b/c", Rules.ItselfRule, Rules.FractionAddRule);
+
+			model.OnChanged += Update;
+
+			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
+			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
+			Console.WriteLine(model.Expression.Value.Equals("a+b/c")+"\n-----\n");
+
+			/*******/
+
+			model = new ExpressionModel("a/b*c/d", Rules.ItselfRule, Rules.FractionMultiplyRule);
+
+			model.OnChanged += Update;
+
+			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
+			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
+			Console.WriteLine(model.Expression.Value.Equals("a*c/b*d")+"\n-----\n");
+
+			/*******/
+
+			model = new ExpressionModel("a*b/c", Rules.ItselfRule, Rules.FractionVariableMultiplyRule);
+
+			model.OnChanged += Update;
+
+			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
+			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
+			Console.WriteLine(model.Expression.Value.Equals("a*b/c")+"\n-----\n");
+
+			/*******/
+
+			model = new ExpressionModel("a*(b+c)", Rules.ItselfRule, Rules.MultiplyVariableIntoParentheses);
+
+			model.OnChanged += Update;
+
+			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
+			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
+			Console.WriteLine(model.Expression.Value.Equals("a*b+a*c")+"\n-----\n");
+
+			/*******/
+
+			model = new ExpressionModel("1*a+1*b", Rules.ItselfRule, Rules.MultiplyingWithOneRule);
 
 			model.OnChanged += Update;
 
 			model.Select(model.Expression.GetNodesRecursive().ElementAt(1));
 
 			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
+			Console.WriteLine(model.Expression.Value.Equals("a+1*b")+"\n-----\n");
         }
     }
 }
