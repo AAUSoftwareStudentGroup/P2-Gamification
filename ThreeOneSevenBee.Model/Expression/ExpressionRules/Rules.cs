@@ -81,12 +81,12 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             ExpressionSerializer serializer = new ExpressionSerializer();
             if((operatorExpression = expression as OperatorExpression) != null)
             {
-                if(operatorExpression.Type == OperatorType.Multiply && operatorExpression.Left.Value.Equals(1))
+                if(operatorExpression.Type == OperatorType.Multiply && operatorExpression.Left.Value.Equals("1"))
                 {
                     identity = operatorExpression.Right;
                     return true;
                 }
-                else if((operatorExpression.Type == OperatorType.Multiply && operatorExpression.Right.Value.Equals(1)))
+                else if((operatorExpression.Type == OperatorType.Multiply && operatorExpression.Right.Value.Equals("1")))
                 { 
                     identity = operatorExpression.Left;
                     return true;

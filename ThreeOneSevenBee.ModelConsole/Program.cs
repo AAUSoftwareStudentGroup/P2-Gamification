@@ -62,6 +62,15 @@ namespace ThreeOneSevenBee.ModelConsole
 
 			model.ApplyIdentity(model.Identities[1]);
 
+			/*******/
+
+			model = new ExpressionModel("1*a+1*b", Rules.ItselfRule, Rules.MultiplyingWith1Rule);
+
+			model.OnChanged += Update;
+
+			model.Select(model.Expression.GetNodesRecursive().ElementAt(1));
+
+			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
         }
     }
 }
