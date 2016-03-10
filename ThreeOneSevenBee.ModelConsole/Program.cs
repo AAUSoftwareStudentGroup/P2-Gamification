@@ -31,14 +31,14 @@ namespace ThreeOneSevenBee.ModelConsole
         static void Main(string[] args)
         {
             ExpressionModel model;
-	
+
 			/*******/
 			model = new ExpressionModel("a+b*2/5", Rules.ItselfRule, Rules.CommutativeRule);
 
-			model.OnChanged += Update;
+            model.OnChanged += Update;
 
-			model.Select(model.Expression.GetNodesRecursive().ElementAt(4));
-			model.Select(model.Expression.GetNodesRecursive().ElementAt(5));
+            model.Select(model.Expression.GetNodesRecursive().ElementAt(4));
+            model.Select(model.Expression.GetNodesRecursive().ElementAt(5));
 
 			model.ApplyIdentity(model.Identities[1]);
 
@@ -50,7 +50,7 @@ namespace ThreeOneSevenBee.ModelConsole
 
 			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-			model.ApplyIdentity(model.Identities[1]);
+            model.ApplyIdentity(model.Identities[1]);
 
 			/*******/
 
