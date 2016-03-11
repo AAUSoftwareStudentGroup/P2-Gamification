@@ -131,16 +131,74 @@ namespace ThreeOneSevenBee.ModelConsole
 			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
 			Console.WriteLine(model.Expression.Value.Equals("a^n+b^n")+"\n-----\n");
 
-			/*******/
+            /*******/
 
-			model = new ExpressionModel("1*a+1*b", Rules.ItselfRule, Rules.MultiplyingWithOneRule);
+            model = new ExpressionModel("1*a+1*b", Rules.ItselfRule, Rules.MultiplyingWithOneRule);
+
+            model.OnChanged += Update;
+
+            model.Select(model.Expression.GetNodesRecursive().ElementAt(1));
+
+            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            Console.WriteLine(model.Expression.Value.Equals("a+1*b") + "\n-----\n");
+
+            /*******/
+
+            model = new ExpressionModel("b/1", Rules.ItselfRule, Rules.DenumeratorIsOneRule);
 
 			model.OnChanged += Update;
 
-			model.Select(model.Expression.GetNodesRecursive().ElementAt(1));
+			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
 			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
-			Console.WriteLine(model.Expression.Value.Equals("a+1*b")+"\n-----\n");
+			Console.WriteLine(model.Expression.Value.Equals("b")+"\n-----\n");
+
+            /*******/
+
+            model = new ExpressionModel("0/b", Rules.ItselfRule, Rules.NumeratorIsZero);
+
+            model.OnChanged += Update;
+
+            model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
+            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            Console.WriteLine(model.Expression.Value.Equals("0") + "\n-----\n");
+
+            /*******/
+
+            model = new ExpressionModel("-a/-b", Rules.ItselfRule, Rules.RemovingUnaryMinusInDivisionRule);
+
+            model.OnChanged += Update;
+
+            model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
+            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            Console.WriteLine(model.Expression.Value.Equals("a/b") + "\n-----\n");
+
+            /*******/
+
+            model = new ExpressionModel("--a", Rules.ItselfRule, Rules.DoubleMinusEqualsPlus);
+
+            model.OnChanged += Update;
+
+            model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
+            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            Console.WriteLine(model.Expression.Value.Equals("a") + "\n-----\n");
+
+            /*******/
+
+            model = new ExpressionModel("sqrt(a^2)", Rules.ItselfRule, Rules.SquareRootAndPowerRule);
+
+            model.OnChanged += Update;
+
+            model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
+            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            Console.WriteLine(model.Expression.Value.Equals("a") + "\n-----\n");
+
+            Console.ReadKey();
+
         }
     }
 }

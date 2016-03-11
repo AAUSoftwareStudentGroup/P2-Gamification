@@ -49,15 +49,28 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public event Action<ExpressionModel> OnChanged;
 
+        public int SelectionIndex(ExpressionBase expression)
+        {
+            for (int i = 0; i < selection.Count; i++)
+            {
+                if (selection[i] == expression)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         public void Select(ExpressionBase expression)
         {
-            if (!selection.Contains(expression))
+            int index = SelectionIndex(expression);
+            if (index == -1)
             {
                 selection.Add(expression);
             }
             else
             {
-                selection.Remove(expression);
+                selection.RemoveAt(index);
             }
             selectionParent = analyzer.GetCommonParent(selection);
             identities = analyzer.GetIdentities(expression, selection);
@@ -91,6 +104,7 @@ namespace ThreeOneSevenBee.Model.Expression
                     {
                         parent.Right = identity;
                     }
+                    identity.Parent = parent;
                 }
             }
             UnSelectAll();

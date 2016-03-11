@@ -12,9 +12,9 @@ namespace ThreeOneSevenBee.Model.UI
             OnClick = onClick;
         }
 
-        public override void DrawWithContext(Context context)
+        public override void DrawWithContext(Context context, double offsetX, double offsetY)
         {
-            context.Draw(this);
+            context.Draw(this, offsetX, offsetY);
         }
     }
 }

@@ -331,11 +331,11 @@ namespace ThreeOneSevenBee.Model.Expression
                     case TokenType.Variable:
                         VariableExpression variable;
                         var variableString = (string)token.Data;
-                        if (!variables.TryGetValue(variableString, out variable))
-                        {
+                        //if (!variables.TryGetValue(variableString, out variable))
+                        //{
                             variable = new VariableExpression((string)token.Data);
-                            variables[variableString] = variable;
-                        }
+                        //    variables[variableString] = variable;
+                        //}
                         root = variable;
                         stack.Push(root);
                         break;

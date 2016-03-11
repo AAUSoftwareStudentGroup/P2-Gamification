@@ -31,11 +31,17 @@
                 }
                 else  {
                     var intersection = selection.getItem(0).getParentPath();
-                    $t = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(selection).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f1));
+    
+                    $t = Bridge.getEnumerator(selection);
                     while ($t.moveNext()) {
-                        var path = $t.getCurrent();
+                        var expression = $t.getCurrent();
+                        var path = expression.getParentPath();
+                        if (Bridge.Linq.Enumerable.from(path).count() === 0) {
+                            return expression;
+                        }
                         intersection = Bridge.Linq.Enumerable.from(intersection).intersect(path);
                     }
+    
                     return Bridge.Linq.Enumerable.from(intersection).first();
                 }
             }
@@ -59,16 +65,6 @@
             }
     
             return identities;
-        }
-    });
-    
-    var $_ = {};
-    
-    Bridge.ns("ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer", $_)
-    
-    Bridge.apply($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer, {
-        f1: function (expr) {
-            return expr.getParentPath();
         }
     });
     
@@ -147,12 +143,21 @@
     getSelected: function () {
         return this.selectionParent;
     },
+    selectionIndex: function (expression) {
+        for (var i = 0; i < this.selection.getCount(); i++) {
+            if (this.selection.getItem(i) === expression) {
+                return i;
+            }
+        }
+        return -1;
+    },
     select: function (expression) {
-        if (!this.selection.contains(expression)) {
+        var index = this.selectionIndex(expression);
+        if (index === -1) {
             this.selection.add(expression);
         }
         else  {
-            this.selection.remove(expression);
+            this.selection.removeAt(index);
         }
         this.selectionParent = this.analyzer.getCommonParent(this.selection);
         this.identities = this.analyzer.getIdentities(expression, this.selection);
@@ -177,6 +182,7 @@
                 else  {
                     parent.setRight(identity);
                 }
+                identity.setParent(parent);
             }
         }
         this.unSelectAll();
@@ -507,13 +513,14 @@
                         stack.push(root);
                         break;
                     case ThreeOneSevenBee.Model.Expression.TokenType.variable: 
-                        var variable = { };
+                        var variable;
                         var variableString = Bridge.cast(token.getData(), String);
-                        if (!variables.tryGetValue(variableString, variable)) {
-                            variable.v = new ThreeOneSevenBee.Model.Expression.Expressions.VariableExpression(Bridge.cast(token.getData(), String));
-                            variables.set(variableString, variable.v);
-                        }
-                        root = variable.v;
+                        //if (!variables.TryGetValue(variableString, out variable))
+                        //{
+                        variable = new ThreeOneSevenBee.Model.Expression.Expressions.VariableExpression(Bridge.cast(token.getData(), String));
+                        //    variables[variableString] = variable;
+                        //}
+                        root = variable;
                         stack.push(root);
                         break;
                     case ThreeOneSevenBee.Model.Expression.TokenType.operator: 

@@ -10,25 +10,36 @@ namespace ThreeOneSevenBee.Model.UI
             Width = width;
             Height = height;
             Children = new List<View>();
+            PropagateClick = true;
         }
 
         public List<View> Children;
 
-        public override void DrawWithContext(Context context)
+        public bool PropagateClick { set; get; }
+
+        public override void DrawWithContext(Context context, double offsetX, double offsetY)
         {
             foreach (var child in Children)
             {
-                child.DrawWithContext(context);
+                child.DrawWithContext(context, offsetX + X, offsetY + Y);
             }
         }
 
-        public override void Click(int x, int y)
+        public override void Click(double x, double y)
         {
             if (base.ContainsPoint(x, y))
             {
-                foreach (View child in Children)
+                if(PropagateClick)
                 {
-                    child.Click(x, y);
+                    foreach (View child in Children)
+                    {
+                        child.Click(x - X, y - Y);
+                    }
+                }
+                
+                if(OnClick != null)
+                {
+                    OnClick();
                 }
             }
         }

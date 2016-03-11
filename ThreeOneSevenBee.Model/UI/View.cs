@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ThreeOneSevenBee.Model.UI
 {
@@ -12,11 +9,15 @@ namespace ThreeOneSevenBee.Model.UI
         public double X { get; set; }
         public double Y { get; set; }
 
-        public abstract void DrawWithContext(Context context);
+        public string Name { get; set; }
 
-        public virtual void Click(int x, int y)
+        public bool Selected { get; set; }
+
+        public abstract void DrawWithContext(Context context, double offsetX, double offsetY);
+
+        public virtual void Click(double x, double y)
         {
-            if(ContainsPoint(x, y))
+            if(ContainsPoint(x, y) && OnClick != null)
             {
                 OnClick();
             }
@@ -24,7 +25,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public Action OnClick;
         
-        public virtual bool ContainsPoint(int x, int y)
+        public virtual bool ContainsPoint(double x, double y)
         {
             return x >= X && y >= Y && x <= X + Width && y <= Y + Height;
         }

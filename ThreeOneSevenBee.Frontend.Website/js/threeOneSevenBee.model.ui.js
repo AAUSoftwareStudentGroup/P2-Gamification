@@ -8,11 +8,13 @@
                 Width: 0,
                 Height: 0,
                 X: 0,
-                Y: 0
+                Y: 0,
+                Name: null,
+                Selected: false
             }
         },
         click: function (x, y) {
-            if (this.containsPoint(x, y)) {
+            if (this.containsPoint(x, y) && Bridge.hasValue(this.onClick)) {
                 this.onClick();
             }
         },
@@ -38,10 +40,10 @@
         },
         draw: function () {
             this.clear();
-            this._contentView.drawWithContext(this);
+            this._contentView.drawWithContext(this, 0, 0);
         },
-        draw$1: function (view) {
-            this.draw$2(Bridge.as(view, ThreeOneSevenBee.Model.UI.LabelView));
+        draw$1: function (view, offsetX, offsetY) {
+            this.draw$2(Bridge.as(view, ThreeOneSevenBee.Model.UI.LabelView), offsetX, offsetY);
         }
     });
     
@@ -129,36 +131,48 @@
     
             this.setText(text);
         },
-        drawWithContext: function (context) {
-            context.draw$2(this);
+        drawWithContext: function (context, offsetX, offsetY) {
+            context.draw$2(this, offsetX, offsetY);
         }
     });
     
     Bridge.define('ThreeOneSevenBee.Model.UI.CompositeView', {
         inherits: [ThreeOneSevenBee.Model.UI.View,Bridge.IEnumerable$1(ThreeOneSevenBee.Model.UI.View)],
         children: null,
+        config: {
+            properties: {
+                PropagateClick: false
+            }
+        },
         constructor: function (width, height) {
             ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this);
     
             this.setWidth(width);
             this.setHeight(height);
             this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
+            this.setPropagateClick(true);
         },
-        drawWithContext: function (context) {
+        drawWithContext: function (context, offsetX, offsetY) {
             var $t;
             $t = Bridge.getEnumerator(this.children);
             while ($t.moveNext()) {
                 var child = $t.getCurrent();
-                child.drawWithContext(context);
+                child.drawWithContext(context, offsetX + this.getX(), offsetY + this.getY());
             }
         },
         click: function (x, y) {
             var $t;
             if (ThreeOneSevenBee.Model.UI.View.prototype.containsPoint.call(this, x, y)) {
-                $t = Bridge.getEnumerator(this.children);
-                while ($t.moveNext()) {
-                    var child = $t.getCurrent();
-                    child.click(x, y);
+                if (this.getPropagateClick()) {
+                    $t = Bridge.getEnumerator(this.children);
+                    while ($t.moveNext()) {
+                        var child = $t.getCurrent();
+                        child.click(x - this.getX(), y - this.getY());
+                    }
+                }
+    
+                if (Bridge.hasValue(this.onClick)) {
+                    this.onClick();
                 }
             }
         },
@@ -181,8 +195,8 @@
     
             this.progressbar = new ThreeOneSevenBee.Model.UI.ProgressbarStar(50, 100);
         },
-        drawWithContext: function (context) {
-            context.draw$3(this);
+        drawWithContext: function (context, offsetX, offsetY) {
+            context.draw$3(this, offsetX, offsetY);
         }
     });
     
@@ -193,30 +207,50 @@
     
             this.onClick = onClick;
         },
-        drawWithContext: function (context) {
-            context.draw$1(this);
+        drawWithContext: function (context, offsetX, offsetY) {
+            context.draw$1(this, offsetX, offsetY);
         }
     });
     
     Bridge.define('ThreeOneSevenBee.Model.UI.ExpressionView', {
         inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
+        statics: {
+            build: function (expression, model) {
+                var $t;
+                if (Bridge.is(expression, ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression) || Bridge.is(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariableExpression)) {
+                    return Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView(expression.toString(), function () {
+                        model.select(expression);
+                    }), {
+                        setWidth: 20,
+                        setHeight: 20,
+                        setSelected: model.selectionIndex(expression) !== -1
+                    } );
+                }
+                var operatorExpression;
+                if (Bridge.hasValue((($t = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression), operatorExpression = $t, $t)))) {
+                    var left = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getLeft(), model);
+                    var operatorSign = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("+", null), {
+                        setX: left.getWidth(),
+                        setWidth: 20,
+                        setHeight: 20
+                    } );
+                    var right = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getRight(), model);
+                    right.setX(left.getWidth() + operatorSign.getWidth());
+                    return Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(right.getX() + right.getWidth(), Math.max(Math.max(left.getHeight(), operatorSign.getHeight()), right.getHeight())), [
+                        [left],
+                        [operatorSign],
+                        [right]
+                    ] );
+                }
+                return null;
+            }
+        },
         constructor: function (model, width, height) {
             ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
     
-            this.build(model.getExpression(), model);
-            model.addOnChanged($_.ThreeOneSevenBee.Model.UI.ExpressionView.f1);
-        },
-        build: function (expression, model) {
-            this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
-            this.children.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView(expression.toString(), function () {
-                model.select(expression);
-            }), {
-                setX: 20,
-                setY: 20,
-                setWidth: 100,
-                setHeight: 100
-            } ));
-            return this;
+            var view = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(model.getExpression(), model);
+            this.children.add(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(model.getExpression(), model));
+            model.addOnChanged(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.ExpressionView.f1));
         }
     });
     
@@ -226,7 +260,50 @@
     
     Bridge.apply($_.ThreeOneSevenBee.Model.UI.ExpressionView, {
         f1: function (m) {
-            console.log(m.getExpression().toString());
+            this.children.clear();
+            this.children.add(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(m.getExpression(), m));
+        }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.UI.IdentityMenuView', {
+        inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
+        constructor: function (model, width, height) {
+            ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
+    
+            this.children = this.build(model.getIdentities(), model);
+            model.addOnChanged(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.IdentityMenuView.f1));
+        },
+        build: function (identities, model) {
+            var views = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
+            var x = 0;
+            for (var index = 0; index < Bridge.Linq.Enumerable.from(identities).count(); index++) {
+                (function () {
+                    var indexCopy = index;
+                    var view = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(identities.getItem(index), model);
+                    var Container = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(view.getWidth(), view.getHeight()), {
+                        setPropagateClick: false
+                    } );
+                    Container.add(view);
+                    Container.setX(x);
+                    x += Container.getWidth() + 20;
+                    Container.onClick = function () {
+                        model.applyIdentity(identities.getItem(indexCopy));
+                    };
+                    views.add(Container);
+                }).call(this);
+            }
+            return views;
+        },
+        click: function (x, y) {
+            ThreeOneSevenBee.Model.UI.CompositeView.prototype.click.call(this, x, y);
+        }
+    });
+    
+    Bridge.ns("ThreeOneSevenBee.Model.UI.IdentityMenuView", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Model.UI.IdentityMenuView, {
+        f1: function (m) {
+            this.children = this.build(m.getIdentities(), m);
         }
     });
     
