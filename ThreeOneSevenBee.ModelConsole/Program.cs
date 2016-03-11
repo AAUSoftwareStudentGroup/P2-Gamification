@@ -176,6 +176,18 @@ namespace ThreeOneSevenBee.ModelConsole
             model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("a") + "\n-----\n");
 
+
+            /*******/
+
+            model = new ExpressionModel("a^n^n", Rules.ItselfRule, Rules.VariableWithTwoExponent);
+
+            model.OnChanged += Update;
+
+            model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
+            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            Console.WriteLine(model.Expression.Value.Equals("a^n*n") + "\n-----\n");
+
             Console.ReadKey();
 
         }
