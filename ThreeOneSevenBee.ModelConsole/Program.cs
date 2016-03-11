@@ -30,6 +30,7 @@ namespace ThreeOneSevenBee.ModelConsole
 
         static void Main(string[] args)
         {
+			
             ExpressionModel model;
 
 			/*******/
@@ -110,28 +111,6 @@ namespace ThreeOneSevenBee.ModelConsole
 			Console.WriteLine(model.Expression.Value.Equals("a^n+p")+"\n-----\n");
 
 			/*******/
-
-			model = new ExpressionModel("(a*b)^n", Rules.ItselfRule, Rules.PowerOfVariablesMultiplied);
-
-			model.OnChanged += Update;
-
-			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
-
-			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
-			Console.WriteLine(model.Expression.Value.Equals("a^n+b^n")+"\n-----\n");
-
-			/*******/
-
-			model = new ExpressionModel("(a*b)^n", Rules.ItselfRule, Rules.PowerOfVariablesMultiplied);
-
-			model.OnChanged += Update;
-
-			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
-
-			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
-			Console.WriteLine(model.Expression.Value.Equals("a^n+b^n")+"\n-----\n");
-
-            /*******/
 
             model = new ExpressionModel("1*a+1*b", Rules.ItselfRule, Rules.MultiplyingWithOneRule);
 

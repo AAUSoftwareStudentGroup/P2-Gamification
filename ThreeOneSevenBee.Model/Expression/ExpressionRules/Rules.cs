@@ -147,32 +147,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return false;
 		}
 
-		// a * b/c = a*b/c
-		public static bool FractionVariableMultiplyRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
-		{
-			OperatorExpression operatorExpression;
-			ExpressionSerializer serializer = new ExpressionSerializer();
-			if ((operatorExpression = expression as OperatorExpression) != null)
-			{
-				if(operatorExpression.Type == OperatorType.Multiply)
-				{
-					OperatorExpression righthand;
-					// Skal der ikke tjekkes for:  && operatorExpression.Left is VariableExpression i nedenstående?
-					if ((righthand = operatorExpression.Right as OperatorExpression) != null)
-					{
-						if(righthand.Type == OperatorType.Divide)
-						{
-							identity = serializer.Deserialize("a/"+serializer.Serialize(righthand.Left));
-							identity.Replace (serializer.Deserialize ("a"), serializer.Deserialize (serializer.Serialize (operatorExpression.Left) + "*" + serializer.Serialize (righthand.Left)));
-							return true;
-						}
-					}
-				}
-			}
-			identity = null;
-			return false;
-		}
-
         // (a)^n * (a)^p = a^(n+p)
         public static bool SameVariableDifferentExpMultiplyRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
