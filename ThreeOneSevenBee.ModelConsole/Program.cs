@@ -100,14 +100,36 @@ namespace ThreeOneSevenBee.ModelConsole
 
 			/*******/
 
-			model = new ExpressionModel("a*(b+c)", Rules.ItselfRule, Rules.MultiplyVariableIntoParentheses);
+			model = new ExpressionModel("a^n*a^p", Rules.ItselfRule, Rules.SameVariableDifferentExpMultiplyRule);
 
 			model.OnChanged += Update;
 
 			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
 			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
-			Console.WriteLine(model.Expression.Value.Equals("a*b+a*c")+"\n-----\n");
+			Console.WriteLine(model.Expression.Value.Equals("a^n+p")+"\n-----\n");
+
+			/*******/
+
+			model = new ExpressionModel("(a*b)^n", Rules.ItselfRule, Rules.PowerOfVariablesMultiplied);
+
+			model.OnChanged += Update;
+
+			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
+			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
+			Console.WriteLine(model.Expression.Value.Equals("a^n+b^n")+"\n-----\n");
+
+			/*******/
+
+			model = new ExpressionModel("(a*b)^n", Rules.ItselfRule, Rules.PowerOfVariablesMultiplied);
+
+			model.OnChanged += Update;
+
+			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
+			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
+			Console.WriteLine(model.Expression.Value.Equals("a^n+b^n")+"\n-----\n");
 
             /*******/
 
