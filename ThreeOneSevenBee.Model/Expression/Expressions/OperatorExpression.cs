@@ -1,4 +1,7 @@
 ﻿using System;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
@@ -73,7 +76,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new OperatorExpression(Left.Clone(), Right.Clone(), Type);
         }
 
-        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
+        public override bool Replace(ExpressionBase old, ExpressionBase replacement)
         {
             var leftReplaced = false;
             var rightReplaced = false;
@@ -110,10 +113,9 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
 		public override string TreePrint(string indent, bool isLast)
 		{
-			Console.Write (indent+"|-");
-			indent += (isLast ? "  " : "| ");
-			Console.WriteLine (symbols[Type]);
-			Left.TreePrint (indent, false);
+			Console.WriteLine (indent + "|-" + symbols[Type]);
+            indent += (isLast ? "  " : "| ");
+            Left.TreePrint (indent, false);
 			Right.TreePrint (indent, true);
 			return indent;
 		}

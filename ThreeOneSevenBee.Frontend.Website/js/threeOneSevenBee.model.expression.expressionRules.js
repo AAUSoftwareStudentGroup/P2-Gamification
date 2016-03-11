@@ -121,8 +121,14 @@
                         if (Bridge.hasValue((($t1 = Bridge.as(operatorExpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression), lefthand = $t1, $t1))) && Bridge.hasValue((($t2 = Bridge.as(operatorExpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression), righthand = $t2, $t2)))) {
                             if (lefthand.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power && righthand.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
                                 if (lefthand.getLeft() === righthand.getLeft()) {
-                                    // May be missing parenthesis 
-                                    identity.v = serializer.deserialize(serializer.serialize(lefthand.getLeft()) + "^" + serializer.serialize(lefthand.getRight()) + "+" + serializer.serialize(righthand.getRight()));
+                                    // May be missing parenthesis
+                                    var newPower = Bridge.as(serializer.deserialize("a^b"), ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
+                                    var newAdd = Bridge.as(serializer.deserialize("a+b"), ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
+                                    newPower.setLeft(lefthand.getLeft());
+                                    newAdd.setLeft(lefthand.getRight());
+                                    newAdd.setRight(righthand.getRight());
+                                    newPower.setRight(newAdd);
+                                    identity.v = newPower;
                                     return true;
                                 }
                             }
@@ -138,10 +144,10 @@
                 var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
                 if (Bridge.hasValue((($t = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression), operatorExpression = $t, $t)))) {
                     if (operatorExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
-                        var lefthand;
-                        if (Bridge.hasValue((($t1 = Bridge.as(operatorExpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression), lefthand = $t1, $t1)))) {
-                            if (lefthand.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
-                                identity.v = serializer.deserialize(serializer.serialize(lefthand.getLeft()) + "^" + serializer.serialize(lefthand.getRight()) + "*" + serializer.serialize(operatorExpression.getRight()));
+                        var righthand;
+                        if (Bridge.hasValue((($t1 = Bridge.as(operatorExpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression), righthand = $t1, $t1)))) {
+                            if (righthand.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
+                                identity.v = serializer.deserialize(serializer.serialize(operatorExpression.getLeft()) + "^" + serializer.serialize(righthand.getLeft()) + "*" + serializer.serialize(righthand.getRight()));
                                 return true;
                             }
                         }
@@ -220,24 +226,6 @@
                         if (Bridge.hasValue((($t1 = Bridge.as(operatorExpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression), righthand = $t1, $t1)))) {
                             if (righthand.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
                                 identity.v = serializer.deserialize(serializer.serialize(operatorExpression.getLeft()) + "*" + serializer.serialize(righthand.getLeft()) + "+" + serializer.serialize(operatorExpression.getLeft()) + "*" + serializer.serialize(righthand.getRight()));
-                                return true;
-                            }
-                        }
-                    }
-                }
-                identity.v = null;
-                return false;
-            },
-            powerOfVariablesMultiplied: function (expression, selection, identity) {
-                var $t, $t1;
-                var operatorExpression;
-                var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
-                if (Bridge.hasValue((($t = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression), operatorExpression = $t, $t)))) {
-                    if (operatorExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
-                        var lefthand;
-                        if (Bridge.hasValue((($t1 = Bridge.as(operatorExpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression), lefthand = $t1, $t1)))) {
-                            if (lefthand.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
-                                identity.v = serializer.deserialize(serializer.serialize(lefthand.getLeft()) + "^" + serializer.serialize(operatorExpression.getRight()) + "+" + serializer.serialize(lefthand.getRight()) + "^" + serializer.serialize(operatorExpression.getRight()));
                                 return true;
                             }
                         }

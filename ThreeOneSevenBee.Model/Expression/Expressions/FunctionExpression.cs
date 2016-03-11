@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
@@ -55,7 +55,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new FunctionExpression(Expression.Clone(), Function);
         }
 
-        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
+        public override bool Replace(ExpressionBase old, ExpressionBase replacement)
         {
             if (Expression == old)
             {
@@ -75,10 +75,9 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
 		public override string TreePrint(string indent, bool isLast)
 		{
-			Console.Write (indent+"|-");
-			indent += (isLast ? "  " : "| ");
-			Console.WriteLine (Function);
-			this.Expression.TreePrint (indent, true);
+			Console.WriteLine (indent + "|-" + Function);
+            indent += (isLast ? "  " : "| ");
+            this.Expression.TreePrint (indent, true);
 			return indent;
 		}
     }

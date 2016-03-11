@@ -56,6 +56,10 @@
             }
     
             return ThreeOneSevenBee.Model.Expression.ExpressionBase.prototype.calculate.call(this);
+        },
+        treePrint: function (indent, isLast) {
+            console.log(indent + "|-" + this.getValue());
+            return indent + (isLast ? "  " : "| ");
         }
     });
     
@@ -102,6 +106,12 @@
                 $yield.push(node);
             }
             return Bridge.Array.toEnumerable($yield);
+        },
+        treePrint: function (indent, isLast) {
+            console.log(indent + "|-" + "()");
+            indent += (isLast ? "  " : "| ");
+            this.getExpression().treePrint(indent, true);
+            return indent;
         }
     });
     
@@ -169,6 +179,12 @@
                 $yield.push(node);
             }
             return Bridge.Array.toEnumerable($yield);
+        },
+        treePrint: function (indent, isLast) {
+            console.log(indent + "|-" + this.getFunction());
+            indent += (isLast ? "  " : "| ");
+            this.getExpression().treePrint(indent, true);
+            return indent;
         }
     });
     
@@ -199,6 +215,10 @@
         },
         calculate: function () {
             return this.value;
+        },
+        treePrint: function (indent, isLast) {
+            console.log(indent + "|-" + this.getValue());
+            return indent + (isLast ? "  " : "| ");
         }
     });
     
@@ -306,6 +326,13 @@
                 $yield.push(node1);
             }
             return Bridge.Array.toEnumerable($yield);
+        },
+        treePrint: function (indent, isLast) {
+            console.log(indent + "|-" + Bridge.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression).symbols.get(this.getType()));
+            indent += (isLast ? "  " : "| ");
+            this.getLeft().treePrint(indent, false);
+            this.getRight().treePrint(indent, true);
+            return indent;
         }
     });
     
@@ -352,6 +379,12 @@
                 $yield.push(node);
             }
             return Bridge.Array.toEnumerable($yield);
+        },
+        treePrint: function (indent, isLast) {
+            console.log(indent + "|-" + "-");
+            indent += (isLast ? "  " : "| ");
+            this.getExpression().treePrint(indent, true);
+            return indent;
         }
     });
     
@@ -379,6 +412,10 @@
             var $yield = [];
             $yield.push(this);
             return Bridge.Array.toEnumerable($yield);
+        },
+        treePrint: function (indent, isLast) {
+            console.log(Bridge.String.format(indent + "|-" + this.getValue(), true));
+            return indent + (isLast ? "  " : "| ");
         }
     });
     

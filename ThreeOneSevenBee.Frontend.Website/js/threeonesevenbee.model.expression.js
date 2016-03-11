@@ -101,6 +101,9 @@
         },
         toString: function () {
             return this.getValue();
+        },
+        prettyPrint: function () {
+            this.treePrint("", true);
         }
     });
     
@@ -490,7 +493,6 @@
         parse: function (postFix) {
             var $t;
             var stack = new ThreeOneSevenBee.Model.Collections.Stack$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
-            var variables = new Bridge.Dictionary$2(String,ThreeOneSevenBee.Model.Expression.Expressions.VariableExpression)();
             var root = null;
             $t = Bridge.getEnumerator(postFix);
             while ($t.moveNext()) {
@@ -513,14 +515,7 @@
                         stack.push(root);
                         break;
                     case ThreeOneSevenBee.Model.Expression.TokenType.variable: 
-                        var variable;
-                        var variableString = Bridge.cast(token.getData(), String);
-                        //if (!variables.TryGetValue(variableString, out variable))
-                        //{
-                        variable = new ThreeOneSevenBee.Model.Expression.Expressions.VariableExpression(Bridge.cast(token.getData(), String));
-                        //    variables[variableString] = variable;
-                        //}
-                        root = variable;
+                        root = new ThreeOneSevenBee.Model.Expression.Expressions.VariableExpression(Bridge.cast(token.getData(), String));
                         stack.push(root);
                         break;
                     case ThreeOneSevenBee.Model.Expression.TokenType.operator: 

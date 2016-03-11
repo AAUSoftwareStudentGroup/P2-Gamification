@@ -1,4 +1,7 @@
 ﻿using System;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
@@ -27,7 +30,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new VariableExpression(Value);
         }
 
-        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
+        public override bool Replace(ExpressionBase old, ExpressionBase replacement)
         {
             return false;
         }
@@ -39,10 +42,8 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
 		public override string TreePrint(string indent, bool isLast)
 		{
-			Console.Write (indent+"|-");
-			indent += (isLast ? "  " : "| ");
-			Console.WriteLine (Value, true);
-			return indent;
+			Console.WriteLine (indent + "|-" + Value, true);
+			return indent + (isLast ? "  " : "| ");
 		}
     }
 }

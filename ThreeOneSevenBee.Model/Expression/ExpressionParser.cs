@@ -302,7 +302,6 @@ namespace ThreeOneSevenBee.Model.Expression
         public ExpressionBase Parse(List<Token> postFix)
         {
             var stack = new ExpressionStack();
-            var variables = new Dictionary<string, VariableExpression>();
             ExpressionBase root = null;
             foreach (var token in postFix)
             {
@@ -329,14 +328,7 @@ namespace ThreeOneSevenBee.Model.Expression
                         break;
 
                     case TokenType.Variable:
-                        VariableExpression variable;
-                        var variableString = (string)token.Data;
-                        //if (!variables.TryGetValue(variableString, out variable))
-                        //{
-                            variable = new VariableExpression((string)token.Data);
-                        //    variables[variableString] = variable;
-                        //}
-                        root = variable;
+                        root = new VariableExpression((string)token.Data);
                         stack.Push(root);
                         break;
 

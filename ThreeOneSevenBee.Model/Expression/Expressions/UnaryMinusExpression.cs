@@ -1,4 +1,7 @@
 ﻿using System;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
@@ -56,10 +59,9 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
 		public override string TreePrint(string indent, bool isLast)
 		{
-			Console.Write (indent+"|-");
-			indent += (isLast ? "  " : "| ");
-			Console.WriteLine ("-");
-			Expression.TreePrint (indent, true);
+			Console.WriteLine (indent + "|-" + "-");
+            indent += (isLast ? "  " : "| ");
+            Expression.TreePrint (indent, true);
 			return indent;
 		}
     }
