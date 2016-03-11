@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
     public class UnaryMinusExpression : ExpressionBase
-    {
+	{
         public UnaryMinusExpression(ExpressionBase expression)
         {
             Expression = expression;
@@ -52,6 +52,15 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
             foreach (var node in Expression.GetNodesRecursive())
                 yield return node;
-        }
+		}
+
+		public override string TreePrint(string indent, bool isLast)
+		{
+			Console.Write (indent+"|-");
+			indent += (isLast ? "  " : "| ");
+			Console.WriteLine ("-");
+			Expression.TreePrint (indent, true);
+			return indent;
+		}
     }
 }

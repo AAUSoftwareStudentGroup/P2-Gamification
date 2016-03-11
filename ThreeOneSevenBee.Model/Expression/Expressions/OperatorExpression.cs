@@ -12,7 +12,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             { OperatorType.Divide, "/" },
             { OperatorType.Multiply, "*" },
             { OperatorType.Power, "^" },
-        };
+		};
 
         public OperatorExpression(ExpressionBase left, ExpressionBase right, OperatorType type)
         {
@@ -106,7 +106,17 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 yield return node;
             foreach (var node in Right.GetNodesRecursive())
                 yield return node;
-        }
+		}
+
+		public override string TreePrint(string indent, bool isLast)
+		{
+			Console.Write (indent+"|-");
+			indent += (isLast ? "  " : "| ");
+			Console.WriteLine (symbols[Type]);
+			Left.TreePrint (indent, false);
+			Right.TreePrint (indent, true);
+			return indent;
+		}
     }
 
     public enum OperatorType

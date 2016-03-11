@@ -5,7 +5,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
     public class NumericExpression : ExpressionBase
     {
-        private double value;
+		private double value;
 
         public NumericExpression(double value)
         {
@@ -40,6 +40,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         public override double? Calculate()
         {
             return value;
-        }
+		}
+
+		public override string TreePrint(string indent, bool isLast)
+		{
+			Console.Write (indent+"|-");
+			indent += (isLast ? "  " : "| ");
+			Console.WriteLine (Value);
+			return indent;
+		}
     }
 }

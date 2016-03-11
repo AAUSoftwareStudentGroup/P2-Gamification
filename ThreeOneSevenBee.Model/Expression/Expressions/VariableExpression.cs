@@ -5,7 +5,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
     public class VariableExpression : ExpressionBase
     {
-        private string value;
+		private string value;
 
         public VariableExpression(string value)
         {
@@ -35,6 +35,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
         {
             yield return this;
-        }
+		}
+
+		public override string TreePrint(string indent, bool isLast)
+		{
+			Console.Write (indent+"|-");
+			indent += (isLast ? "  " : "| ");
+			Console.WriteLine (Value, true);
+			return indent;
+		}
     }
 }

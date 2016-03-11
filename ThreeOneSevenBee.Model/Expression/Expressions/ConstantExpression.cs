@@ -52,7 +52,15 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             }
 
             return base.Calculate();
-        }
+		}
+
+		public override string TreePrint(string indent, bool isLast) 
+		{
+			Console.Write (indent+"|-");
+			indent += (isLast ? "  " : "| ");
+			Console.WriteLine (Value);
+			return indent;
+		}
     }
 
     public enum ConstantType

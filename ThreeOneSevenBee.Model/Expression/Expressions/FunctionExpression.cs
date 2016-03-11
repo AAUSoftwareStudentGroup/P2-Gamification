@@ -14,7 +14,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             { "sin", Math.Sin },
             { "cos", Math.Cos },
             { "tan", Math.Tan },
-        };
+		};
 
         public FunctionExpression(ExpressionBase expression, string function)
         {
@@ -71,6 +71,15 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
             foreach (var node in Expression.GetNodesRecursive())
                 yield return node;
-        }
+		}
+
+		public override string TreePrint(string indent, bool isLast)
+		{
+			Console.Write (indent+"|-");
+			indent += (isLast ? "  " : "| ");
+			Console.WriteLine (Function);
+			this.Expression.TreePrint (indent, true);
+			return indent;
+		}
     }
 }
