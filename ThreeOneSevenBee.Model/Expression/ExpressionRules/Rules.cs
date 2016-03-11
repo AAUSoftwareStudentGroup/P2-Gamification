@@ -186,14 +186,12 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 if (operatorExpression.Type == OperatorType.Power)
                 {
-                    OperatorExpression lefthand;
-                    if ((lefthand = operatorExpression.Left as OperatorExpression) != null)
+                    OperatorExpression righthand;
+                    if ((righthand = operatorExpression.Right as OperatorExpression) != null)
                     {
-                        if (lefthand.Type == OperatorType.Power)
+                        if (righthand.Type == OperatorType.Power)
                         {
-                            identity = serializer.Deserialize(serializer.Serialize(lefthand.Left) + "^" +
-                                       serializer.Serialize(lefthand.Right) + "*" +
-                                       serializer.Serialize(operatorExpression.Right));
+                            identity = serializer.Deserialize(serializer.Serialize(operatorExpression.Left) + "^" + serializer.Serialize(righthand.Left) + "*" + serializer.Serialize(righthand.Right));
                             return true;
                         }
                     }
