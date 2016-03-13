@@ -108,9 +108,9 @@ namespace ThreeOneSevenBee.ModelConsole
 			model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
 			model.ApplyIdentity(model.Identities[model.Identities.Count-1]);
-			Console.WriteLine(model.Expression.Value.Equals("a^n+p")+"\n-----\n");
+            Console.WriteLine(model.Expression.Value.Equals("a^n+p")+"\n-----\n");
 
-			/*******/
+            /*******/
 
             model = new ExpressionModel("1*a+1*b", Rules.ItselfRule, Rules.MultiplyingWithOneRule);
 
