@@ -97,7 +97,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                                        righthand = operatorExpression.Right as OperatorExpression;
                     if (lefthand != null && righthand != null)
                     {
-                        if (lefthand.Type == OperatorType.Divide && righthand.Type == OperatorType.Divide && lefthand.Right == righthand.Right)
+                        if (lefthand.Type == OperatorType.Divide && righthand.Type == OperatorType.Divide && lefthand.Right.Value == righthand.Right.Value)
                         {
                             ExpressionSerializer serializer = new ExpressionSerializer();
                             OperatorExpression newDivision = serializer.Deserialize("a/b") as OperatorExpression;
@@ -164,7 +164,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                             ExpressionSerializer serializer = new ExpressionSerializer();
                             // May be missing parenthesis
                             identity = serializer.Deserialize(serializer.Serialize(lefthand.Left) +
-                                     "^"  + lefthand.Right + "+" + righthand.Right);
+                                     "^" + lefthand.Right + "+" + righthand.Right);
                             return true;
                         }
                     }
