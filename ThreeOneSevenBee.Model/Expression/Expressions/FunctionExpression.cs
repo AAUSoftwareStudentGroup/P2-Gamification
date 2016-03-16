@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
@@ -39,7 +36,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             if (functions.ContainsKey(Function))
                 return Expression.CanCalculate();
-            return base.CanCalculate();
+            return false;
         }
 
         public override double? Calculate()
@@ -47,7 +44,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             Func<double, double> func;
             if (functions.TryGetValue(Function, out func))
                 return func(Expression.Calculate().Value);
-            return base.Calculate();
+            return null;
         }
 
         public override ExpressionBase Clone()

@@ -25,9 +25,9 @@ namespace ThreeOneSevenBee.Model.Expression
             }
         }
 
-        public virtual bool CanCalculate() { return false; }
+        public abstract bool CanCalculate();
 
-        public virtual double? Calculate() { return null; }
+        public abstract double? Calculate();
 
         public override bool Equals(object other)
         {

@@ -18,9 +18,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // Commutative Rule: a + b = b + a
         public static bool CommutativeRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Add)
                 {
@@ -40,19 +40,19 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // a^-n = 1/(a)^n
         public static bool InversePowerRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
             identity = null;
 
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Power)
                 {
                     if (operatorExpression.Right is UnaryMinusExpression)
                     {
                         UnaryMinusExpression power = operatorExpression.Right as UnaryMinusExpression;
-                        OperatorExpression newDivision = serializer.Deserialize("1/b") as OperatorExpression;
-                        OperatorExpression newPower = serializer.Deserialize("a^b") as OperatorExpression;
+                        BinaryOperatorExpression newDivision = serializer.Deserialize("1/b") as BinaryOperatorExpression;
+                        BinaryOperatorExpression newPower = serializer.Deserialize("a^b") as BinaryOperatorExpression;
                         newPower.Left = operatorExpression.Left;
                         newPower.Right = power.Expression;
                         newDivision.Right = newPower;
@@ -67,9 +67,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // a^0 = 1
         public static bool PowerZeroRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Power)
                 {
@@ -87,22 +87,22 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // a/c + b/c = (a+b)/c
         public static bool FractionAddRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Add)
                 {
-                    OperatorExpression lefthand, righthand;
-                    if ((lefthand = operatorExpression.Left as OperatorExpression) != null &&
-                       (righthand = operatorExpression.Right as OperatorExpression) != null)
+                    BinaryOperatorExpression lefthand, righthand;
+                    if ((lefthand = operatorExpression.Left as BinaryOperatorExpression) != null &&
+                       (righthand = operatorExpression.Right as BinaryOperatorExpression) != null)
                     {
                         if (lefthand.Type == OperatorType.Divide && righthand.Type == OperatorType.Divide)
                         {
                             if (lefthand.Right == righthand.Right)
                             {
-                                OperatorExpression newDivision = serializer.Deserialize("a/b") as OperatorExpression;
-                                OperatorExpression newAddition = serializer.Deserialize("a+b") as OperatorExpression;
+                                BinaryOperatorExpression newDivision = serializer.Deserialize("a/b") as BinaryOperatorExpression;
+                                BinaryOperatorExpression newAddition = serializer.Deserialize("a+b") as BinaryOperatorExpression;
                                 newAddition.Left = lefthand.Left;
                                 newAddition.Right = righthand.Left;
                                 newDivision.Left = newAddition;
@@ -121,19 +121,19 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // a/b * c/d = a*c/(b*d)
         public static bool FractionMultiplyRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Multiply)
                 {
-                    OperatorExpression lefthand, righthand;
-                    if ((lefthand = operatorExpression.Left as OperatorExpression) != null &&
-                       (righthand = operatorExpression.Right as OperatorExpression) != null)
+                    BinaryOperatorExpression lefthand, righthand;
+                    if ((lefthand = operatorExpression.Left as BinaryOperatorExpression) != null &&
+                       (righthand = operatorExpression.Right as BinaryOperatorExpression) != null)
                     {
                         if (lefthand.Type == OperatorType.Divide && righthand.Type == OperatorType.Divide)
                         {
-                            OperatorExpression division = serializer.Deserialize("a/b") as OperatorExpression;
+                            BinaryOperatorExpression division = serializer.Deserialize("a/b") as BinaryOperatorExpression;
 
                             division.Left = (serializer.Deserialize(serializer.Serialize(lefthand.Left) + "*" + serializer.Serialize(righthand.Left)));
                             division.Right = (serializer.Deserialize(serializer.Serialize(lefthand.Right) + "*" + serializer.Serialize(righthand.Right)));
@@ -150,15 +150,15 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // (a)^n * (a)^p = a^(n+p)
         public static bool SameVariableDifferentExpMultiplyRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Multiply)
                 {
-                    OperatorExpression lefthand, righthand;
-                    if ((lefthand = operatorExpression.Left as OperatorExpression) != null &&
-                        (righthand = operatorExpression.Right as OperatorExpression) != null)
+                    BinaryOperatorExpression lefthand, righthand;
+                    if ((lefthand = operatorExpression.Left as BinaryOperatorExpression) != null &&
+                        (righthand = operatorExpression.Right as BinaryOperatorExpression) != null)
                     {
                         if (lefthand.Type == OperatorType.Power && righthand.Type == OperatorType.Power)
                         {
@@ -180,14 +180,14 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // a^n^n
         public static bool VariableWithTwoExponent(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Power)
                 {
-                    OperatorExpression lefthand;
-                    if ((lefthand = operatorExpression.Left as OperatorExpression) != null)
+                    BinaryOperatorExpression lefthand;
+                    if ((lefthand = operatorExpression.Left as BinaryOperatorExpression) != null)
                     {
                         if (lefthand.Type == OperatorType.Power)
                         {
@@ -205,14 +205,14 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // (a+b)^2 = a^2+b^2+2ab
         public static bool SquareSentenceRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Power && operatorExpression.Right.Value.Equals("2"))
                 {
-                    OperatorExpression lefthand;
-                    if ((lefthand = operatorExpression.Left as OperatorExpression) != null)
+                    BinaryOperatorExpression lefthand;
+                    if ((lefthand = operatorExpression.Left as BinaryOperatorExpression) != null)
                     {
                         if (lefthand.Type == OperatorType.Add)
                         {
@@ -236,7 +236,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         {
             FunctionExpression functionExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             DelimiterExpression delimiterExpression;
             if ((functionExpression = expression as FunctionExpression) != null)
             {
@@ -244,7 +244,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 {
                     if ((delimiterExpression = functionExpression.Expression as DelimiterExpression) != null)
                     {
-                        if ((operatorExpression = delimiterExpression.Expression as OperatorExpression) != null)
+                        if ((operatorExpression = delimiterExpression.Expression as BinaryOperatorExpression) != null)
                         {
 
                             if (operatorExpression.Type == OperatorType.Power && operatorExpression.Right.Value.Equals("2"))
@@ -263,15 +263,15 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // a * b/c = a*b/c
         public static bool FractionVariableMultiplyRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Multiply)
                 {
-                    OperatorExpression righthand;
+                    BinaryOperatorExpression righthand;
                     // Skal der ikke tjekkes for:  && operatorExpression.Left is VariableExpression i nedenstående?
-                    if ((righthand = operatorExpression.Right as OperatorExpression) != null)
+                    if ((righthand = operatorExpression.Right as BinaryOperatorExpression) != null)
                     {
                         if (righthand.Type == OperatorType.Divide)
                         {
@@ -289,14 +289,14 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // a * (b + c) = a*b + a*c
         public static bool MultiplyVariableIntoParentheses(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Multiply)
                 {
-                    OperatorExpression righthand;
-                    if ((righthand = operatorExpression.Right as OperatorExpression) != null)
+                    BinaryOperatorExpression righthand;
+                    if ((righthand = operatorExpression.Right as BinaryOperatorExpression) != null)
                     {
                         if (righthand.Type == OperatorType.Multiply)
                         {
@@ -314,14 +314,14 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // (a * b)^n = a^n + b^n
         public static bool PowerOfVariablesMultiplied(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Power)
                 {
-                    OperatorExpression lefthand;
-                    if ((lefthand = operatorExpression.Right as OperatorExpression) != null)
+                    BinaryOperatorExpression lefthand;
+                    if ((lefthand = operatorExpression.Right as BinaryOperatorExpression) != null)
                     {
                         if (lefthand.Type == OperatorType.Multiply)
                         {
@@ -339,9 +339,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // 1 * a = a V a * 1 = a
         public static bool MultiplyingWithOneRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Multiply && operatorExpression.Left.Value.Equals("1"))
                 {
@@ -361,9 +361,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // b/1 = b
         public static bool DenumeratorIsOneRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Divide)
                 {
@@ -381,9 +381,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // 0/b = 0
         public static bool NumeratorIsZero(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Divide)
                 {
@@ -401,9 +401,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // -a/-b = a/b
         public static bool RemovingUnaryMinusInDivisionRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            OperatorExpression operatorExpression;
+            BinaryOperatorExpression operatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 if (operatorExpression.Type == OperatorType.Divide)
                 {

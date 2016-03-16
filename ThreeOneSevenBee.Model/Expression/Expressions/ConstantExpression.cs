@@ -3,23 +3,23 @@ using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
-    public class ConstantExpression : ExpressionBase
+    public class ConstantExpression : ExpressionBase, ILeaf
     {
-        private ConstantType value;
-
-        public ConstantExpression(ConstantType value)
+        public ConstantExpression(ConstantType type)
         {
-            this.value = value;
+            Type = type;
         }
 
         public override string Value
         {
-            get { return value.ToString(); }
+            get { return Type.ToString(); }
         }
+
+        public ConstantType Type { get; set; }
 
         public override ExpressionBase Clone()
         {
-            return new ConstantExpression(value);
+            return new ConstantExpression(Type);
         }
 
         public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
@@ -29,29 +29,29 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
         {
-            yield return this;
+            yield break;
         }
 
         public override bool CanCalculate()
         {
-            switch (value)
+            switch (Type)
             {
                 case ConstantType.Pi:
                     return true;
             }
 
-            return base.CanCalculate();
+            return false;
         }
 
         public override double? Calculate()
         {
-            switch (value)
+            switch (Type)
             {
                 case ConstantType.Pi:
                     return Math.PI;
             }
 
-            return base.Calculate();
+            return null;
         }
     }
 

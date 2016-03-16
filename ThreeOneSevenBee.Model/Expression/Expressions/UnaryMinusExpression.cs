@@ -3,22 +3,15 @@ using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
-    public class UnaryMinusExpression : ExpressionBase
+    public class UnaryMinusExpression : UnaryExpression
     {
         public UnaryMinusExpression(ExpressionBase expression)
-        {
-            Expression = expression;
-            Expression.Parent = this;
-        }
-
-        public ExpressionBase Expression { get; protected set; }
+            : base(OperatorType.Subtract, expression)
+        { }
 
         public override string Value
         {
-            get
-            {
-                return "-" + Expression.ToString();
-            }
+            get { return "-" + Expression.ToString(); }
         }
 
         public override bool CanCalculate()
@@ -48,7 +41,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
         {
-            yield return this;
+            yield return Expression;
 
             foreach (var node in Expression.GetNodesRecursive())
                 yield return node;

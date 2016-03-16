@@ -48,7 +48,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
         {
-            yield return this;
+            yield return Expression;
 
             foreach (var node in Expression.GetNodesRecursive())
                 yield return node;
