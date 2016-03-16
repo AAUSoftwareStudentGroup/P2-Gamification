@@ -65,6 +65,58 @@
             }
     
             return identities;
+        },
+        getTermsList: function (expression) {
+            var result = Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase))(), [
+                [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)()],
+                [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract, new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)()]
+            ] );
+            var operatornode;
+    
+            if (Bridge.is(expression, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression)) {
+                operatornode = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
+                if (operatornode.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add || operatornode.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract) {
+                    var temp1 = this.getTermsList(operatornode.getLeft());
+                    var temp2 = this.getTermsList(operatornode.getRight());
+                    result.set(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, Bridge.Linq.Enumerable.from(temp1.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add)).concat(temp2.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add)).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
+                    result.set(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract, Bridge.Linq.Enumerable.from(temp1.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract)).concat(temp2.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract)).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
+                }
+                else  {
+                    if (!Bridge.hasValue(expression.getParent())) {
+                        result.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add).add(expression);
+                    }
+                    else  {
+                        operatornode = Bridge.as(expression.getParent(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
+                        if (operatornode.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract) {
+                            result.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract).add(expression);
+                        }
+                        else  {
+                            result.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add).add(expression);
+                        }
+                    }
+                }
+            }
+            else  {
+                if (Bridge.is(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression)) {
+                    var unarynode = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
+                    result.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract).add(unarynode.getExpression());
+                }
+                else  {
+                    if (!Bridge.hasValue(expression.getParent())) {
+                        result.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add).add(expression);
+                    }
+                    else  {
+                        operatornode = Bridge.as(expression.getParent(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
+                        if (operatornode.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract) {
+                            result.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract).add(expression);
+                        }
+                        else  {
+                            result.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add).add(expression);
+                        }
+                    }
+                }
+            }
+            return result;
         }
     });
     
@@ -472,6 +524,30 @@
                         this.output.enqueue(tok);
                     }
                     lastToken = Bridge.get(ThreeOneSevenBee.Model.Expression.Token).delimiter();
+                    lastToken.setData("()");
+                    this.output.enqueue(lastToken);
+                    i.v++;
+                    continue;
+                }
+    
+    
+                if (inFix.charCodeAt(i.v) === 123) {
+                    lastToken = Bridge.get(ThreeOneSevenBee.Model.Expression.Token).operator(new ThreeOneSevenBee.Model.Expression.Operator("constructor", "{"));
+                    this.operators.push(lastToken);
+                    i.v++;
+                    continue;
+                }
+    
+                if (inFix.charCodeAt(i.v) === 125) {
+                    while (Bridge.Linq.Enumerable.from(this.operators).any()) {
+                        var tok1 = this.operators.pop();
+                        if (tok1.getType() === ThreeOneSevenBee.Model.Expression.TokenType.operator && Bridge.String.equals((Bridge.as(tok1.getData(), ThreeOneSevenBee.Model.Expression.Operator)).getSymbol(), "{")) {
+                            break;
+                        }
+                        this.output.enqueue(tok1);
+                    }
+                    lastToken = Bridge.get(ThreeOneSevenBee.Model.Expression.Token).delimiter();
+                    lastToken.setData("{}");
                     this.output.enqueue(lastToken);
                     i.v++;
                     continue;
@@ -503,8 +579,16 @@
                         stack.push(root);
                         break;
                     case ThreeOneSevenBee.Model.Expression.TokenType.delimiter: 
-                        root = new ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression(stack.pop());
-                        stack.push(root);
+                        switch (token.getData().toString()) {
+                            case "()": 
+                                root = new ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression(stack.pop());
+                                stack.push(root);
+                                break;
+                            case "{}": 
+                                root = stack.pop();
+                                stack.push(root);
+                                break;
+                        }
                         break;
                     case ThreeOneSevenBee.Model.Expression.TokenType.number: 
                         root = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(Bridge.cast(token.getData(), Number));
