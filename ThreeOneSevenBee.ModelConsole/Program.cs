@@ -35,14 +35,15 @@ namespace ThreeOneSevenBee.ModelConsole
             ExpressionModel model;
 
             /*******/
-            model = new ExpressionModel("a+b*2/5", Rules.ItselfRule, Rules.CommutativeRule);
+            model = new ExpressionModel("a+b+2/5", Rules.ItselfRule, Rules.CommutativeRule);
 
             model.OnChanged += Update;
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(4));
             model.Select(model.Expression.GetNodesRecursive().ElementAt(5));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if(model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("a+2*b/5") + "\n-----\n");
 
             /*******/
@@ -53,7 +54,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("1/a^1") + "\n-----\n");
 
             /*******/
@@ -64,7 +66,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("1") + "\n-----\n");
 
             /*******/
@@ -75,7 +78,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("a+b/c") + "\n-----\n");
 
             /*******/
@@ -86,7 +90,9 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            model.Expression.TreePrint(" ", false);
             Console.WriteLine(model.Expression.Value.Equals("a*c/b*d") + "\n-----\n");
 
             /*******/
@@ -97,7 +103,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("a*b/c") + "\n-----\n");
 
             /*******/
@@ -108,7 +115,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("a^n+p") + "\n-----\n");
 
             /*******/
@@ -119,7 +127,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(1));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("a+1*b") + "\n-----\n");
 
             /*******/
@@ -130,7 +139,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("b") + "\n-----\n");
 
             /*******/
@@ -141,7 +151,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("0") + "\n-----\n");
 
             /*******/
@@ -152,7 +163,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("a/b") + "\n-----\n");
 
             /*******/
@@ -163,7 +175,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("a") + "\n-----\n");
 
             /*******/
@@ -174,7 +187,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("a") + "\n-----\n");
 
 
@@ -186,7 +200,8 @@ namespace ThreeOneSevenBee.ModelConsole
 
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
 
-            model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
+            if (model.Identities.Count > 0)
+                model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("a^n*n") + "\n-----\n");
             model.Expression.TreePrint(" ", false);
 
@@ -205,6 +220,20 @@ namespace ThreeOneSevenBee.ModelConsole
             model = new ExpressionModel("{2*2}/2", Rules.ItselfRule);
 
             model.Expression.PrettyPrint();
+
+            /********************/
+
+
+            model = new ExpressionModel("{a/b", Rules.ItselfRule);
+
+            model.Expression.PrettyPrint();
+
+            model.OnChanged += Update;
+            Console.WriteLine();
+            Console.WriteLine("deselect child test");
+            model.Select(model.Expression.GetNodesRecursive().ElementAt(2));
+            model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
+
 
             Console.ReadKey();
         }
