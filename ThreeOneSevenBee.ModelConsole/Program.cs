@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ThreeOneSevenBee.Model.Expression;
 using ThreeOneSevenBee.Model.Expression.ExpressionRules;
+using ThreeOneSevenBee.Model.Expression.Expressions;
 
 namespace ThreeOneSevenBee.ModelConsole
 {
@@ -188,8 +189,24 @@ namespace ThreeOneSevenBee.ModelConsole
             model.ApplyIdentity(model.Identities[model.Identities.Count - 1]);
             Console.WriteLine(model.Expression.Value.Equals("a^n*n") + "\n-----\n");
             model.Expression.TreePrint(" ", false);
-            Console.ReadKey();
 
+
+            /*********/
+            Console.WriteLine();
+            Console.WriteLine("test");
+           
+
+            model = new ExpressionModel("2*{2/2}", Rules.ItselfRule);
+
+            model.Expression.PrettyPrint();
+
+            /****************/ 
+
+            model = new ExpressionModel("{2*2}/2", Rules.ItselfRule);
+
+            model.Expression.PrettyPrint();
+
+            Console.ReadKey();
         }
     }
 }
