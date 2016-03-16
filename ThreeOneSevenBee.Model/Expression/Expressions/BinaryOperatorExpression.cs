@@ -65,5 +65,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             throw new NotImplementedException();
         }
+
+        public override string TreePrint(string indent, bool isLast)
+        {
+            Console.WriteLine(indent + "|-" + Symbol);
+            indent += (isLast ? "  " : "| ");
+            Left.TreePrint(indent, false);
+            Right.TreePrint(indent, true);
+            return indent;
+        }
     }
 }

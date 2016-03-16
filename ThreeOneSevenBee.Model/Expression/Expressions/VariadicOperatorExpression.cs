@@ -82,5 +82,10 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             throw new NotImplementedException();
         }
+
+        public override String TreePrint(String indent, Boolean isLast)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
