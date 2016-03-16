@@ -27,6 +27,16 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return -Expression.Calculate();
         }
 
+        public override bool Equals(ExpressionBase otherBase)
+        {
+            var other = (otherBase as UnaryMinusExpression);
+
+            if (other == null)
+                return false;
+
+            return this.Expression == other.Expression;
+        }
+
         public override ExpressionBase Clone()
         {
             return new UnaryMinusExpression(Expression.Clone());
