@@ -61,6 +61,41 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return result;
         }
 
+        //
+        //Tjek this[0] med hele other[i] indtil en ækvivalent findes. Når den findes skal det markeres, så other[i] ikke tjekkes igen (for at undgå a*a = a)
+        // Gå derefter til this[1] og fortsæt til this er færdig.
+        public override bool Equals(ExpressionBase otherBase)
+        {
+            var other = (otherBase as VariadicOperatorExpression);
+
+            if (other == null)
+                return false;
+
+            // http://stackoverflow.com/questions/3669970/compare-two-listt-objects-for-equality-ignoring-order
+            var cnt = new Dictionary<ExpressionBase, int>();
+            foreach (ExpressionBase s in this)
+            {
+                if (cnt.ContainsKey(s))
+                {
+                    cnt[s]++;
+                }
+                else {
+                    cnt.Add(s, 1);
+                }
+            }
+            foreach (ExpressionBase s in other)
+            {
+                if (cnt.ContainsKey(s))
+                {
+                    cnt[s]--;
+                }
+                else {
+                    return false;
+                }
+            }
+            return cnt.Values.All(c => c == 0);
+        }
+
         public override ExpressionBase Clone()
         {
             return new VariadicOperatorExpression(Type, this.Select(e => e.Clone()).ToArray());

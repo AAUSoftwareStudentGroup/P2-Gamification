@@ -50,6 +50,16 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return null;
         }
 
+        public override bool Equals(ExpressionBase otherBase)
+        {
+            var other = (otherBase as FunctionExpression);
+
+            if (other == null)
+                return false;
+
+            return this.Function == other.Function && this.Expression == other.Expression;
+        }
+
         public override ExpressionBase Clone()
         {
             return new FunctionExpression(Expression.Clone(), Function);
