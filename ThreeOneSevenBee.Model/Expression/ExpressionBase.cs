@@ -5,6 +5,16 @@ namespace ThreeOneSevenBee.Model.Expression
 {
     public abstract class ExpressionBase : IEquatable<ExpressionBase>
     {
+        public static bool operator ==(ExpressionBase left, ExpressionBase right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ExpressionBase left, ExpressionBase right)
+        {
+            return !left.Equals(right);
+        }
+
         public ExpressionBase Parent { get; set; }
 
         public abstract string Value { get; }
@@ -49,11 +59,11 @@ namespace ThreeOneSevenBee.Model.Expression
             return Value;
         }
 
-		public abstract string TreePrint (string indent, bool isLast);
+        public abstract string TreePrint(string indent, bool isLast);
 
-		public void PrettyPrint () 
-		{
-			this.TreePrint ("", true);
-		}
+        public void PrettyPrint()
+        {
+            this.TreePrint("", true);
+        }
     }
 }
