@@ -58,7 +58,17 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return null;
         }
 
-		public override string TreePrint(string indent, bool isLast) 
+        public override bool Equals(ExpressionBase otherBase)
+        {
+            var other = (otherBase as ConstantExpression);
+
+            if (other == null)
+                return false;
+
+            return this.Type == other.Type;
+        }
+
+        public override string TreePrint(string indent, bool isLast) 
 		{
 			Console.WriteLine (indent + "|-" + Value);
             return indent + (isLast ? "  " : "| ");

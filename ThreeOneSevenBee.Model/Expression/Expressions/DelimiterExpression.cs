@@ -34,6 +34,16 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return Expression.Calculate();
         }
 
+        public override bool Equals(ExpressionBase otherBase)
+        {
+            var other = (otherBase as DelimiterExpression);
+
+            if (other == null)
+                return false;
+
+            return this.Expression == other.Expression;
+        }
+
         public override ExpressionBase Clone()
         {
             return new DelimiterExpression(Expression.Clone());

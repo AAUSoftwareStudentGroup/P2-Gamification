@@ -35,6 +35,16 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return null;
         }
 
+        public override bool Equals(ExpressionBase otherBase)
+        {
+            var other = (otherBase as VariableExpression);
+
+            if (other == null)
+                return false;
+
+            return this.value == other.value;
+        }
+
         public override ExpressionBase Clone()
         {
             return new VariableExpression(Value);

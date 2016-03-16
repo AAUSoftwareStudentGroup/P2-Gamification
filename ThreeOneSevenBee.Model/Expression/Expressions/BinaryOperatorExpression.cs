@@ -49,6 +49,34 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return null;
         }
 
+        public override bool Equals(ExpressionBase otherBase)
+        {
+            var other = (otherBase as BinaryOperatorExpression);
+
+            if (other == null)
+                return false;
+
+            if (other.Type != this.Type)
+                return false;
+
+            switch (this.Type)
+            {
+                case OperatorType.Add:
+                case OperatorType.Multiply:
+                    if (this.Left == other.Left && this.Right == other.Right ||
+                        this.Left == other.Right && this.Right == other.Left)
+                        return true;
+                    break;
+                case OperatorType.Subtract:
+                case OperatorType.Divide:
+                case OperatorType.Power:
+                    if (this.Left.Equals(other.Left) && this.Right.Equals(other.Right))
+                        return true;
+                    break;
+            }
+            return false;
+        }
+
         public override ExpressionBase Clone()
         {
             return new BinaryOperatorExpression(Left.Clone(), Right.Clone(), Type);

@@ -56,10 +56,7 @@ namespace ThreeOneSevenBee.Model.Expression
             return (other is ExpressionBase) && Equals((ExpressionBase)other);
         }
 
-        public bool Equals(ExpressionBase other)
-        {
-            return ToString() == other.ToString();
-        }
+        public abstract bool Equals(ExpressionBase other);
 
         public override int GetHashCode()
         {
