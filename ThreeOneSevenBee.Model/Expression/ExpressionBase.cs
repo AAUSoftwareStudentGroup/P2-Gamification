@@ -48,5 +48,12 @@ namespace ThreeOneSevenBee.Model.Expression
         {
             return Value;
         }
+
+		public abstract string TreePrint (string indent, bool isLast);
+
+		public void PrettyPrint () 
+		{
+			this.TreePrint ("", true);
+		}
     }
 }

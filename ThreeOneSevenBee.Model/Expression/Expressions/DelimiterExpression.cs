@@ -1,10 +1,13 @@
 ﻿using System;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
     public class DelimiterExpression : ExpressionBase
-    {
+	{
         public DelimiterExpression(ExpressionBase expression)
         {
             Expression = expression;
@@ -36,7 +39,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new DelimiterExpression(Expression.Clone());
         }
 
-        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
+        public override bool Replace(ExpressionBase old, ExpressionBase replacement)
         {
             if (Expression == old)
             {
@@ -52,6 +55,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
             foreach (var node in Expression.GetNodesRecursive())
                 yield return node;
-        }
+		}
+
+		public override string TreePrint(string indent, bool isLast)
+		{
+			Console.WriteLine (indent + "|-" + "()");
+            indent += (isLast ? "  " : "| ");
+            this.Expression.TreePrint (indent, true);
+			return indent;
+		}
     }
 }

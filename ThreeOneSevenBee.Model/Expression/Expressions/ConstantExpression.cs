@@ -1,4 +1,8 @@
-﻿using System;
+﻿#if BRIDGE
+using Bridge.Html5;
+#else
+using System;
+#endif
 using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
@@ -22,7 +26,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new ConstantExpression(Type);
         }
 
-        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
+        public override bool Replace(ExpressionBase old, ExpressionBase replacement)
         {
             return false;
         }
@@ -48,11 +52,17 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             switch (Type)
             {
                 case ConstantType.Pi:
-                    return Math.PI;
+                    return System.Math.PI;
             }
 
             return null;
         }
+
+		public override string TreePrint(string indent, bool isLast) 
+		{
+			Console.WriteLine (indent + "|-" + Value);
+            return indent + (isLast ? "  " : "| ");
+		}
     }
 
     public enum ConstantType

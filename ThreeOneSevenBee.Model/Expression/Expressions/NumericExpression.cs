@@ -1,11 +1,14 @@
 ﻿using System;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
     public class NumericExpression : ExpressionBase, ILeaf
     {
-        private double value;
+		private double value;
 
         public NumericExpression(double value)
         {
@@ -40,6 +43,12 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         public override double? Calculate()
         {
             return value;
-        }
+		}
+
+		public override string TreePrint(string indent, bool isLast)
+		{
+			Console.WriteLine (indent + "|-" + Value);
+			return indent + (isLast ? "  " : "| ");
+		}
     }
 }

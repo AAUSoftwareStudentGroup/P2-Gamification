@@ -1,4 +1,7 @@
 ﻿using System;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
@@ -28,8 +31,17 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 if (symbols.ContainsKey(Type))
                     return symbols[Type];
                 throw new InvalidOperationException("Invalid Type: " + Type);
-            }
         }
+        }
+
+		public override string TreePrint(string indent, bool isLast)
+		{
+			Console.WriteLine (indent + "|-" + symbols[Type]);
+            indent += (isLast ? "  " : "| ");
+            Left.TreePrint (indent, false);
+			Right.TreePrint (indent, true);
+			return indent;
+		}
     }
 
     public enum OperatorType
