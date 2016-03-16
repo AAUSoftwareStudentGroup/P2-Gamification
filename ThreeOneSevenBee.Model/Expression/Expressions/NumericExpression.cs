@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
-    public class NumericExpression : ExpressionBase
+    public class NumericExpression : ExpressionBase, ILeaf
     {
 		private double value;
 
@@ -32,7 +32,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
         {
-            yield return this;
+            yield break;
         }
 
         public override bool CanCalculate()

@@ -14,7 +14,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             { "sin", Math.Sin },
             { "cos", Math.Cos },
             { "tan", Math.Tan },
-		};
+        };
 
         public FunctionExpression(ExpressionBase expression, string function)
         {
@@ -39,7 +39,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             if (functions.ContainsKey(Function))
                 return Expression.CanCalculate();
-            return base.CanCalculate();
+            return false;
         }
 
         public override double? Calculate()
@@ -47,7 +47,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             Func<double, double> func;
             if (functions.TryGetValue(Function, out func))
                 return func(Expression.Calculate().Value);
-            return base.Calculate();
+            return null;
         }
 
         public override ExpressionBase Clone()
@@ -71,7 +71,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
             foreach (var node in Expression.GetNodesRecursive())
                 yield return node;
-		}
+        }
 
 		public override string TreePrint(string indent, bool isLast)
 		{

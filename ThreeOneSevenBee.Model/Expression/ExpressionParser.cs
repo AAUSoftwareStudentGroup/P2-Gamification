@@ -379,35 +379,35 @@ namespace ThreeOneSevenBee.Model.Expression
                             case "+":
                                 var right = stack.Pop();
                                 var left = stack.Pop();
-                                root = new OperatorExpression(left, right, OperatorType.Add);
+                                root = new BinaryOperatorExpression(left, right, OperatorType.Add);
                                 stack.Push(root);
                                 break;
 
                             case "-":
                                 right = stack.Pop();
                                 left = stack.Pop();
-                                root = new OperatorExpression(left, right, OperatorType.Subtract);
+                                root = new BinaryOperatorExpression(left, right, OperatorType.Subtract);
                                 stack.Push(root);
                                 break;
 
                             case "*":
                                 right = stack.Pop();
                                 left = stack.Pop();
-                                root = new OperatorExpression(left, right, OperatorType.Multiply);
+                                root = new BinaryOperatorExpression(left, right, OperatorType.Multiply);
                                 stack.Push(root);
                                 break;
 
                             case "/":
                                 right = stack.Pop();
                                 left = stack.Pop();
-                                root = new OperatorExpression(left, right, OperatorType.Divide);
+                                root = new BinaryOperatorExpression(left, right, OperatorType.Divide);
                                 stack.Push(root);
                                 break;
 
                             case "^":
                                 right = stack.Pop();
                                 left = stack.Pop();
-                                root = new OperatorExpression(left, right, OperatorType.Power);
+                                root = new BinaryOperatorExpression(left, right, OperatorType.Power);
                                 stack.Push(root);
                                 break;
                         }
