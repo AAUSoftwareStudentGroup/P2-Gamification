@@ -15,6 +15,8 @@ namespace ThreeOneSevenBee.Model.Collections
             list = new List<T>();
         }
 
+        public int Count { get { return list.Count; } }
+
         public void Push(T item)
         {
             list.Add(item);
