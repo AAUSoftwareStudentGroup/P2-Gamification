@@ -88,7 +88,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 			Console.WriteLine(indent + "|-" + Symbol);
 			indent += (isLast ? "  " : "| ");
 			for (int i = 0; i < this.Count-1; i++) {
-				this [i].TreePrint(indent);
+				this [i].TreePrint(indent, false);
 			}
 			this[this.Count-1].TreePrint(indent, true);
 			return indent;
