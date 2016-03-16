@@ -28,7 +28,7 @@ namespace ThreeOneSevenBee.Model.UI
             if ((operatorExpression = expression as OperatorExpression) != null)
             {
                 View left = Build(operatorExpression.Left, model);
-                View operatorSign = new ButtonView("+", null) { X = left.Width, Width = 20, Height = 20 };
+                View operatorSign = new ButtonView(operatorExpression.GetTypeString(), null) { X = left.Width, Width = 20, Height = 20 };
                 View right = Build(operatorExpression.Right, model);
                 right.X = left.Width + operatorSign.Width;
                 return new CompositeView(right.X + right.Width, System.Math.Max(System.Math.Max(left.Height, operatorSign.Height), right.Height)) { left, operatorSign, right };

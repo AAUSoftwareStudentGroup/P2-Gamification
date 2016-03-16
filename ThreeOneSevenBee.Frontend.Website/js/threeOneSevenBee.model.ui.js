@@ -229,7 +229,7 @@
                 var operatorExpression;
                 if (Bridge.hasValue((($t = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression), operatorExpression = $t, $t)))) {
                     var left = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getLeft(), model);
-                    var operatorSign = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("+", null), {
+                    var operatorSign = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView(operatorExpression.getTypeString(), null), {
                         setX: left.getWidth(),
                         setWidth: 20,
                         setHeight: 20

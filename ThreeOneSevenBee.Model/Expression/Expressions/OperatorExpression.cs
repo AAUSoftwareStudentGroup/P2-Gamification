@@ -17,6 +17,11 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             { OperatorType.Power, "^" },
 		};
 
+        public string GetTypeString()
+        {
+            return symbols[Type];
+        }
+
         public OperatorExpression(ExpressionBase left, ExpressionBase right, OperatorType type)
         {
             Left = left;

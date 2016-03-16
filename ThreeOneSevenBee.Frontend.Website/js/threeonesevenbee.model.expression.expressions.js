@@ -259,6 +259,9 @@
             }
             throw new Bridge.InvalidOperationException("Invalid operator type: " + this.getType());
         },
+        getTypeString: function () {
+            return Bridge.get(ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression).symbols.get(this.getType());
+        },
         canCalculate: function () {
             return this.getLeft().canCalculate() && this.getRight().canCalculate();
         },
