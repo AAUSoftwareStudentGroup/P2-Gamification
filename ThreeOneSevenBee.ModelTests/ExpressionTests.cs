@@ -122,6 +122,11 @@ namespace ThreeOneSevenBee.ModelTests
             return new BinaryOperatorExpression(left, right, OperatorType.Add);
         }
 
+        private ExpressionBase Add(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
+        {
+            return new VariadicOperatorExpression(OperatorType.Add, first, second, expressions);
+        }
+
         private ExpressionBase Divide(ExpressionBase left, ExpressionBase right)
         {
             return new BinaryOperatorExpression(left, right, OperatorType.Divide);
@@ -130,6 +135,11 @@ namespace ThreeOneSevenBee.ModelTests
         private ExpressionBase Multiply(ExpressionBase left, ExpressionBase right)
         {
             return new BinaryOperatorExpression(left, right, OperatorType.Multiply);
+        }
+
+        private ExpressionBase Multiply(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
+        {
+            return new VariadicOperatorExpression(OperatorType.Multiply, first, second, expressions);
         }
 
         private ExpressionBase Power(ExpressionBase left, ExpressionBase right)
