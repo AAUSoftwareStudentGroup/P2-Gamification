@@ -19,7 +19,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override String Value
         {
-            get { return this.Aggregate(this.First().Value, (s, e) => s + Symbol + e.Value); }
+            get { return this.Skip(1).Aggregate(this.First().Value, (s, e) => s + Symbol + e.Value); }
         }
 
         public override Boolean CanCalculate()
