@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
-    public class VariableExpression : ExpressionBase
+    public class VariableExpression : ExpressionBase, ILeaf
     {
-		private string value;
+        private string value;
 
         public VariableExpression(string value)
         {
@@ -25,6 +25,26 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             this.value = value;
         }
 
+        public override Boolean CanCalculate()
+        {
+            return false;
+        }
+
+        public override Double? Calculate()
+        {
+            return null;
+        }
+
+        public override bool Equals(ExpressionBase otherBase)
+        {
+            var other = (otherBase as VariableExpression);
+
+            if (other == null)
+                return false;
+
+            return this.value == other.value;
+        }
+
         public override ExpressionBase Clone()
         {
             return new VariableExpression(Value);
@@ -37,8 +57,8 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
         {
-            yield return this;
-		}
+            yield break;
+        }
 
 		public override string TreePrint(string indent, bool isLast)
 		{

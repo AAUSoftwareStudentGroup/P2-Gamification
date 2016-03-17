@@ -277,6 +277,32 @@ namespace ThreeOneSevenBee.Model.Expression
                         this.output.Enqueue(tok);
                     }
                     lastToken = Token.Delimiter();
+                    lastToken.Data = "()";
+                    this.output.Enqueue(lastToken);
+                    i++;
+                    continue;
+                }
+
+
+                if (inFix[i] == '{')
+                {
+                    lastToken = Token.Operator(new Operator("{"));
+                    operators.Push(lastToken);
+                    i++;
+                    continue;
+                }
+
+                if (inFix[i] == '}')
+                {
+                    while (operators.Any())
+                    {
+                        var tok = operators.Pop();
+                        if (tok.Type == TokenType.Operator && (tok.Data as Operator).Symbol.Equals("{"))
+                            break;
+                        this.output.Enqueue(tok);
+                    }
+                    lastToken = Token.Delimiter();
+                    lastToken.Data = "{}";
                     this.output.Enqueue(lastToken);
                     i++;
                     continue;
@@ -313,8 +339,18 @@ namespace ThreeOneSevenBee.Model.Expression
                         break;
 
                     case TokenType.Delimiter:
-                        root = new DelimiterExpression(stack.Pop());
-                        stack.Push(root);
+                        switch (token.Data.ToString())
+                        {
+                            case "()":
+                                root = new DelimiterExpression(stack.Pop());
+                                stack.Push(root);
+                                break;
+                            case "{}":
+                                root = stack.Pop();
+                                stack.Push(root);
+                                break;
+                        }
+
                         break;
 
                     case TokenType.Number:
@@ -343,35 +379,35 @@ namespace ThreeOneSevenBee.Model.Expression
                             case "+":
                                 var right = stack.Pop();
                                 var left = stack.Pop();
-                                root = new OperatorExpression(left, right, OperatorType.Add);
+                                root = new BinaryOperatorExpression(left, right, OperatorType.Add);
                                 stack.Push(root);
                                 break;
 
                             case "-":
                                 right = stack.Pop();
                                 left = stack.Pop();
-                                root = new OperatorExpression(left, right, OperatorType.Subtract);
+                                root = new BinaryOperatorExpression(left, right, OperatorType.Subtract);
                                 stack.Push(root);
                                 break;
 
                             case "*":
                                 right = stack.Pop();
                                 left = stack.Pop();
-                                root = new OperatorExpression(left, right, OperatorType.Multiply);
+                                root = new BinaryOperatorExpression(left, right, OperatorType.Multiply);
                                 stack.Push(root);
                                 break;
 
                             case "/":
                                 right = stack.Pop();
                                 left = stack.Pop();
-                                root = new OperatorExpression(left, right, OperatorType.Divide);
+                                root = new BinaryOperatorExpression(left, right, OperatorType.Divide);
                                 stack.Push(root);
                                 break;
 
                             case "^":
                                 right = stack.Pop();
                                 left = stack.Pop();
-                                root = new OperatorExpression(left, right, OperatorType.Power);
+                                root = new BinaryOperatorExpression(left, right, OperatorType.Power);
                                 stack.Push(root);
                                 break;
                         }

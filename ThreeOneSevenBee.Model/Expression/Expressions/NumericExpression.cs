@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
-    public class NumericExpression : ExpressionBase
+    public class NumericExpression : ExpressionBase, ILeaf
     {
 		private double value;
 
@@ -32,7 +32,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
         {
-            yield return this;
+            yield break;
         }
 
         public override bool CanCalculate()
@@ -45,7 +45,17 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return value;
 		}
 
-		public override string TreePrint(string indent, bool isLast)
+        public override bool Equals(ExpressionBase otherBase)
+        {
+            var other = (otherBase as NumericExpression);
+
+            if (other == null)
+                return false;
+
+            return (Math.Abs(this.value - other.value) < double.Epsilon);
+        }
+
+        public override string TreePrint(string indent, bool isLast)
 		{
 			Console.WriteLine (indent + "|-" + Value);
 			return indent + (isLast ? "  " : "| ");

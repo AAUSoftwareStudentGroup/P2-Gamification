@@ -66,6 +66,13 @@ namespace ThreeOneSevenBee.Model.Expression
             int index = SelectionIndex(expression);
             if (index == -1)
             {
+
+                foreach (var descendant in expression.GetNodesRecursive())
+                {
+                    int i;
+                    if ((i = SelectionIndex(descendant)) != -1)
+                        selection.RemoveAt(i);
+                }
                 selection.Add(expression);
             }
             else
@@ -95,7 +102,7 @@ namespace ThreeOneSevenBee.Model.Expression
                 }
                 else
                 {
-                    var parent = (selectionParent.Parent as OperatorExpression);
+                    var parent = (selectionParent.Parent as BinaryOperatorExpression);
                     if(parent.Left == selectionParent)
                     {
                         parent.Left = identity;

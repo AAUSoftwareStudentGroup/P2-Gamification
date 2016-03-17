@@ -24,8 +24,8 @@ namespace ThreeOneSevenBee.Model.UI
                     Selected = model.SelectionIndex(expression) != -1
                 };
             }
-            OperatorExpression operatorExpression;
-            if ((operatorExpression = expression as OperatorExpression) != null)
+            BinaryOperatorExpression operatorExpression;
+            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
             {
                 View left;
                 View operatorSign;

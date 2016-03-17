@@ -7,6 +7,9 @@
         constructor: function () {
             this.list = new Bridge.List$1(T)();
         },
+        getCount: function () {
+            return this.list.getCount();
+        },
         enqueue: function (item) {
             this.list.add(item);
         },
@@ -31,6 +34,9 @@
         list: null,
         constructor: function () {
             this.list = new Bridge.List$1(T)();
+        },
+        getCount: function () {
+            return this.list.getCount();
         },
         push: function (item) {
             this.list.add(item);
