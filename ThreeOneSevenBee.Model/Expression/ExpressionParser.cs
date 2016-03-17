@@ -380,14 +380,15 @@ namespace ThreeOneSevenBee.Model.Expression
 
                             case "+":
                                 right = stack.Pop();
-                                if (right is VariadicOperatorExpression && (right as VariadicOperatorExpression).Type == OperatorType.Add)
+                                left = stack.Pop();
+                                if (left is VariadicOperatorExpression && (left as VariadicOperatorExpression).Type == OperatorType.Add)
                                 {
-                                    (right as VariadicOperatorExpression).Add(stack.Pop());
-                                    root = right;
+                                    (left as VariadicOperatorExpression).Add(right);
+                                    root = left;
+                                    stack.Push(root);
                                 }
                                 else
                                 {
-                                    left = stack.Pop();
                                     root = new VariadicOperatorExpression(OperatorType.Add, left, right);
                                     stack.Push(root);
                                 }
@@ -402,14 +403,15 @@ namespace ThreeOneSevenBee.Model.Expression
 
                             case "*":
                                 right = stack.Pop();
-                                if (right is VariadicOperatorExpression && (right as VariadicOperatorExpression).Type == OperatorType.Multiply)
+                                left = stack.Pop();
+                                if (left is VariadicOperatorExpression && (left as VariadicOperatorExpression).Type == OperatorType.Multiply)
                                 {
-                                    (right as VariadicOperatorExpression).Add(stack.Pop());
-                                    root = right;
+                                    (left as VariadicOperatorExpression).Add(right);
+                                    root = left;
+                                    stack.Push(root);
                                 }
                                 else
                                 {
-                                    left = stack.Pop();
                                     root = new VariadicOperatorExpression(OperatorType.Multiply, left, right);
                                     stack.Push(root);
                                 }
