@@ -45,6 +45,7 @@ namespace ThreeOneSevenBee.Frontend
         {
             context.TextBaseline = CanvasTypes.CanvasTextBaselineAlign.Middle;
             context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
+            context.Font = view.Height/1.5 + "px Arial Black";
             context.FillText(view.Text, (int)(view.X + offsetX + view.Width / 2), (int)(view.Y + offsetY + view.Height / 2));
         }
 
@@ -62,33 +63,36 @@ namespace ThreeOneSevenBee.Frontend
             {
                 context.BeginPath();
                 context.LineCap = CanvasTypes.CanvasLineCapType.Round;
-                context.MoveTo(view.X + offsetX + view.Width/2, view.Y + offsetY + view.Height/2);
-                context.LineTo(view.X + offsetX + view.Width/2, view.Y + offsetY + view.Height / 2);
+                context.LineWidth = view.Height/40;
+                context.MoveTo(view.X + offsetX + view.Width/10, view.Y + offsetY);
+                context.LineTo(view.X + offsetX + view.Width - view.Width / 10, view.Y + offsetY);
                 context.Stroke();
-                context.ClosePath();
             }
             else if (view.type == OperatorType.Multiply)
             {
                 context.BeginPath();
-                context.Rect(view.X + offsetX - 1, view.Y + offsetY - 1, 2, 2);
+                //context.Rect(, view.Width / 10,);
+                context.Arc(view.X + offsetX + view.Width / 2 - view.Height / 20, view.Y + offsetY + view.Height / 2 - view.Height / 20, view.Height / 10, 0, 2 * Math.PI);
+                context.Fill();
                 context.Stroke();
-                context.ClosePath();
             }
             else if (view.type == OperatorType.Add)
             {
                 context.BeginPath();
-                context.MoveTo(view.X + offsetX, view.Y + offsetY - 5);
-                context.LineTo(view.X + offsetX, view.Y + offsetY + 5);
-                context.MoveTo(view.X + offsetX - 5, view.Y + offsetY);
-                context.LineTo(view.X + offsetX + 5, view.Y + offsetY);
+                context.LineWidth = view.Height / 20;
+                context.MoveTo(view.X + offsetX + view.Width / 2, view.Y + offsetY - view.Height / 3 + view.Height / 2);
+                context.LineTo(view.X + offsetX + view.Width / 2, view.Y + offsetY + view.Height / 3 + view.Height / 2);
+                context.MoveTo(view.X + offsetX - view.Width / 3 + view.Width / 2, view.Y + offsetY + view.Height / 2);
+                context.LineTo(view.X + offsetX + view.Width / 3 + view.Width / 2, view.Y + offsetY + view.Height / 2);
                 context.Stroke();
                 context.ClosePath();
             }
             else if (view.type == OperatorType.Subtract)
             {
                 context.BeginPath();
-                context.MoveTo(view.X + offsetX - 5, view.Y + offsetY);
-                context.LineTo(view.X + offsetX + 5, view.Y + offsetY);
+                context.LineWidth = view.Height / 20;
+                context.MoveTo(view.X + offsetX - view.Width / 3 + view.Width / 2, view.Y + offsetY + view.Height / 2);
+                context.LineTo(view.X + offsetX + view.Width / 3 + view.Width / 2, view.Y + offsetY + view.Height / 2);
                 context.Stroke();
                 context.ClosePath();
             }

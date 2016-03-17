@@ -13,14 +13,15 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class ExpressionView : CompositeView
     {
+        public static int NUMVAR_SIZE = 20;
         public static View Build(ExpressionBase expression, ExpressionModel model)
         {
             if(expression is NumericExpression || expression is VariableExpression)
             {
                 return new ButtonView(expression.ToString(), () => model.Select(expression))
                 {
-                    Width = 20,
-                    Height = 20,
+                    Width = NUMVAR_SIZE,
+                    Height = NUMVAR_SIZE,
                     Selected = model.SelectionIndex(expression) != -1
                 };
             }
@@ -30,6 +31,7 @@ namespace ThreeOneSevenBee.Model.UI
                 View left;
                 View operatorSign;
                 View right;
+                double viewWidth;
 
                 if (operatorExpression.Type == OperatorType.Divide)
                 {
@@ -38,25 +40,33 @@ namespace ThreeOneSevenBee.Model.UI
                     // Draw line in the middle with max width of left and right
 
                     left = Build(operatorExpression.Left, model);
-                    operatorSign = new OperatorButtonView(operatorExpression.Type, null);
                     right = Build(operatorExpression.Right, model);
+                    operatorSign = new OperatorButtonView(operatorExpression.Type, null) { Width = System.Math.Max(left.Width, right.Width), Height = left.Height + right.Height };
                     left.Y -= left.Height / 2;
                     right.Y += right.Height / 2;
-                    right.X = left.X+left.Width/2-right.Width/2;
+                    right.X = left.X + left.Width / 2 - right.Width / 2;
+                    operatorSign.Y = right.Y-1;
+                    viewWidth = operatorSign.Width;
                 }
-                /*else if (operatorExpression.Type == OperatorType.Power)
+                else if (operatorExpression.Type == OperatorType.Power)
                 {
-                    // Move right expression up
-
-                }*/
+                    // Move right expression up and make font smaller
+                    left = Build(operatorExpression.Left, model);
+                    operatorSign = new OperatorButtonView(operatorExpression.Type, null) { X = left.Width, Width = 0, Height = 0 };
+                    right = Build(operatorExpression.Right, model);
+                    right.Y -= right.Height / 2;
+                    right.X += left.Width - NUMVAR_SIZE / 3;
+                    viewWidth = left.Width + operatorSign.Width + right.Width - NUMVAR_SIZE / 3;
+                }
                 else
                 {
                     left = Build(operatorExpression.Left, model);
-                    operatorSign = new OperatorButtonView(operatorExpression.Type, null) { X = left.Width, Width = 20, Height = 20 };
+                    operatorSign = new OperatorButtonView(operatorExpression.Type, null) { X = left.Width, Width = NUMVAR_SIZE, Height = NUMVAR_SIZE };
                     right = Build(operatorExpression.Right, model);
                     right.X = operatorSign.Width + left.Width;
+                    viewWidth = left.Width + operatorSign.Width + right.Width;
                 }
-                return new CompositeView(left.Width + operatorSign.Width + right.Width, System.Math.Max(System.Math.Max(left.Height, operatorSign.Height), right.Height)) { left, operatorSign, right };
+                return new CompositeView(viewWidth, System.Math.Max(System.Math.Max(left.Height, operatorSign.Height), right.Height)) { left, operatorSign, right };
             }
             return null;
         }

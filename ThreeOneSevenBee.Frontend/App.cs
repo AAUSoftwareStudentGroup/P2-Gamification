@@ -19,14 +19,12 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel model = new ExpressionModel("b*a/a", Rules.ItselfRule, Rules.CommutativeRule, Rules.FractionVariableMultiplyRule);
+            ExpressionModel model = new ExpressionModel("a+b^c-d*e/f", Rules.ItselfRule, Rules.CommutativeRule, Rules.FractionVariableMultiplyRule);
 
             View view = new CompositeView(600, 400)
             {
                 new IdentityMenuView(model, 600, 20) { Y = 60 },
-                new ExpressionView(model, 220, 100) { X = 20, Y = 20 },
-                new ButtonView("Hello", () => Global.Alert("Hello")) { X = 100, Y = 100, Width = 40, Height = 20 },
-                new ButtonView("World", () => Global.Alert("World")) { X = 200, Y = 100, Width = 40, Height = 20 }
+                new ExpressionView(model, 220, 200) { X = 20, Y = 20 }
             };
 
             Console.WriteLine(view);
