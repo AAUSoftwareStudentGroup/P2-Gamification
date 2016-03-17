@@ -52,12 +52,12 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             get
             {
-                throw new NotImplementedException();
+                return expressions[index];
             }
 
             set
             {
-                throw new NotImplementedException();
+                expressions[index] = value;
             }
         }
 
