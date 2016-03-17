@@ -27,11 +27,36 @@ namespace ThreeOneSevenBee.Model.UI
             OperatorExpression operatorExpression;
             if ((operatorExpression = expression as OperatorExpression) != null)
             {
-                View left = Build(operatorExpression.Left, model);
-                View operatorSign = new ButtonView(operatorExpression.GetTypeString(), null) { X = left.Width, Width = 20, Height = 20 };
-                View right = Build(operatorExpression.Right, model);
-                right.X = left.Width + operatorSign.Width;
-                return new CompositeView(right.X + right.Width, System.Math.Max(System.Math.Max(left.Height, operatorSign.Height), right.Height)) { left, operatorSign, right };
+                View left;
+                View operatorSign;
+                View right;
+
+                if (operatorExpression.Type == OperatorType.Divide)
+                {
+                    // Move right expression up
+                    // Move left expression down
+                    // Draw line in the middle with max width of left and right
+
+                    left = Build(operatorExpression.Left, model);
+                    operatorSign = new OperatorButtonView(operatorExpression.Type, null);
+                    right = Build(operatorExpression.Right, model);
+                    left.Y -= left.Height / 2;
+                    right.Y += right.Height / 2;
+                    right.X = left.X+left.Width/2-right.Width/2;
+                }
+                /*else if (operatorExpression.Type == OperatorType.Power)
+                {
+                    // Move right expression up
+
+                }*/
+                else
+                {
+                    left = Build(operatorExpression.Left, model);
+                    operatorSign = new OperatorButtonView(operatorExpression.Type, null) { X = left.Width, Width = 20, Height = 20 };
+                    right = Build(operatorExpression.Right, model);
+                    right.X = operatorSign.Width + left.Width;
+                }
+                return new CompositeView(left.Width + operatorSign.Width + right.Width, System.Math.Max(System.Math.Max(left.Height, operatorSign.Height), right.Height)) { left, operatorSign, right };
             }
             return null;
         }

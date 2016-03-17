@@ -36,6 +36,8 @@ namespace ThreeOneSevenBee.Model.UI
 
         public abstract void Draw(ProgressbarStarView view, double offsetX, double offsetY);
 
+        public abstract void Draw(OperatorButtonView view, double offsetX, double offsetY);
+
         public virtual void Draw(ButtonView view, double offsetX, double offsetY)
         {
             Draw(view as LabelView, offsetX, offsetY);

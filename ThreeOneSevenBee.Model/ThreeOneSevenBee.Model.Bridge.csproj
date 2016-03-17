@@ -43,7 +43,7 @@
     <Compile Include="Expression\ExpressionModel.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
     <Compile Include="Expression\ExpressionRule.cs" />
-    <Compile Include="Expression\ExpressionRules\Rules.cs" />
+    <Compile Include="Collections\ExpressionRules\Rules.cs" />
     <Compile Include="Expression\ExpressionSerializer.cs" />
     <Compile Include="Expression\Expressions\ConstantExpression.cs" />
     <Compile Include="Expression\Expressions\DelimiterExpression.cs" />
@@ -63,6 +63,7 @@
     <Compile Include="UI\ExpressionView.cs" />
     <Compile Include="UI\IdentityMenuView.cs" />
     <Compile Include="UI\LabelView.cs" />
+    <Compile Include="UI\OperatorButtonView.cs" />
     <Compile Include="UI\ProgressbarCircle.cs" />
     <Compile Include="UI\ProgressbarStar.cs" />
     <Compile Include="UI\ProgressbarStarView.cs" />

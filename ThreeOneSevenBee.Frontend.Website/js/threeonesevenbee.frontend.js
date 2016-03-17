@@ -16,7 +16,7 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("b+a*a", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commutativeRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).fractionVariableMultiplyRule]);
+                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("b*a/a", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commutativeRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).fractionVariableMultiplyRule]);
     
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(model, 600, 20), {
@@ -84,7 +84,7 @@
         clear: function () {
             this.context.clearRect(0, 0, Bridge.Int.trunc(this.getWidth()), Bridge.Int.trunc(this.getHeight()));
         },
-        draw$3: function (view, offsetX, offsetY) {
+        draw$4: function (view, offsetX, offsetY) {
             this.context.beginPath();
             this.context.rect(view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
             this.context.rect(view.getX() + offsetX, view.getY() + offsetY, view.getWidth() * view.progressbar.getPercentage(), view.getHeight());
@@ -101,6 +101,44 @@
             this.context.fillRect(Bridge.Int.trunc((view.getX() + offsetX)), Bridge.Int.trunc((view.getY() + offsetY)), Bridge.Int.trunc(view.getWidth()), Bridge.Int.trunc(view.getHeight()));
             this.context.fillStyle = "black";
             this.draw$2(Bridge.as(view, ThreeOneSevenBee.Model.UI.LabelView), offsetX, offsetY);
+        },
+        draw$3: function (view, offsetX, offsetY) {
+            if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
+                this.context.beginPath();
+                this.context.lineCap = "round";
+                this.context.moveTo(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2);
+                this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2);
+                this.context.stroke();
+                this.context.closePath();
+            }
+            else  {
+                if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
+                    this.context.beginPath();
+                    this.context.rect(view.getX() + offsetX - 1, view.getY() + offsetY - 1, 2, 2);
+                    this.context.stroke();
+                    this.context.closePath();
+                }
+                else  {
+                    if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
+                        this.context.beginPath();
+                        this.context.moveTo(view.getX() + offsetX, view.getY() + offsetY - 5);
+                        this.context.lineTo(view.getX() + offsetX, view.getY() + offsetY + 5);
+                        this.context.moveTo(view.getX() + offsetX - 5, view.getY() + offsetY);
+                        this.context.lineTo(view.getX() + offsetX + 5, view.getY() + offsetY);
+                        this.context.stroke();
+                        this.context.closePath();
+                    }
+                    else  {
+                        if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract) {
+                            this.context.beginPath();
+                            this.context.moveTo(view.getX() + offsetX - 5, view.getY() + offsetY);
+                            this.context.lineTo(view.getX() + offsetX + 5, view.getY() + offsetY);
+                            this.context.stroke();
+                            this.context.closePath();
+                        }
+                    }
+                }
+            }
         }
     });
     
