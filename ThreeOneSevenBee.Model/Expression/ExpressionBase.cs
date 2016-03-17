@@ -5,7 +5,7 @@ namespace ThreeOneSevenBee.Model.Expression
 {
     public abstract class ExpressionBase : IEquatable<ExpressionBase>
     {
-        /*public static bool operator ==(ExpressionBase left, ExpressionBase right)
+        public static bool operator ==(ExpressionBase left, ExpressionBase right)
         {
             if (System.Object.ReferenceEquals(left, null))
             {
@@ -25,7 +25,7 @@ namespace ThreeOneSevenBee.Model.Expression
         public static bool operator !=(ExpressionBase left, ExpressionBase right)
         {
             return !(left == right);
-        }*/
+        }
 
         public ExpressionBase Parent { get; set; }
 

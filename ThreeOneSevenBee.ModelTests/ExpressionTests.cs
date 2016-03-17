@@ -58,12 +58,12 @@ namespace ThreeOneSevenBee.ModelTests
             var parser = new ExpressionSerializer();
             var exp = parser.Deserialize("pi+1");
 
-            Assert.IsInstanceOfType(exp, typeof(BinaryOperatorExpression), "Root is Operator");
-            Assert.AreEqual(OperatorType.Add, (exp as BinaryOperatorExpression).Type, "Root operator is add");
-            Assert.IsInstanceOfType((exp as BinaryOperatorExpression).Left, typeof(ConstantExpression), "Root.Left is Constant");
-            Assert.AreEqual("Pi", ((exp as BinaryOperatorExpression).Left as ConstantExpression).Value, "Root.Left is Pi");
-            Assert.IsInstanceOfType((exp as BinaryOperatorExpression).Right, typeof(NumericExpression), "Root.Right is Numeric");
-            Assert.AreEqual("1", ((exp as BinaryOperatorExpression).Right as NumericExpression).Value, "Root.Right is 1");
+            Assert.IsInstanceOfType(exp, typeof(VariadicOperatorExpression), "Root is Operator");
+            Assert.AreEqual(OperatorType.Add, (exp as VariadicOperatorExpression).Type, "Root operator is add");
+            Assert.IsInstanceOfType((exp as VariadicOperatorExpression)[0], typeof(ConstantExpression), "Root.Left is Constant");
+            Assert.AreEqual("Pi", ((exp as VariadicOperatorExpression)[0] as ConstantExpression).Value, "Root.Left is Pi");
+            Assert.IsInstanceOfType((exp as VariadicOperatorExpression)[1], typeof(NumericExpression), "Root.Right is Numeric");
+            Assert.AreEqual("1", ((exp as VariadicOperatorExpression)[1] as NumericExpression).Value, "Root.Right is 1");
         }
 
         [TestMethod]
@@ -83,6 +83,7 @@ namespace ThreeOneSevenBee.ModelTests
             Assert.AreEqual(24, parser.Deserialize("(2+2)*(3+3)").Calculate(), "(2 + 2) * (3 + 3) = 24");
             Assert.AreEqual(24, parser.Deserialize("-(2+2)*-(3+3)").Calculate(), "-(2 + 2) * -(3 + 3) = 24");
             Assert.AreEqual(20, parser.Deserialize("2*sqrt(4)*5").Calculate(), "2 * sqrt(4) * 5 = 20");
+            Assert.AreEqual(-2, parser.Deserialize("-sqrt(4)").Calculate(), "-sqrt(2) = -2");
             Assert.IsTrue(double.IsInfinity(parser.Deserialize("1/0").Calculate().Value), "1/0 = Infinity");
             Assert.IsTrue(double.IsNaN(parser.Deserialize("0/0").Calculate().Value), "0/0 = NaN");
         }
@@ -94,6 +95,99 @@ namespace ThreeOneSevenBee.ModelTests
             var exp = parser.Deserialize("1   +  1");
 
             Assert.AreEqual("1+1", parser.Serialize(exp), "'1   +  1' = '1+1'");
+        }
+
+        private ExpressionBase New(int value)
+        {
+            return new NumericExpression(value);
+        }
+
+        private ExpressionBase New(string value)
+        {
+            return new VariableExpression(value);
+        }
+
+        private ExpressionBase New(ConstantType type)
+        {
+            return new ConstantExpression(type);
+        }
+
+        private ExpressionBase Minus(ExpressionBase expression)
+        {
+            return new UnaryMinusExpression(expression);
+        }
+
+        private ExpressionBase Add(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Add);
+        }
+
+        private ExpressionBase Add(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
+        {
+            return new VariadicOperatorExpression(OperatorType.Add, first, second, expressions);
+        }
+
+        private ExpressionBase Divide(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Divide);
+        }
+
+        private ExpressionBase Multiply(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Multiply);
+        }
+
+        private ExpressionBase Multiply(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
+        {
+            return new VariadicOperatorExpression(OperatorType.Multiply, first, second, expressions);
+        }
+
+        private ExpressionBase Power(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Power);
+        }
+
+        private ExpressionBase Subtract(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Subtract);
+        }
+
+        [TestMethod]
+        public void ExpressionEquals()
+        {
+            // numeric
+            Assert.IsTrue(New(1) == New(1), "1 == 1");
+            Assert.IsTrue(New(1) != New(2), "1 != 2");
+
+            // variable
+            Assert.IsTrue(New("a") == New("a"), "a == a");
+            Assert.IsTrue(New("a") != New("b"), "a != b");
+
+            // constant
+            Assert.IsTrue(New(ConstantType.Pi) == New(ConstantType.Pi), "Pi == Pi");
+
+            // unary minus
+            Assert.IsTrue(Minus(New(1)) == Minus(New(1)), "-1 == -1");
+            Assert.IsTrue(Minus(New("a")) == Minus(New("a")), "-a == -a");
+            Assert.IsTrue(Minus(New(1)) != Minus(New("a")), "-1 != -a");
+            Assert.IsTrue(Minus(New("a")) != Minus(New(1)), "-a != -1");
+
+            // binary
+            // - add
+            Assert.IsTrue(Add(New(1), New("a")) == Add(New(1), New("a")), "1+a == 1+a");
+            Assert.IsTrue(Add(New(1), New("a")) == Add(New("a"), New(1)), "1+a == a+1");
+            // - mult
+            Assert.IsTrue(Multiply(New(1), New("a")) == Multiply(New(1), New("a")), "1*a == 1*a");
+            Assert.IsTrue(Multiply(New(1), New("a")) == Multiply(New("a"), New(1)), "1*a == a*1");
+            // - sub
+            Assert.IsTrue(Subtract(New(1), New("a")) == Subtract(New(1), New("a")), "1-a == 1-a");
+            Assert.IsTrue(Subtract(New(1), New("a")) != Subtract(New("a"), New(1)), "1-a != a-1");
+            // - div
+            Assert.IsTrue(Divide(New(1), New("a")) == Divide(New(1), New("a")), "1/a == 1/a");
+            Assert.IsTrue(Divide(New(1), New("a")) != Divide(New("a"), New(1)), "1/a != a/1");
+            // - pow
+            Assert.IsTrue(Power(New(1), New("a")) == Power(New(1), New("a")), "1^a == 1^a");
+            Assert.IsTrue(Power(New(1), New("a")) != Power(New("a"), New(1)), "1 ^ a != a ^ 1");
         }
     }
 }

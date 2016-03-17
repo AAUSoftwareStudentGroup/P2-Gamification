@@ -215,15 +215,14 @@
     Bridge.define('ThreeOneSevenBee.Model.UI.ExpressionView', {
         inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
         statics: {
-            nUMVAR_SIZE: 20,
             build: function (expression, model) {
                 var $t;
                 if (Bridge.is(expression, ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression) || Bridge.is(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariableExpression)) {
                     return Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView(expression.toString(), function () {
                         model.select(expression);
                     }), {
-                        setWidth: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
-                        setHeight: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
+                        setWidth: 20,
+                        setHeight: 20,
                         setSelected: model.selectionIndex(expression) !== -1
                     } );
                 }
@@ -232,7 +231,6 @@
                     var left;
                     var operatorSign;
                     var right;
-                    var viewWidth;
     
                     if (operatorExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                         // Move right expression up
@@ -240,44 +238,23 @@
                         // Draw line in the middle with max width of left and right
     
                         left = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getLeft(), model);
+                        operatorSign = new ThreeOneSevenBee.Model.UI.OperatorButtonView(operatorExpression.getType(), null);
                         right = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getRight(), model);
-                        operatorSign = Bridge.merge(new ThreeOneSevenBee.Model.UI.OperatorButtonView(operatorExpression.getType(), null), {
-                            setWidth: Math.max(left.getWidth(), right.getWidth()),
-                            setHeight: left.getHeight() + right.getHeight()
-                        } );
                         left.setY(left.getY()-left.getHeight() / 2);
                         right.setY(right.getY()+right.getHeight() / 2);
                         right.setX(left.getX() + left.getWidth() / 2 - right.getWidth() / 2);
-                        operatorSign.setY(right.getY() - 1);
-                        viewWidth = operatorSign.getWidth();
                     }
                     else  {
-                        if (operatorExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
-                            // Move right expression up and make font smaller
-                            left = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getLeft(), model);
-                            operatorSign = Bridge.merge(new ThreeOneSevenBee.Model.UI.OperatorButtonView(operatorExpression.getType(), null), {
-                                setX: left.getWidth(),
-                                setWidth: 0,
-                                setHeight: 0
-                            } );
-                            right = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getRight(), model);
-                            right.setY(right.getY()-right.getHeight() / 2);
-                            right.setX(right.getX()+left.getWidth() - Bridge.Int.div(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE, 3));
-                            viewWidth = left.getWidth() + operatorSign.getWidth() + right.getWidth() - Bridge.Int.div(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE, 3);
-                        }
-                        else  {
-                            left = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getLeft(), model);
-                            operatorSign = Bridge.merge(new ThreeOneSevenBee.Model.UI.OperatorButtonView(operatorExpression.getType(), null), {
-                                setX: left.getWidth(),
-                                setWidth: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
-                                setHeight: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE
-                            } );
-                            right = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getRight(), model);
-                            right.setX(operatorSign.getWidth() + left.getWidth());
-                            viewWidth = left.getWidth() + operatorSign.getWidth() + right.getWidth();
-                        }
+                        left = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getLeft(), model);
+                        operatorSign = Bridge.merge(new ThreeOneSevenBee.Model.UI.OperatorButtonView(operatorExpression.getType(), null), {
+                            setX: left.getWidth(),
+                            setWidth: 20,
+                            setHeight: 20
+                        } );
+                        right = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getRight(), model);
+                        right.setX(operatorSign.getWidth() + left.getWidth());
                     }
-                    return Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(viewWidth, Math.max(Math.max(left.getHeight(), operatorSign.getHeight()), right.getHeight())), [
+                    return Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(left.getWidth() + operatorSign.getWidth() + right.getWidth(), Math.max(Math.max(left.getHeight(), operatorSign.getHeight()), right.getHeight())), [
                         [left],
                         [operatorSign],
                         [right]

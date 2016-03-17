@@ -8,14 +8,8 @@ using ThreeOneSevenBee.Model.Expression;
 namespace ThreeOneSevenBee.ModelTests
 {
     [TestClass]
-    public class QueueAndStackTests
+    public class QueueStackandCloneTests
     {
-        [TestMethod]
-        public void QueueConstruct()
-        {
-            var queue = new Queue<int>();
-            Assert.IsInstanceOfType(queue, typeof(Queue<int>), "Queue Constructed");
-        }
 
         [TestMethod]
         public void StackConstruct()
@@ -85,16 +79,21 @@ namespace ThreeOneSevenBee.ModelTests
         public void CloneTest()
         {
             var parser = new ExpressionSerializer();
-            var expressionTree = parser.Deserialize("a+b*c");
-            var otherExpressionTree = parser.Deserialize("2+pi");
+            var expressionTree = parser.Deserialize("a*b");
             var complexExpressionTree = parser.Deserialize("sqrt(pi^2)+2-5*(3-2)+pi");
+            var crazyComplexExpressionTree = parser.Deserialize("sqrt(pi^2)+(-5)*2^6/--2*sqrt(2*5^5)");
             var cloneExpressionTree = expressionTree.Clone();
             var cloneComplexExpressionTree = complexExpressionTree.Clone();
-            Assert.AreEqual(expressionTree.Value, cloneExpressionTree.Value, "Succesfully cloned tree");
-            Assert.AreEqual(complexExpressionTree.Value, cloneComplexExpressionTree.Value, "Succesfully cloned tree");
-            Assert.AreNotEqual(cloneExpressionTree.Value, otherExpressionTree.Value);
+            var cloneCrazyComplexExpressionTree = crazyComplexExpressionTree.Clone();
 
+            Assert.IsTrue(expressionTree.Equals(cloneExpressionTree));
+            Assert.IsTrue(expressionTree == cloneExpressionTree);
 
+            Assert.IsTrue(complexExpressionTree.Equals(cloneComplexExpressionTree));
+            Assert.IsTrue(complexExpressionTree == cloneComplexExpressionTree);
+
+            Assert.IsTrue(crazyComplexExpressionTree == cloneCrazyComplexExpressionTree);
+            Assert.IsTrue(crazyComplexExpressionTree.Equals(cloneCrazyComplexExpressionTree));
         }
 
     }
