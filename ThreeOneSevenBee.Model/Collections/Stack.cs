@@ -42,12 +42,12 @@ namespace ThreeOneSevenBee.Model.Collections
 
         public IEnumerator<T> GetEnumerator()
         {
-            return list.GetEnumerator();
+            return list.Reverse<T>().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return list.GetEnumerator();
+            return list.Reverse<T>().GetEnumerator();
         }
     }
 }
