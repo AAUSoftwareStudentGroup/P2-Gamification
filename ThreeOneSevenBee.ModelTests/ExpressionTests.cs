@@ -96,5 +96,88 @@ namespace ThreeOneSevenBee.ModelTests
 
             Assert.AreEqual("1+1", parser.Serialize(exp), "'1   +  1' = '1+1'");
         }
+
+        private ExpressionBase New(int value)
+        {
+            return new NumericExpression(value);
+        }
+
+        private ExpressionBase New(string value)
+        {
+            return new VariableExpression(value);
+        }
+
+        private ExpressionBase New(ConstantType type)
+        {
+            return new ConstantExpression(type);
+        }
+
+        private ExpressionBase Minus(ExpressionBase expression)
+        {
+            return new UnaryMinusExpression(expression);
+        }
+
+        private ExpressionBase Add(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Add);
+        }
+
+        private ExpressionBase Divide(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Divide);
+        }
+
+        private ExpressionBase Multiply(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Multiply);
+        }
+
+        private ExpressionBase Power(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Power);
+        }
+
+        private ExpressionBase Subtract(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Subtract);
+        }
+
+        [TestMethod]
+        public void ExpressionEquals()
+        {
+            // numeric
+            Assert.IsTrue(New(1) == New(1), "1 == 1");
+            Assert.IsTrue(New(1) != New(2), "1 != 2");
+
+            // variable
+            Assert.IsTrue(New("a") == New("a"), "a == a");
+            Assert.IsTrue(New("a") != New("b"), "a != b");
+
+            // constant
+            Assert.IsTrue(New(ConstantType.Pi) == New(ConstantType.Pi), "Pi == Pi");
+
+            // unary minus
+            Assert.IsTrue(Minus(New(1)) == Minus(New(1)), "-1 == -1");
+            Assert.IsTrue(Minus(New("a")) == Minus(New("a")), "-a == -a");
+            Assert.IsTrue(Minus(New(1)) != Minus(New("a")), "-1 != -a");
+            Assert.IsTrue(Minus(New("a")) != Minus(New(1)), "-a != -1");
+
+            // binary
+            // - add
+            Assert.IsTrue(Add(New(1), New("a")) == Add(New(1), New("a")), "1+a == 1+a");
+            Assert.IsTrue(Add(New(1), New("a")) == Add(New("a"), New(1)), "1+a == a+1");
+            // - mult
+            Assert.IsTrue(Multiply(New(1), New("a")) == Multiply(New(1), New("a")), "1*a == 1*a");
+            Assert.IsTrue(Multiply(New(1), New("a")) == Multiply(New("a"), New(1)), "1*a == a*1");
+            // - sub
+            Assert.IsTrue(Subtract(New(1), New("a")) == Subtract(New(1), New("a")), "1-a == 1-a");
+            Assert.IsTrue(Subtract(New(1), New("a")) != Subtract(New("a"), New(1)), "1-a != a-1");
+            // - div
+            Assert.IsTrue(Divide(New(1), New("a")) == Divide(New(1), New("a")), "1/a == 1/a");
+            Assert.IsTrue(Divide(New(1), New("a")) != Divide(New("a"), New(1)), "1/a != a/1");
+            // - pow
+            Assert.IsTrue(Power(New(1), New("a")) == Power(New(1), New("a")), "1^a == 1^a");
+            Assert.IsTrue(Power(New(1), New("a")) != Power(New("a"), New(1)), "1 ^ a != a ^ 1");
+        }
     }
 }
