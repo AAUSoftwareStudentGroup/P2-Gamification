@@ -11,7 +11,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         protected VariadicExpression(OperatorType type, ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
             : base(type)
         {
-            if (type != OperatorType.Add || type != OperatorType.Multiply)
+            if (type != OperatorType.Add && type != OperatorType.Multiply)
                 throw new ArgumentException("Invalid Type: " + type, "type");
             if (first == null)
                 throw new ArgumentNullException("first");
