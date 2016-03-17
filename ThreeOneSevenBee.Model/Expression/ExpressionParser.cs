@@ -329,6 +329,8 @@ namespace ThreeOneSevenBee.Model.Expression
         {
             var stack = new ExpressionStack();
             ExpressionBase root = null;
+            ExpressionBase left = null;
+            ExpressionBase right = null;
             foreach (var token in postFix)
             {
                 switch (token.Type)
@@ -377,10 +379,18 @@ namespace ThreeOneSevenBee.Model.Expression
                                 break;
 
                             case "+":
-                                var right = stack.Pop();
-                                var left = stack.Pop();
-                                root = new BinaryOperatorExpression(left, right, OperatorType.Add);
-                                stack.Push(root);
+                                right = stack.Pop();
+                                if (right is VariadicOperatorExpression && (right as VariadicOperatorExpression).Type == OperatorType.Add)
+                                {
+                                    (right as VariadicOperatorExpression).Add(stack.Pop());
+                                    root = right;
+                                }
+                                else
+                                {
+                                    left = stack.Pop();
+                                    root = new VariadicOperatorExpression(OperatorType.Add, left, right);
+                                    stack.Push(root);
+                                }
                                 break;
 
                             case "-":
@@ -392,9 +402,17 @@ namespace ThreeOneSevenBee.Model.Expression
 
                             case "*":
                                 right = stack.Pop();
-                                left = stack.Pop();
-                                root = new BinaryOperatorExpression(left, right, OperatorType.Multiply);
-                                stack.Push(root);
+                                if (right is VariadicOperatorExpression && (right as VariadicOperatorExpression).Type == OperatorType.Multiply)
+                                {
+                                    (right as VariadicOperatorExpression).Add(stack.Pop());
+                                    root = right;
+                                }
+                                else
+                                {
+                                    left = stack.Pop();
+                                    root = new VariadicOperatorExpression(OperatorType.Multiply, left, right);
+                                    stack.Push(root);
+                                }
                                 break;
 
                             case "/":
