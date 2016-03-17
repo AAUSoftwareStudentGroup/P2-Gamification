@@ -43,7 +43,7 @@
     <Compile Include="Expression\ExpressionModel.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
     <Compile Include="Expression\ExpressionRule.cs" />
-    <Compile Include="Collections\ExpressionRules\Rules.cs" />
+    <Compile Include="Expression\ExpressionRules\Rules.cs" />
     <Compile Include="Expression\ExpressionSerializer.cs" />
     <Compile Include="Expression\Expressions\BinaryExpression.cs" />
     <Compile Include="Expression\Expressions\BinaryOperatorExpression.cs" />
