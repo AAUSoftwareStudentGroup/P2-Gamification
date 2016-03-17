@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using ThreeOneSevenBee.Model.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ThreeOneSevenBee.Model.Expression;
 
 namespace ThreeOneSevenBee.ModelTests
 {
@@ -78,6 +79,22 @@ namespace ThreeOneSevenBee.ModelTests
             {
 
             }
+        }
+
+        [TestMethod]
+        public void CloneTest()
+        {
+            var parser = new ExpressionSerializer();
+            var expressionTree = parser.Deserialize("a+b*c");
+            var otherExpressionTree = parser.Deserialize("2+pi");
+            var complexExpressionTree = parser.Deserialize("sqrt(pi^2)+2-5*(3-2)+pi");
+            var cloneExpressionTree = expressionTree.Clone();
+            var cloneComplexExpressionTree = complexExpressionTree.Clone();
+            Assert.AreEqual(expressionTree.Value, cloneExpressionTree.Value, "Succesfully cloned tree");
+            Assert.AreEqual(complexExpressionTree.Value, cloneComplexExpressionTree.Value, "Succesfully cloned tree");
+            Assert.AreNotEqual(cloneExpressionTree.Value, otherExpressionTree.Value);
+
+
         }
 
     }
