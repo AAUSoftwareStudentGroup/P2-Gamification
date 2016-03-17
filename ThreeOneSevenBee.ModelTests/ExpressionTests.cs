@@ -83,6 +83,7 @@ namespace ThreeOneSevenBee.ModelTests
             Assert.AreEqual(24, parser.Deserialize("(2+2)*(3+3)").Calculate(), "(2 + 2) * (3 + 3) = 24");
             Assert.AreEqual(24, parser.Deserialize("-(2+2)*-(3+3)").Calculate(), "-(2 + 2) * -(3 + 3) = 24");
             Assert.AreEqual(20, parser.Deserialize("2*sqrt(4)*5").Calculate(), "2 * sqrt(4) * 5 = 20");
+            Assert.AreEqual(-2, parser.Deserialize("-sqrt(4)").Calculate(), "-sqrt(2) = -2");
             Assert.IsTrue(double.IsInfinity(parser.Deserialize("1/0").Calculate().Value), "1/0 = Infinity");
             Assert.IsTrue(double.IsNaN(parser.Deserialize("0/0").Calculate().Value), "0/0 = NaN");
         }

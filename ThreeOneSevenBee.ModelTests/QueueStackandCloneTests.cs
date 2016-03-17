@@ -8,7 +8,7 @@ using ThreeOneSevenBee.Model.Expression;
 namespace ThreeOneSevenBee.ModelTests
 {
     [TestClass]
-    public class QueueAndStackTests
+    public class QueueStackandCloneTests
     {
         [TestMethod]
         public void QueueConstruct()
@@ -85,7 +85,7 @@ namespace ThreeOneSevenBee.ModelTests
         public void CloneTest()
         {
             var parser = new ExpressionSerializer();
-            var expressionTree = parser.Deserialize("a+b*c");
+            var expressionTree = parser.Deserialize("b*c");
             var otherExpressionTree = parser.Deserialize("2+pi");
             var complexExpressionTree = parser.Deserialize("sqrt(pi^2)+2-5*(3-2)+pi");
             var cloneExpressionTree = expressionTree.Clone();
