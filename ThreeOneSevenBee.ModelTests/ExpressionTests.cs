@@ -58,12 +58,12 @@ namespace ThreeOneSevenBee.ModelTests
             var parser = new ExpressionSerializer();
             var exp = parser.Deserialize("pi+1");
 
-            Assert.IsInstanceOfType(exp, typeof(BinaryOperatorExpression), "Root is Operator");
-            Assert.AreEqual(OperatorType.Add, (exp as BinaryOperatorExpression).Type, "Root operator is add");
-            Assert.IsInstanceOfType((exp as BinaryOperatorExpression).Left, typeof(ConstantExpression), "Root.Left is Constant");
-            Assert.AreEqual("Pi", ((exp as BinaryOperatorExpression).Left as ConstantExpression).Value, "Root.Left is Pi");
-            Assert.IsInstanceOfType((exp as BinaryOperatorExpression).Right, typeof(NumericExpression), "Root.Right is Numeric");
-            Assert.AreEqual("1", ((exp as BinaryOperatorExpression).Right as NumericExpression).Value, "Root.Right is 1");
+            Assert.IsInstanceOfType(exp, typeof(VariadicOperatorExpression), "Root is Operator");
+            Assert.AreEqual(OperatorType.Add, (exp as VariadicOperatorExpression).Type, "Root operator is add");
+            Assert.IsInstanceOfType((exp as VariadicOperatorExpression)[0], typeof(ConstantExpression), "Root.Left is Constant");
+            Assert.AreEqual("Pi", ((exp as VariadicOperatorExpression)[0] as ConstantExpression).Value, "Root.Left is Pi");
+            Assert.IsInstanceOfType((exp as VariadicOperatorExpression)[1], typeof(NumericExpression), "Root.Right is Numeric");
+            Assert.AreEqual("1", ((exp as VariadicOperatorExpression)[1] as NumericExpression).Value, "Root.Right is 1");
         }
 
         [TestMethod]

@@ -11,7 +11,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         protected VariadicExpression(OperatorType type, ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
             : base(type)
         {
-            if (type != OperatorType.Add || type != OperatorType.Multiply)
+            if (type != OperatorType.Add && type != OperatorType.Multiply)
                 throw new ArgumentException("Invalid Type: " + type, "type");
             if (first == null)
                 throw new ArgumentNullException("first");
@@ -30,7 +30,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         protected VariadicExpression(OperatorType type, params ExpressionBase[] expressions)
             : base(type)
         {
-            if (type != OperatorType.Add || type != OperatorType.Multiply)
+            if (type != OperatorType.Add && type != OperatorType.Multiply)
                 throw new ArgumentException("Invalid Type: " + type, "type");
             if (expressions == null)
                 throw new ArgumentNullException("expressions");
@@ -52,12 +52,12 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             get
             {
-                throw new NotImplementedException();
+                return expressions[index];
             }
 
             set
             {
-                throw new NotImplementedException();
+                expressions[index] = value;
             }
         }
 
