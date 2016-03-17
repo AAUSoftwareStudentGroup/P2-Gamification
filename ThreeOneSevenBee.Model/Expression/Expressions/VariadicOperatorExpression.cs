@@ -64,9 +64,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return result;
         }
 
-        //
-        //Tjek this[0] med hele other[i] indtil en ækvivalent findes. Når den findes skal det markeres, så other[i] ikke tjekkes igen (for at undgå a*a = a)
-        // Gå derefter til this[1] og fortsæt til this er færdig.
+        //Removes element from two clones if an element is in both lists. If both lists are 0 at the end, returns true.
         public override bool Equals(ExpressionBase otherBase)
         {
             var other = (otherBase as VariadicOperatorExpression);
@@ -74,29 +72,27 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             if (other == null)
                 return false;
 
-            // http://stackoverflow.com/questions/3669970/compare-two-listt-objects-for-equality-ignoring-order
-            var cnt = new Dictionary<ExpressionBase, int>();
-            foreach (ExpressionBase s in this)
+            other = (VariadicOperatorExpression)other.Clone();
+            var thisClone = (VariadicOperatorExpression)this.Clone();
+
+            for (int i = 0; i < thisClone.Count; i++)
             {
-                if (cnt.ContainsKey(s))
+                for (int j = 0; j < other.Count; j++)
                 {
-                    cnt[s]++;
-                }
-                else {
-                    cnt.Add(s, 1);
+                    if (thisClone[i].Equals(other[j]))
+                    {
+                        thisClone.RemoveAt(i);
+                        i--;
+                        other.RemoveAt(j);
+                        break;
+                    }
                 }
             }
-            foreach (ExpressionBase s in other)
-            {
-                if (cnt.ContainsKey(s))
-                {
-                    cnt[s]--;
-                }
-                else {
-                    return false;
-                }
-            }
-            return cnt.Values.All(c => c == 0);
+
+            if (other.Count != 0 && thisClone.Count != 0)
+                return false;
+
+            return true;
         }
 
         public override ExpressionBase Clone()
