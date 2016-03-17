@@ -10,12 +10,6 @@ namespace ThreeOneSevenBee.ModelTests
     [TestClass]
     public class QueueStackandCloneTests
     {
-        [TestMethod]
-        public void QueueConstruct()
-        {
-            var queue = new Queue<int>();
-            Assert.IsInstanceOfType(queue, typeof(Queue<int>), "Queue Constructed");
-        }
 
         [TestMethod]
         public void StackConstruct()
