@@ -63,11 +63,35 @@ namespace ThreeOneSevenBee.Model.UI
                     left = Build(operatorExpression.Left, model);
                     operatorSign = new OperatorButtonView(operatorExpression.Type, null) { X = left.Width, Width = NUMVAR_SIZE, Height = NUMVAR_SIZE };
                     right = Build(operatorExpression.Right, model);
-                    right.X = operatorSign.Width + left.Width;
                     viewWidth = left.Width + operatorSign.Width + right.Width;
+                    right.X += left.Width + operatorSign.Width;
                 }
+                Console.WriteLine("Gon make som binary views 'ere");
                 return new CompositeView(viewWidth, System.Math.Max(System.Math.Max(left.Height, operatorSign.Height), right.Height)) { left, operatorSign, right };
             }
+            VariadicOperatorExpression variadicExpression;
+            if ((variadicExpression = expression as VariadicOperatorExpression) != null)
+            {
+                View var;
+                View operatorSign;
+                double viewWidth = 0;
+                double viewHeight = 0;
+                List<View> views = new List<View>();
+                for (int i = 0; i < variadicExpression.Count; i++)
+                {
+                    var = Build(variadicExpression, model);
+                    Console.WriteLine("Gon make som buttonviews 'ere");
+                    operatorSign = new OperatorButtonView(variadicExpression.Type, null) { X = var.Width, Width = NUMVAR_SIZE, Height = NUMVAR_SIZE };
+                    viewWidth += var.Width + operatorSign.Width;
+                    viewHeight = System.Math.Max(viewHeight, System.Math.Max(var.Height, operatorSign.Height));
+                    views.Add(var);
+                    if (i != variadicExpression.Count - 1)
+                        views.Add(operatorSign);
+                }
+                Console.WriteLine("Gon make som views 'ere");
+                return new CompositeView(viewWidth, viewWidth) { views };
+            }
+            Console.WriteLine("FUCKSHIT");
             return null;
         }
 

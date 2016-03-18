@@ -70,6 +70,24 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Expression.ExpressionBase', {
         inherits: function () { return [Bridge.IEquatable$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)]; },
+        statics: {
+            op_Equality: function (left, right) {
+                if (left === null) {
+                    // ...and right hand side is null...
+                    if (right === null) {
+                        //...both are null and are Equal.
+                        return true;
+                    }
+    
+                    // ...right hand side is not null, therefore not Equal.
+                    return false;
+                }
+                return left.equalsT(right);
+            },
+            op_Inequality: function (left, right) {
+                return !(ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(left, right));
+            }
+        },
         config: {
             properties: {
                 Parent: null
@@ -139,7 +157,7 @@
     },
     selectionIndex: function (expression) {
         for (var i = 0; i < this.selection.getCount(); i++) {
-            if (this.selection.getItem(i) === expression) {
+            if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.selection.getItem(i), expression)) {
                 return i;
             }
         }
@@ -180,7 +198,7 @@
             }
             else  {
                 var parent = (Bridge.as(this.selectionParent.getParent(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression));
-                if (parent.getLeft() === this.selectionParent) {
+                if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(parent.getLeft(), this.selectionParent)) {
                     parent.setLeft(identity);
                 }
                 else  {
@@ -519,6 +537,8 @@
             var $t;
             var stack = new ThreeOneSevenBee.Model.Collections.Stack$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
             var root = null;
+            var left = null;
+            var right = null;
             $t = Bridge.getEnumerator(postFix);
             while ($t.moveNext()) {
                 var token = $t.getCurrent();
@@ -558,10 +578,17 @@
                                 stack.push(root);
                                 break;
                             case "+": 
-                                var right = stack.pop();
-                                var left = stack.pop();
-                                root = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(left, right, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add);
-                                stack.push(root);
+                                right = stack.pop();
+                                left = stack.pop();
+                                if (Bridge.is(left, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression) && (Bridge.as(left, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression)).getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
+                                    (Bridge.as(left, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression)).add(right);
+                                    root = left;
+                                    stack.push(root);
+                                }
+                                else  {
+                                    root = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, left, right);
+                                    stack.push(root);
+                                }
                                 break;
                             case "-": 
                                 right = stack.pop();
@@ -572,8 +599,15 @@
                             case "*": 
                                 right = stack.pop();
                                 left = stack.pop();
-                                root = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(left, right, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply);
-                                stack.push(root);
+                                if (Bridge.is(left, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression) && (Bridge.as(left, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression)).getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
+                                    (Bridge.as(left, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression)).add(right);
+                                    root = left;
+                                    stack.push(root);
+                                }
+                                else  {
+                                    root = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, left, right);
+                                    stack.push(root);
+                                }
                                 break;
                             case "/": 
                                 right = stack.pop();

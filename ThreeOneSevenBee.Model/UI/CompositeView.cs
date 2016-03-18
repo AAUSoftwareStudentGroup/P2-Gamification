@@ -58,5 +58,10 @@ namespace ThreeOneSevenBee.Model.UI
         {
             Children.Add(view);
         }
+
+        public void Add(List<View> views)
+        {
+            Children.AddRange(views);
+        }
     }
 }

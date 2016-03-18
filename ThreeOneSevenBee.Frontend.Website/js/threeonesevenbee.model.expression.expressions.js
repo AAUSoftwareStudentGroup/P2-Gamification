@@ -141,13 +141,13 @@
                 return false;
             }
     
-            return this.getExpression() === other.getExpression();
+            return ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getExpression(), other.getExpression());
         },
         clone: function () {
             return new ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression(this.getExpression().clone());
         },
         replace: function (old, replacement) {
-            if (this.getExpression() === old) {
+            if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getExpression(), old)) {
                 this.setExpression(replacement);
                 return true;
             }
@@ -223,13 +223,13 @@
                 return false;
             }
     
-            return this.getFunction() === other.getFunction() && this.getExpression() === other.getExpression();
+            return this.getFunction() === other.getFunction() && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getExpression(), other.getExpression());
         },
         clone: function () {
             return new ThreeOneSevenBee.Model.Expression.Expressions.FunctionExpression(this.getExpression().clone(), this.getFunction());
         },
         replace: function (old, replacement) {
-            if (this.getExpression() === old) {
+            if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getExpression(), old)) {
                 this.setExpression(replacement);
                 return true;
             }
@@ -399,7 +399,7 @@
             var $t;
     
             if (expressions === void 0) { expressions = []; }
-            if (type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add || type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
+            if (type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
                 throw new Bridge.ArgumentException("Invalid Type: " + type, "type");
             }
             if (!Bridge.hasValue(first)) {
@@ -425,7 +425,7 @@
         var $t;
     
         if (expressions === void 0) { expressions = []; }
-        if (type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add || type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
+        if (type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
             throw new Bridge.ArgumentException("Invalid Type: " + type, "type");
         }
         if (!Bridge.hasValue(expressions)) {
@@ -451,10 +451,10 @@
         return false;
     },
     getItem: function (index) {
-        throw new Bridge.NotImplementedException();
+        return this.expressions.getItem(index);
     },
     setItem: function (index, value) {
-        throw new Bridge.NotImplementedException();
+        this.expressions.setItem(index, value);
     },
     add: function (item) {
         this.expressions.add(item);
@@ -534,7 +534,7 @@
             switch (this.getType()) {
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add: 
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply: 
-                    if (this.getLeft() === other.getLeft() && this.getRight() === other.getRight() || this.getLeft() === other.getRight() && this.getRight() === other.getLeft()) {
+                    if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getLeft(), other.getLeft()) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getRight(), other.getRight()) || ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getLeft(), other.getRight()) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getRight(), other.getLeft())) {
                         return true;
                     }
                     break;
@@ -602,13 +602,13 @@
                 return false;
             }
     
-            return this.getExpression() === other.getExpression();
+            return ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getExpression(), other.getExpression());
         },
         clone: function () {
             return new ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression(this.getExpression().clone());
         },
         replace: function (old, replacement) {
-            if (this.getExpression() === old) {
+            if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getExpression(), old)) {
                 this.setExpression(replacement);
                 return true;
             }
@@ -647,7 +647,7 @@
             if (expressions === void 0) { expressions = []; }
         },
         getValue: function () {
-            return Bridge.Linq.Enumerable.from(this).aggregate(Bridge.Linq.Enumerable.from(this).first().getValue(), Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression.f1));
+            return Bridge.Linq.Enumerable.from(this).skip(1).aggregate(Bridge.Linq.Enumerable.from(this).first().getValue(), Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression.f1));
         },
         canCalculate: function () {
             var $t;
@@ -692,39 +692,34 @@
             return result;
         },
         equalsT: function (otherBase) {
-            var $t, $t1;
             var other = (Bridge.as(otherBase, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression));
     
             if (!Bridge.hasValue(other)) {
                 return false;
             }
     
-            // http://stackoverflow.com/questions/3669970/compare-two-listt-objects-for-equality-ignoring-order
-            var cnt = new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.ExpressionBase,Bridge.Int)();
-            $t = Bridge.getEnumerator(this);
-            while ($t.moveNext()) {
-                var s = $t.getCurrent();
-                if (cnt.containsKey(s)) {
-                    cnt.get(s);
-                }
-                else  {
-                    cnt.add(s, 1);
-                }
-            }
-            $t1 = Bridge.getEnumerator(other);
-            while ($t1.moveNext()) {
-                var s1 = $t1.getCurrent();
-                if (cnt.containsKey(s1)) {
-                    cnt.get(s1);
-                }
-                else  {
-                    return false;
+            other = Bridge.cast(other.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+            var thisClone = Bridge.cast(this.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+    
+            for (var i = 0; i < thisClone.getCount(); i++) {
+                for (var j = 0; j < other.getCount(); j++) {
+                    if (thisClone.getItem(i).equalsT(other.getItem(j))) {
+                        thisClone.removeAt(i);
+                        i--;
+                        other.removeAt(j);
+                        break;
+                    }
                 }
             }
-            return Bridge.Linq.Enumerable.from(cnt.getValues()).all($_.ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression.f2);
+    
+            if (other.getCount() !== 0 && thisClone.getCount() !== 0) {
+                return false;
+            }
+    
+            return true;
         },
         clone: function () {
-            return new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor$1", this.getType(), [Bridge.Linq.Enumerable.from(this).select($_.ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression.f3).toArray()]);
+            return new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor$1", this.getType(), [Bridge.Linq.Enumerable.from(this).select($_.ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression.f2).toArray()]);
         },
         getNodesRecursive: function () {
             var $t, $t1;
@@ -763,10 +758,7 @@
         f1: function (s, e) {
             return s + this.getSymbol() + e.getValue();
         },
-        f2: function (c) {
-            return c === 0;
-        },
-        f3: function (e) {
+        f2: function (e) {
             return e.clone();
         }
     });

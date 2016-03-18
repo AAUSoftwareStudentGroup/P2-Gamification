@@ -58,10 +58,10 @@
             return item;
         },
         getEnumerator$1: function () {
-            return this.list.getEnumerator();
+            return Bridge.Linq.Enumerable.from(this.list).reverse().getEnumerator();
         },
         getEnumerator: function () {
-            return this.list.getEnumerator();
+            return Bridge.Linq.Enumerable.from(this.list).reverse().getEnumerator();
         }
     }; });
     
