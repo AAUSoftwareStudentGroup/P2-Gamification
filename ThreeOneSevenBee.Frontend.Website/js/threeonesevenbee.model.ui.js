@@ -19,6 +19,13 @@
                 this.onClick();
             }
         },
+        scale: function (factor) {
+            this.setX(this.getX()*factor);
+            this.setY(this.getY()*factor);
+            this.setWidth(this.getWidth()*factor);
+            this.setHeight(this.getHeight()*factor);
+            return this;
+        },
         containsPoint: function (x, y) {
             return x >= this.getX() && y >= this.getY() && x <= this.getX() + this.getWidth() && y <= this.getY() + this.getHeight();
         }
@@ -177,6 +184,15 @@
                 }
             }
         },
+        scale: function (factor) {
+            var $t;
+            $t = Bridge.getEnumerator(this.children);
+            while ($t.moveNext()) {
+                var child = $t.getCurrent();
+                child.scale(factor);
+            }
+            return ThreeOneSevenBee.Model.UI.View.prototype.scale.call(this, factor);
+        },
         getEnumerator$1: function () {
             return this.children.getEnumerator();
         },
@@ -281,9 +297,9 @@
                         view.setY(maxBaseline - view.getBaseline());
                         height = Math.max(height, view.getY() + view.getHeight());
                     }
-    
                     return Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(offsetX, height), {
-                        children: views
+                        children: views,
+                        setBaseline: maxBaseline
                     } );
                 }
                 return Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView(expression.toString(), function () {
@@ -300,9 +316,12 @@
         constructor: function (model, width, height) {
             ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
     
-            var view = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(model.getExpression(), model);
-            this.children.add(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(model.getExpression(), model));
+            this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
+            this.children.add(this.fit(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(model.getExpression(), model)));
             model.addOnChanged(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.ExpressionView.f1));
+        },
+        fit: function (view) {
+            return view.scale(Math.min(this.getWidth() / view.getWidth(), this.getHeight() / view.getHeight()));
         }
     });
     
@@ -313,7 +332,7 @@
     Bridge.apply($_.ThreeOneSevenBee.Model.UI.ExpressionView, {
         f1: function (m) {
             this.children.clear();
-            this.children.add(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(m.getExpression(), m));
+            this.children.add(this.fit(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(m.getExpression(), m)));
         }
     });
     

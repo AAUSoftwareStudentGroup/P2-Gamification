@@ -19,12 +19,12 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel model = new ExpressionModel("{e/a}/{b/c}");
+            ExpressionModel model = new ExpressionModel("a+b*c");
 
             View view = new CompositeView(600, 400)
             {
                 new IdentityMenuView(model, 600, 200) { Y = 100 },
-                new ExpressionView(model, 220, 300) { X = 20, Y = 20 }
+                new ExpressionView(model, 600, 400) { X = 0, Y = 0 }
             };
 
             Console.WriteLine(view);

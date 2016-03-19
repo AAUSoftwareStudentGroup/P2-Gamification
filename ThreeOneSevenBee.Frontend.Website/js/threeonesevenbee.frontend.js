@@ -16,15 +16,15 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("{e/a}/{b/c}");
+                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a+b*c");
     
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(model, 600, 200), {
                         setY: 100
                     } )],
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(model, 220, 300), {
-                        setX: 20,
-                        setY: 20
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(model, 600, 400), {
+                        setX: 0,
+                        setY: 0
                     } )]
                 ] );
     

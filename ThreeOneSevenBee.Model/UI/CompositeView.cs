@@ -44,6 +44,15 @@ namespace ThreeOneSevenBee.Model.UI
             }
         }
 
+        public override View Scale(double factor)
+        {
+            foreach (View child in Children)
+            {
+                child.Scale(factor);
+            }
+            return base.Scale(factor);
+        }
+
         public IEnumerator<View> GetEnumerator()
         {
             return Children.GetEnumerator();

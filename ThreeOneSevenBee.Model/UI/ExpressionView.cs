@@ -82,8 +82,7 @@ namespace ThreeOneSevenBee.Model.UI
                     view.Y = maxBaseline - view.Baseline;
                     height = System.Math.Max(height, view.Y + view.Height);
                 }
-
-                return new CompositeView(offsetX, height) { Children = views };
+                return new CompositeView(offsetX, height) { Children = views, Baseline = maxBaseline };
             }
             return new ButtonView(expression.ToString(), () => model.Select(expression))
             {
@@ -95,14 +94,19 @@ namespace ThreeOneSevenBee.Model.UI
 
         }
 
+        private View Fit(View view)
+        {
+            return view.Scale(System.Math.Min(Width / view.Width, Height / view.Height));
+        }
+
         public ExpressionView(ExpressionModel model, double width, double height) : base(width, height)
         {
-            View view = Build(model.Expression, model);
-            Children.Add(Build(model.Expression, model));
+            Children = new List<View>();
+            Children.Add(Fit(Build(model.Expression, model)));
             model.OnChanged += (m) =>
             {
                 Children.Clear();
-                Children.Add(Build(m.Expression, m));
+                Children.Add(Fit(Build(m.Expression, m)));
             };
         }
 

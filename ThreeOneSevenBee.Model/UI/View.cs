@@ -27,6 +27,15 @@ namespace ThreeOneSevenBee.Model.UI
 
         public Action OnClick;
         
+        public virtual View Scale(double factor)
+        {
+            X *= factor;
+            Y *= factor;
+            Width *= factor;
+            Height *= factor;
+            return this;
+        }
+
         public virtual bool ContainsPoint(double x, double y)
         {
             return x >= X && y >= Y && x <= X + Width && y <= Y + Height;
