@@ -73,6 +73,7 @@
     <Compile Include="UI\CompositeView.cs" />
     <Compile Include="UI\Context.cs" />
     <Compile Include="UI\ExpressionView.cs" />
+    <Compile Include="UI\FrameView.cs" />
     <Compile Include="UI\IdentityMenuView.cs" />
     <Compile Include="UI\LabelView.cs" />
     <Compile Include="UI\OperatorButtonView.cs" />

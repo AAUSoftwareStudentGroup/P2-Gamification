@@ -204,6 +204,61 @@
         }
     });
     
+    Bridge.define('ThreeOneSevenBee.Model.UI.FrameView', {
+        inherits: [ThreeOneSevenBee.Model.UI.View],
+        maxScale: 0,
+        config: {
+            properties: {
+                Content$1: null,
+                PropagateClick: false
+            }
+        },
+        constructor: function (width, height, content) {
+            ThreeOneSevenBee.Model.UI.FrameView.prototype.constructor$1.call(this, width, height, content, true, height / content.getHeight());
+    
+        },
+        constructor$2: function (width, height, content, maxScale) {
+            ThreeOneSevenBee.Model.UI.FrameView.prototype.constructor$1.call(this, width, height, content, true, maxScale);
+    
+        },
+        constructor$1: function (width, height, content, propagateClick, maxScale) {
+            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this);
+    
+            this.setWidth(width);
+            this.setHeight(height);
+            this.setPropagateClick(propagateClick);
+            this.maxScale = maxScale;
+            this.setContent$1(this.align(this.fit(content)));
+        },
+        setContent: function (content) {
+            this.setContent$1(this.align(this.fit(content)));
+        },
+        click: function (x, y) {
+    
+            if (ThreeOneSevenBee.Model.UI.View.prototype.containsPoint.call(this, x, y)) {
+                if (this.getPropagateClick()) {
+                    this.getContent$1().click(x - this.getX(), y - this.getY());
+                }
+    
+                if (Bridge.hasValue(this.onClick)) {
+                    console.log("tets");
+                    this.onClick();
+                }
+            }
+        },
+        drawWithContext: function (context, offsetX, offsetY) {
+            this.getContent$1().drawWithContext(context, offsetX + this.getX(), offsetY + this.getY());
+        },
+        align: function (view) {
+            view.setX((this.getWidth() - view.getWidth()) / 2);
+            view.setY((this.getHeight() - view.getHeight()) / 2);
+            return view;
+        },
+        fit: function (view) {
+            return view.scale(Math.min(this.getWidth() / view.getWidth(), this.getHeight() / view.getHeight(), this.maxScale));
+        }
+    });
+    
     Bridge.define('ThreeOneSevenBee.Model.UI.ProgressbarStarView', {
         inherits: [ThreeOneSevenBee.Model.UI.View],
         progressbar: null,
@@ -230,7 +285,7 @@
     });
     
     Bridge.define('ThreeOneSevenBee.Model.UI.ExpressionView', {
-        inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
+        inherits: [ThreeOneSevenBee.Model.UI.FrameView],
         statics: {
             nUMVAR_SIZE: 20,
             build: function (expression, model) {
@@ -349,14 +404,9 @@
             }
         },
         constructor: function (model, width, height) {
-            ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
+            ThreeOneSevenBee.Model.UI.FrameView.prototype.constructor$2.call(this, width, height, Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(model.getExpression(), model), 2);
     
-            this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
-            this.children.add(this.fit(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(model.getExpression(), model)));
             model.addOnChanged(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.ExpressionView.f1));
-        },
-        fit: function (view) {
-            return view.scale(Math.min(this.getWidth() / view.getWidth(), this.getHeight() / view.getHeight()));
         }
     });
     
@@ -366,8 +416,7 @@
     
     Bridge.apply($_.ThreeOneSevenBee.Model.UI.ExpressionView, {
         f1: function (m) {
-            this.children.clear();
-            this.children.add(this.fit(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(m.getExpression(), m)));
+            this.setContent(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(m.getExpression(), m));
         }
     });
     
@@ -386,16 +435,15 @@
                 (function () {
                     var indexCopy = index;
                     var view = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(identities.getItem(index), model);
-                    var Container = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(view.getWidth(), view.getHeight()), {
+                    var frameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor$2", 200, 100, view, 1), {
                         setPropagateClick: false
                     } );
-                    Container.add(view);
-                    Container.setX(x);
-                    x += Container.getWidth() + 20;
-                    Container.onClick = function () {
+                    frameView.setX(x);
+                    x += frameView.getWidth() + 20;
+                    frameView.onClick = function () {
                         model.applyIdentity(identities.getItem(indexCopy));
                     };
-                    views.add(Container);
+                    views.add(frameView);
                 }).call(this);
             }
             return views;

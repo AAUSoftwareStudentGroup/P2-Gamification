@@ -19,12 +19,11 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 int indexCopy = index;
                 View view = ExpressionView.Build(identities[index], model);
-                CompositeView Container = new CompositeView(view.Width, view.Height) { PropagateClick = false };
-                Container.Add(view);
-                Container.X = x;
-                x += Container.Width + 20;
-                Container.OnClick = () => model.ApplyIdentity(identities[indexCopy]);
-                views.Add(Container);
+                FrameView frameView = new FrameView(200, 100, view, 1) { PropagateClick = false };
+                frameView.X = x;
+                x += frameView.Width + 20;
+                frameView.OnClick = () => model.ApplyIdentity(identities[indexCopy]);
+                views.Add(frameView);
             }
             return views;
         }

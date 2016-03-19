@@ -16,7 +16,7 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a+b+a/b+c+e*b*a", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commutativeRule]);
+                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a+b*c", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commutativeRule]);
     
                 model.getExpression().clone();
     
@@ -30,26 +30,11 @@
                     } )]
                 ] );
     
-                console.log(view);
-    
                 context.setContentView(view);
                 model.addOnChanged(function (m) {
                     context.draw();
                 });
-                model.addOnChanged($_.ThreeOneSevenBee.Frontend.App.f1);
                 context.draw();
-            }
-        }
-    });
-    
-    var $_ = {};
-    
-    Bridge.ns("ThreeOneSevenBee.Frontend.App", $_)
-    
-    Bridge.apply($_.ThreeOneSevenBee.Frontend.App, {
-        f1: function (m) {
-            if (Bridge.hasValue(m.getSelected())) {
-                m.getSelected().prettyPrint();
             }
         }
     });

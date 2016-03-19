@@ -99,6 +99,7 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public void ApplyIdentity(ExpressionBase identity)
         {
+            Console.WriteLine(identity.ToString());
             if (identities.Contains(identity))
             {
                 if(Selected.Parent == null)

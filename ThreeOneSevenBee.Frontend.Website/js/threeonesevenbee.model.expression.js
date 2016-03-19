@@ -196,6 +196,7 @@
         this.OnChanged(this);
     },
     applyIdentity: function (identity) {
+        console.log(identity.toString());
         if (this.identities.contains(identity)) {
             if (!Bridge.hasValue(this.getSelected().getParent())) {
                 this.expression = identity;

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.UI
 {
-    public class ExpressionView : CompositeView
+    public class ExpressionView : FrameView
     {
         public static int NUMVAR_SIZE = 20;
         public static View Build(ExpressionBase expression, ExpressionModel model)
@@ -66,7 +66,7 @@ namespace ThreeOneSevenBee.Model.UI
                         exponent.Baseline = exponent.Height - left.Baseline;
                         return exponent;
                     case OperatorType.Subtract:
-                        double baseline = System.Math.Max(operatorView.Baseline, left.Baseline, right.Baseline);
+                        double baseline = System.Math.Max(operatorView.Baseline, System.Math.Max(left.Baseline, right.Baseline));
                         operatorView.X = left.Width;
                         operatorView.Width = NUMVAR_SIZE;
                         operatorView.Height = NUMVAR_SIZE;
@@ -76,7 +76,7 @@ namespace ThreeOneSevenBee.Model.UI
                         operatorView.Y = baseline - operatorView.Baseline;
                         right.Y = baseline - right.Baseline;
                         double height = System.Math.Max(left.Y + left.Height,
-                            operatorView.Y + operatorView.Height, right.Y + right.Height);
+                            System.Math.Max(operatorView.Y + operatorView.Height, right.Y + right.Height));
                         CompositeView subtraction = new CompositeView(right.X + right.Width, height)
                         {
                             left,
@@ -129,22 +129,12 @@ namespace ThreeOneSevenBee.Model.UI
 
         }
 
-        private View Fit(View view)
+        public ExpressionView(ExpressionModel model, double width, double height) : base(width, height, Build(model.Expression, model), 2)
         {
-            return view.Scale(System.Math.Min(Width / view.Width, Height / view.Height));
-        }
-
-        public ExpressionView(ExpressionModel model, double width, double height) : base(width, height)
-        {
-            Children = new List<View>();
-            Children.Add(Fit(Build(model.Expression, model)));
             model.OnChanged += (m) =>
             {
-                Children.Clear();
-                Children.Add(Fit(Build(m.Expression, m)));
+                setContent(Build(m.Expression, m));
             };
         }
-
-
     }
 }
