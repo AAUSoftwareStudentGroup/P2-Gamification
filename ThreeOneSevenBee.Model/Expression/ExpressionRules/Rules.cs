@@ -18,19 +18,30 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // Commutative Rule: a + b = b + a
         public static bool CommutativeRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
-            BinaryOperatorExpression operatorExpression;
+            VariadicOperatorExpression operatorExpression = expression as VariadicOperatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if ((operatorExpression = expression as BinaryOperatorExpression) != null)
+            if(operatorExpression != null && selection.Count == 2)
             {
-                if (operatorExpression.Type == OperatorType.Add)
+                if (operatorExpression.Type == OperatorType.Add || operatorExpression.Type == OperatorType.Multiply)
                 {
-                    identity = serializer.Deserialize(serializer.Serialize(operatorExpression.Right) + "+" + serializer.Serialize(operatorExpression.Left));
-                    return true;
-                }
-                else if (operatorExpression.Type == OperatorType.Multiply)
-                {
-                    identity = serializer.Deserialize(serializer.Serialize(operatorExpression.Right) + "*" + serializer.Serialize(operatorExpression.Left));
-                    return true;
+                    if (selection[0].Parent == expression && selection[1].Parent == expression)
+                    {
+                        VariadicOperatorExpression temp = operatorExpression.Clone() as VariadicOperatorExpression;
+                        for (int index = 0; index < operatorExpression.Count; index++)
+                        {
+                            if (ReferenceEquals(operatorExpression[index], selection[0]))
+                            {
+                                temp[index] = selection[1].Clone();
+                            }
+                            if (ReferenceEquals(operatorExpression[index], selection[1]))
+                            {
+                                temp[index] = selection[0].Clone();
+                            }
+                            temp[index].Parent = temp;
+                        }
+                        identity = temp;
+                        return true;
+                    }
                 }
             }
             identity = null;

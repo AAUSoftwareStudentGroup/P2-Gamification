@@ -16,7 +16,7 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("4+5", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule]);
+                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a+b+a/b+c+e*b*a", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commutativeRule]);
     
                 model.getExpression().clone();
     

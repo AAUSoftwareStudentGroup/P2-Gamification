@@ -52,7 +52,6 @@
         },
         getIdentities: function (expression, selection) {
             var $t;
-            console.log("w0");
             var identities = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
     
             if (Bridge.Linq.Enumerable.from(selection).count() === 0) {
@@ -65,7 +64,6 @@
                 var commonParent = this.getCommonParent$1(selection);
                 var identity = { };
                 if (rule(commonParent, selection, identity)) {
-                    console.log("w0");
                     identities.add(identity.v);
                 }
             }
@@ -199,18 +197,34 @@
     },
     applyIdentity: function (identity) {
         if (this.identities.contains(identity)) {
-            if (!Bridge.hasValue(this.selectionParent.getParent())) {
+            if (!Bridge.hasValue(this.getSelected().getParent())) {
                 this.expression = identity;
             }
             else  {
-                var parent = (Bridge.as(this.selectionParent.getParent(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression));
-                if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(parent.getLeft(), this.selectionParent)) {
-                    parent.setLeft(identity);
+                var binaryParent = Bridge.as(this.getSelected().getParent(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                if (Bridge.hasValue(binaryParent)) {
+                    if (binaryParent.getLeft() === this.getSelected()) {
+                        binaryParent.setLeft(identity);
+                    }
+                    else  {
+                        binaryParent.setRight(identity);
+                    }
+                    identity.setParent(binaryParent);
                 }
-                else  {
-                    parent.setRight(identity);
+                var variadicParent = Bridge.as(this.getSelected().getParent(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                if (Bridge.hasValue(variadicParent)) {
+                    for (var index = 0; index < variadicParent.getCount(); index++) {
+                        if (variadicParent.getItem(index) === this.getSelected()) {
+                            variadicParent.setItem(index, identity);
+                        }
+                    }
+                    identity.setParent(variadicParent);
                 }
-                identity.setParent(parent);
+                var minusParent = Bridge.as(this.getSelected().getParent(), ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
+                if (Bridge.hasValue(minusParent)) {
+                    minusParent.setExpression(identity);
+                    identity.setParent(minusParent);
+                }
             }
         }
         this.unSelectAll();

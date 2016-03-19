@@ -16,7 +16,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             { OperatorType.Multiply, "*" },
             { OperatorType.Power, "^" },
         };
-        
+
         public string GetTypeString()
         {
             return symbols[Type];

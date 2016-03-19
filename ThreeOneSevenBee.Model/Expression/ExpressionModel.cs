@@ -95,26 +95,49 @@ namespace ThreeOneSevenBee.Model.Expression
             OnChanged(this);
         }
 
+
+
         public void ApplyIdentity(ExpressionBase identity)
         {
             if (identities.Contains(identity))
             {
-                if(selectionParent.Parent == null)
+                if(Selected.Parent == null)
                 {
                     expression = identity;
                 }
                 else
                 {
-                    var parent = (selectionParent.Parent as BinaryOperatorExpression);
-                    if(parent.Left == selectionParent)
+                    var binaryParent = Selected.Parent as BinaryOperatorExpression;
+                    if (binaryParent != null)
                     {
-                        parent.Left = identity;
+                        if(ReferenceEquals(binaryParent.Left, Selected))
+                        {
+                            binaryParent.Left = identity;
+                        }
+                        else
+                        {
+                            binaryParent.Right = identity;
+                        }
+                        identity.Parent = binaryParent;
                     }
-                    else
+                    var variadicParent = Selected.Parent as VariadicOperatorExpression;
+                    if (variadicParent != null)
                     {
-                        parent.Right = identity;
+                        for (int index = 0; index < variadicParent.Count; index++)
+                        {
+                            if(ReferenceEquals(variadicParent[index], Selected))
+                            {
+                                variadicParent[index] = identity;
+                            }
+                        }
+                        identity.Parent = variadicParent;
                     }
-                    identity.Parent = parent;
+                    var minusParent = Selected.Parent as UnaryMinusExpression;
+                    if (minusParent != null)
+                    {
+                        minusParent.Expression = identity;
+                        identity.Parent = minusParent;
+                    }
                 }
             }
             UnSelectAll();

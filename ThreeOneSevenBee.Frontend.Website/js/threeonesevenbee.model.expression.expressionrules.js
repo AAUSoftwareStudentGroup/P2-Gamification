@@ -8,17 +8,22 @@
                 return true;
             },
             commutativeRule: function (expression, selection, identity) {
-                var $t;
-                var operatorExpression;
+                var operatorExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
                 var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
-                if (Bridge.hasValue((($t = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression), operatorExpression = $t, $t)))) {
-                    if (operatorExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
-                        identity.v = serializer.deserialize(serializer.serialize(operatorExpression.getRight()) + "+" + serializer.serialize(operatorExpression.getLeft()));
-                        return true;
-                    }
-                    else  {
-                        if (operatorExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
-                            identity.v = serializer.deserialize(serializer.serialize(operatorExpression.getRight()) + "*" + serializer.serialize(operatorExpression.getLeft()));
+                if (Bridge.hasValue(operatorExpression) && selection.getCount() === 2) {
+                    if (operatorExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add || operatorExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
+                        if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0).getParent(), expression) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(1).getParent(), expression)) {
+                            var temp = Bridge.as(operatorExpression.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                            for (var index = 0; index < operatorExpression.getCount(); index++) {
+                                if (operatorExpression.getItem(index) === selection.getItem(0)) {
+                                    temp.setItem(index, selection.getItem(1).clone());
+                                }
+                                if (operatorExpression.getItem(index) === selection.getItem(1)) {
+                                    temp.setItem(index, selection.getItem(0).clone());
+                                }
+                                temp.getItem(index).setParent(temp);
+                            }
+                            identity.v = temp;
                             return true;
                         }
                     }
