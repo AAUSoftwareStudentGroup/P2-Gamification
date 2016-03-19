@@ -42,7 +42,7 @@
             for (var index = 2; index < parentPaths.getCount(); index++) {
                 intersection = this.pathIntersection(intersection, parentPaths.getItem(index));
             }
-            return intersection.getItem(0);
+            return intersection.getItem(intersection.getCount() - 1);
         },
         pathIntersection: function (first, second) {
             var secondIndex = 0;

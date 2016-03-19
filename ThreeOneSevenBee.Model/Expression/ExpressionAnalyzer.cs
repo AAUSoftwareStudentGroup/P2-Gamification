@@ -59,7 +59,7 @@ namespace ThreeOneSevenBee.Model.Expression
             {
                 intersection = PathIntersection(intersection, parentPaths[index]);
             }
-            return intersection[0];
+            return intersection[intersection.Count - 1];
         }
 
         public List<ExpressionBase> PathIntersection(List<ExpressionBase> first, List<ExpressionBase> second)

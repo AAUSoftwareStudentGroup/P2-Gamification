@@ -16,7 +16,7 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a+b+a");
+                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("{e/a}/{b/c}");
     
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(model, 600, 200), {
@@ -86,7 +86,7 @@
             this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + view.getWidth() / 2)), Bridge.Int.trunc((view.getY() + offsetY + view.getHeight() / 2)));
         },
         draw$1: function (view, offsetX, offsetY) {
-            this.context.fillStyle = view.getSelected() ? "skyblue" : "white";
+            this.context.fillStyle = view.getSelected() ? "lightblue" : "#eeeeee";
             this.context.fillRect(Bridge.Int.trunc((view.getX() + offsetX)), Bridge.Int.trunc((view.getY() + offsetY)), Bridge.Int.trunc(view.getWidth()), Bridge.Int.trunc(view.getHeight()));
             this.context.fillStyle = "black";
             this.draw$2(Bridge.as(view, ThreeOneSevenBee.Model.UI.LabelView), offsetX, offsetY);

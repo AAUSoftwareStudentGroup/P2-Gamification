@@ -9,6 +9,8 @@ namespace ThreeOneSevenBee.Model.UI
         public double X { get; set; }
         public double Y { get; set; }
 
+        public double Baseline { get; set; }
+
         public string Name { get; set; }
 
         public bool Selected { get; set; }

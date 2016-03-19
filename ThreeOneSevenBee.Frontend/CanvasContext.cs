@@ -51,7 +51,7 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void Draw(ButtonView view, double offsetX, double offsetY)
         {
-            context.FillStyle = view.Selected ? HTMLColor.Skyblue : HTMLColor.White;
+            context.FillStyle = view.Selected ? HTMLColor.LightBlue : "#eeeeee";
             context.FillRect((int)(view.X + offsetX), (int)(view.Y + offsetY), (int)view.Width, (int)view.Height);
             context.FillStyle = HTMLColor.Black;
             Draw(view as LabelView, offsetX, offsetY);
