@@ -16,6 +16,20 @@ namespace ThreeOneSevenBee.Model.UI
         public static int NUMVAR_SIZE = 20;
         public static View Build(ExpressionBase expression, ExpressionModel model)
         {
+            UnaryMinusExpression minusExpression = expression as UnaryMinusExpression;
+            if(minusExpression != null)
+            {
+                View view = Build(minusExpression.Expression, model);
+                View operatorView = new OperatorButtonView(minusExpression.Type, null);
+                operatorView.Width = NUMVAR_SIZE;
+                operatorView.Height = NUMVAR_SIZE;
+                operatorView.Baseline = NUMVAR_SIZE / 2;
+                view.X = operatorView.Width;
+                operatorView.Y = view.Baseline - operatorView.Baseline;
+                View minusView = new CompositeView(operatorView.Width + view.Width, view.Height) { operatorView, view };
+                minusView.Baseline = view.Baseline;
+                return minusView;
+            }
             BinaryOperatorExpression operatorExpression = expression as BinaryOperatorExpression;
             if (operatorExpression != null)
             {
@@ -29,6 +43,7 @@ namespace ThreeOneSevenBee.Model.UI
                         operatorView.Width = width;
                         operatorView.Height = NUMVAR_SIZE;
                         operatorView.Y = left.Height;
+                        operatorView.Baseline = NUMVAR_SIZE / 2;
                         right.Y = left.Height + operatorView.Height;
                         left.X = (width - left.Width) / 2;
                         right.X = (width - right.Width) / 2;
@@ -50,6 +65,26 @@ namespace ThreeOneSevenBee.Model.UI
                         };
                         exponent.Baseline = exponent.Height - left.Baseline;
                         return exponent;
+                    case OperatorType.Subtract:
+                        double baseline = System.Math.Max(operatorView.Baseline, left.Baseline, right.Baseline);
+                        operatorView.X = left.Width;
+                        operatorView.Width = NUMVAR_SIZE;
+                        operatorView.Height = NUMVAR_SIZE;
+                        operatorView.Baseline = NUMVAR_SIZE / 2;
+                        right.X = left.Width + operatorView.Width;
+                        left.Y = baseline - left.Baseline;
+                        operatorView.Y = baseline - operatorView.Baseline;
+                        right.Y = baseline - right.Baseline;
+                        double height = System.Math.Max(left.Y + left.Height,
+                            operatorView.Y + operatorView.Height, right.Y + right.Height);
+                        CompositeView subtraction = new CompositeView(right.X + right.Width, height)
+                        {
+                            left,
+                            operatorView,
+                            right
+                        };
+                        subtraction.Baseline = baseline;
+                        return subtraction;
                 }
             }
             VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;

@@ -16,7 +16,7 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a+b*c");
+                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a--b");
     
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(model, 600, 200), {
@@ -104,7 +104,7 @@
                 if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
                     this.context.beginPath();
                     //context.Rect(, view.Width / 10,);
-                    this.context.arc(view.getX() + offsetX + view.getWidth() / 2 - view.getHeight() / 20, view.getY() + offsetY + view.getHeight() / 2 - view.getHeight() / 20, view.getHeight() / 10, 0, 2 * Math.PI);
+                    this.context.arc(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2, view.getHeight() / 10, 0, 2 * Math.PI);
                     this.context.fill();
                     this.context.stroke();
                 }

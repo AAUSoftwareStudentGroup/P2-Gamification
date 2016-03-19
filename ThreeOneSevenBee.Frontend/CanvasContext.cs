@@ -72,7 +72,7 @@ namespace ThreeOneSevenBee.Frontend
             {
                 context.BeginPath();
                 //context.Rect(, view.Width / 10,);
-                context.Arc(view.X + offsetX + view.Width / 2 - view.Height / 20, view.Y + offsetY + view.Height / 2 - view.Height / 20, view.Height / 10, 0, 2 * Math.PI);
+                context.Arc(view.X + offsetX + view.Width / 2, view.Y + offsetY + view.Height / 2, view.Height / 10, 0, 2 * Math.PI);
                 context.Fill();
                 context.Stroke();
             }
