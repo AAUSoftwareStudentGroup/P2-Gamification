@@ -67,7 +67,7 @@
             var canvasLeft = this.context.canvas.getBoundingClientRect().left;
             var canvasRight = this.context.canvas.getBoundingClientRect().left;
             this.context.canvas.addEventListener("mousedown", function (e) {
-                view.click(e.clientX - Bridge.Int.trunc(canvasLeft), e.clientY - Bridge.Int.trunc(canvasRight));
+                view.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             });
             ThreeOneSevenBee.Model.UI.Context.prototype.setContentView.call(this, view);
         },

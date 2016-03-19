@@ -22,7 +22,8 @@ namespace ThreeOneSevenBee.Frontend
             context.Canvas.AddEventListener(EventType.MouseDown, 
                 (e) =>
                 {
-                    view.Click(e.As<MouseEvent>().ClientX - (int)canvasLeft, e.As<MouseEvent>().ClientY - (int)canvasRight);
+                    view.Click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft, 
+                        e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
                 });
             base.SetContentView(view);
         }
