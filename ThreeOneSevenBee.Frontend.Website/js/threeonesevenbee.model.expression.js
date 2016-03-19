@@ -20,8 +20,7 @@
         remove: function (rule) {
             this.rules.remove(rule);
         },
-        getCommonParent: function (selection) {
-            var $t;
+        getCommonParent$1: function (selection) {
             if (selection.getCount() === 0) {
                 return null;
             }
@@ -30,21 +29,26 @@
                     return selection.getItem(0);
                 }
                 else  {
-                    var intersection = selection.getItem(0).getParentPath();
-    
-                    $t = Bridge.getEnumerator(selection);
-                    while ($t.moveNext()) {
-                        var expression = $t.getCurrent();
-                        var path = expression.getParentPath();
-                        if (Bridge.Linq.Enumerable.from(path).count() === 0) {
-                            return expression;
-                        }
-                        intersection = Bridge.Linq.Enumerable.from(intersection).intersect(path);
+                    var parentPaths = new Bridge.List$1(Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase))();
+                    for (var index = 0; index < selection.getCount(); index++) {
+                        parentPaths.add(Bridge.Linq.Enumerable.from(selection.getItem(index).getParentPath()).reverse().toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
                     }
-    
-                    return Bridge.Linq.Enumerable.from(intersection).first();
+                    return this.getCommonParent(parentPaths);
                 }
             }
+        },
+        getCommonParent: function (parentPaths) {
+            var intersection = this.pathIntersection(parentPaths.getItem(0), parentPaths.getItem(1));
+            for (var index = 2; index < parentPaths.getCount(); index++) {
+                intersection = this.pathIntersection(intersection, parentPaths.getItem(index));
+            }
+            return intersection.getItem(0);
+        },
+        pathIntersection: function (first, second) {
+            var secondIndex = 0;
+            return Bridge.Linq.Enumerable.from(first).takeWhile(function (expr) {
+                return secondIndex === second.getCount() || expr === second.getItem(secondIndex++);
+            }).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase);
         },
         getIdentities: function (expression, selection) {
             var $t;
@@ -57,7 +61,7 @@
             $t = Bridge.getEnumerator(this.rules);
             while ($t.moveNext()) {
                 var rule = $t.getCurrent();
-                var commonParent = this.getCommonParent(selection);
+                var commonParent = this.getCommonParent$1(selection);
                 var identity = { };
                 if (rule(commonParent, selection, identity)) {
                     identities.add(identity.v);
@@ -95,7 +99,7 @@
         },
         getParentPath: function () {
             var $yield = [];
-            var currentParent = this.getParent();
+            var currentParent = this;
             while (Bridge.hasValue(currentParent)) {
                 $yield.push(currentParent);
                 currentParent = currentParent.getParent();
@@ -157,22 +161,22 @@
     },
     selectionIndex: function (expression) {
         for (var i = 0; i < this.selection.getCount(); i++) {
-            if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.selection.getItem(i), expression)) {
+            if (this.selection.getItem(i) === expression) {
                 return i;
             }
         }
         return -1;
     },
     select: function (expression) {
-        var $t, $t1;
+        var $t;
         var index = this.selectionIndex(expression);
         if (index === -1) {
     
             $t = Bridge.getEnumerator(expression.getNodesRecursive());
             while ($t.moveNext()) {
                 var descendant = $t.getCurrent();
-                var i;
-                if ((($t1 = this.selectionIndex(descendant), i = $t1, $t1)) !== -1) {
+                var i = this.selectionIndex(descendant);
+                if (i !== -1) {
                     this.selection.removeAt(i);
                 }
             }
@@ -181,7 +185,7 @@
         else  {
             this.selection.removeAt(index);
         }
-        this.selectionParent = this.analyzer.getCommonParent(this.selection);
+        this.selectionParent = this.analyzer.getCommonParent$1(this.selection);
         this.identities = this.analyzer.getIdentities(expression, this.selection);
         this.OnChanged(this);
     },

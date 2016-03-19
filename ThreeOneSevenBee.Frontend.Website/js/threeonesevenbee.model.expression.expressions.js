@@ -458,6 +458,7 @@
     },
     add: function (item) {
         this.expressions.add(item);
+        item.setParent(this);
     },
     remove: function (item) {
         return this.expressions.remove(item);

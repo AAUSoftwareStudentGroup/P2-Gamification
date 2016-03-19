@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 using ThreeOneSevenBee.Model.Expression.Expressions;
 
 namespace ThreeOneSevenBee.Model.Expression
@@ -53,7 +56,7 @@ namespace ThreeOneSevenBee.Model.Expression
         {
             for (int i = 0; i < selection.Count; i++)
             {
-                if (selection[i] == expression)
+                if (ReferenceEquals(selection[i], expression))
                 {
                     return i;
                 }
@@ -69,8 +72,8 @@ namespace ThreeOneSevenBee.Model.Expression
 
                 foreach (var descendant in expression.GetNodesRecursive())
                 {
-                    int i;
-                    if ((i = SelectionIndex(descendant)) != -1)
+                    int i = SelectionIndex(descendant);
+                    if (i != -1)
                         selection.RemoveAt(i);
                 }
                 selection.Add(expression);

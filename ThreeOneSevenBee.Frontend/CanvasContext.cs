@@ -64,8 +64,8 @@ namespace ThreeOneSevenBee.Frontend
                 context.BeginPath();
                 context.LineCap = CanvasTypes.CanvasLineCapType.Round;
                 context.LineWidth = view.Height/40;
-                context.MoveTo(view.X + offsetX + view.Width/10, view.Y + offsetY);
-                context.LineTo(view.X + offsetX + view.Width - view.Width / 10, view.Y + offsetY);
+                context.MoveTo(view.X + offsetX, view.Y + offsetY + view.Height / 2);
+                context.LineTo(view.X + offsetX + view.Width, view.Y + offsetY + view.Height / 2);
                 context.Stroke();
             }
             else if (view.type == OperatorType.Multiply)

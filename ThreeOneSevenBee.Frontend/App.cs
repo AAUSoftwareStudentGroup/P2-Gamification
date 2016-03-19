@@ -19,18 +19,19 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel model = new ExpressionModel("a+b^c-d*e/f", Rules.ItselfRule, Rules.CommutativeRule, Rules.FractionVariableMultiplyRule);
+            ExpressionModel model = new ExpressionModel("a+b+a");
 
             View view = new CompositeView(600, 400)
             {
-                new IdentityMenuView(model, 600, 20) { Y = 60 },
-                new ExpressionView(model, 220, 200) { X = 20, Y = 20 }
+                new IdentityMenuView(model, 600, 200) { Y = 100 },
+                new ExpressionView(model, 220, 300) { X = 20, Y = 20 }
             };
 
             Console.WriteLine(view);
 
             context.SetContentView(view);
             model.OnChanged += (m) => context.Draw();
+            model.OnChanged += (m) => { if (m.Selected != null) { m.Selected.PrettyPrint(); } };
             context.Draw();
         }
     }

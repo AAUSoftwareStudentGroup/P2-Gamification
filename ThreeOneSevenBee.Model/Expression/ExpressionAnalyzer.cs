@@ -1,4 +1,7 @@
 ﻿using System;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,42 +33,54 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public ExpressionBase GetCommonParent(List<ExpressionBase> selection)
         {
-            if(selection.Count == 0)
+            if (selection.Count == 0)
             {
                 return null;
             }
-            else if(selection.Count == 1)
+            else if (selection.Count == 1)
             {
                 return selection[0];
             }
             else
             {
-                var intersection = selection[0].GetParentPath();
-
-                foreach (var expression in selection)
+                var parentPaths = new List<List<ExpressionBase>>();
+                for (int index = 0; index < selection.Count; index++)
                 {
-                    var path = expression.GetParentPath();
-                    if (path.Count() == 0)
-                    {
-                        return expression;
-                    }
-                    intersection = intersection.Intersect(path);
+                    parentPaths.Add(selection[index].GetParentPath().Reverse().ToList());
                 }
-
-                return intersection.First();
+                return GetCommonParent(parentPaths);
             }
+        }
+
+        public ExpressionBase GetCommonParent(List<List<ExpressionBase>> parentPaths)
+        {
+            List<ExpressionBase> intersection = PathIntersection(parentPaths[0], parentPaths[1]);
+            for (int index = 2; index < parentPaths.Count; index++)
+            {
+                intersection = PathIntersection(intersection, parentPaths[index]);
+            }
+            return intersection[0];
+        }
+
+        public List<ExpressionBase> PathIntersection(List<ExpressionBase> first, List<ExpressionBase> second)
+        {
+            int secondIndex = 0;
+            return first.TakeWhile(
+                (expr) => 
+                secondIndex == second.Count || 
+                ReferenceEquals(expr, second[secondIndex++])).ToList();
         }
 
         public List<ExpressionBase> GetIdentities(ExpressionBase expression, List<ExpressionBase> selection)
         {
             var identities = new List<ExpressionBase>();
-            
-            if(selection.Count() == 0)
+
+            if (selection.Count() == 0)
             {
                 return identities;
             }
 
-            foreach(ExpressionRule rule in rules)
+            foreach (ExpressionRule rule in rules)
             {
                 ExpressionBase commonParent = GetCommonParent(selection);
                 ExpressionBase identity;

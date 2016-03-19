@@ -39,7 +39,7 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public IEnumerable<ExpressionBase> GetParentPath()
         {
-            ExpressionBase currentParent = Parent;
+            ExpressionBase currentParent = this;
             while (currentParent != null)
             {
                 yield return currentParent;

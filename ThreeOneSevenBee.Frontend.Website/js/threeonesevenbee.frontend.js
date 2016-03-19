@@ -16,13 +16,13 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a+b^c-d*e/f", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commutativeRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).fractionVariableMultiplyRule]);
+                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a+b+a");
     
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), [
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(model, 600, 20), {
-                        setY: 60
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(model, 600, 200), {
+                        setY: 100
                     } )],
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(model, 220, 200), {
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(model, 220, 300), {
                         setX: 20,
                         setY: 20
                     } )]
@@ -34,7 +34,20 @@
                 model.addOnChanged(function (m) {
                     context.draw();
                 });
+                model.addOnChanged($_.ThreeOneSevenBee.Frontend.App.f1);
                 context.draw();
+            }
+        }
+    });
+    
+    var $_ = {};
+    
+    Bridge.ns("ThreeOneSevenBee.Frontend.App", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Frontend.App, {
+        f1: function (m) {
+            if (Bridge.hasValue(m.getSelected())) {
+                m.getSelected().prettyPrint();
             }
         }
     });
@@ -83,8 +96,8 @@
                 this.context.beginPath();
                 this.context.lineCap = "round";
                 this.context.lineWidth = view.getHeight() / 40;
-                this.context.moveTo(view.getX() + offsetX + view.getWidth() / 10, view.getY() + offsetY);
-                this.context.lineTo(view.getX() + offsetX + view.getWidth() - view.getWidth() / 10, view.getY() + offsetY);
+                this.context.moveTo(view.getX() + offsetX, view.getY() + offsetY + view.getHeight() / 2);
+                this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsetY + view.getHeight() / 2);
                 this.context.stroke();
             }
             else  {

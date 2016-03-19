@@ -64,6 +64,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         public void Add(ExpressionBase item)
         {
             expressions.Add(item);
+            item.Parent = this;
         }
 
         public Boolean Remove(ExpressionBase item)
