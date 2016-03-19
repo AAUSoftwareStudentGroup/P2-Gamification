@@ -1,4 +1,7 @@
 ﻿using System;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,6 +14,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         protected VariadicExpression(OperatorType type, ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
             : base(type)
         {
+            
             if (type != OperatorType.Add && type != OperatorType.Multiply)
                 throw new ArgumentException("Invalid Type: " + type, "type");
             if (first == null)
@@ -30,6 +34,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         protected VariadicExpression(OperatorType type, params ExpressionBase[] expressions)
             : base(type)
         {
+            Console.WriteLine(expressions[0]);
             if (type != OperatorType.Add && type != OperatorType.Multiply)
                 throw new ArgumentException("Invalid Type: " + type, "type");
             if (expressions == null)

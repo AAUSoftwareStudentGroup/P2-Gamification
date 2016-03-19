@@ -97,7 +97,12 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override ExpressionBase Clone()
         {
-            return new VariadicOperatorExpression(Type, this.Select(e => e.Clone()).ToArray());
+            var expression = new VariadicOperatorExpression(Type, this[0].Clone(), this[1].Clone());
+            foreach (var expr in this.Skip(2))
+            {
+                expression.Add(expr.Clone());
+            }
+            return expression;
         }
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()

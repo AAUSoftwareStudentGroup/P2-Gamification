@@ -399,6 +399,7 @@
             var $t;
     
             if (expressions === void 0) { expressions = []; }
+    
             if (type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
                 throw new Bridge.ArgumentException("Invalid Type: " + type, "type");
             }
@@ -425,6 +426,7 @@
         var $t;
     
         if (expressions === void 0) { expressions = []; }
+        console.log(expressions[0]);
         if (type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
             throw new Bridge.ArgumentException("Invalid Type: " + type, "type");
         }
@@ -720,7 +722,14 @@
             return true;
         },
         clone: function () {
-            return new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor$1", this.getType(), [Bridge.Linq.Enumerable.from(this).select($_.ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression.f2).toArray()]);
+            var $t;
+            var expression = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", this.getType(), this.getItem(0).clone(), this.getItem(1).clone());
+            $t = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(this).skip(2));
+            while ($t.moveNext()) {
+                var expr = $t.getCurrent();
+                expression.add(expr.clone());
+            }
+            return expression;
         },
         getNodesRecursive: function () {
             var $t, $t1;
@@ -758,9 +767,6 @@
     Bridge.apply($_.ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression, {
         f1: function (s, e) {
             return s + this.getSymbol() + e.getValue();
-        },
-        f2: function (e) {
-            return e.clone();
         }
     });
     

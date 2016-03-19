@@ -73,6 +73,7 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public List<ExpressionBase> GetIdentities(ExpressionBase expression, List<ExpressionBase> selection)
         {
+            Console.WriteLine("w0");
             var identities = new List<ExpressionBase>();
 
             if (selection.Count() == 0)
@@ -86,6 +87,7 @@ namespace ThreeOneSevenBee.Model.Expression
                 ExpressionBase identity;
                 if (rule(commonParent, selection, out identity))
                 {
+                    Console.WriteLine("w0");
                     identities.Add(identity);
                 }
             }

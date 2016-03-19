@@ -52,6 +52,7 @@
         },
         getIdentities: function (expression, selection) {
             var $t;
+            console.log("w0");
             var identities = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
     
             if (Bridge.Linq.Enumerable.from(selection).count() === 0) {
@@ -64,6 +65,7 @@
                 var commonParent = this.getCommonParent$1(selection);
                 var identity = { };
                 if (rule(commonParent, selection, identity)) {
+                    console.log("w0");
                     identities.add(identity.v);
                 }
             }

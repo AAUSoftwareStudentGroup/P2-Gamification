@@ -16,15 +16,17 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a--b");
+                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("4+5", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule]);
+    
+                model.getExpression().clone();
     
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), [
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(model, 600, 200), {
-                        setY: 100
-                    } )],
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(model, 600, 400), {
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(model, 600, 300), {
                         setX: 0,
                         setY: 0
+                    } )],
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(model, 600, 100), {
+                        setY: 300
                     } )]
                 ] );
     

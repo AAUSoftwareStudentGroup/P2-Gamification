@@ -19,12 +19,14 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel model = new ExpressionModel("a--b");
+            ExpressionModel model = new ExpressionModel("4+5", Rules.ItselfRule);
+
+            model.Expression.Clone();
 
             View view = new CompositeView(600, 400)
             {
-                new IdentityMenuView(model, 600, 200) { Y = 100 },
-                new ExpressionView(model, 600, 400) { X = 0, Y = 0 }
+                new ExpressionView(model, 600, 300) { X = 0, Y = 0 },
+                new IdentityMenuView(model, 600, 100) { Y = 300 }
             };
 
             Console.WriteLine(view);
