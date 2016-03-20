@@ -486,6 +486,17 @@
     },
     removeAt: function (index) {
         this.expressions.removeAt(index);
+    },
+    removeReference: function (expression) {
+        this.removeAt(this.indexOfReference(expression));
+    },
+    indexOfReference: function (expression) {
+        for (var i = 0; i < this.getCount(); i++) {
+            if (this.getItem(i) === expression) {
+                return i;
+            }
+        }
+        return -1;
     }
     });
     

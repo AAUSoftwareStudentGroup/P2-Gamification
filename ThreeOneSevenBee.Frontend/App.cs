@@ -19,7 +19,7 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel model = new ExpressionModel("-b*b*b", Rules.ItselfRule, Rules.ExponentToProductRule, Rules.ProductToExponentRule);
+            ExpressionModel model = new ExpressionModel("{a*b*b*a*a*b*a}/{b*a*a*b*a}", Rules.DivideRule);
 
             model.Expression.Clone();
 

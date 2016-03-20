@@ -12,6 +12,90 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 {
     public static class Rules
     {
+        public static bool CheckParentPaths(string checkString, params ExpressionBase[] expressions)
+        {
+            foreach (var expression in expressions)
+            {
+                var parentPath = expression.GetParentPath().ToList();
+                if (parentPath.Count != checkString.Length) return false;
+                for (int index = 0; index < parentPath.Count; index++)
+                {
+                    var expr = parentPath[index];
+                    var c = checkString[index];
+
+                    var numExpr = expr as NumericExpression;
+                    if (numExpr != null && c != 'n' && c != 'l') return false;
+
+                    var varExpr = expr as VariableExpression;
+                    if (varExpr != null && c != 'v' && c != 'l') return false;
+
+                    var minusExpr = expr as UnaryMinusExpression;
+                    if (minusExpr != null && c != '_') return false;
+
+                    var variadicExpr = expr as VariadicOperatorExpression;
+                    if (variadicExpr != null)
+                    {
+                        if (variadicExpr.Type == OperatorType.Add && c != '+') return false;
+                        if (variadicExpr.Type == OperatorType.Multiply && c != '*') return false;
+                    }
+
+                    var binaryExpr = expr as BinaryOperatorExpression;
+                    if (binaryExpr != null)
+                    {
+                        if (binaryExpr.Type == OperatorType.Divide && c != '/') return false;
+                        if (binaryExpr.Type == OperatorType.Power && c != '^') return false;
+                        if (binaryExpr.Type == OperatorType.Subtract && c != '-') return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public static bool AllEqual(List<ExpressionBase> expressions)
+        {
+            if (expressions.Count < 1)
+                return false;
+            for (int i = 1; i < expressions.Count; i++)
+            {
+                if (expressions[i - 1] != expressions[i])
+                    return false;
+            }
+            return true;
+        }
+
+        public static bool DivideRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            if (selection.Count > 0 && selection.Count % 2 == 0 && AllEqual(selection) && CheckParentPaths("l*/", selection.ToArray()))
+            {
+                BinaryExpression fraction = selection[0].Parent.Parent as BinaryExpression;
+                VariadicOperatorExpression left = fraction.Left as VariadicOperatorExpression;
+                VariadicOperatorExpression right = fraction.Right as VariadicOperatorExpression;
+                List<int> leftIndexes = selection.Select(e => left.IndexOfReference(e)).Where(e => e != -1).ToList();
+                List<int> rightIndexes = selection.Select(e => right.IndexOfReference(e)).Where(e => e != -1).ToList();
+                if (leftIndexes.Count == rightIndexes.Count)
+                {
+                    leftIndexes.Sort();
+                    rightIndexes.Sort();
+                    BinaryExpression temp = expression.Clone() as BinaryExpression;
+                    VariadicOperatorExpression tempLeft = temp.Left as VariadicOperatorExpression;
+                    VariadicOperatorExpression tempRight = temp.Right as VariadicOperatorExpression;
+                    for (int index = 0; index < leftIndexes.Count; index++)
+                    {
+                        tempLeft.RemoveAt(leftIndexes[index] - index);
+                    }
+                    for (int index = 0; index < rightIndexes.Count; index++)
+                    {
+                        tempRight.RemoveAt(rightIndexes[index] - index);
+                    }
+                    identity = temp;
+                    return true;
+                }
+            }
+            identity = null;
+            return false;
+
+        }
+
         public static bool ItselfRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             identity = expression.Clone();
@@ -52,6 +136,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 {
                     temp.RemoveAt(indexes[index] - index + 1);
                 }
+
                 temp[indexes[0]] = new BinaryOperatorExpression(selection[0].Clone(), new NumericExpression(selection.Count), OperatorType.Power);
                 temp[indexes[0]].Parent = temp;
                 identity = temp;
@@ -66,7 +151,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             BinaryExpression binaryExpression = expression as BinaryExpression;
             if (binaryExpression != null)
             {
-                if (selection.Count == 2 && 
+                if (selection.Count == 2 &&
                     (selection[0] == binaryExpression.Left && selection[1] == binaryExpression.Right) ||
                     (selection[1] == binaryExpression.Left && selection[0] == binaryExpression.Right))
                 {

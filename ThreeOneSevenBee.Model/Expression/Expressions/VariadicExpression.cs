@@ -119,5 +119,22 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             expressions.RemoveAt(index);
         }
+
+        public void RemoveReference(ExpressionBase expression)
+        {
+            RemoveAt(IndexOfReference(expression));
+        }
+
+        public int IndexOfReference(ExpressionBase expression)
+        {
+            for (int i = 0; i < this.Count; i++)
+            {
+                if (ReferenceEquals(this[i], expression))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
     }
 }
