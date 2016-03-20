@@ -7,6 +7,67 @@
                 identity.v = expression.clone();
                 return true;
             },
+            productToExponentRule: function (expression, selection, identity) {
+                var operatorExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                if (Bridge.hasValue(operatorExpression) && selection.getCount() > 0 && operatorExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
+                    for (var index = 0; index < selection.getCount(); index++) {
+                        if (!selection.getItem(index).getParent() === operatorExpression) {
+                            identity.v = null;
+                            return false;
+                        }
+                        if (index > 0 && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Inequality(selection.getItem(index - 1), selection.getItem(index))) {
+                            identity.v = null;
+                            return false;
+                        }
+                    }
+                    var indexes = new Bridge.List$1(Bridge.Int)();
+                    for (var index1 = 0; index1 < operatorExpression.getCount(); index1++) {
+                        for (var selctionIndex = 0; selctionIndex < selection.getCount(); selctionIndex++) {
+                            if (operatorExpression.getItem(index1) === selection.getItem(selctionIndex)) {
+                                indexes.add(index1);
+                            }
+                        }
+                    }
+                    var temp = Bridge.as(operatorExpression.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                    for (var index2 = 1; index2 < indexes.getCount(); index2++) {
+                        temp.removeAt(indexes.getItem(index2) - index2 + 1);
+                    }
+                    temp.setItem(indexes.getItem(0), new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(selection.getItem(0).clone(), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(selection.getCount()), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power));
+                    temp.getItem(indexes.getItem(0)).setParent(temp);
+                    identity.v = temp;
+                    return true;
+                }
+                identity.v = null;
+                return false;
+            },
+            exponentToProductRule: function (expression, selection, identity) {
+                var binaryExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryExpression);
+                if (Bridge.hasValue(binaryExpression)) {
+                    if (selection.getCount() === 2 && (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0), binaryExpression.getLeft()) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(1), binaryExpression.getRight())) || (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(1), binaryExpression.getLeft()) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0), binaryExpression.getRight()))) {
+                        var numericExpression = Bridge.as(binaryExpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
+                        if (Bridge.hasValue(numericExpression)) {
+                            if (numericExpression.getValue() === "0") {
+                                identity.v = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1);
+                            }
+                            else  {
+                                if (numericExpression.getValue() === "1") {
+                                    identity.v = binaryExpression.getLeft().clone();
+                                }
+                                else  {
+                                    var temp = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, binaryExpression.getLeft().clone(), binaryExpression.getLeft().clone());
+                                    for (var n = 2; n < numericExpression.number; n++) {
+                                        temp.add(binaryExpression.getLeft().clone());
+                                    }
+                                    identity.v = temp;
+                                }
+                            }
+                            return true;
+                        }
+                    }
+                }
+                identity.v = null;
+                return false;
+            },
             commutativeRule: function (expression, selection, identity) {
                 var operatorExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
                 var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();

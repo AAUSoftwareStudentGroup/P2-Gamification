@@ -1,4 +1,7 @@
 ﻿using System;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 using System.Collections.Generic;
 using ThreeOneSevenBee.Model.Expression.Expressions;
 using ThreeOneSevenBee.Model.Expression;
@@ -15,12 +18,93 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return true;
         }
 
+        public static bool ProductToExponentRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            VariadicOperatorExpression operatorExpression = expression as VariadicOperatorExpression;
+            if (operatorExpression != null && selection.Count > 0 && operatorExpression.Type == OperatorType.Multiply)
+            {
+                for (int index = 0; index < selection.Count; index++)
+                {
+                    if (!ReferenceEquals(selection[index].Parent, operatorExpression))
+                    {
+                        identity = null;
+                        return false;
+                    }
+                    if (index > 0 && selection[index - 1] != selection[index])
+                    {
+                        identity = null;
+                        return false;
+                    }
+                }
+                List<int> indexes = new List<int>();
+                for (int index = 0; index < operatorExpression.Count; index++)
+                {
+                    for (int selctionIndex = 0; selctionIndex < selection.Count; selctionIndex++)
+                    {
+                        if (ReferenceEquals(operatorExpression[index], selection[selctionIndex]))
+                        {
+                            indexes.Add(index);
+                        }
+                    }
+                }
+                VariadicOperatorExpression temp = operatorExpression.Clone() as VariadicOperatorExpression;
+                for (int index = 1; index < indexes.Count; index++)
+                {
+                    temp.RemoveAt(indexes[index] - index + 1);
+                }
+                temp[indexes[0]] = new BinaryOperatorExpression(selection[0].Clone(), new NumericExpression(selection.Count), OperatorType.Power);
+                temp[indexes[0]].Parent = temp;
+                identity = temp;
+                return true;
+            }
+            identity = null;
+            return false;
+        }
+
+        public static bool ExponentToProductRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            BinaryExpression binaryExpression = expression as BinaryExpression;
+            if (binaryExpression != null)
+            {
+                if (selection.Count == 2 && 
+                    (selection[0] == binaryExpression.Left && selection[1] == binaryExpression.Right) ||
+                    (selection[1] == binaryExpression.Left && selection[0] == binaryExpression.Right))
+                {
+                    NumericExpression numericExpression = binaryExpression.Right as NumericExpression;
+                    if (numericExpression != null)
+                    {
+                        if (numericExpression.Value == "0")
+                        {
+                            identity = new NumericExpression(1);
+                        }
+                        else if (numericExpression.Value == "1")
+                        {
+                            identity = binaryExpression.Left.Clone();
+                        }
+                        else
+                        {
+                            var temp = new VariadicOperatorExpression(OperatorType.Multiply,
+                                binaryExpression.Left.Clone(), binaryExpression.Left.Clone());
+                            for (int n = 2; n < numericExpression.Number; n++)
+                            {
+                                temp.Add(binaryExpression.Left.Clone());
+                            }
+                            identity = temp;
+                        }
+                        return true;
+                    }
+                }
+            }
+            identity = null;
+            return false;
+        }
+
         // Commutative Rule: a + b = b + a
         public static bool CommutativeRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             VariadicOperatorExpression operatorExpression = expression as VariadicOperatorExpression;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            if(operatorExpression != null && selection.Count == 2)
+            if (operatorExpression != null && selection.Count == 2)
             {
                 if (operatorExpression.Type == OperatorType.Add || operatorExpression.Type == OperatorType.Multiply)
                 {

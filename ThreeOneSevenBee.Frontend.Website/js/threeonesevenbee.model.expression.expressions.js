@@ -257,17 +257,17 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression', {
         inherits: [ThreeOneSevenBee.Model.Expression.ExpressionBase,ThreeOneSevenBee.Model.Expression.ILeaf],
-        value: 0,
+        number: 0,
         constructor: function (value) {
             ThreeOneSevenBee.Model.Expression.ExpressionBase.prototype.$constructor.call(this);
     
-            this.value = value;
+            this.number = value;
         },
         getValue: function () {
-            return Bridge.Int.format(this.value, 'G');
+            return Bridge.Int.format(this.number, 'G');
         },
         clone: function () {
-            return new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(this.value);
+            return new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(this.number);
         },
         replace: function (old, replacement) {
             return false;
@@ -281,7 +281,7 @@
             return true;
         },
         calculate: function () {
-            return this.value;
+            return this.number;
         },
         equalsT: function (otherBase) {
             var other = (Bridge.as(otherBase, ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression));
@@ -290,7 +290,7 @@
                 return false;
             }
     
-            return (Math.abs(this.value - other.value) < 4.94065645841247E-324);
+            return (Math.abs(this.number - other.number) < 4.94065645841247E-324);
         },
         treePrint: function (indent, isLast) {
             console.log(indent + "|-" + this.getValue());
@@ -482,6 +482,7 @@
     },
     insert: function (index, item) {
         this.expressions.insert(index, item);
+        item.setParent(this);
     },
     removeAt: function (index) {
         this.expressions.removeAt(index);

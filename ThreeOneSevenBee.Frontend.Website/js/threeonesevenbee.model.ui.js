@@ -255,7 +255,7 @@
             return view;
         },
         fit: function (view) {
-            return view.scale(Math.min(this.getWidth() / view.getWidth(), this.getHeight() / view.getHeight(), this.maxScale));
+            return view.scale(Math.min(this.getWidth() / view.getWidth(), Math.min(this.getHeight() / view.getHeight(), this.maxScale)));
         }
     });
     
@@ -338,7 +338,7 @@
                             exponent.setBaseline(exponent.getHeight() - left.getBaseline());
                             return exponent;
                         case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract: 
-                            var baseline = Math.max(operatorView1.getBaseline(), left.getBaseline(), right.getBaseline());
+                            var baseline = Math.max(operatorView1.getBaseline(), Math.max(left.getBaseline(), right.getBaseline()));
                             operatorView1.setX(left.getWidth());
                             operatorView1.setWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                             operatorView1.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
@@ -347,7 +347,7 @@
                             left.setY(baseline - left.getBaseline());
                             operatorView1.setY(baseline - operatorView1.getBaseline());
                             right.setY(baseline - right.getBaseline());
-                            var height = Math.max(left.getY() + left.getHeight(), operatorView1.getY() + operatorView1.getHeight(), right.getY() + right.getHeight());
+                            var height = Math.max(left.getY() + left.getHeight(), Math.max(operatorView1.getY() + operatorView1.getHeight(), right.getY() + right.getHeight()));
                             var subtraction = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(right.getX() + right.getWidth(), height), [
                                 [left],
                                 [operatorView1],
@@ -431,15 +431,15 @@
         build: function (identities, model) {
             var views = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
             var x = 0;
-            for (var index = 0; index < Bridge.Linq.Enumerable.from(identities).count(); index++) {
+            for (var index = 0; index < identities.getCount(); index++) {
                 (function () {
                     var indexCopy = index;
                     var view = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(identities.getItem(index), model);
-                    var frameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor$2", 200, 100, view, 1), {
+                    var frameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor$2", this.getWidth() / identities.getCount(), 100, view, 1), {
                         setPropagateClick: false
                     } );
                     frameView.setX(x);
-                    x += frameView.getWidth() + 20;
+                    x += frameView.getWidth();
                     frameView.onClick = function () {
                         model.applyIdentity(identities.getItem(indexCopy));
                     };

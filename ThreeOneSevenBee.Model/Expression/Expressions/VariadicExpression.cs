@@ -112,6 +112,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         public void Insert(Int32 index, ExpressionBase item)
         {
             expressions.Insert(index, item);
+            item.Parent = this;
         }
 
         public void RemoveAt(Int32 index)

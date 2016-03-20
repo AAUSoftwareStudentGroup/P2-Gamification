@@ -100,11 +100,11 @@ namespace ThreeOneSevenBee.Model.Expression
         public void ApplyIdentity(ExpressionBase identity)
         {
             Console.WriteLine(identity.ToString());
-            if (identities.Contains(identity))
-            {
-                if(Selected.Parent == null)
+                Console.WriteLine("nice trye");
+                if (Selected.Parent == null)
                 {
                     expression = identity;
+                    
                 }
                 else
                 {
@@ -124,14 +124,28 @@ namespace ThreeOneSevenBee.Model.Expression
                     var variadicParent = Selected.Parent as VariadicOperatorExpression;
                     if (variadicParent != null)
                     {
+                        var temp = identity as VariadicOperatorExpression;
+                        int selectedIndex = -1;
                         for (int index = 0; index < variadicParent.Count; index++)
                         {
-                            if(ReferenceEquals(variadicParent[index], Selected))
+                            if (ReferenceEquals(variadicParent[index], Selected))
                             {
-                                variadicParent[index] = identity;
+                                selectedIndex = index;
                             }
                         }
-                        identity.Parent = variadicParent;
+                        if (temp != null && temp.Type == variadicParent.Type)
+                        {
+                            variadicParent.RemoveAt(selectedIndex);
+                            foreach (var operand in temp)
+                            {
+                                variadicParent.Insert(selectedIndex, operand);
+                            }
+                        }
+                        else
+                        {
+                            variadicParent[selectedIndex] = identity;
+                            identity.Parent = variadicParent;
+                        }
                     }
                     var minusParent = Selected.Parent as UnaryMinusExpression;
                     if (minusParent != null)
@@ -140,7 +154,6 @@ namespace ThreeOneSevenBee.Model.Expression
                         identity.Parent = minusParent;
                     }
                 }
-            }
             UnSelectAll();
         }
 

@@ -8,21 +8,21 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
     public class NumericExpression : ExpressionBase, ILeaf
     {
-		private double value;
+		public double Number;
 
         public NumericExpression(double value)
         {
-            this.value = value;
+            Number = value;
         }
 
         public override string Value
         {
-            get { return value.ToString(); }
+            get { return Number.ToString(); }
         }
 
         public override ExpressionBase Clone()
         {
-            return new NumericExpression(value);
+            return new NumericExpression(Number);
         }
 
         public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
@@ -42,7 +42,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override double? Calculate()
         {
-            return value;
+            return Number;
 		}
 
         public override bool Equals(ExpressionBase otherBase)
@@ -52,7 +52,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             if (other == null)
                 return false;
 
-            return (Math.Abs(this.value - other.value) < double.Epsilon);
+            return (Math.Abs(this.Number - other.Number) < double.Epsilon);
         }
 
         public override string TreePrint(string indent, bool isLast)
