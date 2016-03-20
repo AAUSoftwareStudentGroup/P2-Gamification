@@ -6,7 +6,6 @@
             checkParentPaths: function (checkString, expressions) {
                 var $t;
                 if (expressions === void 0) { expressions = []; }
-                console.log(expressions);
                 $t = Bridge.getEnumerator(expressions);
                 while ($t.moveNext()) {
                     var expression = $t.getCurrent();
