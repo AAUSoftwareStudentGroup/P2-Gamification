@@ -25,7 +25,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 for (int index = 0; index < selection.Count; index++)
                 {
-                    if (!ReferenceEquals(selection[index].Parent, operatorExpression))
+                    if (ReferenceEquals(selection[index].Parent, operatorExpression) == false)
                     {
                         identity = null;
                         return false;

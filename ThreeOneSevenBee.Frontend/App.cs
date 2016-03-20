@@ -19,7 +19,7 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel model = new ExpressionModel("a^2*a^6", Rules.ItselfRule, Rules.ExponentToProductRule, Rules.ProductToExponentRule);
+            ExpressionModel model = new ExpressionModel("-b*b*b", Rules.ItselfRule, Rules.ExponentToProductRule, Rules.ProductToExponentRule);
 
             model.Expression.Clone();
 
@@ -31,7 +31,7 @@ namespace ThreeOneSevenBee.Frontend
             
             context.SetContentView(view);
             model.OnChanged += (m) => context.Draw();
-            model.OnChanged += (m) => m.Expression.PrettyPrint();
+            //model.OnChanged += (m) => m.Expression.PrettyPrint();
             context.Draw();
         }
     }

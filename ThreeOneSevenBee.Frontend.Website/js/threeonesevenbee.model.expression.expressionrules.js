@@ -11,7 +11,7 @@
                 var operatorExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
                 if (Bridge.hasValue(operatorExpression) && selection.getCount() > 0 && operatorExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
                     for (var index = 0; index < selection.getCount(); index++) {
-                        if (!selection.getItem(index).getParent() === operatorExpression) {
+                        if (selection.getItem(index).getParent() === operatorExpression === false) {
                             identity.v = null;
                             return false;
                         }

@@ -16,7 +16,7 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a^2*a^6", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
+                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("-b*b*b", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).itselfRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
     
                 model.getExpression().clone();
     
@@ -34,19 +34,9 @@
                 model.addOnChanged(function (m) {
                     context.draw();
                 });
-                model.addOnChanged($_.ThreeOneSevenBee.Frontend.App.f1);
+                //model.OnChanged += (m) => m.Expression.PrettyPrint();
                 context.draw();
             }
-        }
-    });
-    
-    var $_ = {};
-    
-    Bridge.ns("ThreeOneSevenBee.Frontend.App", $_)
-    
-    Bridge.apply($_.ThreeOneSevenBee.Frontend.App, {
-        f1: function (m) {
-            m.getExpression().prettyPrint();
         }
     });
     
