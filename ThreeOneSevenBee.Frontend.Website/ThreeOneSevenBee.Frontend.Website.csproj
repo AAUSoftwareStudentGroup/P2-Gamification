@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="Api\Githook.aspx" />
     <Content Include="js\bridge.js" />
     <Content Include="js\bridge.min.js" />
     <Content Include="js\threeonesevenbee.frontend.js" />
@@ -80,6 +81,10 @@
   <ItemGroup>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Api\Githook.aspx.cs">
+      <DependentUpon>Api\Githook.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
