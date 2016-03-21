@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace ThreeOneSevenBee.Frontend.Website
 {
-    public partial class Api_Githook : System.Web.UI.Page
+    public partial class ApiGithook : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
