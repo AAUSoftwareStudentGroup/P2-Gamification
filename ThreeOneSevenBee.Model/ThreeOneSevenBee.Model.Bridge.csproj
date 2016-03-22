@@ -63,6 +63,10 @@
     <Compile Include="Expression\Token.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Template.cs" />
+    <Compile Include="Polygon\PolygonCorner.cs" />
+    <Compile Include="Polygon\PolygonModel.cs" />
+    <Compile Include="Polygon\PolygonRelation.cs" />
+    <Compile Include="Polygon\PolygonSide.cs" />
     <Compile Include="UI\ButtonView.cs" />
     <Compile Include="UI\CompositeView.cs" />
     <Compile Include="UI\Context.cs" />

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="ThreeOneSevenBee.Frontend.Website.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="ThreeOneSevenBee.Frontend.Website.Default" %>
 
 <!DOCTYPE html>
 
