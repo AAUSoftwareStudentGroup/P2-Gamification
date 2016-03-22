@@ -9,9 +9,6 @@
                 }
             },
             main: function () {
-                var t = new ThreeOneSevenBee.Model.Template();
-                console.log(t.toString());
-    
                 var canvas = document.getElementById("canvas");
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
@@ -21,8 +18,8 @@
                 model.getExpression().clone();
     
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), [
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(model, 600, 300), {
-                        setX: 0,
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(model, 100, 300), {
+                        setX: 250,
                         setY: 0
                     } )],
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(model, 600, 100), {
@@ -34,7 +31,6 @@
                 model.addOnChanged(function (m) {
                     context.draw();
                 });
-                //model.OnChanged += (m) => m.Expression.PrettyPrint();
                 context.draw();
             }
         }

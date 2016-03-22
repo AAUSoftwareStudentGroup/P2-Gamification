@@ -99,61 +99,59 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public void ApplyIdentity(ExpressionBase identity)
         {
-            Console.WriteLine(identity.ToString());
-                Console.WriteLine("nice trye");
-                if (Selected.Parent == null)
+            if (Selected.Parent == null)
+            {
+                expression = identity;
+
+            }
+            else
+            {
+                var binaryParent = Selected.Parent as BinaryOperatorExpression;
+                if (binaryParent != null)
                 {
-                    expression = identity;
-                    
+                    if (ReferenceEquals(binaryParent.Left, Selected))
+                    {
+                        binaryParent.Left = identity;
+                    }
+                    else
+                    {
+                        binaryParent.Right = identity;
+                    }
+                    identity.Parent = binaryParent;
                 }
-                else
+                var variadicParent = Selected.Parent as VariadicOperatorExpression;
+                if (variadicParent != null)
                 {
-                    var binaryParent = Selected.Parent as BinaryOperatorExpression;
-                    if (binaryParent != null)
+                    var temp = identity as VariadicOperatorExpression;
+                    int selectedIndex = -1;
+                    for (int index = 0; index < variadicParent.Count; index++)
                     {
-                        if(ReferenceEquals(binaryParent.Left, Selected))
+                        if (ReferenceEquals(variadicParent[index], Selected))
                         {
-                            binaryParent.Left = identity;
-                        }
-                        else
-                        {
-                            binaryParent.Right = identity;
-                        }
-                        identity.Parent = binaryParent;
-                    }
-                    var variadicParent = Selected.Parent as VariadicOperatorExpression;
-                    if (variadicParent != null)
-                    {
-                        var temp = identity as VariadicOperatorExpression;
-                        int selectedIndex = -1;
-                        for (int index = 0; index < variadicParent.Count; index++)
-                        {
-                            if (ReferenceEquals(variadicParent[index], Selected))
-                            {
-                                selectedIndex = index;
-                            }
-                        }
-                        if (temp != null && temp.Type == variadicParent.Type)
-                        {
-                            variadicParent.RemoveAt(selectedIndex);
-                            foreach (var operand in temp)
-                            {
-                                variadicParent.Insert(selectedIndex, operand);
-                            }
-                        }
-                        else
-                        {
-                            variadicParent[selectedIndex] = identity;
-                            identity.Parent = variadicParent;
+                            selectedIndex = index;
                         }
                     }
-                    var minusParent = Selected.Parent as UnaryMinusExpression;
-                    if (minusParent != null)
+                    if (temp != null && temp.Type == variadicParent.Type)
                     {
-                        minusParent.Expression = identity;
-                        identity.Parent = minusParent;
+                        variadicParent.RemoveAt(selectedIndex);
+                        foreach (var operand in temp)
+                        {
+                            variadicParent.Insert(selectedIndex, operand);
+                        }
+                    }
+                    else
+                    {
+                        variadicParent[selectedIndex] = identity;
+                        identity.Parent = variadicParent;
                     }
                 }
+                var minusParent = Selected.Parent as UnaryMinusExpression;
+                if (minusParent != null)
+                {
+                    minusParent.Expression = identity;
+                    identity.Parent = minusParent;
+                }
+            }
             UnSelectAll();
         }
 
