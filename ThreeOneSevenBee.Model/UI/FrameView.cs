@@ -10,23 +10,32 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class FrameView : View
     {
-        public FrameView(double width, double height, View content) : 
-            this(width, height, content, true, height / content.Height) { }
+        public FrameView(double width, double height, View content) :
+            this(width, height, content, true, height / content.Height)
+        { }
 
         public FrameView(double width, double height, View content, double maxScale) :
-            this(width, height, content, true, maxScale) { }
+            this(width, height, content, true, maxScale)
+        { }
 
-        public FrameView(double width, double height, View content, bool propagateClick, double maxScale)
+        public FrameView(double width, double height, View content, bool propagateClick, double maxScale) : base(0, 0, width, height)
         {
             Width = width;
             Height = height;
             PropagateClick = propagateClick;
             MaxScale = maxScale;
+            Padding = 0;
             Content = Align(Fit(content));
         }
 
         public View Content { protected set; get; }
         public bool PropagateClick { set; get; }
+        public double Padding;
+        public double InnerX { get { return X - Padding; } }
+        public double InnerY { get { return Y - Padding; } }
+        public double InnerWidth { get { return Width - Padding; } }
+        public double InnerHeight { get { return Height - Padding; } }
+
         public double MaxScale;
 
         public void setContent(View content)
@@ -36,7 +45,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public override void Click(double x, double y)
         {
-            
+
             if (base.ContainsPoint(x, y))
             {
                 if (PropagateClick)
@@ -46,7 +55,6 @@ namespace ThreeOneSevenBee.Model.UI
 
                 if (OnClick != null)
                 {
-                    Console.WriteLine("tets");
                     OnClick();
                 }
             }
@@ -54,19 +62,20 @@ namespace ThreeOneSevenBee.Model.UI
 
         public override void DrawWithContext(Context context, double offsetX, double offsetY)
         {
-            Content.DrawWithContext(context, offsetX + X, offsetY + Y);
+            context.Draw(this, offsetX, offsetY);
+            Content.DrawWithContext(context, offsetX + InnerX, offsetY + InnerY);
         }
 
         public View Align(View view)
         {
-            view.X = (Width - view.Width) / 2;
-            view.Y = (Height - view.Height) / 2;
+            view.X = (InnerWidth - view.Width) / 2;
+            view.Y = (InnerHeight - view.Height) / 2;
             return view;
         }
 
         public View Fit(View view)
         {
-            return view.Scale(System.Math.Min(Width / view.Width, Math.Min(Height / view.Height, MaxScale)));
+            return view.Scale(System.Math.Min(InnerWidth / view.Width, Math.Min(InnerHeight / view.Height, MaxScale)));
         }
     }
 }

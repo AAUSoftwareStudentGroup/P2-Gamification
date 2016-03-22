@@ -33,29 +33,14 @@ namespace ThreeOneSevenBee.Frontend
             context.ClearRect(0, 0, (int)Width, (int)Height);
         }
 
-        public override void Draw(ProgressbarStarView view, double offsetX, double offsetY)
-        {
-            context.BeginPath();
-            context.Rect(view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
-            context.Rect(view.X + offsetX, view.Y + offsetY, view.Width * view.progressbar.Percentage, view.Height);
-            context.ClosePath();
-            context.Stroke();
-        }
-
         public override void Draw(LabelView view, double offsetX, double offsetY)
         {
+            Draw(view as View, offsetX, offsetY);
+            context.FillStyle = "#000000";
             context.TextBaseline = CanvasTypes.CanvasTextBaselineAlign.Middle;
             context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
-            context.Font = view.Height/1.5 + "px Arial Black";
+            context.Font = view.Height + "px Cambria Math";
             context.FillText(view.Text, (int)(view.X + offsetX + view.Width / 2), (int)(view.Y + offsetY + view.Height / 2));
-        }
-
-        public override void Draw(ButtonView view, double offsetX, double offsetY)
-        {
-            context.FillStyle = view.Selected ? HTMLColor.LightBlue : "#eeeeee";
-            context.FillRect((int)(view.X + offsetX), (int)(view.Y + offsetY), (int)view.Width, (int)view.Height);
-            context.FillStyle = HTMLColor.Black;
-            Draw(view as LabelView, offsetX, offsetY);
         }
 
         public override void Draw(OperatorButtonView view, double offsetX, double offsetY)
@@ -97,6 +82,19 @@ namespace ThreeOneSevenBee.Frontend
                 context.Stroke();
                 context.ClosePath();
             }
+        }
+
+        public override void Draw(View view, double offsetX, double offsetY)
+        {
+            context.FillStyle = view.BackgroundColor;
+            context.FillRect((int)(view.X + offsetX), (int)(view.Y + offsetY), (int)view.Width, (int)view.Height);
+        }
+
+        public override void Draw(ImageView view, double offsetX, double offsetY)
+        {
+            ImageElement img = new ImageElement();
+            img.Src = "img/" + view.Image;
+            context.DrawImage(img, view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
         }
     }
 }

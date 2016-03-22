@@ -19,7 +19,10 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 int indexCopy = index;
                 View view = ExpressionView.Build(identities[index], model);
-                FrameView frameView = new FrameView(Width / identities.Count, 100, view, 1) { PropagateClick = false };
+                FrameView frameView = new FrameView(Width / identities.Count, Height, view, 1)
+                {
+                    PropagateClick = false
+            };
                 frameView.X = x;
                 x += frameView.Width;
                 frameView.OnClick = () => model.ApplyIdentity(identities[indexCopy]);

@@ -59,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="img\star.png" />
+    <Content Include="img\star_activated.png" />
     <Content Include="js\bridge.js" />
     <Content Include="js\bridge.min.js" />
     <Content Include="js\threeonesevenbee.frontend.js" />
@@ -92,6 +94,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

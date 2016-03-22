@@ -16,7 +16,7 @@
     <script src="js/threeonesevenbee.frontend.js"></script>
 </head>
 <body>
-    <canvas id="canvas" width="600" height="400" style="border:dashed;"></canvas>
+    <canvas id="canvas" width="600" height="400" style="border:1px solid black;"></canvas>
     <form id="form1" runat="server">
         <div>
 

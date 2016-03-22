@@ -32,15 +32,31 @@ namespace ThreeOneSevenBee.Model.UI
             _contentView.DrawWithContext(this, 0, 0);
         }
 
-        public abstract void Draw(LabelView view, double offsetX, double offsetY);
+        public abstract void Draw(View view, double offsetX, double offsetY);
 
-        public abstract void Draw(ProgressbarStarView view, double offsetX, double offsetY);
+        public virtual void Draw(ImageView view, double offsetX, double offsetY)
+        {
+            Draw(view as View, offsetX, offsetY);
+        }
 
-        public abstract void Draw(OperatorButtonView view, double offsetX, double offsetY);
+        public virtual void Draw(LabelView view, double offsetX, double offsetY)
+        {
+            Draw(view as View, offsetX, offsetY);
+        }
 
         public virtual void Draw(ButtonView view, double offsetX, double offsetY)
         {
             Draw(view as LabelView, offsetX, offsetY);
+        }
+
+        public virtual void Draw(ProgressbarStarView view, double offsetX, double offsetY)
+        {
+            Draw(view as View, offsetX, offsetY);
+        }
+
+        public virtual void Draw(OperatorButtonView view, double offsetX, double offsetY)
+        {
+            Draw(view as View, offsetX, offsetY);
         }
     }
 }

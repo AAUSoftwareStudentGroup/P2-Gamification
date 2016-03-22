@@ -5,10 +5,8 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class CompositeView : View, IEnumerable<View>
     {
-        public CompositeView(double width, double height)
+        public CompositeView(double width, double height) : base(0, 0, width, height)
         {
-            Width = width;
-            Height = height;
             Children = new List<View>();
             PropagateClick = true;
         }
@@ -19,6 +17,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public override void DrawWithContext(Context context, double offsetX, double offsetY)
         {
+            context.Draw(this, offsetX, offsetY);
             foreach (var child in Children)
             {
                 child.DrawWithContext(context, offsetX + X, offsetY + Y);

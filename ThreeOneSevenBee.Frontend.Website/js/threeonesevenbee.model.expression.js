@@ -197,8 +197,6 @@
     },
     applyIdentity: function (identity) {
         var $t;
-        console.log(identity.toString());
-        console.log("nice trye");
         if (!Bridge.hasValue(this.getSelected().getParent())) {
             this.expression = identity;
     

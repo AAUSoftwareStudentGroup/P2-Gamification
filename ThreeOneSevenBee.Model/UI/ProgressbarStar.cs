@@ -28,29 +28,29 @@ namespace ThreeOneSevenBee.Model.UI
             set { _maxProgress = value; }
         }
 
-        private List<int> _stars;
+        public List<int> Stars;
 
         public ProgressbarStar(int progress, int maxValue, params int[] stars)
         {
             this._currentProgress = progress;
             this._maxProgress = maxValue;
-            _stars = new List<int>(stars);
+            Stars = new List<int>(stars);
             GetStars();
         }
 
         public void Add(int star)
         {
-            if (!_stars.Contains(star))
+            if (!Stars.Contains(star))
             {
-                _stars.Add(star);
+                Stars.Add(star);
             }
         }
 
         public void Remove(int star)
         {
-            if (_stars.Contains(star))
+            if (Stars.Contains(star))
             {
-                _stars.Remove(star);
+                Stars.Remove(star);
             }
         }
 
@@ -59,7 +59,7 @@ namespace ThreeOneSevenBee.Model.UI
             int starsCount = 0;
             int totalStars = 0;
 
-            foreach (int i in _stars)
+            foreach (int i in Stars)
             {
                 totalStars++;
                 if (i <= _currentProgress)

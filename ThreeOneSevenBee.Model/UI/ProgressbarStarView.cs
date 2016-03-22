@@ -6,18 +6,19 @@ using System.Threading.Tasks;
 
 namespace ThreeOneSevenBee.Model.UI
 {
-    public class ProgressbarStarView : View
+    public class ProgressbarStarView : CompositeView
     {
-        public ProgressbarStar progressbar;
-
-        public ProgressbarStarView(ProgressbarStar progressbar)
+        public ProgressbarStarView(ProgressbarStar progressbar, double width, double height) : base(width, height)
         {
-            this.progressbar = new ProgressbarStar(50, 100);
-        }
-
-        public override void DrawWithContext(Context context, double offsetX, double offsetY)
-        {
-            context.Draw(this, offsetX, offsetY);
+            PropagateClick = false;
+            Children = new List<View>()
+            {
+                new View(0, 0, Width * progressbar.Percentage, height) { BackgroundColor = "#2A9300" },
+            };
+            foreach (int star in progressbar.Stars)
+            {
+                Children.Add(new ImageView(star < progressbar.Progress ? "star_activated.png" : "star.png", height, height) { X = (double)star / progressbar.MaxProgress * Width - Height / 2, BackgroundColor = "#000000" });
+            }
         }
     }
 }

@@ -5,14 +5,14 @@ using System.Text;
 
 namespace ThreeOneSevenBee.Model.UI
 {
-    public class LabelView : View
+    public class ImageView : View
     {
-        public LabelView(string text) : base(0, 0, 10, 10)
-        {
-            Text = text;
-        }
+        public string Image { get; set; }
 
-        public string Text { get; set; }
+        public ImageView(string image, double width, double height) : base(0, 0, width, height)
+        {
+            Image = image;
+        }
 
         public override void DrawWithContext(Context context, double offsetX, double offsetY)
         {

@@ -10,9 +10,19 @@
                 X: 0,
                 Y: 0,
                 Baseline: 0,
-                Name: null,
-                Selected: false
+                BackgroundColor: null
             }
+        },
+        constructor: function (x, y, width, height) {
+            this.setX(x);
+            this.setY(y);
+            this.setWidth(width);
+            this.setHeight(height);
+            this.setBaseline(height / 2);
+            this.setBackgroundColor("transparent");
+        },
+        drawWithContext: function (context, offsetX, offsetY) {
+            context.draw$6(this, offsetX, offsetY);
         },
         click: function (x, y) {
             if (this.containsPoint(x, y) && Bridge.hasValue(this.onClick)) {
@@ -50,8 +60,20 @@
             this.clear();
             this._contentView.drawWithContext(this, 0, 0);
         },
+        draw$2: function (view, offsetX, offsetY) {
+            this.draw$6(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+        },
+        draw$3: function (view, offsetX, offsetY) {
+            this.draw$6(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+        },
         draw$1: function (view, offsetX, offsetY) {
-            this.draw$2(Bridge.as(view, ThreeOneSevenBee.Model.UI.LabelView), offsetX, offsetY);
+            this.draw$3(Bridge.as(view, ThreeOneSevenBee.Model.UI.LabelView), offsetX, offsetY);
+        },
+        draw$5: function (view, offsetX, offsetY) {
+            this.draw$6(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+        },
+        draw$4: function (view, offsetX, offsetY) {
+            this.draw$6(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         }
     });
     
@@ -76,12 +98,12 @@
     Bridge.define('ThreeOneSevenBee.Model.UI.ProgressbarStar', {
         _maxProgress: 0,
         _currentProgress: 0,
-        _stars: null,
+        stars: null,
         constructor: function (progress, maxValue, stars) {
             if (stars === void 0) { stars = []; }
             this._currentProgress = progress;
             this._maxProgress = maxValue;
-            this._stars = new Bridge.List$1(Bridge.Int)(stars);
+            this.stars = new Bridge.List$1(Bridge.Int)(stars);
             this.getStars();
         },
         getProgress: function () {
@@ -100,13 +122,13 @@
             this._maxProgress = value;
         },
         add: function (star) {
-            if (!this._stars.contains(star)) {
-                this._stars.add(star);
+            if (!this.stars.contains(star)) {
+                this.stars.add(star);
             }
         },
         remove: function (star) {
-            if (this._stars.contains(star)) {
-                this._stars.remove(star);
+            if (this.stars.contains(star)) {
+                this.stars.remove(star);
             }
         },
         getStars: function () {
@@ -114,7 +136,7 @@
             var starsCount = 0;
             var totalStars = 0;
     
-            $t = Bridge.getEnumerator(this._stars);
+            $t = Bridge.getEnumerator(this.stars);
             while ($t.moveNext()) {
                 var i = $t.getCurrent();
                 totalStars++;
@@ -135,12 +157,12 @@
             }
         },
         constructor: function (text) {
-            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this);
+            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, 0, 0, 10, 10);
     
             this.setText(text);
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$2(this, offsetX, offsetY);
+            context.draw$3(this, offsetX, offsetY);
         }
     });
     
@@ -153,15 +175,14 @@
             }
         },
         constructor: function (width, height) {
-            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this);
+            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, 0, 0, width, height);
     
-            this.setWidth(width);
-            this.setHeight(height);
             this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
             this.setPropagateClick(true);
         },
         drawWithContext: function (context, offsetX, offsetY) {
             var $t;
+            context.draw$6(this, offsetX, offsetY);
             $t = Bridge.getEnumerator(this.children);
             while ($t.moveNext()) {
                 var child = $t.getCurrent();
@@ -206,6 +227,7 @@
     
     Bridge.define('ThreeOneSevenBee.Model.UI.FrameView', {
         inherits: [ThreeOneSevenBee.Model.UI.View],
+        padding: 0,
         maxScale: 0,
         config: {
             properties: {
@@ -222,13 +244,26 @@
     
         },
         constructor$1: function (width, height, content, propagateClick, maxScale) {
-            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this);
+            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, 0, 0, width, height);
     
             this.setWidth(width);
             this.setHeight(height);
             this.setPropagateClick(propagateClick);
             this.maxScale = maxScale;
+            this.padding = 0;
             this.setContent$1(this.align(this.fit(content)));
+        },
+        getInnerX: function () {
+            return this.getX() - this.padding;
+        },
+        getInnerY: function () {
+            return this.getY() - this.padding;
+        },
+        getInnerWidth: function () {
+            return this.getWidth() - this.padding;
+        },
+        getInnerHeight: function () {
+            return this.getHeight() - this.padding;
         },
         setContent: function (content) {
             this.setContent$1(this.align(this.fit(content)));
@@ -241,34 +276,38 @@
                 }
     
                 if (Bridge.hasValue(this.onClick)) {
-                    console.log("tets");
                     this.onClick();
                 }
             }
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            this.getContent$1().drawWithContext(context, offsetX + this.getX(), offsetY + this.getY());
+            context.draw$6(this, offsetX, offsetY);
+            this.getContent$1().drawWithContext(context, offsetX + this.getInnerX(), offsetY + this.getInnerY());
         },
         align: function (view) {
-            view.setX((this.getWidth() - view.getWidth()) / 2);
-            view.setY((this.getHeight() - view.getHeight()) / 2);
+            view.setX((this.getInnerWidth() - view.getWidth()) / 2);
+            view.setY((this.getInnerHeight() - view.getHeight()) / 2);
             return view;
         },
         fit: function (view) {
-            return view.scale(Math.min(this.getWidth() / view.getWidth(), Math.min(this.getHeight() / view.getHeight(), this.maxScale)));
+            return view.scale(Math.min(this.getInnerWidth() / view.getWidth(), Math.min(this.getInnerHeight() / view.getHeight(), this.maxScale)));
         }
     });
     
-    Bridge.define('ThreeOneSevenBee.Model.UI.ProgressbarStarView', {
+    Bridge.define('ThreeOneSevenBee.Model.UI.ImageView', {
         inherits: [ThreeOneSevenBee.Model.UI.View],
-        progressbar: null,
-        constructor: function (progressbar) {
-            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this);
+        config: {
+            properties: {
+                Image: null
+            }
+        },
+        constructor: function (image, width, height) {
+            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, 0, 0, width, height);
     
-            this.progressbar = new ThreeOneSevenBee.Model.UI.ProgressbarStar(50, 100);
+            this.setImage(image);
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$4(this, offsetX, offsetY);
+            context.draw$2(this, offsetX, offsetY);
         }
     });
     
@@ -398,7 +437,7 @@
                     setWidth: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
                     setHeight: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
                     setBaseline: Bridge.Int.div(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE, 2),
-                    setSelected: model.selectionIndex(expression) !== -1
+                    setBackgroundColor: model.selectionIndex(expression) !== -1 ? "#cccccc" : "transparent"
                 } );
     
             }
@@ -435,7 +474,7 @@
                 (function () {
                     var indexCopy = index;
                     var view = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(identities.getItem(index), model);
-                    var frameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor$2", this.getWidth() / identities.getCount(), 100, view, 1), {
+                    var frameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor$2", this.getWidth() / identities.getCount(), this.getHeight(), view, 1), {
                         setPropagateClick: false
                     } );
                     frameView.setX(x);
@@ -461,6 +500,29 @@
         }
     });
     
+    Bridge.define('ThreeOneSevenBee.Model.UI.ProgressbarStarView', {
+        inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
+        constructor: function (progressbar, width, height) {
+            ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
+            var $t;
+    
+            this.setPropagateClick(false);
+            this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
+                [Bridge.merge(new ThreeOneSevenBee.Model.UI.View(0, 0, this.getWidth() * progressbar.getPercentage(), height), {
+                    setBackgroundColor: "#2A9300"
+                } )]
+            ] );
+            $t = Bridge.getEnumerator(progressbar.stars);
+            while ($t.moveNext()) {
+                var star = $t.getCurrent();
+                this.children.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(star < progressbar.getProgress() ? "star_activated.png" : "star.png", height, height), {
+                    setX: Bridge.cast(star, Number) / progressbar.getMaxProgress() * this.getWidth() - this.getHeight() / 2,
+                    setBackgroundColor: "#000000"
+                } ));
+            }
+    }
+    });
+    
     Bridge.define('ThreeOneSevenBee.Model.UI.OperatorButtonView', {
         inherits: [ThreeOneSevenBee.Model.UI.ButtonView],
         config: {
@@ -474,7 +536,7 @@
             this.settype(type);
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$3(this, offsetX, offsetY);
+            context.draw$4(this, offsetX, offsetY);
         }
     });
     

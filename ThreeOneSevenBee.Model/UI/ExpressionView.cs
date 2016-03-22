@@ -124,7 +124,7 @@ namespace ThreeOneSevenBee.Model.UI
                 Width = NUMVAR_SIZE,
                 Height = NUMVAR_SIZE,
                 Baseline = NUMVAR_SIZE / 2,
-                Selected = model.SelectionIndex(expression) != -1
+                BackgroundColor = model.SelectionIndex(expression) != -1 ? "#cccccc" : "transparent"
             };
 
         }
