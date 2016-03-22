@@ -13,23 +13,23 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var model = new ThreeOneSevenBee.Model.Expression.ExpressionModel("{b^3*a^2}/{a^5*b^2}", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
+                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("{b^3*a^2}/{a^5*b^2}", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
     
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(new ThreeOneSevenBee.Model.UI.ProgressbarStar(50, 100, [30, 60, 75]), 600, 20), {
                         setY: 30
                     } )],
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(model, 600, 300), {
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(expressionModel, 600, 300), {
                         setX: 0,
                         setY: 50
                     } )],
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(model, 600, 50), {
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(expressionModel, 600, 50), {
                         setY: 350
                     } )]
                 ] );
     
                 context.setContentView(view);
-                model.addOnChanged(function (m) {
+                expressionModel.addOnChanged(function (m) {
                     context.draw();
                 });
                 context.draw();

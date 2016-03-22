@@ -11,9 +11,10 @@ namespace ThreeOneSevenBee.Model.UI
         public ProgressbarStarView(ProgressbarStar progressbar, double width, double height) : base(width, height)
         {
             PropagateClick = false;
+            BackgroundColor = "#E2E2E2";
             Children = new List<View>()
             {
-                new View(0, 0, Width * progressbar.Percentage, height) { BackgroundColor = "#2A9300" },
+                new View(0, 0, Width * progressbar.Percentage, height) { BackgroundColor = "#2A9300" }
             };
             foreach (int star in progressbar.Stars)
             {

@@ -22,7 +22,7 @@ namespace ThreeOneSevenBee.Model.UI
                 FrameView frameView = new FrameView(Width / identities.Count, Height, view, 1)
                 {
                     PropagateClick = false
-            };
+                };
                 frameView.X = x;
                 x += frameView.Width;
                 frameView.OnClick = () => model.ApplyIdentity(identities[indexCopy]);

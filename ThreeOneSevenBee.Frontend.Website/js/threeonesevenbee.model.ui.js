@@ -507,6 +507,7 @@
             var $t;
     
             this.setPropagateClick(false);
+            this.setBackgroundColor("#E2E2E2");
             this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
                 [Bridge.merge(new ThreeOneSevenBee.Model.UI.View(0, 0, this.getWidth() * progressbar.getPercentage(), height), {
                     setBackgroundColor: "#2A9300"
