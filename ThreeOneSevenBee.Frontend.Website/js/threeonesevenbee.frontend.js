@@ -10,21 +10,23 @@
             },
             main: function () {
                 var canvas = document.getElementById("canvas");
+                canvas.width = document.documentElement.clientWidth;
+                canvas.height = document.documentElement.clientHeight;
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("{b^3*a^2}/{a^5*b^2}", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
+                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("(a+b/{e*f+q)", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
     
-                var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), [
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(new ThreeOneSevenBee.Model.UI.ProgressbarStar(50, 100, [30, 60, 75]), 600, 20), {
+                var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(canvas.width, canvas.height), [
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(new ThreeOneSevenBee.Model.UI.ProgressbarStar(50, 100, [30, 60, 75]), canvas.width, 20), {
                         setY: 30
                     } )],
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(expressionModel, 600, 300), {
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(expressionModel, canvas.width, canvas.height - 70), {
                         setX: 0,
                         setY: 50
                     } )],
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(expressionModel, 600, 50), {
-                        setY: 350
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(expressionModel, canvas.width, 50), {
+                        setY: canvas.height - 50
                     } )]
                 ] );
     
@@ -58,7 +60,7 @@
             this.context.clearRect(0, 0, Bridge.Int.trunc(this.getWidth()), Bridge.Int.trunc(this.getHeight()));
         },
         draw$3: function (view, offsetX, offsetY) {
-            this.draw$6(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$7(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             this.context.fillStyle = "#000000";
             this.context.textBaseline = "middle";
             this.context.textAlign = "center";
@@ -106,7 +108,19 @@
                 }
             }
         },
-        draw$6: function (view, offsetX, offsetY) {
+        draw$5: function (view, offsetX, offsetY) {
+            if (view.getType() === ThreeOneSevenBee.Model.UI.ParenthesisType.left) {
+                this.context.beginPath();
+                this.context.ellipse(view.getX() + view.getWidth() + offsetX, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), view.getHeight() / 2, 0, Math.PI / 2, (3 * Math.PI) / 2);
+                this.context.stroke();
+            }
+            else  {
+                this.context.beginPath();
+                this.context.ellipse(view.getX() + offsetX, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), view.getHeight() / 2, 0, Math.PI / 2, (3 * Math.PI) / 2, true);
+                this.context.stroke();
+            }
+        },
+        draw$7: function (view, offsetX, offsetY) {
             this.context.fillStyle = view.getBackgroundColor();
             this.context.fillRect(Bridge.Int.trunc((view.getX() + offsetX)), Bridge.Int.trunc((view.getY() + offsetY)), Bridge.Int.trunc(view.getWidth()), Bridge.Int.trunc(view.getHeight()));
         },

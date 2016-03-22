@@ -54,7 +54,12 @@ namespace ThreeOneSevenBee.Model.UI
             Draw(view as View, offsetX, offsetY);
         }
 
-        public virtual void Draw(OperatorButtonView view, double offsetX, double offsetY)
+        public virtual void Draw(OperatorView view, double offsetX, double offsetY)
+        {
+            Draw(view as View, offsetX, offsetY);
+        }
+
+        public virtual void Draw(ParenthesisView view, double offsetX, double offsetY)
         {
             Draw(view as View, offsetX, offsetY);
         }

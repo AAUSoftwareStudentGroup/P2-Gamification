@@ -782,7 +782,5 @@
         }
     });
     
-    
-    
     Bridge.init();
 })(this);

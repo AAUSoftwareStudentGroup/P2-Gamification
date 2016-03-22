@@ -13,19 +13,21 @@ namespace ThreeOneSevenBee.Frontend
         public static void Main()
         {
             CanvasElement canvas = Document.GetElementById<CanvasElement>("canvas");
+            canvas.Width = Document.DocumentElement.ClientWidth;
+            canvas.Height = Document.DocumentElement.ClientHeight;
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel expressionModel = new ExpressionModel("{b^3*a^2}/{a^5*b^2}", 
+            ExpressionModel expressionModel = new ExpressionModel("(a+b/{e*f+q)", 
                 Rules.DivideRule, Rules.ExponentToProductRule, Rules.ProductToExponentRule);
 
-            View view = new CompositeView(600, 400)
+            View view = new CompositeView(canvas.Width, canvas.Height)
             {
-                new ProgressbarStarView(new ProgressbarStar(50, 100, 30, 60, 75), 600, 20) { Y=30 },
-                new ExpressionView(expressionModel, 600, 300) { X = 0, Y = 50 },
-                new IdentityMenuView(expressionModel, 600, 50) { Y = 350 }
+                new ProgressbarStarView(new ProgressbarStar(50, 100, 30, 60, 75), canvas.Width, 20) { Y=30 },
+                new ExpressionView(expressionModel, canvas.Width, canvas.Height - 70) { X = 0, Y = 50 },
+                new IdentityMenuView(expressionModel, canvas.Width, 50) { Y = canvas.Height - 50 }
             };
-            
+
             context.SetContentView(view);
             expressionModel.OnChanged += (m) => context.Draw();
             context.Draw();

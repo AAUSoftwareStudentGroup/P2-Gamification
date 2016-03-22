@@ -43,7 +43,7 @@ namespace ThreeOneSevenBee.Frontend
             context.FillText(view.Text, (int)(view.X + offsetX + view.Width / 2), (int)(view.Y + offsetY + view.Height / 2));
         }
 
-        public override void Draw(OperatorButtonView view, double offsetX, double offsetY)
+        public override void Draw(OperatorView view, double offsetX, double offsetY)
         {
             if (view.type == OperatorType.Divide)
             {
@@ -84,6 +84,22 @@ namespace ThreeOneSevenBee.Frontend
             }
         }
 
+        public override void Draw(ParenthesisView view, double offsetX, double offsetY)
+        {
+            if(view.Type == ParenthesisType.Left)
+            {
+                context.BeginPath();
+                context.Ellipse(view.X + view.Width + offsetX, view.Y + view.Height / 2 + offsetY, view.Width, view.Height / 2, 0, Math.PI / 2, (3 * Math.PI) / 2);
+                context.Stroke();
+            }
+            else
+            {
+                context.BeginPath();
+                context.Ellipse(view.X + offsetX, view.Y + view.Height / 2 + offsetY, view.Width, view.Height / 2, 0, Math.PI / 2, (3 * Math.PI) / 2, true);
+                context.Stroke();
+            }
+        }
+
         public override void Draw(View view, double offsetX, double offsetY)
         {
             context.FillStyle = view.BackgroundColor;
@@ -96,5 +112,6 @@ namespace ThreeOneSevenBee.Frontend
             img.Src = "img/" + view.Image;
             context.DrawImage(img, view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
         }
+
     }
 }

@@ -6,11 +6,11 @@ using ThreeOneSevenBee.Model.Expression.Expressions;
 
 namespace ThreeOneSevenBee.Model.UI
 {
-    public class OperatorButtonView : ButtonView
+    public class OperatorView : View
     {
         public OperatorType type { get; set; }
 
-        public OperatorButtonView(OperatorType type, Action onClick) : base("", onClick)
+        public OperatorView(OperatorType type) : base(0, 0, 10, 10)
         {
             this.type = type;
         }

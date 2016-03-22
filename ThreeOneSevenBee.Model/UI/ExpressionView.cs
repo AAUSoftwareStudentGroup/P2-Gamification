@@ -13,14 +13,14 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class ExpressionView : FrameView
     {
-        public static int NUMVAR_SIZE = 20;
+        public static double NUMVAR_SIZE = 20;
         public static View Build(ExpressionBase expression, ExpressionModel model)
         {
             UnaryMinusExpression minusExpression = expression as UnaryMinusExpression;
             if(minusExpression != null)
             {
                 View view = Build(minusExpression.Expression, model);
-                View operatorView = new OperatorButtonView(minusExpression.Type, null);
+                View operatorView = new OperatorView(minusExpression.Type);
                 operatorView.Width = NUMVAR_SIZE;
                 operatorView.Height = NUMVAR_SIZE;
                 operatorView.Baseline = NUMVAR_SIZE / 2;
@@ -35,7 +35,7 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 View left = Build(operatorExpression.Left, model);
                 View right = Build(operatorExpression.Right, model);
-                View operatorView = new OperatorButtonView(operatorExpression.Type, null);
+                View operatorView = new OperatorView(operatorExpression.Type);
                 switch (operatorExpression.Type)
                 {
                     case OperatorType.Divide:
@@ -98,7 +98,7 @@ namespace ThreeOneSevenBee.Model.UI
                 {
                     if (views.Count != 0)
                     {
-                        View operatorView = new OperatorButtonView(variadicExpression.Type, null);
+                        View operatorView = new OperatorView(variadicExpression.Type);
                         operatorView.X = offsetX;
                         operatorView.Width = NUMVAR_SIZE;
                         operatorView.Height = NUMVAR_SIZE;
@@ -118,6 +118,19 @@ namespace ThreeOneSevenBee.Model.UI
                     height = System.Math.Max(height, view.Y + view.Height);
                 }
                 return new CompositeView(offsetX, height) { Children = views, Baseline = maxBaseline };
+            }
+            DelimiterExpression delimiterExpression = expression as DelimiterExpression;
+            if(delimiterExpression != null)
+            {
+                View view = Build(delimiterExpression.Expression, model);
+                view.X = NUMVAR_SIZE / 2;
+                View compositeView = new CompositeView(view.Width + NUMVAR_SIZE, view.Height)
+                {
+                    new ParenthesisView(ParenthesisType.Left) { Width = NUMVAR_SIZE / 2, Height = view.Height },
+                    view,
+                    new ParenthesisView(ParenthesisType.Right) { X = view.Width + NUMVAR_SIZE / 2, Width = NUMVAR_SIZE / 2, Height = view.Height },
+                };
+                return compositeView;
             }
             return new ButtonView(expression.ToString(), () => model.Select(expression))
             {

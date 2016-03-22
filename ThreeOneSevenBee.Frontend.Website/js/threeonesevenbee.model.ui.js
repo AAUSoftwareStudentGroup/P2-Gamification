@@ -22,7 +22,7 @@
             this.setBackgroundColor("transparent");
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$6(this, offsetX, offsetY);
+            context.draw$7(this, offsetX, offsetY);
         },
         click: function (x, y) {
             if (this.containsPoint(x, y) && Bridge.hasValue(this.onClick)) {
@@ -61,20 +61,31 @@
             this._contentView.drawWithContext(this, 0, 0);
         },
         draw$2: function (view, offsetX, offsetY) {
-            this.draw$6(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$7(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$3: function (view, offsetX, offsetY) {
-            this.draw$6(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$7(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$1: function (view, offsetX, offsetY) {
             this.draw$3(Bridge.as(view, ThreeOneSevenBee.Model.UI.LabelView), offsetX, offsetY);
         },
-        draw$5: function (view, offsetX, offsetY) {
-            this.draw$6(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+        draw$6: function (view, offsetX, offsetY) {
+            this.draw$7(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$4: function (view, offsetX, offsetY) {
-            this.draw$6(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$7(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+        },
+        draw$5: function (view, offsetX, offsetY) {
+            this.draw$7(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.UI.ParenthesisType', {
+        statics: {
+            left: 0,
+            right: 1
+        },
+        $enum: true
     });
     
     Bridge.define('ThreeOneSevenBee.Model.UI.ProgressbarCircle', {
@@ -182,7 +193,7 @@
         },
         drawWithContext: function (context, offsetX, offsetY) {
             var $t;
-            context.draw$6(this, offsetX, offsetY);
+            context.draw$7(this, offsetX, offsetY);
             $t = Bridge.getEnumerator(this.children);
             while ($t.moveNext()) {
                 var child = $t.getCurrent();
@@ -281,7 +292,7 @@
             }
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$6(this, offsetX, offsetY);
+            context.draw$7(this, offsetX, offsetY);
             this.getContent$1().drawWithContext(context, offsetX + this.getInnerX(), offsetY + this.getInnerY());
         },
         align: function (view) {
@@ -311,6 +322,40 @@
         }
     });
     
+    Bridge.define('ThreeOneSevenBee.Model.UI.OperatorView', {
+        inherits: [ThreeOneSevenBee.Model.UI.View],
+        config: {
+            properties: {
+                type: null
+            }
+        },
+        constructor: function (type) {
+            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, 0, 0, 10, 10);
+    
+            this.settype(type);
+        },
+        drawWithContext: function (context, offsetX, offsetY) {
+            context.draw$4(this, offsetX, offsetY);
+        }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.UI.ParenthesisView', {
+        inherits: [ThreeOneSevenBee.Model.UI.View],
+        config: {
+            properties: {
+                Type: null
+            }
+        },
+        constructor: function (type) {
+            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, 0, 0, 10, 10);
+    
+            this.setType(type);
+        },
+        drawWithContext: function (context, offsetX, offsetY) {
+            context.draw$5(this, offsetX, offsetY);
+        }
+    });
+    
     Bridge.define('ThreeOneSevenBee.Model.UI.ButtonView', {
         inherits: [ThreeOneSevenBee.Model.UI.LabelView],
         constructor: function (text, onClick) {
@@ -332,10 +377,10 @@
                 var minusExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
                 if (Bridge.hasValue(minusExpression)) {
                     var view = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(minusExpression.getExpression(), model);
-                    var operatorView = new ThreeOneSevenBee.Model.UI.OperatorButtonView(minusExpression.getType(), null);
+                    var operatorView = new ThreeOneSevenBee.Model.UI.OperatorView(minusExpression.getType());
                     operatorView.setWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                     operatorView.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
-                    operatorView.setBaseline(Bridge.Int.div(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE, 2));
+                    operatorView.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
                     view.setX(operatorView.getWidth());
                     operatorView.setY(view.getBaseline() - operatorView.getBaseline());
                     var minusView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(operatorView.getWidth() + view.getWidth(), view.getHeight()), [
@@ -349,14 +394,14 @@
                 if (Bridge.hasValue(operatorExpression)) {
                     var left = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getLeft(), model);
                     var right = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(operatorExpression.getRight(), model);
-                    var operatorView1 = new ThreeOneSevenBee.Model.UI.OperatorButtonView(operatorExpression.getType(), null);
+                    var operatorView1 = new ThreeOneSevenBee.Model.UI.OperatorView(operatorExpression.getType());
                     switch (operatorExpression.getType()) {
                         case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide: 
                             var width = Math.max(left.getWidth(), right.getWidth()) + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE;
                             operatorView1.setWidth(width);
                             operatorView1.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                             operatorView1.setY(left.getHeight());
-                            operatorView1.setBaseline(Bridge.Int.div(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE, 2));
+                            operatorView1.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
                             right.setY(left.getHeight() + operatorView1.getHeight());
                             left.setX((width - left.getWidth()) / 2);
                             right.setX((width - right.getWidth()) / 2);
@@ -381,7 +426,7 @@
                             operatorView1.setX(left.getWidth());
                             operatorView1.setWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                             operatorView1.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
-                            operatorView1.setBaseline(Bridge.Int.div(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE, 2));
+                            operatorView1.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
                             right.setX(left.getWidth() + operatorView1.getWidth());
                             left.setY(baseline - left.getBaseline());
                             operatorView1.setY(baseline - operatorView1.getBaseline());
@@ -401,16 +446,16 @@
                     var views = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
                     var offsetX = 0;
                     var height1 = 0;
-                    var maxBaseline = Bridge.Int.div(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE, 2);
+                    var maxBaseline = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2;
                     $t = Bridge.getEnumerator(variadicExpression);
                     while ($t.moveNext()) {
                         var expr = $t.getCurrent();
                         if (views.getCount() !== 0) {
-                            var operatorView2 = new ThreeOneSevenBee.Model.UI.OperatorButtonView(variadicExpression.getType(), null);
+                            var operatorView2 = new ThreeOneSevenBee.Model.UI.OperatorView(variadicExpression.getType());
                             operatorView2.setX(offsetX);
                             operatorView2.setWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                             operatorView2.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
-                            operatorView2.setBaseline(Bridge.Int.div(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE, 2));
+                            operatorView2.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
                             views.add(operatorView2);
                             offsetX += operatorView2.getWidth();
                         }
@@ -431,12 +476,30 @@
                         setBaseline: maxBaseline
                     } );
                 }
+                var delimiterExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression);
+                if (Bridge.hasValue(delimiterExpression)) {
+                    var view2 = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(delimiterExpression.getExpression(), model);
+                    view2.setX(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
+                    var compositeView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(view2.getWidth() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE, view2.getHeight()), [
+                        [Bridge.merge(new ThreeOneSevenBee.Model.UI.ParenthesisView(ThreeOneSevenBee.Model.UI.ParenthesisType.left), {
+                            setWidth: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2,
+                            setHeight: view2.getHeight()
+                        } )],
+                        [view2],
+                        [Bridge.merge(new ThreeOneSevenBee.Model.UI.ParenthesisView(ThreeOneSevenBee.Model.UI.ParenthesisType.right), {
+                            setX: view2.getWidth() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2,
+                            setWidth: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2,
+                            setHeight: view2.getHeight()
+                        } )]
+                    ] );
+                    return compositeView;
+                }
                 return Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView(expression.toString(), function () {
                     model.select(expression);
                 }), {
                     setWidth: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
                     setHeight: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
-                    setBaseline: Bridge.Int.div(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE, 2),
+                    setBaseline: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2,
                     setBackgroundColor: model.selectionIndex(expression) !== -1 ? "#cccccc" : "transparent"
                 } );
     
@@ -524,22 +587,7 @@
     }
     });
     
-    Bridge.define('ThreeOneSevenBee.Model.UI.OperatorButtonView', {
-        inherits: [ThreeOneSevenBee.Model.UI.ButtonView],
-        config: {
-            properties: {
-                type: null
-            }
-        },
-        constructor: function (type, onClick) {
-            ThreeOneSevenBee.Model.UI.ButtonView.prototype.$constructor.call(this, "", onClick);
     
-            this.settype(type);
-        },
-        drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$4(this, offsetX, offsetY);
-        }
-    });
     
     Bridge.init();
 })(this);
