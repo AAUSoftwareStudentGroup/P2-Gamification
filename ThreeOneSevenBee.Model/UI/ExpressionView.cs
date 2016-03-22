@@ -63,7 +63,7 @@ namespace ThreeOneSevenBee.Model.UI
                             left,
                             right
                         };
-                        exponent.Baseline = exponent.Height - left.Baseline;
+                        exponent.Baseline = left.Y + left.Baseline;
                         return exponent;
                     case OperatorType.Subtract:
                         double baseline = System.Math.Max(operatorView.Baseline, System.Math.Max(left.Baseline, right.Baseline));
@@ -123,12 +123,12 @@ namespace ThreeOneSevenBee.Model.UI
             if(delimiterExpression != null)
             {
                 View view = Build(delimiterExpression.Expression, model);
-                view.X = NUMVAR_SIZE / 4;
-                View compositeView = new CompositeView(view.Width + NUMVAR_SIZE / 2, view.Height)
+                view.X = view.Height / 10;
+                View compositeView = new CompositeView(view.Width + view.Height / 5, view.Height)
                 {
-                    new ParenthesisView(ParenthesisType.Left) { Width = NUMVAR_SIZE / 4, Height = view.Height },
+                    new ParenthesisView(ParenthesisType.Left) { Width = view.Height / 10, Height = view.Height },
                     view,
-                    new ParenthesisView(ParenthesisType.Right) { X = view.Width + NUMVAR_SIZE / 4, Width = NUMVAR_SIZE / 4, Height = view.Height },
+                    new ParenthesisView(ParenthesisType.Right) { X = view.Width + view.Height / 10, Width = view.Height / 10, Height = view.Height },
                 };
                 compositeView.Baseline = view.Baseline;
                 return compositeView;

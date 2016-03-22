@@ -446,7 +446,7 @@
                                 [left],
                                 [right]
                             ] );
-                            exponent.setBaseline(exponent.getHeight() - left.getBaseline());
+                            exponent.setBaseline(left.getY() + left.getBaseline());
                             return exponent;
                         case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract: 
                             var baseline = Math.max(operatorView1.getBaseline(), Math.max(left.getBaseline(), right.getBaseline()));
@@ -506,16 +506,16 @@
                 var delimiterExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression);
                 if (Bridge.hasValue(delimiterExpression)) {
                     var view2 = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(delimiterExpression.getExpression(), model);
-                    view2.setX(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4);
-                    var compositeView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(view2.getWidth() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2, view2.getHeight()), [
+                    view2.setX(view2.getHeight() / 10);
+                    var compositeView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(view2.getWidth() + view2.getHeight() / 5, view2.getHeight()), [
                         [Bridge.merge(new ThreeOneSevenBee.Model.UI.ParenthesisView(ThreeOneSevenBee.Model.UI.ParenthesisType.left), {
-                            setWidth: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4,
+                            setWidth: view2.getHeight() / 10,
                             setHeight: view2.getHeight()
                         } )],
                         [view2],
                         [Bridge.merge(new ThreeOneSevenBee.Model.UI.ParenthesisView(ThreeOneSevenBee.Model.UI.ParenthesisType.right), {
-                            setX: view2.getWidth() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4,
-                            setWidth: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4,
+                            setX: view2.getWidth() + view2.getHeight() / 10,
+                            setWidth: view2.getHeight() / 10,
                             setHeight: view2.getHeight()
                         } )]
                     ] );
