@@ -492,6 +492,7 @@
                             setHeight: view2.getHeight()
                         } )]
                     ] );
+                    compositeView.setBaseline(view2.getBaseline());
                     return compositeView;
                 }
                 return Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView(expression.toString(), function () {

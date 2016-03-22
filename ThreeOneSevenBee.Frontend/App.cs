@@ -18,7 +18,7 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel expressionModel = new ExpressionModel("(a+b/{e*f+q)", 
+            ExpressionModel expressionModel = new ExpressionModel("{a^3*b^4}/{b^3*a^4}", 
                 Rules.DivideRule, Rules.ExponentToProductRule, Rules.ProductToExponentRule);
 
             View view = new CompositeView(canvas.Width, canvas.Height)

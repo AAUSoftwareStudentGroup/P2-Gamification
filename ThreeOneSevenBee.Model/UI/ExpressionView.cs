@@ -130,6 +130,7 @@ namespace ThreeOneSevenBee.Model.UI
                     view,
                     new ParenthesisView(ParenthesisType.Right) { X = view.Width + NUMVAR_SIZE / 2, Width = NUMVAR_SIZE / 2, Height = view.Height },
                 };
+                compositeView.Baseline = view.Baseline;
                 return compositeView;
             }
             return new ButtonView(expression.ToString(), () => model.Select(expression))
