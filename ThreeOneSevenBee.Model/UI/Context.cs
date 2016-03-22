@@ -63,5 +63,10 @@ namespace ThreeOneSevenBee.Model.UI
         {
             Draw(view as View, offsetX, offsetY);
         }
+
+        public virtual void Draw(SqrtView view, double offsetX, double offsetY)
+        {
+            Draw(view as View, offsetX, offsetY);
+        }
     }
 }

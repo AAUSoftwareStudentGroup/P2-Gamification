@@ -151,6 +151,18 @@ namespace ThreeOneSevenBee.Model.Expression
                     minusParent.Expression = identity;
                     identity.Parent = minusParent;
                 }
+                var delimiterParent = Selected.Parent as DelimiterExpression;
+                if (delimiterParent != null)
+                {
+                    delimiterParent.Expression = identity;
+                    identity.Parent = delimiterParent;
+                }
+                var functionExpression = Selected.Parent as FunctionExpression;
+                if (functionExpression != null)
+                {
+                    functionExpression.Expression = identity;
+                    identity.Parent = functionExpression;
+                }
             }
             UnSelectAll();
         }

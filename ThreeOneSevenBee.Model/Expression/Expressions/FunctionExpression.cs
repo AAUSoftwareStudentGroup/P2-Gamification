@@ -23,7 +23,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             Function = function.ToLower();
         }
 
-        public ExpressionBase Expression { get; protected set; }
+        public ExpressionBase Expression { get; set; }
 
         public string Function { get; protected set; }
 

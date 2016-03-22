@@ -54,6 +54,16 @@
                                 return false;
                             }
                         }
+    
+                        var functionExpr = Bridge.as(expr, ThreeOneSevenBee.Model.Expression.Expressions.FunctionExpression);
+                        if (Bridge.hasValue(functionExpr) && c !== 102) {
+                            return false;
+                        }
+    
+                        var delimiterExpr = Bridge.as(expr, ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression);
+                        if (Bridge.hasValue(delimiterExpr) && c !== 100) {
+                            return false;
+                        }
                     }
                 }
                 return true;
@@ -140,7 +150,7 @@
             },
             exponentToProductRule: function (expression, selection, identity) {
                 var binaryExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryExpression);
-                if (Bridge.hasValue(binaryExpression)) {
+                if (Bridge.hasValue(binaryExpression) && binaryExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
                     if (selection.getCount() === 2 && (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0), binaryExpression.getLeft()) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(1), binaryExpression.getRight())) || (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(1), binaryExpression.getLeft()) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0), binaryExpression.getRight()))) {
                         var numericExpression = Bridge.as(binaryExpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
                         if (Bridge.hasValue(numericExpression)) {

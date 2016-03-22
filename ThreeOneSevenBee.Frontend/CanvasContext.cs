@@ -100,6 +100,17 @@ namespace ThreeOneSevenBee.Frontend
             }
         }
 
+        public override void Draw(SqrtView view, double offsetX, double offsetY)
+        {
+            context.BeginPath();
+            context.MoveTo(view.X + offsetX + view.SignWidth / 8, view.Y + offsetY + view.Height - view.SignWidth / 2);
+            context.LineTo(view.X + offsetX + view.SignWidth / 4, view.Y + offsetY +   view.Height - view.SignWidth / 2 );
+            context.LineTo(view.X + offsetX + view.SignWidth / 2, view.Y + offsetY + view.Height);
+            context.LineTo(view.X + offsetX + view.SignWidth, view.Y + offsetY + view.TopHeight / 2);
+            context.LineTo(view.X + offsetX + view.Width, view.Y + offsetY + view.TopHeight / 2);
+            context.Stroke();
+        }
+
         public override void Draw(View view, double offsetX, double offsetY)
         {
             context.FillStyle = view.BackgroundColor;

@@ -18,16 +18,15 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel expressionModel = new ExpressionModel("{a^3*b^4}/{b^3*a^4}", 
+            ExpressionModel expressionModel = new ExpressionModel("sqrt{sqrt{a}^b/b^3+b-(b*b)^b}", 
                 Rules.DivideRule, Rules.ExponentToProductRule, Rules.ProductToExponentRule);
 
             View view = new CompositeView(canvas.Width, canvas.Height)
             {
                 new ProgressbarStarView(new ProgressbarStar(50, 100, 30, 60, 75), canvas.Width, 20) { Y=30 },
-                new ExpressionView(expressionModel, canvas.Width, canvas.Height - 70) { X = 0, Y = 50 },
-                new IdentityMenuView(expressionModel, canvas.Width, 50) { Y = canvas.Height - 50 }
+                new ExpressionView(expressionModel, canvas.Width, canvas.Height - 150) { X = 0, Y = 50 },
+                new IdentityMenuView(expressionModel, canvas.Width, 100) { Y = canvas.Height - 100 }
             };
-
             context.SetContentView(view);
             expressionModel.OnChanged += (m) => context.Draw();
             context.Draw();

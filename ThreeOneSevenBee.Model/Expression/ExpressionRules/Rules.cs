@@ -46,6 +46,12 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         if (binaryExpr.Type == OperatorType.Power && c != '^') return false;
                         if (binaryExpr.Type == OperatorType.Subtract && c != '-') return false;
                     }
+
+                    var functionExpr = expr as FunctionExpression;
+                    if (functionExpr != null && c != 'f') return false;
+
+                    var delimiterExpr = expr as DelimiterExpression;
+                    if (delimiterExpr != null && c != 'd') return false;
                 }
             }
             return true;
@@ -149,7 +155,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         public static bool ExponentToProductRule(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
         {
             BinaryExpression binaryExpression = expression as BinaryExpression;
-            if (binaryExpression != null)
+            if (binaryExpression != null && binaryExpression.Type == OperatorType.Power)
             {
                 if (selection.Count == 2 &&
                     (selection[0] == binaryExpression.Left && selection[1] == binaryExpression.Right) ||

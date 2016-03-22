@@ -57,7 +57,7 @@ namespace ThreeOneSevenBee.Model.UI
                         return fraction;
                     case OperatorType.Power:
                         right.X = left.Width;
-                        left.Y = right.Height;
+                        left.Y = right.Height - NUMVAR_SIZE / 2;
                         CompositeView exponent = new CompositeView(right.X + right.Width, left.Y + left.Height)
                         {
                             left,
@@ -123,19 +123,38 @@ namespace ThreeOneSevenBee.Model.UI
             if(delimiterExpression != null)
             {
                 View view = Build(delimiterExpression.Expression, model);
-                view.X = NUMVAR_SIZE / 2;
-                View compositeView = new CompositeView(view.Width + NUMVAR_SIZE, view.Height)
+                view.X = NUMVAR_SIZE / 4;
+                View compositeView = new CompositeView(view.Width + NUMVAR_SIZE / 2, view.Height)
                 {
-                    new ParenthesisView(ParenthesisType.Left) { Width = NUMVAR_SIZE / 2, Height = view.Height },
+                    new ParenthesisView(ParenthesisType.Left) { Width = NUMVAR_SIZE / 4, Height = view.Height },
                     view,
-                    new ParenthesisView(ParenthesisType.Right) { X = view.Width + NUMVAR_SIZE / 2, Width = NUMVAR_SIZE / 2, Height = view.Height },
+                    new ParenthesisView(ParenthesisType.Right) { X = view.Width + NUMVAR_SIZE / 4, Width = NUMVAR_SIZE / 4, Height = view.Height },
                 };
                 compositeView.Baseline = view.Baseline;
                 return compositeView;
             }
+            FunctionExpression functionExpression = expression as FunctionExpression;
+            if(functionExpression != null && functionExpression.Function == "sqrt")
+            {
+                View view = Build(functionExpression.Expression, model);
+                SqrtView sqrtView = new SqrtView();
+                sqrtView.SignWidth = view.Height / 2;
+                sqrtView.TopHeight = NUMVAR_SIZE / 2;
+                sqrtView.Width = view.Width + sqrtView.SignWidth + NUMVAR_SIZE / 4;
+                sqrtView.Height = view.Height + sqrtView.TopHeight;
+                view.X = sqrtView.SignWidth + NUMVAR_SIZE / 8;
+                view.Y = sqrtView.TopHeight;
+                View compositeView = new CompositeView(sqrtView.Width, sqrtView.Height)
+                {
+                    sqrtView,
+                    view,
+                };
+                compositeView.Baseline = view.Baseline + sqrtView.TopHeight;
+                return compositeView;
+            }
             return new ButtonView(expression.ToString(), () => model.Select(expression))
             {
-                Width = NUMVAR_SIZE,
+                Width = 3 * NUMVAR_SIZE / 4,
                 Height = NUMVAR_SIZE,
                 Baseline = NUMVAR_SIZE / 2,
                 BackgroundColor = model.SelectionIndex(expression) != -1 ? "#cccccc" : "transparent"

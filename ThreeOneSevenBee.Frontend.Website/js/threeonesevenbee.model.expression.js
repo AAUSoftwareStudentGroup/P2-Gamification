@@ -239,6 +239,16 @@
                 minusParent.setExpression(identity);
                 identity.setParent(minusParent);
             }
+            var delimiterParent = Bridge.as(this.getSelected().getParent(), ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression);
+            if (Bridge.hasValue(delimiterParent)) {
+                delimiterParent.setExpression(identity);
+                identity.setParent(delimiterParent);
+            }
+            var functionExpression = Bridge.as(this.getSelected().getParent(), ThreeOneSevenBee.Model.Expression.Expressions.FunctionExpression);
+            if (Bridge.hasValue(functionExpression)) {
+                functionExpression.setExpression(identity);
+                identity.setParent(functionExpression);
+            }
         }
         this.unSelectAll();
     }
