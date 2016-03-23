@@ -12,9 +12,10 @@
         statics: {
             add: 0,
             subtract: 1,
-            divide: 2,
-            multiply: 3,
-            power: 4
+            minus: 2,
+            divide: 3,
+            multiply: 4,
+            power: 5
         },
         $enum: true
     });
@@ -379,7 +380,7 @@
         constructor: function (type, expression) {
             ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression.prototype.$constructor.call(this, type);
     
-            if (type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract) {
+            if (type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus) {
                 throw new Bridge.ArgumentException("Invalid Type: " + type, "type");
             }
             if (!Bridge.hasValue(expression)) {
@@ -598,7 +599,7 @@
     Bridge.define('ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression', {
         inherits: [ThreeOneSevenBee.Model.Expression.Expressions.UnaryExpression],
         constructor: function (expression) {
-            ThreeOneSevenBee.Model.Expression.Expressions.UnaryExpression.prototype.$constructor.call(this, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract, expression);
+            ThreeOneSevenBee.Model.Expression.Expressions.UnaryExpression.prototype.$constructor.call(this, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus, expression);
     
         },
         getValue: function () {

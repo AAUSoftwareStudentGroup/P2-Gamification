@@ -15,7 +15,7 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("((sqrt{sqrt{a}^b/b^3+b-(b*b)^b}+a*(a+b)/{c+b})^{{a*b}/{b^2}})", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
+                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("sqrt{{a*b*a*c*c*c*c*a*a*b}/{a^5*b^4*c^1}}", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
     
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(canvas.width, canvas.height), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(new ThreeOneSevenBee.Model.UI.ProgressbarStar(50, 100, [30, 60, 75]), canvas.width, 20), {
@@ -85,16 +85,24 @@
                         this.context.beginPath();
                         this.context.moveTo(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY - view.getHeight() / 3 + view.getHeight() / 2);
                         this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 3 + view.getHeight() / 2);
-                        this.context.moveTo(view.getX() + offsetX - view.getWidth() / 3 + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2);
-                        this.context.lineTo(view.getX() + offsetX + view.getWidth() / 3 + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2);
+                        this.context.moveTo(view.getX() + offsetX + view.getWidth() / 2 - view.getHeight() / 3, view.getY() + offsetY + view.getHeight() / 2);
+                        this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2 + view.getHeight() / 3, view.getY() + offsetY + view.getHeight() / 2);
                         this.context.stroke();
                     }
                     else  {
                         if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract) {
                             this.context.beginPath();
-                            this.context.moveTo(view.getX() + offsetX - view.getWidth() / 3 + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2);
-                            this.context.lineTo(view.getX() + offsetX + view.getWidth() / 3 + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2);
+                            this.context.moveTo(view.getX() + offsetX + view.getWidth() / 2 - view.getHeight() / 3, view.getY() + offsetY + view.getHeight() / 2);
+                            this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2 + view.getHeight() / 3, view.getY() + offsetY + view.getHeight() / 2);
                             this.context.stroke();
+                        }
+                        else  {
+                            if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus) {
+                                this.context.beginPath();
+                                this.context.moveTo(view.getX() + offsetX + view.getWidth() / 3, view.getY() + offsetY + view.getHeight() / 2);
+                                this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsetY + view.getHeight() / 2);
+                                this.context.stroke();
+                            }
                         }
                     }
                 }

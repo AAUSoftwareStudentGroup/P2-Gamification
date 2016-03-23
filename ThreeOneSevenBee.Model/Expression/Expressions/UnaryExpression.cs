@@ -8,7 +8,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         protected UnaryExpression(OperatorType type, ExpressionBase expression)
             : base(type)
         {
-            if (type != OperatorType.Subtract)
+            if (type != OperatorType.Minus)
                 throw new ArgumentException("Invalid Type: " + type, "type");
             if (expression == null)
                 throw new ArgumentNullException("expression");

@@ -45,6 +45,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
     {
         Add,
         Subtract,
+        Minus,
         Divide,
         Multiply,
         Power
