@@ -12,7 +12,10 @@ namespace ThreeOneSevenBee.Frontend
         public CanvasContext(CanvasElement canvas) : base(canvas.Width, canvas.Height)
         {
             context = canvas.GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D);
-            context.Font = "12px Arial Black";
+            context.FillStyle = "#000000";
+            context.LineWidth = 2;
+            context.TextBaseline = CanvasTypes.CanvasTextBaselineAlign.Middle;
+            context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
         }
 
         public override void SetContentView(View view)
@@ -36,9 +39,6 @@ namespace ThreeOneSevenBee.Frontend
         public override void Draw(LabelView view, double offsetX, double offsetY)
         {
             Draw(view as View, offsetX, offsetY);
-            context.FillStyle = "#000000";
-            context.TextBaseline = CanvasTypes.CanvasTextBaselineAlign.Middle;
-            context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
             context.Font = view.Height + "px Cambria Math";
             context.FillText(view.Text, (int)(view.X + offsetX + view.Width / 2), (int)(view.Y + offsetY + view.Height / 2));
         }
@@ -48,8 +48,6 @@ namespace ThreeOneSevenBee.Frontend
             if (view.type == OperatorType.Divide)
             {
                 context.BeginPath();
-                context.LineCap = CanvasTypes.CanvasLineCapType.Round;
-                context.LineWidth = view.Height/40;
                 context.MoveTo(view.X + offsetX, view.Y + offsetY + view.Height / 2);
                 context.LineTo(view.X + offsetX + view.Width, view.Y + offsetY + view.Height / 2);
                 context.Stroke();
@@ -57,7 +55,6 @@ namespace ThreeOneSevenBee.Frontend
             else if (view.type == OperatorType.Multiply)
             {
                 context.BeginPath();
-                //context.Rect(, view.Width / 10,);
                 context.Arc(view.X + offsetX + view.Width / 2, view.Y + offsetY + view.Height / 2, view.Height / 10, 0, 2 * Math.PI);
                 context.Fill();
                 context.Stroke();
@@ -65,22 +62,18 @@ namespace ThreeOneSevenBee.Frontend
             else if (view.type == OperatorType.Add)
             {
                 context.BeginPath();
-                context.LineWidth = view.Height / 20;
                 context.MoveTo(view.X + offsetX + view.Width / 2, view.Y + offsetY - view.Height / 3 + view.Height / 2);
                 context.LineTo(view.X + offsetX + view.Width / 2, view.Y + offsetY + view.Height / 3 + view.Height / 2);
                 context.MoveTo(view.X + offsetX - view.Width / 3 + view.Width / 2, view.Y + offsetY + view.Height / 2);
                 context.LineTo(view.X + offsetX + view.Width / 3 + view.Width / 2, view.Y + offsetY + view.Height / 2);
                 context.Stroke();
-                context.ClosePath();
             }
             else if (view.type == OperatorType.Subtract)
             {
                 context.BeginPath();
-                context.LineWidth = view.Height / 20;
                 context.MoveTo(view.X + offsetX - view.Width / 3 + view.Width / 2, view.Y + offsetY + view.Height / 2);
                 context.LineTo(view.X + offsetX + view.Width / 3 + view.Width / 2, view.Y + offsetY + view.Height / 2);
                 context.Stroke();
-                context.ClosePath();
             }
         }
 
@@ -115,6 +108,7 @@ namespace ThreeOneSevenBee.Frontend
         {
             context.FillStyle = view.BackgroundColor;
             context.FillRect((int)(view.X + offsetX), (int)(view.Y + offsetY), (int)view.Width, (int)view.Height);
+            context.FillStyle = "#000000";
         }
 
         public override void Draw(ImageView view, double offsetX, double offsetY)
