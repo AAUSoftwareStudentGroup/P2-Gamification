@@ -21,7 +21,7 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel expressionModel = new ExpressionModel("(sqrt{sqrt{a}^b/b^3+b-(b*b)^b})", 
+            ExpressionModel expressionModel = new ExpressionModel("((sqrt{sqrt{a}^b/b^3+b-(b*b)^b}+a*(a+b)/{c+b})^{{a*b}/{b^2}})", 
                 Rules.DivideRule, Rules.ExponentToProductRule, Rules.ProductToExponentRule);
 
             PolygonModel polygon = new PolygonModel(4);

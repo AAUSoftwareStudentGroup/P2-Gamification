@@ -15,7 +15,7 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("(sqrt{sqrt{a}^b/b^3+b-(b*b)^b})", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
+                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("((sqrt{sqrt{a}^b/b^3+b-(b*b)^b}+a*(a+b)/{c+b})^{{a*b}/{b^2}})", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
     
                 var polygon = new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor$1", 4);
                 var cornerpos = new Bridge.List$1(ThreeOneSevenBee.Model.Euclidean.Vector2)();
@@ -53,7 +53,10 @@
             ThreeOneSevenBee.Model.UI.Context.prototype.$constructor.call(this, canvas.width, canvas.height);
     
             this.context = canvas.getContext("2d");
-            this.context.font = "12px Arial Black";
+            this.context.fillStyle = "#000000";
+            this.context.lineWidth = 2;
+            this.context.textBaseline = "middle";
+            this.context.textAlign = "center";
         },
         setContentView: function (view) {
             var canvasLeft = this.context.canvas.getBoundingClientRect().left;
@@ -68,17 +71,12 @@
         },
         draw$3: function (view, offsetX, offsetY) {
             this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
-            this.context.fillStyle = "#000000";
-            this.context.textBaseline = "middle";
-            this.context.textAlign = "center";
             this.context.font = view.getHeight() + "px Cambria Math";
             this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + view.getWidth() / 2)), Bridge.Int.trunc((view.getY() + offsetY + view.getHeight() / 2)));
         },
         draw$4: function (view, offsetX, offsetY) {
             if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                 this.context.beginPath();
-                this.context.lineCap = "round";
-                this.context.lineWidth = view.getHeight() / 40;
                 this.context.moveTo(view.getX() + offsetX, view.getY() + offsetY + view.getHeight() / 2);
                 this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsetY + view.getHeight() / 2);
                 this.context.stroke();
@@ -86,7 +84,6 @@
             else  {
                 if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
                     this.context.beginPath();
-                    //context.Rect(, view.Width / 10,);
                     this.context.arc(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2, view.getHeight() / 10, 0, 2 * Math.PI);
                     this.context.fill();
                     this.context.stroke();
@@ -94,22 +91,18 @@
                 else  {
                     if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
                         this.context.beginPath();
-                        this.context.lineWidth = view.getHeight() / 20;
                         this.context.moveTo(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY - view.getHeight() / 3 + view.getHeight() / 2);
                         this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 3 + view.getHeight() / 2);
                         this.context.moveTo(view.getX() + offsetX - view.getWidth() / 3 + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2);
                         this.context.lineTo(view.getX() + offsetX + view.getWidth() / 3 + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2);
                         this.context.stroke();
-                        this.context.closePath();
                     }
                     else  {
                         if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract) {
                             this.context.beginPath();
-                            this.context.lineWidth = view.getHeight() / 20;
                             this.context.moveTo(view.getX() + offsetX - view.getWidth() / 3 + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2);
                             this.context.lineTo(view.getX() + offsetX + view.getWidth() / 3 + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2);
                             this.context.stroke();
-                            this.context.closePath();
                         }
                     }
                 }
@@ -118,12 +111,12 @@
         draw$5: function (view, offsetX, offsetY) {
             if (view.getType() === ThreeOneSevenBee.Model.UI.ParenthesisType.left) {
                 this.context.beginPath();
-                this.context.ellipse(view.getX() + view.getWidth() + offsetX, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), view.getHeight() / 2, 0, Math.PI / 2, (3 * Math.PI) / 2);
+                this.context.ellipse(view.getX() + view.getWidth() + offsetX, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), 1.1 * view.getHeight() / 2, 0, -1.141096661 + Math.PI, 1.141096661 + Math.PI);
                 this.context.stroke();
             }
             else  {
                 this.context.beginPath();
-                this.context.ellipse(view.getX() + offsetX, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), view.getHeight() / 2, 0, Math.PI / 2, (3 * Math.PI) / 2, true);
+                this.context.ellipse(view.getX() + offsetX, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), 1.1 * view.getHeight() / 2, 0, -1.141096661, 1.141096661);
                 this.context.stroke();
             }
         },
@@ -139,6 +132,7 @@
         draw$9: function (view, offsetX, offsetY) {
             this.context.fillStyle = view.getBackgroundColor();
             this.context.fillRect(Bridge.Int.trunc((view.getX() + offsetX)), Bridge.Int.trunc((view.getY() + offsetY)), Bridge.Int.trunc(view.getWidth()), Bridge.Int.trunc(view.getHeight()));
+            this.context.fillStyle = "#000000";
         },
         draw$2: function (view, offsetX, offsetY) {
             var img = new Image();

@@ -7,12 +7,13 @@
     <title>317B</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="js/bridge.js"></script>
-    <script src="js/threeOneSevenBee.model.uI.js"></script>
-    <script src="js/threeOneSevenBee.model.expression.js"></script>
-    <script src="js/threeOneSevenBee.model.expression.expressionRules.js"></script>
-    <script src="js/threeOneSevenBee.model.collections.js"></script>
-    <script src="js/threeOneSevenBee.model.expression.expressions.js"></script>
-    <script src="js/threeOneSevenBee.model.js"></script>
+
+    <script src="js/threeonesevenbee.model.ui.js"></script>
+    <script src="js/threeonesevenbee.model.expression.js"></script>
+    <script src="js/threeonesevenbee.model.expression.expressionrules.js"></script>
+    <script src="js/threeonesevenbee.model.collections.js"></script>
+    <script src="js/threeonesevenbee.model.expression.expressions.js"></script>
+    <script src="js/threeonesevenbee.model.js"></script>
     <script src="js/threeOneSevenBee.frontend.js"></script>
     <script src="js/threeOneSevenBee.model.euclidean.js"></script>
     <script src="js/threeOneSevenBee.model.geometry.js"></script>
