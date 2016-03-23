@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="threeonesevenbee.Frontend.Website.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="ThreeOneSevenBee.Frontend.Website.Default" %>
 
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
