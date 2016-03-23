@@ -1,14 +1,14 @@
 ﻿using Bridge;
 using Bridge.Html5;
-using ThreeOneSevenBee.Model;
-using ThreeOneSevenBee.Model.UI;
-using ThreeOneSevenBee.Model.Expression;
-using ThreeOneSevenBee.Model.Expression.ExpressionRules;
-using ThreeOneSevenBee.Model.Geometry;
+using threeonesevenbee.Model;
+using threeonesevenbee.Model.UI;
+using threeonesevenbee.Model.Expression;
+using threeonesevenbee.Model.Expression.ExpressionRules;
+using threeonesevenbee.Model.Geometry;
 using System.Collections.Generic;
-using ThreeOneSevenBee.Model.Euclidean;
+using threeonesevenbee.Model.Euclidean;
 
-namespace ThreeOneSevenBee.Frontend
+namespace threeonesevenbee.Frontend
 {
     public class App
     {

@@ -1,7 +1,7 @@
 ﻿(function (globals) {
     "use strict";
 
-    Bridge.define('ThreeOneSevenBee.Model.Geometry.PolygonModel', {
+    Bridge.define('threeonesevenbee.Model.Geometry.PolygonModel', {
         config: {
             properties: {
                 sides: null,
@@ -15,18 +15,18 @@
             this.setrelations(relations);
         },
         constructor$1: function (sideCount) {
-            var sides = new Bridge.List$1(ThreeOneSevenBee.Model.Polygon.PolygonSide)();
-            var corners = new Bridge.List$1(ThreeOneSevenBee.Model.Polygon.PolygonCorner)();
-            var relations = new Bridge.List$1(ThreeOneSevenBee.Model.Polygon.PolygonRelation)();
+            var sides = new Bridge.List$1(threeonesevenbee.Model.Polygon.PolygonSide)();
+            var corners = new Bridge.List$1(threeonesevenbee.Model.Polygon.PolygonCorner)();
+            var relations = new Bridge.List$1(threeonesevenbee.Model.Polygon.PolygonRelation)();
             var side = 65;
             var corner = 97;
-            var lastCorner = new ThreeOneSevenBee.Model.Polygon.PolygonCorner(corner++);
+            var lastCorner = new threeonesevenbee.Model.Polygon.PolygonCorner(corner++);
             corners.add(lastCorner);
             var thisCorner;
             for (var i = 1; i < sideCount; i++) {
-                thisCorner = new ThreeOneSevenBee.Model.Polygon.PolygonCorner(corner++);
+                thisCorner = new threeonesevenbee.Model.Polygon.PolygonCorner(corner++);
                 corners.add(thisCorner);
-                sides.add(new ThreeOneSevenBee.Model.Polygon.PolygonSide(lastCorner, thisCorner, side++));
+                sides.add(new threeonesevenbee.Model.Polygon.PolygonSide(lastCorner, thisCorner, side++));
                 thisCorner = (i === sideCount - 1) ? sides.getItem(0).getcorner1() : lastCorner;
             }
             this.setsides(sides);
@@ -50,8 +50,8 @@
             /* New polygons becomes this and returned object*/
             /* Part PolygonModel in 2 and copy corner and sides to new PolygonModel and create new side*/
     
-            var newSides = new Bridge.List$1(ThreeOneSevenBee.Model.Polygon.PolygonSide)();
-            var newCorners = new Bridge.List$1(ThreeOneSevenBee.Model.Polygon.PolygonCorner)();
+            var newSides = new Bridge.List$1(threeonesevenbee.Model.Polygon.PolygonSide)();
+            var newCorners = new Bridge.List$1(threeonesevenbee.Model.Polygon.PolygonCorner)();
     
             var newSide;
             var cutCorner1 = this.getcorners().getItem(corner1);
@@ -63,7 +63,7 @@
             while (corner !== cutCorner2) {
                 // Put all encountered sides into newSides and all encountered corners into newCorners without removing
                 // Find a side that connects to this corner.
-                newSide = new ThreeOneSevenBee.Model.Polygon.PolygonSide(null, null, 169); // Just fuck shit up
+                newSide = new threeonesevenbee.Model.Polygon.PolygonSide(null, null, 169); // Just fuck shit up
     
                 for (var i = 0; i < this.getsides().getCount(); i++) {
                     if (this.getsides().getItem(i).getcorner1() === corner || this.getsides().getItem(i).getcorner2() === corner) {
@@ -84,12 +84,12 @@
                 // Repeat until other cutcorner is reached
             }
             // Insert new sides
-            newSides.add(new ThreeOneSevenBee.Model.Polygon.PolygonSide(cutCorner1, cutCorner2, 88));
-            this.getsides().add(new ThreeOneSevenBee.Model.Polygon.PolygonSide(cutCorner1, cutCorner2, 88));
+            newSides.add(new threeonesevenbee.Model.Polygon.PolygonSide(cutCorner1, cutCorner2, 88));
+            this.getsides().add(new threeonesevenbee.Model.Polygon.PolygonSide(cutCorner1, cutCorner2, 88));
             // Insert missing corner
             newCorners.add(cutCorner2);
             this.getcorners().add(cutCorner1);
-            return new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor", newSides, newCorners, this.getrelations()); // Same relations are just passed on
+            return new threeonesevenbee.Model.Geometry.PolygonModel("constructor", newSides, newCorners, this.getrelations()); // Same relations are just passed on
         }
     });
     

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ThreeOneSevenBee.Model.Euclidean
+namespace threeonesevenbee.Model.Euclidean
 {
     /// <summary>
     /// Basic 2D vector.

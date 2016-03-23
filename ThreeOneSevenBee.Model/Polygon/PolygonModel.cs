@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ThreeOneSevenBee.Model.Polygon;
+using threeonesevenbee.Model.Polygon;
 
-namespace ThreeOneSevenBee.Model.Geometry
+namespace threeonesevenbee.Model.Geometry
 {
     public class PolygonModel
     {

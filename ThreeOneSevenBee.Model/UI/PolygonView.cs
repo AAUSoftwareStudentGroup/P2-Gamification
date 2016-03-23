@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ThreeOneSevenBee.Model.Euclidean;
-using ThreeOneSevenBee.Model.Geometry;
+using threeonesevenbee.Model.Euclidean;
+using threeonesevenbee.Model.Geometry;
 
-namespace ThreeOneSevenBee.Model.UI
+namespace threeonesevenbee.Model.UI
 {
     public class PolygonView : View
     {

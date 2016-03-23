@@ -5,7 +5,7 @@ using Bridge.Html5;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace ThreeOneSevenBee.Model.Expression.Expressions
+namespace threeonesevenbee.Model.Expression.Expressions
 {
     public abstract class VariadicExpression : OperatorExpression, ICollection<ExpressionBase>, IList<ExpressionBase>
     {

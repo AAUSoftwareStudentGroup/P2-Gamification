@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ThreeOneSevenBee.Model.UI
+namespace threeonesevenbee.Model.UI
 {
     public class View
     {

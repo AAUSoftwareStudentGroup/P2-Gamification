@@ -3,9 +3,9 @@ using System;
 #if BRIDGE
 using Bridge.Html5;
 #endif
-using ThreeOneSevenBee.Model.Expression.Expressions;
+using threeonesevenbee.Model.Expression.Expressions;
 
-namespace ThreeOneSevenBee.Model.Expression
+namespace threeonesevenbee.Model.Expression
 {
     public class ExpressionModel
     {

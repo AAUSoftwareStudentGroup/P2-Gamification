@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="ThreeOneSevenBee.Frontend.Website.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="threeonesevenbee.Frontend.Website.Default" %>
 
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -14,10 +14,10 @@
     <script src="js/threeonesevenbee.model.collections.js"></script>
     <script src="js/threeonesevenbee.model.expression.expressions.js"></script>
     <script src="js/threeonesevenbee.model.js"></script>
-    <script src="js/threeOneSevenBee.frontend.js"></script>
-    <script src="js/threeOneSevenBee.model.euclidean.js"></script>
-    <script src="js/threeOneSevenBee.model.geometry.js"></script>
-    <script src="js/threeOneSevenBee.model.polygon.js"></script>
+    <script src="js/threeonesevenbee.frontend.js"></script>
+    <script src="js/threeonesevenbee.model.euclidean.js"></script>
+    <script src="js/threeonesevenbee.model.geometry.js"></script>
+    <script src="js/threeonesevenbee.model.polygon.js"></script>
 </head>
 <body style="margin: 0;overflow:hidden">
     <canvas id="canvas" width="600" height="400"></canvas>

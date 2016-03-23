@@ -4,7 +4,7 @@ using Bridge.Html5;
 using System;
 #endif
 
-namespace ThreeOneSevenBee.Model.UI
+namespace threeonesevenbee.Model.UI
 {
     public abstract class Context
     {

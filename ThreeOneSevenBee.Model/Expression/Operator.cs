@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ThreeOneSevenBee.Model.Expression
+namespace threeonesevenbee.Model.Expression
 {
     public class Operator
     {

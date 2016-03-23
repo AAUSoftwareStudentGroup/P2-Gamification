@@ -4,7 +4,7 @@ using Bridge.Html5;
 #endif
 using System.Collections.Generic;
 
-namespace ThreeOneSevenBee.Model.Expression.Expressions
+namespace threeonesevenbee.Model.Expression.Expressions
 {
     public class BinaryOperatorExpression : BinaryExpression
     {

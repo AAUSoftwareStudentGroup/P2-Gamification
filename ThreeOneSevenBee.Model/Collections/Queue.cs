@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ThreeOneSevenBee.Model.Collections
+namespace threeonesevenbee.Model.Collections
 {
     public class Queue<T> : IEnumerable<T>
     {
