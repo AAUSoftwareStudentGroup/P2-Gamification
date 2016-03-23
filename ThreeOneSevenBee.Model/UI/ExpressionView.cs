@@ -123,14 +123,15 @@ namespace ThreeOneSevenBee.Model.UI
             if(delimiterExpression != null)
             {
                 View view = Build(delimiterExpression.Expression, model);
-                view.X = view.Height / 10;
-                View compositeView = new CompositeView(view.Width + view.Height / 5, view.Height)
+                view.X = view.Height / 6;
+                view.Y = NUMVAR_SIZE / 8;
+                View compositeView = new CompositeView(view.Width + view.Height / 3, view.Height + NUMVAR_SIZE / 4)
                 {
-                    new ParenthesisView(ParenthesisType.Left) { Width = view.Height / 10, Height = view.Height },
+                    new ParenthesisView(ParenthesisType.Left) { Width = view.Height / 6, Height = view.Height + NUMVAR_SIZE / 4},
                     view,
-                    new ParenthesisView(ParenthesisType.Right) { X = view.Width + view.Height / 10, Width = view.Height / 10, Height = view.Height },
+                    new ParenthesisView(ParenthesisType.Right) { X = view.Width + view.Height / 6, Width = view.Height / 6, Height = view.Height +  NUMVAR_SIZE / 4},
                 };
-                compositeView.Baseline = view.Baseline;
+                compositeView.Baseline = view.Y + view.Baseline;
                 return compositeView;
             }
             FunctionExpression functionExpression = expression as FunctionExpression;

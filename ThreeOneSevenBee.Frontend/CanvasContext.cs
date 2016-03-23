@@ -89,13 +89,13 @@ namespace ThreeOneSevenBee.Frontend
             if(view.Type == ParenthesisType.Left)
             {
                 context.BeginPath();
-                context.Ellipse(view.X + view.Width + offsetX, view.Y + view.Height / 2 + offsetY, view.Width, view.Height / 2, 0, Math.PI / 2, (3 * Math.PI) / 2);
+                context.Ellipse(view.X + view.Width + offsetX, view.Y + view.Height / 2 + offsetY, view.Width, 1.1 * view.Height / 2, 0, -1.141096661 + Math.PI, 1.141096661 + Math.PI);
                 context.Stroke();
             }
             else
             {
                 context.BeginPath();
-                context.Ellipse(view.X + offsetX, view.Y + view.Height / 2 + offsetY, view.Width, view.Height / 2, 0, Math.PI / 2, (3 * Math.PI) / 2, true);
+                context.Ellipse(view.X + offsetX, view.Y + view.Height / 2 + offsetY, view.Width, 1.1 * view.Height / 2, 0, -1.141096661, 1.141096661);
                 context.Stroke();
             }
         }
@@ -103,9 +103,9 @@ namespace ThreeOneSevenBee.Frontend
         public override void Draw(SqrtView view, double offsetX, double offsetY)
         {
             context.BeginPath();
-            context.MoveTo(view.X + offsetX + view.SignWidth / 8, view.Y + offsetY + view.Height - view.SignWidth / 2);
-            context.LineTo(view.X + offsetX + view.SignWidth / 4, view.Y + offsetY +   view.Height - view.SignWidth / 2 );
-            context.LineTo(view.X + offsetX + view.SignWidth / 2, view.Y + offsetY + view.Height);
+            context.MoveTo(view.X + offsetX, view.Y + offsetY + view.Height - view.SignWidth / 2);
+            context.LineTo(view.X + offsetX + view.SignWidth / 4 - view.SignWidth / 8, view.Y + offsetY +   view.Height - view.SignWidth / 2 );
+            context.LineTo(view.X + offsetX + view.SignWidth / 2 - view.SignWidth / 8, view.Y + offsetY + view.Height);
             context.LineTo(view.X + offsetX + view.SignWidth, view.Y + offsetY + view.TopHeight / 2);
             context.LineTo(view.X + offsetX + view.Width, view.Y + offsetY + view.TopHeight / 2);
             context.Stroke();
