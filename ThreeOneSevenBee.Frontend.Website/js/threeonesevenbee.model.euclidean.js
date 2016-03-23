@@ -160,6 +160,14 @@
         },
         constructor: function () {
         },
+        normalize: function () {
+            var length = this.getLength();
+            this.x /= length;
+            this.y /= length;
+        },
+        getLength: function () {
+            return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.x, 2));
+        },
         toString: function () {
             return "{" + Bridge.Int.format(this.x, "0.00") + ", " + Bridge.Int.format(this.y, "0.00") + "}";
         },

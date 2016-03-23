@@ -14,6 +14,26 @@
             this.setcorners(corners);
             this.setrelations(relations);
         },
+        constructor$1: function (sideCount) {
+            var sides = new Bridge.List$1(ThreeOneSevenBee.Model.Polygon.PolygonSide)();
+            var corners = new Bridge.List$1(ThreeOneSevenBee.Model.Polygon.PolygonCorner)();
+            var relations = new Bridge.List$1(ThreeOneSevenBee.Model.Polygon.PolygonRelation)();
+            var side = 65;
+            var corner = 97;
+            var lastCorner = new ThreeOneSevenBee.Model.Polygon.PolygonCorner(corner++);
+            corners.add(lastCorner);
+            var thisCorner;
+            for (var i = 1; i < sideCount; i++) {
+                thisCorner = new ThreeOneSevenBee.Model.Polygon.PolygonCorner(corner++);
+                corners.add(thisCorner);
+                sides.add(new ThreeOneSevenBee.Model.Polygon.PolygonSide(lastCorner, thisCorner, side++));
+                thisCorner = (i === sideCount - 1) ? sides.getItem(0).getcorner1() : lastCorner;
+            }
+            this.setsides(sides);
+            this.setcorners(corners);
+            this.setrelations(relations);
+            console.log("PolygonModel Constructor done");
+        },
         getCornerIndex: function (cornerID) {
             for (var i = 0; i < this.getcorners().getCount(); i++) {
                 if (this.getcorners().getItem(i).getidentifier() === cornerID) {
@@ -69,7 +89,7 @@
             // Insert missing corner
             newCorners.add(cutCorner2);
             this.getcorners().add(cutCorner1);
-            return new ThreeOneSevenBee.Model.Geometry.PolygonModel(newSides, newCorners, this.getrelations()); // Same relations are just passed on
+            return new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor", newSides, newCorners, this.getrelations()); // Same relations are just passed on
         }
     });
     

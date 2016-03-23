@@ -17,6 +17,13 @@
     
                 var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("(sqrt{sqrt{a}^b/b^3+b-(b*b)^b})", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
     
+                var polygon = new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor$1", 4);
+                var cornerpos = new Bridge.List$1(ThreeOneSevenBee.Model.Euclidean.Vector2)();
+                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 0));
+                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 1));
+                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 1, 1));
+                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 1, 0));
+    
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(canvas.width, canvas.height), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(new ThreeOneSevenBee.Model.UI.ProgressbarStar(50, 100, [30, 60, 75]), canvas.width, 20), {
                         setY: 30
@@ -27,7 +34,8 @@
                     } )],
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(expressionModel, canvas.width, 100), {
                         setY: canvas.height - 100
-                    } )]
+                    } )],
+                    [new ThreeOneSevenBee.Model.UI.PolygonView("constructor", polygon, cornerpos, 200, 200, 100, 100)]
                 ] );
                 context.setContentView(view);
                 expressionModel.addOnChanged(function (m) {
@@ -59,7 +67,7 @@
             this.context.clearRect(0, 0, Bridge.Int.trunc(this.getWidth()), Bridge.Int.trunc(this.getHeight()));
         },
         draw$3: function (view, offsetX, offsetY) {
-            this.draw$8(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             this.context.fillStyle = "#000000";
             this.context.textBaseline = "middle";
             this.context.textAlign = "center";
@@ -119,7 +127,7 @@
                 this.context.stroke();
             }
         },
-        draw$7: function (view, offsetX, offsetY) {
+        draw$8: function (view, offsetX, offsetY) {
             this.context.beginPath();
             this.context.moveTo(view.getX() + offsetX + view.getSignWidth() / 8, view.getY() + offsetY + view.getHeight() - view.getSignWidth() / 2);
             this.context.lineTo(view.getX() + offsetX + view.getSignWidth() / 4, view.getY() + offsetY + view.getHeight() - view.getSignWidth() / 2);
@@ -128,7 +136,7 @@
             this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsetY + view.getTopHeight() / 2);
             this.context.stroke();
         },
-        draw$8: function (view, offsetX, offsetY) {
+        draw$9: function (view, offsetX, offsetY) {
             this.context.fillStyle = view.getBackgroundColor();
             this.context.fillRect(Bridge.Int.trunc((view.getX() + offsetX)), Bridge.Int.trunc((view.getY() + offsetY)), Bridge.Int.trunc(view.getWidth()), Bridge.Int.trunc(view.getHeight()));
         },
@@ -136,6 +144,21 @@
             var img = new Image();
             img.src = "img/" + view.getImage();
             this.context.drawImage(img, view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
+        },
+        draw$6: function (view, offsetX, offsetY) {
+            if (view.getcornerPositions().getCount() < 3) {
+                throw new Bridge.Exception("Polygon does not contain enough corners");
+            }
+            this.context.beginPath();
+            console.log("Line at: " + (view.getcornerPositions().getItem(0).x + offsetX) + " x " + (view.getcornerPositions().getItem(0).y + offsetY));
+            this.context.moveTo(view.getcornerPositions().getItem(0).x + offsetX, view.getcornerPositions().getItem(0).y + offsetY);
+            for (var i = 1; i < view.getcornerPositions().getCount(); i++) {
+                console.log("Line at: " + (view.getcornerPositions().getItem(i).x + offsetX) + " x " + (view.getcornerPositions().getItem(i).y + offsetY));
+                this.context.lineTo(view.getcornerPositions().getItem(i).x + offsetX, view.getcornerPositions().getItem(i).y + offsetY);
+            }
+            this.context.closePath();
+            this.context.stroke();
+            //context.Fill();
         }
     });
     

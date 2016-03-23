@@ -14,6 +14,9 @@
     <script src="js/threeOneSevenBee.model.expression.expressions.js"></script>
     <script src="js/threeOneSevenBee.model.js"></script>
     <script src="js/threeOneSevenBee.frontend.js"></script>
+    <script src="js/threeOneSevenBee.model.euclidean.js"></script>
+    <script src="js/threeOneSevenBee.model.geometry.js"></script>
+    <script src="js/threeOneSevenBee.model.polygon.js"></script>
 </head>
 <body style="margin: 0;overflow:hidden">
     <canvas id="canvas" width="600" height="400"></canvas>

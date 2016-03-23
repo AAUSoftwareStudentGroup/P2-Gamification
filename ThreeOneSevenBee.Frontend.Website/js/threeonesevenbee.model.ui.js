@@ -22,7 +22,7 @@
             this.setBackgroundColor("transparent");
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$8(this, offsetX, offsetY);
+            context.draw$9(this, offsetX, offsetY);
         },
         click: function (x, y) {
             if (this.containsPoint(x, y) && Bridge.hasValue(this.onClick)) {
@@ -61,25 +61,28 @@
             this._contentView.drawWithContext(this, 0, 0);
         },
         draw$2: function (view, offsetX, offsetY) {
-            this.draw$8(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$3: function (view, offsetX, offsetY) {
-            this.draw$8(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$1: function (view, offsetX, offsetY) {
             this.draw$3(Bridge.as(view, ThreeOneSevenBee.Model.UI.LabelView), offsetX, offsetY);
         },
-        draw$6: function (view, offsetX, offsetY) {
-            this.draw$8(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+        draw$7: function (view, offsetX, offsetY) {
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$4: function (view, offsetX, offsetY) {
-            this.draw$8(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$5: function (view, offsetX, offsetY) {
-            this.draw$8(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
-        draw$7: function (view, offsetX, offsetY) {
-            this.draw$8(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+        draw$8: function (view, offsetX, offsetY) {
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+        },
+        draw$6: function (view, offsetX, offsetY) {
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         }
     });
     
@@ -196,7 +199,7 @@
         },
         drawWithContext: function (context, offsetX, offsetY) {
             var $t;
-            context.draw$8(this, offsetX, offsetY);
+            context.draw$9(this, offsetX, offsetY);
             $t = Bridge.getEnumerator(this.children);
             while ($t.moveNext()) {
                 var child = $t.getCurrent();
@@ -295,7 +298,7 @@
             }
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$8(this, offsetX, offsetY);
+            context.draw$9(this, offsetX, offsetY);
             this.getContent$1().drawWithContext(context, offsetX + this.getInnerX(), offsetY + this.getInnerY());
         },
         align: function (view) {
@@ -359,6 +362,76 @@
         }
     });
     
+    Bridge.define('ThreeOneSevenBee.Model.UI.PolygonView', {
+        inherits: [ThreeOneSevenBee.Model.UI.View],
+        config: {
+            properties: {
+                model: null,
+                cornerPositions: null
+            }
+        },
+        constructor$1: function (model, x, y, width, height) {
+            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, x, y, width, height);
+    
+            // Draw model as is
+            this.setcornerPositions(new Bridge.List$1(ThreeOneSevenBee.Model.Euclidean.Vector2)());
+            var vector = new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 0);
+            var angle = 2 * Math.PI / (Bridge.Linq.Enumerable.from(model.getcorners()).count() - 2);
+            this.getcornerPositions().add(vector.$clone());
+            for (var i = 1; i < Bridge.Linq.Enumerable.from(model.getcorners()).count(); i++) {
+                vector.x = Math.cos(angle * i);
+                vector.y = Math.sin(angle * i);
+                vector.normalize();
+                this.getcornerPositions().add(ThreeOneSevenBee.Model.Euclidean.Vector2.op_Addition(vector, this.getcornerPositions().getItem(i - 1)));
+            }
+            this.setcornerPositions(this.getcornerPositions());
+            this.centerAndScale(width, height);
+        },
+        constructor: function (model, cornerPositions, x, y, width, height) {
+            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, x, y, width, height);
+    
+            // Draw model per specifications
+            if (Bridge.Linq.Enumerable.from(model.getcorners()).count() !== Bridge.Linq.Enumerable.from(cornerPositions).count()) {
+                throw new Bridge.ArgumentException("Non-equal amounts of cornerpositions(" + Bridge.Linq.Enumerable.from(cornerPositions).count() + ") and corners(" + Bridge.Linq.Enumerable.from(model.getcorners()).count() + ")!");
+            }
+    
+            this.setcornerPositions(cornerPositions);
+            this.centerAndScale(width, height);
+        },
+        centerAndScale: function (width, height) {
+            var $t;
+            var min = new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", Number.MAX_VALUE, Number.MAX_VALUE);
+            var max = new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", Number.MIN_VALUE, Number.MIN_VALUE);
+            $t = Bridge.getEnumerator(this.getcornerPositions());
+            while ($t.moveNext()) {
+                var corner = $t.getCurrent();
+                if (corner.x < min.x) {
+                    min.x = corner.x;
+                }
+                if (corner.y < min.y) {
+                    min.y = corner.y;
+                }
+                if (corner.x > max.x) {
+                    max.x = corner.x;
+                }
+                if (corner.y > max.y) {
+                    max.y = corner.y;
+                }
+            }
+            max = ThreeOneSevenBee.Model.Euclidean.Vector2.op_Addition(max.$clone(), min.$clone());
+            var scale = (max.x - width < max.y - height) ? width / max.x : height / max.y;
+    
+            for (var i = 0; i < Bridge.Linq.Enumerable.from(this.getcornerPositions()).count(); i++) {
+                this.getcornerPositions().setItem(i, ThreeOneSevenBee.Model.Euclidean.Vector2.op_Addition(this.getcornerPositions().getItem(i), min.$clone()));
+                this.getcornerPositions().setItem(i, ThreeOneSevenBee.Model.Euclidean.Vector2.op_Multiply$1(this.getcornerPositions().getItem(i), scale)); //  Take the biggest offset and scale accordingly
+            }
+    
+        },
+        drawWithContext: function (context, offsetX, offsetY) {
+            context.draw$6(this, offsetX + this.getX(), offsetY + this.getX());
+        }
+    });
+    
     Bridge.define('ThreeOneSevenBee.Model.UI.SqrtView', {
         inherits: [ThreeOneSevenBee.Model.UI.View],
         config: {
@@ -374,7 +447,7 @@
             this.setTopHeight(5);
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$7(this, offsetX, offsetY);
+            context.draw$8(this, offsetX, offsetY);
         },
         scale: function (factor) {
             this.setSignWidth(this.getSignWidth()*factor);
