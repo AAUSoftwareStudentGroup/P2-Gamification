@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ThreeOneSevenBee.Model.Polygon
+namespace threeonesevenbee.Model.Polygon
 {
-    class PolygonSide
+    public class PolygonSide
     {
         public PolygonCorner corner1 { get; private set; }
         public PolygonCorner corner2 { get; private set; }

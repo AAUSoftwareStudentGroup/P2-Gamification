@@ -77,6 +77,7 @@
     <Compile Include="UI\LabelView.cs" />
     <Compile Include="UI\OperatorView.cs" />
     <Compile Include="UI\ParenthesisView.cs" />
+    <Compile Include="UI\PolygonView.cs" />
     <Compile Include="UI\ProgressbarCircle.cs" />
     <Compile Include="UI\ProgressbarStar.cs" />
     <Compile Include="UI\ProgressbarStarView.cs" />

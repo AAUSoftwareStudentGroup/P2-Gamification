@@ -1,9 +1,9 @@
 ﻿using System;
 using Bridge.Html5;
-using ThreeOneSevenBee.Model.UI;
-using ThreeOneSevenBee.Model.Expression.Expressions;
+using threeonesevenbee.Model.UI;
+using threeonesevenbee.Model.Expression.Expressions;
 
-namespace ThreeOneSevenBee.Frontend
+namespace threeonesevenbee.Frontend
 {
     class CanvasContext : Context
     {
@@ -102,9 +102,9 @@ namespace ThreeOneSevenBee.Frontend
         public override void Draw(SqrtView view, double offsetX, double offsetY)
         {
             context.BeginPath();
-            context.MoveTo(view.X + offsetX, view.Y + offsetY + view.Height - view.SignWidth / 2);
-            context.LineTo(view.X + offsetX + view.SignWidth / 4 - view.SignWidth / 8, view.Y + offsetY +   view.Height - view.SignWidth / 2 );
-            context.LineTo(view.X + offsetX + view.SignWidth / 2 - view.SignWidth / 8, view.Y + offsetY + view.Height);
+            context.MoveTo(view.X + offsetX + view.SignWidth / 8, view.Y + offsetY + view.Height - view.SignWidth / 2);
+            context.LineTo(view.X + offsetX + view.SignWidth / 4, view.Y + offsetY + view.Height - view.SignWidth / 2);
+            context.LineTo(view.X + offsetX + view.SignWidth / 2, view.Y + offsetY + view.Height);
             context.LineTo(view.X + offsetX + view.SignWidth, view.Y + offsetY + view.TopHeight / 2);
             context.LineTo(view.X + offsetX + view.Width, view.Y + offsetY + view.TopHeight / 2);
             context.Stroke();
@@ -124,5 +124,21 @@ namespace ThreeOneSevenBee.Frontend
             context.DrawImage(img, view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
         }
 
+        public override void Draw(PolygonView view, double offsetX, double offsetY)
+        {
+            if (view.cornerPositions.Count < 3)
+                throw new Exception("Polygon does not contain enough corners");
+            context.BeginPath();
+            Console.WriteLine("Line at: " + (view.cornerPositions[0].X + offsetX) + " x " + (view.cornerPositions[0].Y + offsetY));
+            context.MoveTo(view.cornerPositions[0].X + offsetX, view.cornerPositions[0].Y + offsetY);
+            for (int i = 1; i < view.cornerPositions.Count; i++)
+            {
+                Console.WriteLine("Line at: " + (view.cornerPositions[i].X + offsetX) + " x " + (view.cornerPositions[i].Y + offsetY));
+                context.LineTo(view.cornerPositions[i].X + offsetX, view.cornerPositions[i].Y + offsetY);
+            }
+            context.ClosePath();
+            context.Stroke();
+            //context.Fill();
+        }
     }
 }

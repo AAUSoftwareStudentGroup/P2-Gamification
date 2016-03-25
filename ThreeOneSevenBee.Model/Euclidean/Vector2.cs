@@ -1,4 +1,6 @@
-﻿namespace ThreeOneSevenBee.Model.Euclidean
+﻿using System;
+
+namespace threeonesevenbee.Model.Euclidean
 {
     /// <summary>
     /// Basic 2D vector.
@@ -35,7 +37,17 @@
             return new Vector2(left.X / right, left.Y / right);
         }
 
+        public void Normalize()
+        {
+            double length = GetLength();
+            X /= length;
+            Y /= length;
+        }
 
+        public double GetLength()
+        {
+            return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(X, 2));
+        }
 
         public double X;
 

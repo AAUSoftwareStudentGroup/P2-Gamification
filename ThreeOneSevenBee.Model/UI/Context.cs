@@ -4,7 +4,7 @@ using Bridge.Html5;
 using System;
 #endif
 
-namespace ThreeOneSevenBee.Model.UI
+namespace threeonesevenbee.Model.UI
 {
     public abstract class Context
     {
@@ -65,6 +65,11 @@ namespace ThreeOneSevenBee.Model.UI
         }
 
         public virtual void Draw(SqrtView view, double offsetX, double offsetY)
+        {
+            Draw(view as View, offsetX, offsetY);
+        }
+
+        public virtual void Draw(PolygonView view, double offsetX, double offsetY)
         {
             Draw(view as View, offsetX, offsetY);
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ThreeOneSevenBee.Model.Expression
+namespace threeonesevenbee.Model.Expression
 {
     public abstract class ExpressionBase : IEquatable<ExpressionBase>
     {

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Bridge.Html5;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ThreeOneSevenBee.Model.Polygon;
+using threeonesevenbee.Model.Polygon;
 
-namespace ThreeOneSevenBee.Model.Geometry
+namespace threeonesevenbee.Model.Geometry
 {
-    class PolygonModel
+    public class PolygonModel
     {
         public List<PolygonSide> sides { get; private set; }
         public List<PolygonCorner> corners { get; private set; }
@@ -17,6 +18,28 @@ namespace ThreeOneSevenBee.Model.Geometry
             this.sides = sides;
             this.corners = corners;
             this.relations = relations;
+        }
+        public PolygonModel(int sideCount)
+        {
+            List<PolygonSide> sides = new List<PolygonSide>();
+            List<PolygonCorner> corners = new List<PolygonCorner>();
+            List<PolygonRelation> relations = new List<PolygonRelation>();
+            char side = 'A';
+            char corner = 'a';
+            PolygonCorner lastCorner = new PolygonCorner(corner++);
+            corners.Add(lastCorner);
+            PolygonCorner thisCorner;
+            for (int i = 1; i < sideCount;i++)
+            {
+                thisCorner = new PolygonCorner(corner++);
+                corners.Add(thisCorner);
+                sides.Add(new PolygonSide(lastCorner, thisCorner, side++));
+                thisCorner = (i == sideCount - 1) ? sides[0].corner1 : lastCorner;
+            }
+            this.sides = sides;
+            this.corners = corners;
+            this.relations = relations;
+            Console.WriteLine("PolygonModel Constructor done");
         }
 
         private int GetCornerIndex(char cornerID)
