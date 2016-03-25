@@ -4,12 +4,12 @@ using Bridge;
 #else
 using System;
 #endif
-using threeonesevenbee.Model.UI;
-using threeonesevenbee.Model.Expression;
-using threeonesevenbee.Model.Expression.Expressions;
+using ThreeOneSevenBee.Model.UI;
+using ThreeOneSevenBee.Model.Expression;
+using ThreeOneSevenBee.Model.Expression.Expressions;
 using System.Collections.Generic;
 
-namespace threeonesevenbee.Model.UI
+namespace ThreeOneSevenBee.Model.UI
 {
     public class ExpressionView : FrameView
     {

@@ -1,6 +1,6 @@
-﻿using threeonesevenbee.Model.Expression.Expressions;
+﻿using ThreeOneSevenBee.Model.Expression.Expressions;
 
-namespace threeonesevenbee.Model.Expression
+namespace ThreeOneSevenBee.Model.Expression
 {
     public class Token
     {

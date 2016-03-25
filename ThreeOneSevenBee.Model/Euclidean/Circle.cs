@@ -1,4 +1,4 @@
-﻿namespace threeonesevenbee.Model.Euclidean
+﻿namespace ThreeOneSevenBee.Model.Euclidean
 {
     /// <summary>
     /// A basic circle, represented as a point and a radius.

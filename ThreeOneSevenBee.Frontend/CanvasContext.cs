@@ -1,9 +1,9 @@
 ﻿using System;
 using Bridge.Html5;
-using threeonesevenbee.Model.UI;
-using threeonesevenbee.Model.Expression.Expressions;
+using ThreeOneSevenBee.Model.UI;
+using ThreeOneSevenBee.Model.Expression.Expressions;
 
-namespace threeonesevenbee.Frontend
+namespace ThreeOneSevenBee.Frontend
 {
     class CanvasContext : Context
     {

@@ -1,7 +1,7 @@
 ﻿(function (globals) {
     "use strict";
 
-    Bridge.define('threeonesevenbee.Model.Template');
+    Bridge.define('ThreeOneSevenBee.Model.Template');
     
     
     

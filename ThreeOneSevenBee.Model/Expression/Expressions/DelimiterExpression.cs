@@ -4,7 +4,7 @@ using Bridge.Html5;
 #endif
 using System.Collections.Generic;
 
-namespace threeonesevenbee.Model.Expression.Expressions
+namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
     public class DelimiterExpression : ExpressionBase
 	{

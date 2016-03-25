@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using threeonesevenbee.Model.Expression.Expressions;
+using ThreeOneSevenBee.Model.Expression.Expressions;
 
-namespace threeonesevenbee.Model.UI
+namespace ThreeOneSevenBee.Model.UI
 {
     public class OperatorView : View
     {

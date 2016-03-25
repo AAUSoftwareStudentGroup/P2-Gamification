@@ -4,7 +4,7 @@ using Bridge.Html5;
 using System;
 #endif
 
-namespace threeonesevenbee.Model
+namespace ThreeOneSevenBee.Model
 {
     public class Template { }
 }

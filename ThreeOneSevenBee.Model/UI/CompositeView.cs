@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace threeonesevenbee.Model.UI
+namespace ThreeOneSevenBee.Model.UI
 {
     public class CompositeView : View, IEnumerable<View>
     {

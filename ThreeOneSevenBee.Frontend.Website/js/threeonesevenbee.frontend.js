@@ -1,7 +1,7 @@
 ﻿(function (globals) {
     "use strict";
 
-    Bridge.define('threeonesevenbee.Frontend.App', {
+    Bridge.define('ThreeOneSevenBee.Frontend.App', {
         statics: {
             config: {
                 init: function () {
@@ -13,29 +13,29 @@
                 canvas.width = document.documentElement.clientWidth;
                 canvas.height = document.documentElement.clientHeight;
     
-                var context = new threeonesevenbee.Frontend.CanvasContext(canvas);
+                var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var expressionModel = new threeonesevenbee.Model.Expression.ExpressionModel("sqrt{{a*b*a*c*c*c*c*a*a*b}/{a^5*b^4*c^1}}", [Bridge.get(threeonesevenbee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(threeonesevenbee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(threeonesevenbee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
+                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("sqrt{{a*b*a*c*c*c*c*a*a*b}/{a^5*b^4*c^1}}", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
     
-                var polygon = new threeonesevenbee.Model.Geometry.PolygonModel("constructor$1", 4);
-                var cornerpos = new Bridge.List$1(threeonesevenbee.Model.Euclidean.Vector2)();
-                cornerpos.add(new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", 0, 0));
-                cornerpos.add(new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", 0, 1));
-                cornerpos.add(new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", 1, 1));
-                cornerpos.add(new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", 1, 0));
+                var polygon = new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor$1", 4);
+                var cornerpos = new Bridge.List$1(ThreeOneSevenBee.Model.Euclidean.Vector2)();
+                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 0));
+                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 1));
+                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 1, 1));
+                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 1, 0));
     
-                var view = Bridge.merge(new threeonesevenbee.Model.UI.CompositeView(canvas.width, canvas.height), [
-                    [Bridge.merge(new threeonesevenbee.Model.UI.ProgressbarStarView(new threeonesevenbee.Model.UI.ProgressbarStar(50, 100, [30, 60, 75]), canvas.width, 20), {
+                var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(canvas.width, canvas.height), [
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(new ThreeOneSevenBee.Model.UI.ProgressbarStar(50, 100, [30, 60, 75]), canvas.width, 20), {
                         setY: 30
                     } )],
-                    [Bridge.merge(new threeonesevenbee.Model.UI.ExpressionView(expressionModel, canvas.width, canvas.height - 150), {
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(expressionModel, canvas.width, canvas.height - 150), {
                         setX: 0,
                         setY: 50
                     } )],
-                    [Bridge.merge(new threeonesevenbee.Model.UI.IdentityMenuView(expressionModel, canvas.width, 100), {
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(expressionModel, canvas.width, 100), {
                         setY: canvas.height - 100
                     } )],
-                    [new threeonesevenbee.Model.UI.PolygonView("constructor", polygon, cornerpos, 200, 200, 100, 100)]
+                    [new ThreeOneSevenBee.Model.UI.PolygonView("constructor", polygon, cornerpos, 200, 200, 100, 100)]
                 ] );
                 context.setContentView(view);
                 expressionModel.addOnChanged(function (m) {
@@ -46,11 +46,11 @@
         }
     });
     
-    Bridge.define('threeonesevenbee.Frontend.CanvasContext', {
-        inherits: [threeonesevenbee.Model.UI.Context],
+    Bridge.define('ThreeOneSevenBee.Frontend.CanvasContext', {
+        inherits: [ThreeOneSevenBee.Model.UI.Context],
         context: null,
         constructor: function (canvas) {
-            threeonesevenbee.Model.UI.Context.prototype.$constructor.call(this, canvas.width, canvas.height);
+            ThreeOneSevenBee.Model.UI.Context.prototype.$constructor.call(this, canvas.width, canvas.height);
     
             this.context = canvas.getContext("2d");
             this.context.fillStyle = "#000000";
@@ -64,32 +64,32 @@
             this.context.canvas.addEventListener("mousedown", function (e) {
                 view.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             });
-            threeonesevenbee.Model.UI.Context.prototype.setContentView.call(this, view);
+            ThreeOneSevenBee.Model.UI.Context.prototype.setContentView.call(this, view);
         },
         clear: function () {
             this.context.clearRect(0, 0, Bridge.Int.trunc(this.getWidth()), Bridge.Int.trunc(this.getHeight()));
         },
         draw$3: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, threeonesevenbee.Model.UI.View), offsetX, offsetY);
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             this.context.font = view.getHeight() + "px Cambria Math";
             this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + view.getWidth() / 2)), Bridge.Int.trunc((view.getY() + offsetY + view.getHeight() / 2)));
         },
         draw$4: function (view, offsetX, offsetY) {
-            if (view.gettype() === threeonesevenbee.Model.Expression.Expressions.OperatorType.divide) {
+            if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                 this.context.beginPath();
                 this.context.moveTo(view.getX() + offsetX, view.getY() + offsetY + view.getHeight() / 2);
                 this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsetY + view.getHeight() / 2);
                 this.context.stroke();
             }
             else  {
-                if (view.gettype() === threeonesevenbee.Model.Expression.Expressions.OperatorType.multiply) {
+                if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
                     this.context.beginPath();
                     this.context.arc(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2, view.getHeight() / 10, 0, 2 * Math.PI);
                     this.context.fill();
                     this.context.stroke();
                 }
                 else  {
-                    if (view.gettype() === threeonesevenbee.Model.Expression.Expressions.OperatorType.add) {
+                    if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
                         this.context.beginPath();
                         this.context.moveTo(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY - view.getHeight() / 3 + view.getHeight() / 2);
                         this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 3 + view.getHeight() / 2);
@@ -98,14 +98,14 @@
                         this.context.stroke();
                     }
                     else  {
-                        if (view.gettype() === threeonesevenbee.Model.Expression.Expressions.OperatorType.subtract) {
+                        if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract) {
                             this.context.beginPath();
                             this.context.moveTo(view.getX() + offsetX + view.getWidth() / 2 - view.getHeight() / 3, view.getY() + offsetY + view.getHeight() / 2);
                             this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2 + view.getHeight() / 3, view.getY() + offsetY + view.getHeight() / 2);
                             this.context.stroke();
                         }
                         else  {
-                            if (view.gettype() === threeonesevenbee.Model.Expression.Expressions.OperatorType.minus) {
+                            if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus) {
                                 this.context.beginPath();
                                 this.context.moveTo(view.getX() + offsetX + view.getWidth() / 3, view.getY() + offsetY + view.getHeight() / 2);
                                 this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsetY + view.getHeight() / 2);
@@ -117,7 +117,7 @@
             }
         },
         draw$5: function (view, offsetX, offsetY) {
-            if (view.getType() === threeonesevenbee.Model.UI.ParenthesisType.left) {
+            if (view.getType() === ThreeOneSevenBee.Model.UI.ParenthesisType.left) {
                 this.context.beginPath();
                 this.context.ellipse(view.getX() + view.getWidth() + offsetX, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), 1.1 * view.getHeight() / 2, 0, -1.141096661 + Math.PI, 1.141096661 + Math.PI);
                 this.context.stroke();

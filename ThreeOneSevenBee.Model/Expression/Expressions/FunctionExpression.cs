@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Bridge.Html5;
 #endif
 
-namespace threeonesevenbee.Model.Expression.Expressions
+namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
     class FunctionExpression : ExpressionBase
     {

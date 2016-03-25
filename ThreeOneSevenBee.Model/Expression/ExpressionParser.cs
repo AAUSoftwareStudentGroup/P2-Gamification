@@ -3,20 +3,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using threeonesevenbee.Model.Expression.Expressions;
+using ThreeOneSevenBee.Model.Expression.Expressions;
 
 #if BRIDGE
-using TokenQueue = threeonesevenbee.Model.Collections.Queue<threeonesevenbee.Model.Expression.Token>;
-using TokenStack = threeonesevenbee.Model.Collections.Stack<threeonesevenbee.Model.Expression.Token>;
-using ExpressionStack = threeonesevenbee.Model.Collections.Stack<threeonesevenbee.Model.Expression.ExpressionBase>;
+using TokenQueue = ThreeOneSevenBee.Model.Collections.Queue<ThreeOneSevenBee.Model.Expression.Token>;
+using TokenStack = ThreeOneSevenBee.Model.Collections.Stack<ThreeOneSevenBee.Model.Expression.Token>;
+using ExpressionStack = ThreeOneSevenBee.Model.Collections.Stack<ThreeOneSevenBee.Model.Expression.ExpressionBase>;
 #else
-using TokenQueue = System.Collections.Generic.Queue<threeonesevenbee.Model.Expression.Token>;
-using TokenStack = System.Collections.Generic.Stack<threeonesevenbee.Model.Expression.Token>;
-using ExpressionStack = System.Collections.Generic.Stack<threeonesevenbee.Model.Expression.ExpressionBase>;
+using TokenQueue = System.Collections.Generic.Queue<ThreeOneSevenBee.Model.Expression.Token>;
+using TokenStack = System.Collections.Generic.Stack<ThreeOneSevenBee.Model.Expression.Token>;
+using ExpressionStack = System.Collections.Generic.Stack<ThreeOneSevenBee.Model.Expression.ExpressionBase>;
 #endif
 
 
-namespace threeonesevenbee.Model.Expression
+namespace ThreeOneSevenBee.Model.Expression
 {
     public class ExpressionParser
     {

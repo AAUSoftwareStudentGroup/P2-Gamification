@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace threeonesevenbee.Model.Expression
+namespace ThreeOneSevenBee.Model.Expression
 {
     /// <summary>
     /// A generel representation of an expression rule.

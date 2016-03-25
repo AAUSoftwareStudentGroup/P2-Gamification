@@ -1,7 +1,7 @@
 ﻿(function (globals) {
     "use strict";
 
-    Bridge.define('threeonesevenbee.Model.Polygon.PolygonCorner', {
+    Bridge.define('ThreeOneSevenBee.Model.Polygon.PolygonCorner', {
         config: {
             init: function () {
                 Bridge.property(this, "identifier", new Bridge.Int() || new Bridge.Int());
@@ -12,9 +12,9 @@
         }
     });
     
-    Bridge.define('threeonesevenbee.Model.Polygon.PolygonRelation', {
+    Bridge.define('ThreeOneSevenBee.Model.Polygon.PolygonRelation', {
         statics: {
-            getDefaultValue: function () { return new threeonesevenbee.Model.Polygon.PolygonRelation(); }
+            getDefaultValue: function () { return new ThreeOneSevenBee.Model.Polygon.PolygonRelation(); }
         },
         config: {
             init: function () {
@@ -31,20 +31,20 @@
             return hash;
         },
         equals: function (o) {
-            if (!Bridge.is(o,threeonesevenbee.Model.Polygon.PolygonRelation)) {
+            if (!Bridge.is(o,ThreeOneSevenBee.Model.Polygon.PolygonRelation)) {
                 return false;
             }
             return Bridge.equals(this.corner1, o.corner1) && Bridge.equals(this.corner2, o.corner2);
         },
         $clone: function (to) {
-            var s = to || new threeonesevenbee.Model.Polygon.PolygonRelation();
+            var s = to || new ThreeOneSevenBee.Model.Polygon.PolygonRelation();
             s.corner1 = this.corner1;
             s.corner2 = this.corner2;
             return s;
         }
     });
     
-    Bridge.define('threeonesevenbee.Model.Polygon.PolygonSide', {
+    Bridge.define('ThreeOneSevenBee.Model.Polygon.PolygonSide', {
         config: {
             properties: {
                 corner1: null,

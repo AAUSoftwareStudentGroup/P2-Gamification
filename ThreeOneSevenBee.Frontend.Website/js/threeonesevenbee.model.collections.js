@@ -1,7 +1,7 @@
 ﻿(function (globals) {
     "use strict";
 
-    Bridge.define('threeonesevenbee.Model.Collections.Queue$1', function (T) { return {
+    Bridge.define('ThreeOneSevenBee.Model.Collections.Queue$1', function (T) { return {
         inherits: [Bridge.IEnumerable$1(T)],
         list: null,
         constructor: function () {
@@ -29,7 +29,7 @@
         }
     }; });
     
-    Bridge.define('threeonesevenbee.Model.Collections.Stack$1', function (T) { return {
+    Bridge.define('ThreeOneSevenBee.Model.Collections.Stack$1', function (T) { return {
         inherits: [Bridge.IEnumerable$1(T)],
         list: null,
         constructor: function () {

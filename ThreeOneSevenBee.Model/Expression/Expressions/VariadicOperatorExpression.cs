@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace threeonesevenbee.Model.Expression.Expressions
+namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
     public class VariadicOperatorExpression : VariadicExpression
     {

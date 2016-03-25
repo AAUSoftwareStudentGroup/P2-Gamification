@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace threeonesevenbee.Model.Polygon
+namespace ThreeOneSevenBee.Model.Polygon
 {
     public class PolygonSide
     {

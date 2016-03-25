@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace threeonesevenbee.Model.Collections
+namespace ThreeOneSevenBee.Model.Collections
 {
     public class Stack<T> : IEnumerable<T>
     {

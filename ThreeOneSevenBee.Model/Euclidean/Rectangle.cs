@@ -1,4 +1,4 @@
-﻿namespace threeonesevenbee.Model.Euclidean
+﻿namespace ThreeOneSevenBee.Model.Euclidean
 {
     /// <summary>
     /// A basic rectangle represented as the location of the left top point and a width and height.

@@ -3,11 +3,11 @@ using Bridge.Html5;
 #else
 using System;
 #endif
-using threeonesevenbee.Model.Expression;
+using ThreeOneSevenBee.Model.Expression;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace threeonesevenbee.Model.UI
+namespace ThreeOneSevenBee.Model.UI
 {
     public class IdentityMenuView : CompositeView
     {

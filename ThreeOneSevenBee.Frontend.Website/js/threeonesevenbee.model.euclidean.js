@@ -1,22 +1,22 @@
 ﻿(function (globals) {
     "use strict";
 
-    /** @namespace threeonesevenbee.Model.Euclidean */
+    /** @namespace ThreeOneSevenBee.Model.Euclidean */
     
     /**
      * A basic circle, represented as a point and a radius.
      *
      * @public
-     * @class threeonesevenbee.Model.Euclidean.Circle
+     * @class ThreeOneSevenBee.Model.Euclidean.Circle
      */
-    Bridge.define('threeonesevenbee.Model.Euclidean.Circle', {
+    Bridge.define('ThreeOneSevenBee.Model.Euclidean.Circle', {
         statics: {
-            getDefaultValue: function () { return new threeonesevenbee.Model.Euclidean.Circle(); }
+            getDefaultValue: function () { return new ThreeOneSevenBee.Model.Euclidean.Circle(); }
         },
         radius: 0,
         config: {
             init: function () {
-                this.center = new threeonesevenbee.Model.Euclidean.Vector2() || new threeonesevenbee.Model.Euclidean.Vector2();
+                this.center = new ThreeOneSevenBee.Model.Euclidean.Vector2() || new ThreeOneSevenBee.Model.Euclidean.Vector2();
             }
         },
         constructor: function () {
@@ -43,7 +43,7 @@
             return squareDist <= squareRadius;
         },
         contains: function (rectangle) {
-            return this.contains$1(new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", rectangle.getLeft(), rectangle.getTop())) && this.contains$1(new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", rectangle.getRight(), rectangle.getTop())) && this.contains$1(new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", rectangle.getRight(), rectangle.getBottom())) && this.contains$1(new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", rectangle.getLeft(), rectangle.getBottom()));
+            return this.contains$1(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", rectangle.getLeft(), rectangle.getTop())) && this.contains$1(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", rectangle.getRight(), rectangle.getTop())) && this.contains$1(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", rectangle.getRight(), rectangle.getBottom())) && this.contains$1(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", rectangle.getLeft(), rectangle.getBottom()));
         },
         getHashCode: function () {
             var hash = 17;
@@ -52,13 +52,13 @@
             return hash;
         },
         equals: function (o) {
-            if (!Bridge.is(o,threeonesevenbee.Model.Euclidean.Circle)) {
+            if (!Bridge.is(o,ThreeOneSevenBee.Model.Euclidean.Circle)) {
                 return false;
             }
             return Bridge.equals(this.center, o.center) && Bridge.equals(this.radius, o.radius);
         },
         $clone: function (to) {
-            var s = to || new threeonesevenbee.Model.Euclidean.Circle();
+            var s = to || new ThreeOneSevenBee.Model.Euclidean.Circle();
             s.center = this.center;
             s.radius = this.radius;
             return s;
@@ -69,17 +69,17 @@
      * A basic rectangle represented as the location of the left top point and a width and height.
      *
      * @public
-     * @class threeonesevenbee.Model.Euclidean.Rectangle
+     * @class ThreeOneSevenBee.Model.Euclidean.Rectangle
      */
-    Bridge.define('threeonesevenbee.Model.Euclidean.Rectangle', {
+    Bridge.define('ThreeOneSevenBee.Model.Euclidean.Rectangle', {
         statics: {
-            getDefaultValue: function () { return new threeonesevenbee.Model.Euclidean.Rectangle(); }
+            getDefaultValue: function () { return new ThreeOneSevenBee.Model.Euclidean.Rectangle(); }
         },
         width: 0,
         height: 0,
         config: {
             init: function () {
-                this.location = new threeonesevenbee.Model.Euclidean.Vector2() || new threeonesevenbee.Model.Euclidean.Vector2();
+                this.location = new ThreeOneSevenBee.Model.Euclidean.Vector2() || new ThreeOneSevenBee.Model.Euclidean.Vector2();
             }
         },
         constructor: function () {
@@ -110,13 +110,13 @@
             return hash;
         },
         equals: function (o) {
-            if (!Bridge.is(o,threeonesevenbee.Model.Euclidean.Rectangle)) {
+            if (!Bridge.is(o,ThreeOneSevenBee.Model.Euclidean.Rectangle)) {
                 return false;
             }
             return Bridge.equals(this.location, o.location) && Bridge.equals(this.width, o.width) && Bridge.equals(this.height, o.height);
         },
         $clone: function (to) {
-            var s = to || new threeonesevenbee.Model.Euclidean.Rectangle();
+            var s = to || new ThreeOneSevenBee.Model.Euclidean.Rectangle();
             s.location = this.location;
             s.width = this.width;
             s.height = this.height;
@@ -128,29 +128,29 @@
      * Basic 2D vector.
      *
      * @public
-     * @class threeonesevenbee.Model.Euclidean.Vector2
+     * @class ThreeOneSevenBee.Model.Euclidean.Vector2
      */
-    Bridge.define('threeonesevenbee.Model.Euclidean.Vector2', {
+    Bridge.define('ThreeOneSevenBee.Model.Euclidean.Vector2', {
         statics: {
             op_Addition: function (left, right) {
-                return new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", left.x + right.x, left.y + right.y);
+                return new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", left.x + right.x, left.y + right.y);
             },
             op_Subtraction: function (left, right) {
-                return new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", left.x - right.x, left.y - right.y);
+                return new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", left.x - right.x, left.y - right.y);
             },
             op_Multiply: function (left, right) {
-                return new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", left * right.x, left * right.y);
+                return new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", left * right.x, left * right.y);
             },
             op_Multiply$1: function (left, right) {
-                return new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", left.x * right, left.y * right);
+                return new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", left.x * right, left.y * right);
             },
             op_Division: function (left, right) {
-                return new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", left / right.x, left / right.y);
+                return new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", left / right.x, left / right.y);
             },
             op_Division$1: function (left, right) {
-                return new threeonesevenbee.Model.Euclidean.Vector2("constructor$1", left.x / right, left.y / right);
+                return new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", left.x / right, left.y / right);
             },
-            getDefaultValue: function () { return new threeonesevenbee.Model.Euclidean.Vector2(); }
+            getDefaultValue: function () { return new ThreeOneSevenBee.Model.Euclidean.Vector2(); }
         },
         x: 0,
         y: 0,
@@ -178,13 +178,13 @@
             return hash;
         },
         equals: function (o) {
-            if (!Bridge.is(o,threeonesevenbee.Model.Euclidean.Vector2)) {
+            if (!Bridge.is(o,ThreeOneSevenBee.Model.Euclidean.Vector2)) {
                 return false;
             }
             return Bridge.equals(this.x, o.x) && Bridge.equals(this.y, o.y);
         },
         $clone: function (to) {
-            var s = to || new threeonesevenbee.Model.Euclidean.Vector2();
+            var s = to || new ThreeOneSevenBee.Model.Euclidean.Vector2();
             s.x = this.x;
             s.y = this.y;
             return s;

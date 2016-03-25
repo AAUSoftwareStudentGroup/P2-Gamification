@@ -5,7 +5,7 @@ using System;
 #endif
 using System.Collections.Generic;
 
-namespace threeonesevenbee.Model.Expression.Expressions
+namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
     public class ConstantExpression : ExpressionBase, ILeaf
     {

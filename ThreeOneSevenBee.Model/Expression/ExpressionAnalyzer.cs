@@ -5,9 +5,9 @@ using Bridge.Html5;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using threeonesevenbee.Model.Expression.Expressions;
+using ThreeOneSevenBee.Model.Expression.Expressions;
 
-namespace threeonesevenbee.Model.Expression
+namespace ThreeOneSevenBee.Model.Expression
 {
     /// <summary>
     /// Provides functionality to analyze expressions and provide identical alternatives based on <see cref="ExpressionRule"/>.

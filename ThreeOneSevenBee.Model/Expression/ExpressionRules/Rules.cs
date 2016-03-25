@@ -3,12 +3,12 @@
 using Bridge.Html5;
 #endif
 using System.Collections.Generic;
-using threeonesevenbee.Model.Expression.Expressions;
-using threeonesevenbee.Model.Expression;
+using ThreeOneSevenBee.Model.Expression.Expressions;
+using ThreeOneSevenBee.Model.Expression;
 using System.Linq;
 using System.Text;
 
-namespace threeonesevenbee.Model.Expression.ExpressionRules
+namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 {
     public static class Rules
     {
