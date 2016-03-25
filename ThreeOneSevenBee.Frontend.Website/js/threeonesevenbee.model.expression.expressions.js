@@ -1,6 +1,6 @@
 ﻿(function (globals) {
     "use strict";
-
+     
     Bridge.define('ThreeOneSevenBee.Model.Expression.Expressions.ConstantType', {
         statics: {
             pi: 0

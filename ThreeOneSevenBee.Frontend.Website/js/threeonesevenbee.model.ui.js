@@ -1,6 +1,5 @@
 ﻿(function (globals) {
     "use strict";
-
     Bridge.define('ThreeOneSevenBee.Model.UI.View', {
         onClick: null,
         config: {

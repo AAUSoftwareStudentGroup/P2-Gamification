@@ -1,6 +1,6 @@
 ﻿(function (globals) {
     "use strict";
-
+     
     Bridge.define('ThreeOneSevenBee.Frontend.App', {
         statics: {
             config: {

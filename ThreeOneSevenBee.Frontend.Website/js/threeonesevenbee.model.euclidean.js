@@ -1,6 +1,6 @@
 ﻿(function (globals) {
     "use strict";
-
+     
     /** @namespace ThreeOneSevenBee.Model.Euclidean */
     
     /**
