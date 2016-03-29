@@ -623,5 +623,56 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             identity = null;
             return false;
         }
+
+        /*
+        // abc / (cda) = b/d
+        public static bool DivisionWithSelf(ExpressionBase expression, List<ExpressionBase> selection, out ExpressionBase identity)
+        {
+            // Husk at optimere, dvs. flyt ting til deres mindste scope!
+            BinaryOperatorExpression operatorExpression = expression as BinaryOperatorExpression;
+            var left = operatorExpression.Left as VariadicOperatorExpression;
+            var right = operatorExpression.Right as VariadicOperatorExpression;
+
+            if (operatorExpression != null && selection.Count > 1)
+            {
+                if(operatorExpression.Type == OperatorType.Divide && left != null && right != null)
+                {
+                    //sammenlign de to lister left og right
+                    for (int i = 0; i < left.Count; i++)
+                    {
+                        for (int j = 0; j < right.Count; j++)
+                        {
+                            if (left[i].Equals(right[j]))
+                            {
+                                left.RemoveAt(i);
+                                i--;
+                                right.RemoveAt(j);
+                                break;
+                            }
+                        }
+                    }
+                    ExpressionSerializer serializer = new ExpressionSerializer();
+                    if (right.Count != 0 && left.Count != 0)
+                    {
+                        identity = null;
+                        return false;
+                    }
+                    //hvis de er ens, så fjern dem, hvis expression == selection, skriv 1.
+                    else if(left == null && right == null)
+                    {
+                        identity = serializer.Deserialize("1");
+                        return true;
+                    }
+                    else
+                    {
+                        identity = serializer.Deserialize(left + "/" + right);
+                        return true;
+                    }
+                }
+            }
+            identity = null;
+            return false;
+        }
+        */
     }
 }
