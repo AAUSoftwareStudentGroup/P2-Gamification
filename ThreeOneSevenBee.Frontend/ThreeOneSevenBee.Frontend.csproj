@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\ThreeOneSevenBee.Model\ThreeOneSevenBee.Model.Bridge.csproj">
+    <ProjectReference Include="..\threeonesevenbee.Model\ThreeOneSevenBee.Model.Bridge.csproj">
       <Project>{56a1842b-7ed3-406d-a3ab-a1d30116cc2f}</Project>
       <Name>ThreeOneSevenBee.Model.Bridge</Name>
     </ProjectReference>

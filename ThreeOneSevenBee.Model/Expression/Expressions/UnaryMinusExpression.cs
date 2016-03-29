@@ -9,7 +9,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
     public class UnaryMinusExpression : UnaryExpression
     {
         public UnaryMinusExpression(ExpressionBase expression)
-            : base(OperatorType.Subtract, expression)
+            : base(OperatorType.Minus, expression)
         { }
 
         public override string Value

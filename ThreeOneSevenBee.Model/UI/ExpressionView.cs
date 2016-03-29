@@ -68,7 +68,7 @@ namespace ThreeOneSevenBee.Model.UI
                     case OperatorType.Subtract:
                         double baseline = System.Math.Max(operatorView.Baseline, System.Math.Max(left.Baseline, right.Baseline));
                         operatorView.X = left.Width;
-                        operatorView.Width = NUMVAR_SIZE;
+                        operatorView.Width = 2 * NUMVAR_SIZE;
                         operatorView.Height = NUMVAR_SIZE;
                         operatorView.Baseline = NUMVAR_SIZE / 2;
                         right.X = left.Width + operatorView.Width;
@@ -100,7 +100,7 @@ namespace ThreeOneSevenBee.Model.UI
                     {
                         View operatorView = new OperatorView(variadicExpression.Type);
                         operatorView.X = offsetX;
-                        operatorView.Width = NUMVAR_SIZE;
+                        operatorView.Width = (variadicExpression.Type == OperatorType.Multiply ? 0.5 : 1.5)  * NUMVAR_SIZE;
                         operatorView.Height = NUMVAR_SIZE;
                         operatorView.Baseline = NUMVAR_SIZE / 2;
                         views.Add(operatorView);

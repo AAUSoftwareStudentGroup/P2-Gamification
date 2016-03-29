@@ -32,7 +32,6 @@
             this.setsides(sides);
             this.setcorners(corners);
             this.setrelations(relations);
-            console.log("PolygonModel Constructor done");
         },
         getCornerIndex: function (cornerID) {
             for (var i = 0; i < this.getcorners().getCount(); i++) {

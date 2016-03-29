@@ -64,15 +64,21 @@ namespace ThreeOneSevenBee.Frontend
                 context.BeginPath();
                 context.MoveTo(view.X + offsetX + view.Width / 2, view.Y + offsetY - view.Height / 3 + view.Height / 2);
                 context.LineTo(view.X + offsetX + view.Width / 2, view.Y + offsetY + view.Height / 3 + view.Height / 2);
-                context.MoveTo(view.X + offsetX - view.Width / 3 + view.Width / 2, view.Y + offsetY + view.Height / 2);
-                context.LineTo(view.X + offsetX + view.Width / 3 + view.Width / 2, view.Y + offsetY + view.Height / 2);
+                context.MoveTo(view.X + offsetX + view.Width / 2 - view.Height / 3, view.Y + offsetY + view.Height / 2);
+                context.LineTo(view.X + offsetX + view.Width / 2 + view.Height / 3, view.Y + offsetY + view.Height / 2);
                 context.Stroke();
             }
             else if (view.type == OperatorType.Subtract)
             {
                 context.BeginPath();
-                context.MoveTo(view.X + offsetX - view.Width / 3 + view.Width / 2, view.Y + offsetY + view.Height / 2);
-                context.LineTo(view.X + offsetX + view.Width / 3 + view.Width / 2, view.Y + offsetY + view.Height / 2);
+                context.MoveTo(view.X + offsetX + view.Width / 2 - view.Height / 3, view.Y + offsetY + view.Height / 2);
+                context.LineTo(view.X + offsetX + view.Width / 2 + view.Height / 3, view.Y + offsetY + view.Height / 2);
+                context.Stroke();
+            }else if(view.type == OperatorType.Minus)
+            {
+                context.BeginPath();
+                context.MoveTo(view.X + offsetX + view.Width / 3, view.Y + offsetY + view.Height / 2);
+                context.LineTo(view.X + offsetX + view.Width, view.Y + offsetY + view.Height / 2);
                 context.Stroke();
             }
         }

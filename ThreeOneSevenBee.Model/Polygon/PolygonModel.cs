@@ -1,5 +1,4 @@
-﻿using Bridge.Html5;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,7 +38,6 @@ namespace ThreeOneSevenBee.Model.Geometry
             this.sides = sides;
             this.corners = corners;
             this.relations = relations;
-            Console.WriteLine("PolygonModel Constructor done");
         }
 
         private int GetCornerIndex(char cornerID)
