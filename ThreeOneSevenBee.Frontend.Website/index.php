@@ -12,6 +12,7 @@
     <script src="js/threeOneSevenBee.model.collections.js"></script>
     <script src="js/threeOneSevenBee.model.expression.expressions.js"></script>
     <script src="js/threeOneSevenBee.model.js"></script>
+    <script src="js/threeOneSevenBee.model.game.js"></script>
     <script src="js/threeOneSevenBee.frontend.js"></script>
     <script src="js/threeOneSevenBee.model.euclidean.js"></script>
     <script src="js/threeOneSevenBee.model.geometry.js"></script>
