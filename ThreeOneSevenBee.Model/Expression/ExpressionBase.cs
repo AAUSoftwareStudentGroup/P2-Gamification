@@ -31,6 +31,8 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public abstract string Value { get; }
 
+
+
         public abstract ExpressionBase Clone();
 
         public abstract bool Replace(ExpressionBase old, ExpressionBase replacement);
@@ -50,6 +52,14 @@ namespace ThreeOneSevenBee.Model.Expression
         public abstract bool CanCalculate();
 
         public abstract double? Calculate();
+
+        public virtual int Size
+        {
+            get
+            {
+                return 10;
+            }
+        }
 
         public override bool Equals(object other)
         {

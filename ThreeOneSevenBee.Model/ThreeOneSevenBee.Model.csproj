@@ -67,6 +67,11 @@
     <Compile Include="Expression\ILeaf.cs" />
     <Compile Include="Expression\Operator.cs" />
     <Compile Include="Expression\Token.cs" />
+    <Compile Include="Game\CurrentPlayer.cs" />
+    <Compile Include="Game\GameAPI.cs" />
+    <Compile Include="Game\Level.cs" />
+    <Compile Include="Game\Player.cs" />
+    <Compile Include="Game\ProgressbarStar.cs" />
     <Compile Include="Polygon\PolygonCorner.cs" />
     <Compile Include="Polygon\PolygonModel.cs" />
     <Compile Include="Polygon\PolygonRelation.cs" />
@@ -85,7 +90,6 @@
     <Compile Include="UI\ParenthesisView.cs" />
     <Compile Include="UI\PolygonView.cs" />
     <Compile Include="UI\ProgressbarCircle.cs" />
-    <Compile Include="UI\ProgressbarStar.cs" />
     <Compile Include="UI\ProgressbarStarView.cs" />
     <Compile Include="UI\SqrtView.cs" />
     <Compile Include="UI\View.cs" />

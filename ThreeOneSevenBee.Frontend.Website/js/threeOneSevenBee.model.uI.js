@@ -98,7 +98,7 @@
         starLevels: null,
         constructor: function (levels) {
             if (levels === void 0) { levels = []; }
-            this.starLevels = new Bridge.List$1(ThreeOneSevenBee.Model.UI.ProgressbarStar)(levels);
+            this.starLevels = new Bridge.List$1(ThreeOneSevenBee.Model.Game.ProgressbarStar)(levels);
         },
         add: function (level) {
             if (!this.starLevels.contains(level)) {
@@ -109,60 +109,6 @@
             if (this.starLevels.contains(level)) {
                 this.starLevels.remove(level);
             }
-        }
-    });
-    
-    Bridge.define('ThreeOneSevenBee.Model.UI.ProgressbarStar', {
-        _maxProgress: 0,
-        _currentProgress: 0,
-        stars: null,
-        constructor: function (progress, maxValue, stars) {
-            if (stars === void 0) { stars = []; }
-            this._currentProgress = progress;
-            this._maxProgress = maxValue;
-            this.stars = new Bridge.List$1(Bridge.Int)(stars);
-            this.getStars();
-        },
-        getProgress: function () {
-            return this._currentProgress;
-        },
-        setProgress: function (value) {
-            this._currentProgress = value;
-        },
-        getPercentage: function () {
-            return Bridge.cast(this._currentProgress, Number) / this._maxProgress;
-        },
-        getMaxProgress: function () {
-            return this._maxProgress;
-        },
-        setMaxProgress: function (value) {
-            this._maxProgress = value;
-        },
-        add: function (star) {
-            if (!this.stars.contains(star)) {
-                this.stars.add(star);
-            }
-        },
-        remove: function (star) {
-            if (this.stars.contains(star)) {
-                this.stars.remove(star);
-            }
-        },
-        getStars: function () {
-            var $t;
-            var starsCount = 0;
-            var totalStars = 0;
-    
-            $t = Bridge.getEnumerator(this.stars);
-            while ($t.moveNext()) {
-                var i = $t.getCurrent();
-                totalStars++;
-                if (i <= this._currentProgress) {
-                    starsCount++;
-                }
-            }
-            // Returns amount of reached stars.
-            return starsCount;
         }
     });
     
@@ -579,17 +525,23 @@
                 var delimiterExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression);
                 if (Bridge.hasValue(delimiterExpression)) {
                     var view2 = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(delimiterExpression.getExpression(), model);
-                    view2.setX(view2.getHeight() / 6);
+                    view2.setX(view2.getHeight() / 4);
                     view2.setY(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 8);
-                    var compositeView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(view2.getWidth() + view2.getHeight() / 3, view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4), [
+                    var compositeView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(view2.getWidth() + view2.getHeight() / 2, view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4), [
                         [Bridge.merge(new ThreeOneSevenBee.Model.UI.ParenthesisView(ThreeOneSevenBee.Model.UI.ParenthesisType.left), {
-                            setWidth: view2.getHeight() / 6,
+                            onClick: function () {
+                                model.select(expression);
+                            },
+                            setWidth: view2.getHeight() / 4,
                             setHeight: view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4
                         } )],
                         [view2],
                         [Bridge.merge(new ThreeOneSevenBee.Model.UI.ParenthesisView(ThreeOneSevenBee.Model.UI.ParenthesisType.right), {
-                            setX: view2.getWidth() + view2.getHeight() / 6,
-                            setWidth: view2.getHeight() / 6,
+                            onClick: function () {
+                                model.select(expression);
+                            },
+                            setX: view2.getWidth() + view2.getHeight() / 4,
+                            setWidth: view2.getHeight() / 4,
                             setHeight: view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4
                         } )]
                     ] );
@@ -698,7 +650,8 @@
             $t = Bridge.getEnumerator(progressbar.stars);
             while ($t.moveNext()) {
                 var star = $t.getCurrent();
-                this.children.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(star < progressbar.getProgress() ? "star_activated.png" : "star.png", height, height), {
+                this.children.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(star < progressbar.getProgress() ? "star_activated.png" : "star.png", 3 * height, 3 * height), {
+                    setY: -height,
                     setX: Bridge.cast(star, Number) / progressbar.getMaxProgress() * this.getWidth() - this.getHeight() / 2,
                     setBackgroundColor: "#000000"
                 } ));

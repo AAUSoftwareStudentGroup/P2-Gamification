@@ -7,6 +7,7 @@ using ThreeOneSevenBee.Model.Expression.ExpressionRules;
 using ThreeOneSevenBee.Model.Geometry;
 using System.Collections.Generic;
 using ThreeOneSevenBee.Model.Euclidean;
+using ThreeOneSevenBee.Model.Game;
 
 namespace ThreeOneSevenBee.Frontend
 {
@@ -21,8 +22,9 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel expressionModel = new ExpressionModel("sqrt{{a*b*a*c*c*c*c*a*a*b}/{a^5*b^4*c^1}}", 
+            ExpressionModel expressionModel = new ExpressionModel("a/a/a/a/a/a", 
                 Rules.DivideRule, Rules.ExponentToProductRule, Rules.ProductToExponentRule);
+           
 
             PolygonModel polygon = new PolygonModel(4);
             List<Vector2> cornerpos = new List<Vector2>();
@@ -30,14 +32,23 @@ namespace ThreeOneSevenBee.Frontend
             cornerpos.Add(new Vector2(0, 1));
             cornerpos.Add(new Vector2(1, 1));
             cornerpos.Add(new Vector2(1, 0));
-
             View view = new CompositeView(canvas.Width, canvas.Height)
             {
                 new ProgressbarStarView(new ProgressbarStar(50, 100, 30, 60, 75), canvas.Width, 20) { Y=30 },
                 new ExpressionView(expressionModel, canvas.Width, canvas.Height - 150) { X = 0, Y = 50 },
-                new IdentityMenuView(expressionModel, canvas.Width, 100) { Y = canvas.Height - 100 },
-                new PolygonView(polygon, cornerpos, 200, 200, 100, 100)
+                new IdentityMenuView(expressionModel, canvas.Width, 100) { Y = canvas.Height - 100 }
+                //new PolygonView(polygon, cornerpos, 200, 200, 100, 100)
             };
+
+            Window.AddEventListener(EventType.Resize, () =>
+            {
+                canvas.Width = Document.DocumentElement.ClientWidth;
+                canvas.Height = Document.DocumentElement.ClientHeight;
+                view.Width = canvas.Width;
+                view.Height = canvas.Height;
+                context.Draw();
+            });
+
             context.SetContentView(view);
             expressionModel.OnChanged += (m) => context.Draw();
             context.Draw();
