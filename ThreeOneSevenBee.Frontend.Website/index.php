@@ -1,4 +1,4 @@
-<?php
+<?
     session_start();
     if(!isset($_SESSION['authorized']) && $_SESSION['authorized'] != true)
         header("location: /login.php");
@@ -26,5 +26,6 @@
 </head>
 <body style="margin: 0;overflow:hidden">
     <canvas id="canvas" width="600" height="400"></canvas>
+    <a href="#" onclick="$.get('/api?action=userlogout').done(function() {location ='/'});">Log ud</a>
 </body>
 </html>
