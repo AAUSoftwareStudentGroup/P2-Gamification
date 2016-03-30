@@ -57,6 +57,7 @@
     <Compile Include="Expression\Expressions\VariableExpression.cs" />
     <Compile Include="Expression\Expressions\VariadicExpression.cs" />
     <Compile Include="Expression\Expressions\VariadicOperatorExpression.cs" />
+    <Compile Include="Expression\Identity.cs" />
     <Compile Include="Expression\IExpression.cs" />
     <Compile Include="Expression\ILeaf.cs" />
     <Compile Include="Expression\Operator.cs" />

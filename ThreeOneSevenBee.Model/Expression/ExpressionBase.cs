@@ -53,13 +53,7 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public abstract double? Calculate();
 
-        public virtual int Size
-        {
-            get
-            {
-                return 10;
-            }
-        }
+        public abstract int Size { get; }
 
         public override bool Equals(object other)
         {

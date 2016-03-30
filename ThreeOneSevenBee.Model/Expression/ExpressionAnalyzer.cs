@@ -33,6 +33,7 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public ExpressionBase GetCommonParent(List<ExpressionBase> selection)
         {
+            //Console.WriteLine(selection);
             if (selection.Count == 0)
             {
                 return null;
@@ -44,8 +45,10 @@ namespace ThreeOneSevenBee.Model.Expression
             else
             {
                 var parentPaths = new List<List<ExpressionBase>>();
+                //Console.WriteLine(selection.Count);
                 for (int index = 0; index < selection.Count; index++)
                 {
+                    //Console.WriteLine(selection[index].GetParentPath().Reverse().ToList());
                     parentPaths.Add(selection[index].GetParentPath().Reverse().ToList());
                 }
                 return GetCommonParent(parentPaths);
@@ -71,9 +74,9 @@ namespace ThreeOneSevenBee.Model.Expression
                 ReferenceEquals(expr, second[secondIndex++])).ToList();
         }
 
-        public List<ExpressionBase> GetIdentities(ExpressionBase expression, List<ExpressionBase> selection)
+        public List<Identity> GetIdentities(ExpressionBase expression, List<ExpressionBase> selection)
         {
-            var identities = new List<ExpressionBase>();
+            var identities = new List<Identity>();
 
             if (selection.Count() == 0)
             {
@@ -83,8 +86,8 @@ namespace ThreeOneSevenBee.Model.Expression
             foreach (ExpressionRule rule in rules)
             {
                 ExpressionBase commonParent = GetCommonParent(selection);
-                ExpressionBase identity;
-                if (rule(commonParent, selection, out identity))
+                Identity identity = rule(commonParent, selection);
+                if(identity != null)
                 {
                     identities.Add(identity);
                 }

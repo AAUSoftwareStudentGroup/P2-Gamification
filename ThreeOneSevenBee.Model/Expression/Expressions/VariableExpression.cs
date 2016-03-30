@@ -20,6 +20,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             get { return value; }
         }
 
+        public override int Size
+        {
+            get
+            {
+                return 2;
+            }
+        }
+
         public void SetValue(string value)
         {
             this.value = value;
