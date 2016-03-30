@@ -6,7 +6,7 @@ using ThreeOneSevenBee.Model.Expression;
 
 namespace ThreeOneSevenBee.Model.Game
 {
-    class Level
+    public class Level
     {
         public ProgressbarStar Progress;
         public ExpressionBase Expression;

@@ -1,6 +1,23 @@
 ﻿(function (globals) {
     "use strict";
 
+    Bridge.define('ThreeOneSevenBee.Model.Game.Player', {
+        config: {
+            properties: {
+                PlayerName: null,
+                LastLoginTime: null
+            },
+            init: function () {
+                this.badges = new Bridge.List$1(String)() || null;
+            }
+        },
+        constructor: function (playername) {
+            this.setPlayerName(playername);
+        }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.Game.GameAPI');
+    
     Bridge.define('ThreeOneSevenBee.Model.Game.Level', {
         progress: null,
         expression: null,
@@ -69,6 +86,19 @@
             }
             // Returns amount of reached stars.
             return starsCount;
+        }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.Game.CurrentPlayer', {
+        inherits: [ThreeOneSevenBee.Model.Game.Player],
+        config: {
+            init: function () {
+                this.levels = new Bridge.List$1(ThreeOneSevenBee.Model.Game.Level)() || null;
+            }
+        },
+        constructor: function (player) {
+            ThreeOneSevenBee.Model.Game.Player.prototype.$constructor.call(this, player);
+    
         }
     });
     
