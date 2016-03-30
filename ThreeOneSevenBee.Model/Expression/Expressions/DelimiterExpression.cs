@@ -24,6 +24,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             }
         }
 
+        public override int Size
+        {
+            get
+            {
+                return 3 + Expression.Size;
+            }
+        }
+
         public override bool CanCalculate()
         {
             return Expression.CanCalculate();

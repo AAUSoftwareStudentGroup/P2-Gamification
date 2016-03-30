@@ -588,6 +588,7 @@
             throw new Bridge.NotImplementedException();
         },
         treePrint: function (indent, isLast) {
+    
             console.log(indent + "|-" + this.getSymbol());
             indent += (isLast ? "  " : "| ");
             this.getLeft().treePrint(indent, false);

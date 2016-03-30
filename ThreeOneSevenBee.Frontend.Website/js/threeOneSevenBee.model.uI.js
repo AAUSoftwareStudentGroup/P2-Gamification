@@ -607,14 +607,14 @@
             for (var index = 0; index < identities.getCount(); index++) {
                 (function () {
                     var indexCopy = index;
-                    var view = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(identities.getItem(index), model);
+                    var view = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(identities.getItem(index).suggestion, model);
                     var frameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor$2", this.getWidth() / identities.getCount(), this.getHeight(), view, 1), {
                         setPropagateClick: false
                     } );
                     frameView.setX(x);
                     x += frameView.getWidth();
                     frameView.onClick = function () {
-                        model.applyIdentity(identities.getItem(indexCopy));
+                        model.applyIdentity(identities.getItem(indexCopy).result);
                     };
                     views.add(frameView);
                 }).call(this);
