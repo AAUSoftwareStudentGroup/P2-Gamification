@@ -33,8 +33,8 @@ namespace ThreeOneSevenBee.Model.Expression
             new Operator("^", 4, OperatorAssociativity.Right),
             new Operator("*", 3, OperatorAssociativity.Left),
             new Operator("/", 3, OperatorAssociativity.Left),
-            new Operator("+", 2, OperatorAssociativity.Left),
             new Operator("-", 2, OperatorAssociativity.Left),
+            new Operator("+", 1, OperatorAssociativity.Left),
         };
 
         private List<string> functions = new List<string>()

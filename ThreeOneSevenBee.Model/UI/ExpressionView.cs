@@ -155,7 +155,7 @@ namespace ThreeOneSevenBee.Model.UI
             }
             return new ButtonView(expression.ToString(), () => model.Select(expression))
             {
-                Width = 3 * NUMVAR_SIZE / 4,
+                Width = 3 * NUMVAR_SIZE / 5 * expression.ToString().Length,
                 Height = NUMVAR_SIZE,
                 Baseline = NUMVAR_SIZE / 2,
                 BackgroundColor = model.SelectionIndex(expression) != -1 ? "#cccccc" : "transparent"

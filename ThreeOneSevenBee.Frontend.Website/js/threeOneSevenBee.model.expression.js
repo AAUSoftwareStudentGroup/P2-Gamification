@@ -273,8 +273,8 @@
         [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "^", 4, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.right)],
         [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "*", 3, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)],
         [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "/", 3, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)],
-        [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "+", 2, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)],
-        [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "-", 2, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)]
+        [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "-", 2, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)],
+        [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "+", 1, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)]
     ] ) || null;
                 this.functions = Bridge.merge(new Bridge.List$1(String)(), [
         ["sqrt"]

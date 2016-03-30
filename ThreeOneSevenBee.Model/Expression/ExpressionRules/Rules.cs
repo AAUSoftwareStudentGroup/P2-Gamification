@@ -14,20 +14,23 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
     {
         public static Identity ProductToExponentRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
+            if (selection.Count < 2)
+                return null;
+
             VariadicExpression product = expression as VariadicOperatorExpression;
 
-            if(product != null && product.Type == OperatorType.Multiply)
+            if (product != null && product.Type == OperatorType.Multiply)
             {
-                
-                if(selection.TakeWhile( (e) => { return selection[0] == e && e.Parent == expression; }).Count() == selection.Count)
-                {
 
+                if (selection.TakeWhile((e) => { return selection[0] == e && e.Parent == expression; }).Count() == selection.Count)
+                {
                     BinaryExpression suggestion = new BinaryOperatorExpression(selection[0].Clone(), new NumericExpression(selection.Count), OperatorType.Power);
 
                     if (product.Count == selection.Count)
                     {
                         return new Identity(suggestion, suggestion);
-                    }else
+                    }
+                    else
                     {
                         var indexes = selection.Select((s) => product.IndexOfReference(s)).Where((i) => i != -1).ToList();
                         indexes.Sort();
@@ -39,6 +42,134 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         result.Insert(indexes[0], suggestion);
                         return new Identity(suggestion, result);
                     }
+                }
+            }
+            return null;
+        }
+
+        public static Identity ExponentToProductRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count != 2)
+                return null;
+
+            BinaryOperatorExpression exponent = expression as BinaryOperatorExpression;
+
+            if (exponent != null && exponent.Type == OperatorType.Power)
+            {
+                if (selection[0].Parent == exponent && selection[1].Parent == exponent)
+                {
+                    int number = (int)(exponent.Right as NumericExpression).Number;
+                    if (number == 0)
+                    {
+                        return new Identity(new NumericExpression(1), new NumericExpression(1));
+                    }
+                    else if (number == 1)
+                    {
+                        return new Identity(exponent.Left.Clone(), exponent.Left.Clone());
+                    }
+                    else if (number > 1)
+                    {
+                        VariadicOperatorExpression result = new VariadicOperatorExpression(OperatorType.Multiply, exponent.Left.Clone(), exponent.Left.Clone());
+                        for (int i = 2; i < number; i++)
+                        {
+                            result.Add(exponent.Left.Clone());
+                        }
+                        return new Identity(result, result);
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static Identity NumericVariadicRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count < 2)
+                return null;
+
+            VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
+            if (variadicExpression != null)
+            {
+                int sum;
+                Func<int, int, int> operation;
+
+                if (variadicExpression.Type == OperatorType.Multiply)
+                {
+                    sum = 1;
+                    operation = (a, b) => a * b;
+                }
+                else if (variadicExpression.Type == OperatorType.Add)
+                {
+                    sum = 0;
+                    operation = (a, b) => a + b;
+                }
+                else
+                {
+                    return null;
+                }
+                foreach (ExpressionBase selected in selection)
+                {
+                    if (selected.Parent != variadicExpression)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        NumericExpression numericExpression = selected as NumericExpression;
+                        if (numericExpression != null)
+                        {
+                            sum = operation(sum, (int)numericExpression.Number);
+                        }
+                    }
+                }
+                var indexes = selection.Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
+                indexes.Sort();
+                VariadicOperatorExpression result = variadicExpression.Clone() as VariadicOperatorExpression;
+                for (int i = 0; i < indexes.Count; i++)
+                {
+                    result.RemoveAt(indexes[i] - i);
+                }
+                result.Insert(indexes[0], new NumericExpression(sum));
+                return new Identity(new NumericExpression(sum), result);
+
+            }
+            return null;
+        }
+        public static Identity NumericBinaryRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count < 2)
+                return null;
+
+            BinaryOperatorExpression binaryExpression = expression as BinaryOperatorExpression;
+            if (binaryExpression != null && selection[0].Parent == binaryExpression && selection[1].Parent == binaryExpression)
+            {
+                NumericExpression numericLeft = binaryExpression.Left as NumericExpression;
+                NumericExpression numericRight = binaryExpression.Right as NumericExpression;
+                if (binaryExpression != null && binaryExpression != null)
+                {
+                    NumericExpression result;
+                    if (binaryExpression.Type == OperatorType.Subtract)
+                    {
+                        result = new NumericExpression(numericLeft.Number - numericRight.Number);
+                    }
+                    else if(binaryExpression.Type == OperatorType.Power)
+                    {
+                        result = new NumericExpression(Math.Pow(numericLeft.Number, numericRight.Number));
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    if(result.Number >= 0)
+                    {
+                        return new Identity(result, result);
+                    }
+                    else
+                    {
+                        result.Number *= -1;
+                        UnaryMinusExpression positiveResult = new UnaryMinusExpression(result);
+                        return new Identity(positiveResult, positiveResult);
+                    }
+                    
                 }
             }
             return null;
