@@ -123,13 +123,13 @@ namespace ThreeOneSevenBee.Model.UI
             if(delimiterExpression != null)
             {
                 View view = Build(delimiterExpression.Expression, model);
-                view.X = view.Height / 6;
+                view.X = view.Height / 4;
                 view.Y = NUMVAR_SIZE / 8;
-                View compositeView = new CompositeView(view.Width + view.Height / 3, view.Height + NUMVAR_SIZE / 4)
+                View compositeView = new CompositeView(view.Width + view.Height / 2, view.Height + NUMVAR_SIZE / 4)
                 {
-                    new ParenthesisView(ParenthesisType.Left) { Width = view.Height / 6, Height = view.Height + NUMVAR_SIZE / 4},
+                    new ParenthesisView(ParenthesisType.Left) { OnClick = () => model.Select(expression), Width = view.Height /4, Height = view.Height + NUMVAR_SIZE / 4},
                     view,
-                    new ParenthesisView(ParenthesisType.Right) { X = view.Width + view.Height / 6, Width = view.Height / 6, Height = view.Height +  NUMVAR_SIZE / 4},
+                    new ParenthesisView(ParenthesisType.Right) { OnClick = () => model.Select(expression), X = view.Width + view.Height / 4, Width = view.Height / 4, Height = view.Height +  NUMVAR_SIZE / 4},
                 };
                 compositeView.Baseline = view.Y + view.Baseline;
                 return compositeView;

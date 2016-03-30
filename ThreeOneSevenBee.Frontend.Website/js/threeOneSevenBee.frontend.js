@@ -15,7 +15,8 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("sqrt{{a*b*a*c*c*c*c*a*a*b}/{a^5*b^4*c^1}}", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
+                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a/a/a/a/a/a", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divideRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
+    
     
                 var polygon = new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor$1", 4);
                 var cornerpos = new Bridge.List$1(ThreeOneSevenBee.Model.Euclidean.Vector2)();
@@ -23,7 +24,6 @@
                 cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 1));
                 cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 1, 1));
                 cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 1, 0));
-    
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(canvas.width, canvas.height), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(new ThreeOneSevenBee.Model.UI.ProgressbarStar(50, 100, [30, 60, 75]), canvas.width, 20), {
                         setY: 30
@@ -34,9 +34,17 @@
                     } )],
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(expressionModel, canvas.width, 100), {
                         setY: canvas.height - 100
-                    } )],
-                    [new ThreeOneSevenBee.Model.UI.PolygonView("constructor", polygon, cornerpos, 200, 200, 100, 100)]
+                    } )]
                 ] );
+    
+                window.addEventListener("resize", function () {
+                    canvas.width = document.documentElement.clientWidth;
+                    canvas.height = document.documentElement.clientHeight;
+                    view.setWidth(canvas.width);
+                    view.setHeight(canvas.height);
+                    context.draw();
+                });
+    
                 context.setContentView(view);
                 expressionModel.addOnChanged(function (m) {
                     context.draw();

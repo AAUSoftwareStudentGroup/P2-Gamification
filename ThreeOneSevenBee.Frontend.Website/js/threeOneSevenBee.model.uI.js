@@ -579,17 +579,23 @@
                 var delimiterExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression);
                 if (Bridge.hasValue(delimiterExpression)) {
                     var view2 = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).build(delimiterExpression.getExpression(), model);
-                    view2.setX(view2.getHeight() / 6);
+                    view2.setX(view2.getHeight() / 4);
                     view2.setY(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 8);
-                    var compositeView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(view2.getWidth() + view2.getHeight() / 3, view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4), [
+                    var compositeView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(view2.getWidth() + view2.getHeight() / 2, view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4), [
                         [Bridge.merge(new ThreeOneSevenBee.Model.UI.ParenthesisView(ThreeOneSevenBee.Model.UI.ParenthesisType.left), {
-                            setWidth: view2.getHeight() / 6,
+                            onClick: function () {
+                                model.select(expression);
+                            },
+                            setWidth: view2.getHeight() / 4,
                             setHeight: view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4
                         } )],
                         [view2],
                         [Bridge.merge(new ThreeOneSevenBee.Model.UI.ParenthesisView(ThreeOneSevenBee.Model.UI.ParenthesisType.right), {
-                            setX: view2.getWidth() + view2.getHeight() / 6,
-                            setWidth: view2.getHeight() / 6,
+                            onClick: function () {
+                                model.select(expression);
+                            },
+                            setX: view2.getWidth() + view2.getHeight() / 4,
+                            setWidth: view2.getHeight() / 4,
                             setHeight: view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4
                         } )]
                     ] );
@@ -698,7 +704,8 @@
             $t = Bridge.getEnumerator(progressbar.stars);
             while ($t.moveNext()) {
                 var star = $t.getCurrent();
-                this.children.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(star < progressbar.getProgress() ? "star_activated.png" : "star.png", height, height), {
+                this.children.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(star < progressbar.getProgress() ? "star_activated.png" : "star.png", 3 * height, 3 * height), {
+                    setY: -height,
                     setX: Bridge.cast(star, Number) / progressbar.getMaxProgress() * this.getWidth() - this.getHeight() / 2,
                     setBackgroundColor: "#000000"
                 } ));

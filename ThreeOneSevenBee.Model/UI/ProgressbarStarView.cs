@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ThreeOneSevenBee.Model.Game;
 
 namespace ThreeOneSevenBee.Model.UI
 {
@@ -18,7 +19,7 @@ namespace ThreeOneSevenBee.Model.UI
             };
             foreach (int star in progressbar.Stars)
             {
-                Children.Add(new ImageView(star < progressbar.Progress ? "star_activated.png" : "star.png", height, height) { X = (double)star / progressbar.MaxProgress * Width - Height / 2, BackgroundColor = "#000000" });
+                Children.Add(new ImageView(star < progressbar.Progress ? "star_activated.png" : "star.png", 3*height, 3*height) { Y=-height, X = (double)star / progressbar.MaxProgress * Width - Height / 2, BackgroundColor = "#000000" });
             }
         }
     }
