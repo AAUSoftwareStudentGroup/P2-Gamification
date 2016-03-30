@@ -9,6 +9,7 @@
     <script src="js/bridge.js"></script>
 
     <script src="js/threeOneSevenBee.model.uI.js"></script>
+    <script src="js/threeOneSevenBee.model.game.js"></script>
     <script src="js/threeOneSevenBee.model.expression.js"></script>
     <script src="js/threeOneSevenBee.model.expression.expressionRules.js"></script>
     <script src="js/threeOneSevenBee.model.collections.js"></script>
