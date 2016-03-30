@@ -148,7 +148,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 NumericExpression numericLeft = binaryExpression.Left as NumericExpression;
                 NumericExpression numericRight = binaryExpression.Right as NumericExpression;
-                if (binaryExpression != null && binaryExpression != null)
+                if (numericLeft != null && numericRight != null)
                 {
                     NumericExpression result;
                     if (binaryExpression.Type == OperatorType.Subtract)

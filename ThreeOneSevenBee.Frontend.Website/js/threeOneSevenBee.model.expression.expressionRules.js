@@ -130,7 +130,7 @@
                 if (Bridge.hasValue(binaryExpression) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0).getParent(), binaryExpression) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(1).getParent(), binaryExpression)) {
                     var numericLeft = Bridge.as(binaryExpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
                     var numericRight = Bridge.as(binaryExpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
-                    if (Bridge.hasValue(binaryExpression) && Bridge.hasValue(binaryExpression)) {
+                    if (Bridge.hasValue(numericLeft) && Bridge.hasValue(numericRight)) {
                         var result;
                         if (binaryExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract) {
                             result = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(numericLeft.number - numericRight.number);
