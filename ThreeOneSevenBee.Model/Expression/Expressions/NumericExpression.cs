@@ -20,6 +20,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             get { return Number.ToString(); }
         }
 
+        public override int Size
+        {
+            get
+            {
+                return 1;
+            }
+        }
+
         public override ExpressionBase Clone()
         {
             return new NumericExpression(Number);

@@ -22,6 +22,19 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             get { return this.Skip(1).Aggregate(this.First().Value, (s, e) => s + Symbol + e.Value); }
         }
 
+        public override int Size
+        {
+            get
+            {
+                int result = 3;
+                foreach (ExpressionBase expression in this)
+                {
+                    result += expression.Size;
+                }
+                return result;
+            }
+        }
+
         public override Boolean CanCalculate()
         {
             switch (Type)

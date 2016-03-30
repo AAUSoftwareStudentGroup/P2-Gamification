@@ -17,6 +17,27 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             get { return Left.Value + Symbol + Right.Value; }
         }
 
+        public override int Size
+        {
+            get
+            {
+                int result = 0;
+                if (Type == OperatorType.Power)
+                {
+                    result = 1 + Left.Size + Right.Size;
+                }
+                else if (Type == OperatorType.Add || 
+                    Type == OperatorType.Subtract || 
+                    Type == OperatorType.Divide || 
+                    Type == OperatorType.Minus || 
+                    Type == OperatorType.Multiply)
+                {
+                    result = 3 + Left.Size + Right.Size;
+                }
+                return result;
+            }
+        }
+
         public override Boolean CanCalculate()
         {
             switch (Type)
