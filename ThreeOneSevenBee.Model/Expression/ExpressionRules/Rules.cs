@@ -27,13 +27,21 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     if (product.Count == selection.Count)
                     {
                         return new Identity(suggestion, suggestion);
+                    }else
+                    {
+                        var indexes = selection.Select((s) => product.IndexOfReference(s)).Where((i) => i != -1).ToList();
+                        indexes.Sort();
+                        VariadicOperatorExpression result = product.Clone() as VariadicOperatorExpression;
+                        for (int i = 0; i < indexes.Count; i++)
+                        {
+                            result.RemoveAt(indexes[i] - i);
+                        }
+                        result.Insert(indexes[0], suggestion);
+                        return new Identity(suggestion, result);
                     }
                 }
             }
             return null;
-
-
-            // alles parent (ikke common parent) er expr og alle i selection er ens
         }
     }
 }
