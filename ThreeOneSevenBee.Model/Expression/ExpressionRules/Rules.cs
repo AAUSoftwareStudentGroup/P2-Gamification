@@ -119,6 +119,10 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         {
                             sum = operation(sum, (int)numericExpression.Number);
                         }
+                        else
+                        {
+                            return null;
+                        }
                     }
                 }
                 var indexes = selection.Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();

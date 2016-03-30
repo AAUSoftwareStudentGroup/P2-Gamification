@@ -102,6 +102,9 @@
                             if (Bridge.hasValue(numericExpression)) {
                                 sum = operation(sum, Bridge.Int.trunc(numericExpression.number));
                             }
+                            else  {
+                                return null;
+                            }
                         }
                     }
                     var indexes = Bridge.Linq.Enumerable.from(selection).select(function (s) {

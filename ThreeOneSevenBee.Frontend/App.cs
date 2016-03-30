@@ -22,7 +22,7 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel expressionModel = new ExpressionModel("5*5*5", 
+            ExpressionModel expressionModel = new ExpressionModel("a*b*5*a*b*5", 
                 Rules.ProductToExponentRule, Rules.ExponentToProductRule, Rules.NumericVariadicRule, Rules.NumericBinaryRule);
            
 
