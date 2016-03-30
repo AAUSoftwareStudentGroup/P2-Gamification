@@ -1,3 +1,9 @@
+<?php
+    session_start();
+    if(!isset($_SESSION['authorized']) && $_SESSION['authorized'] != true)
+        header("location: /login.php");
+?>
+
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <html xmlns="http://www.w3.org/1999/xhtml">
