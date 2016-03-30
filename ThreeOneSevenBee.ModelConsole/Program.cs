@@ -9,6 +9,9 @@ namespace ThreeOneSevenBee.ModelConsole
 {
     class Program
     {
+        static void Main(string[] args)
+        {
 
+        }
     }
 }

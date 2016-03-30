@@ -11,9 +11,9 @@
                     if (Bridge.Linq.Enumerable.from(selection).takeWhile(function (e) {
                         return ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0), e) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(e.getParent(), expression);
                     }).count() === selection.getCount()) {
-                        expression.prettyPrint();
+    
                         var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(selection.getItem(0).clone(), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(selection.getCount()), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
-                        expression.prettyPrint();
+    
                         if (product.getCount() === selection.getCount()) {
                             return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
                         }

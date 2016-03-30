@@ -100,9 +100,6 @@
                 Parent: null
             }
         },
-        getSize: function () {
-            return 10;
-        },
         getParentPath: function () {
             var $yield = [];
             var currentParent = this;

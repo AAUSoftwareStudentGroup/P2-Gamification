@@ -17,7 +17,6 @@ namespace ThreeOneSevenBee.Model.Game
         public void SetLevel(Level level)
         {
             currentLevel = level;
-            Expression = new ExpressionModel(level.Expression)
         }
 
         public GameModel(GameAPI api)
