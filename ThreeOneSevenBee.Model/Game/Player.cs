@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ThreeOneSevenBee.Model.Game
 {
-    class Player {
+   public class Player {
 
         public Player(string playername)
         {

@@ -5,11 +5,11 @@ using System.Text;
 
 namespace ThreeOneSevenBee.Model.Game
 {
-    class CurrentPlayer : Player
+    public class CurrentPlayer : Player
     {
         public CurrentPlayer(string player) : base(player){ }
 
-        public List<Level> CompletedLevels = new List<Level>();
+        public List<Level> Levels = new List<Level>();
 
 
     }
