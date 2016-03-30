@@ -69,7 +69,9 @@
     <Compile Include="Expression\Token.cs" />
     <Compile Include="Game\CurrentPlayer.cs" />
     <Compile Include="Game\GameAPI.cs" />
+    <Compile Include="Game\GameModel.cs" />
     <Compile Include="Game\Level.cs" />
+    <Compile Include="Game\LevelCategory.cs" />
     <Compile Include="Game\Player.cs" />
     <Compile Include="Game\ProgressbarStar.cs" />
     <Compile Include="Polygon\PolygonCorner.cs" />
