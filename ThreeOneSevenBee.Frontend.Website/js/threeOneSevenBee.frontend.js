@@ -25,7 +25,7 @@
                 cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 1, 1));
                 cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 1, 0));
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(canvas.width, canvas.height), [
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(new ThreeOneSevenBee.Model.UI.ProgressbarStar(50, 100, [30, 60, 75]), canvas.width, 20), {
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(new ThreeOneSevenBee.Model.Game.ProgressbarStar(50, 100, [30, 60, 75]), canvas.width, 20), {
                         setY: 30
                     } )],
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(expressionModel, canvas.width, canvas.height - 150), {

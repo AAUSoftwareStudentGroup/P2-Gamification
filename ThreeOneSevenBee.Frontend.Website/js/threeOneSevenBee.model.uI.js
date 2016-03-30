@@ -98,7 +98,7 @@
         starLevels: null,
         constructor: function (levels) {
             if (levels === void 0) { levels = []; }
-            this.starLevels = new Bridge.List$1(ThreeOneSevenBee.Model.UI.ProgressbarStar)(levels);
+            this.starLevels = new Bridge.List$1(ThreeOneSevenBee.Model.Game.ProgressbarStar)(levels);
         },
         add: function (level) {
             if (!this.starLevels.contains(level)) {
@@ -109,60 +109,6 @@
             if (this.starLevels.contains(level)) {
                 this.starLevels.remove(level);
             }
-        }
-    });
-    
-    Bridge.define('ThreeOneSevenBee.Model.UI.ProgressbarStar', {
-        _maxProgress: 0,
-        _currentProgress: 0,
-        stars: null,
-        constructor: function (progress, maxValue, stars) {
-            if (stars === void 0) { stars = []; }
-            this._currentProgress = progress;
-            this._maxProgress = maxValue;
-            this.stars = new Bridge.List$1(Bridge.Int)(stars);
-            this.getStars();
-        },
-        getProgress: function () {
-            return this._currentProgress;
-        },
-        setProgress: function (value) {
-            this._currentProgress = value;
-        },
-        getPercentage: function () {
-            return Bridge.cast(this._currentProgress, Number) / this._maxProgress;
-        },
-        getMaxProgress: function () {
-            return this._maxProgress;
-        },
-        setMaxProgress: function (value) {
-            this._maxProgress = value;
-        },
-        add: function (star) {
-            if (!this.stars.contains(star)) {
-                this.stars.add(star);
-            }
-        },
-        remove: function (star) {
-            if (this.stars.contains(star)) {
-                this.stars.remove(star);
-            }
-        },
-        getStars: function () {
-            var $t;
-            var starsCount = 0;
-            var totalStars = 0;
-    
-            $t = Bridge.getEnumerator(this.stars);
-            while ($t.moveNext()) {
-                var i = $t.getCurrent();
-                totalStars++;
-                if (i <= this._currentProgress) {
-                    starsCount++;
-                }
-            }
-            // Returns amount of reached stars.
-            return starsCount;
         }
     });
     
