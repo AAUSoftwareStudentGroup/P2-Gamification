@@ -21,6 +21,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public ConstantType Type { get; set; }
 
+        public override int Size
+        {
+            get
+            {
+                return 1;
+            }
+        }
+
         public override ExpressionBase Clone()
         {
             return new ConstantExpression(Type);
