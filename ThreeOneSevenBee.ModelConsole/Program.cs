@@ -11,7 +11,7 @@ namespace ThreeOneSevenBee.ModelConsole
     {
         static void Main(string[] args)
         {
-            ExpressionModel model = new ExpressionModel("b^-2", Rules.VariableWithNegativeExponent);
+            ExpressionModel model = new ExpressionModel("b^-2", null);
             model.Select(model.Expression.GetNodesRecursive().ElementAt(0));
             model.Select(model.Expression.GetNodesRecursive().ElementAt(1));
             model.Selection.ForEach((selected) => selected.PrettyPrint());
