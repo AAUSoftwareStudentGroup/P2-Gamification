@@ -20,11 +20,9 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Game.GameModel', {
         aPI: null,
+        onChanged: null,
         progress: null,
         config: {
-            events: {
-                OnChanged: null
-            },
             properties: {
                 User: null,
                 ExprModel: null,
@@ -33,7 +31,7 @@
             }
         },
         constructor$1: function (api, onChanged) {
-            this.addOnChanged(onChanged);
+            this.onChanged = onChanged;
             this.aPI = api;
             this.setUser(api.getCurrentPlayer());
             this.setLevel(this.getUser().currentLevel, this.getUser().currentCategory);
@@ -68,13 +66,13 @@
                 this.getStarExpressions().add(starExpressionBase);
                 this.progress.add(starExpressionBase.getSize());
             }
-            this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel(this.getUser().categories.getItem(category).levels.getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f1), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators]));
+            this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel(this.getUser().categories.getItem(category).levels.getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f1), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct]));
             this.onExpressionChanged(this.getExprModel());
         },
         onExpressionChanged: function (model) {
             this.progress.setProgress(model.getExpression().getSize());
-            if (Bridge.hasValue(this.OnChanged)) {
-                this.OnChanged(this);
+            if (Bridge.hasValue(this.onChanged)) {
+                this.onChanged(this);
             }
         },
         nextLevel: function () {
@@ -93,6 +91,7 @@
                     }
                 }
             }
+            this.setLevel(this.getUser().currentLevel, this.getUser().currentCategory);
         }
     });
     
@@ -217,7 +216,9 @@
             this.currentPlayer.categories = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)(), [
                 [Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("Numbers"), {
                     levels: Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.Level)(), [
-                        [new ThreeOneSevenBee.Model.Game.Level("a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])]
+                        [new ThreeOneSevenBee.Model.Game.Level("a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
+                        [new ThreeOneSevenBee.Model.Game.Level("4+5*5", "4+5*5", ["4+25", "25"])],
+                        [new ThreeOneSevenBee.Model.Game.Level("4+5*5", "4+10*5", ["4+50", "54"])]
                     ] )
                 } )]
             ] );

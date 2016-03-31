@@ -442,7 +442,6 @@
         var $t;
     
         if (expressions === void 0) { expressions = []; }
-        console.log(expressions[0]);
         if (type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && type !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
             throw new Bridge.ArgumentException("Invalid Type: " + type, "type");
         }

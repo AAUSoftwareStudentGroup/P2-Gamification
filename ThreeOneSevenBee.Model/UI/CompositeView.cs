@@ -29,13 +29,10 @@ namespace ThreeOneSevenBee.Model.UI
 
         public override void Click(double x, double y)
         {
-            Console.WriteLine(x + "; " + y);
             if (base.ContainsPoint(x, y))
             {
-                Console.WriteLine(x + "; " + y);
                 if (PropagateClick)
                 {
-                    Console.WriteLine(x + "; " + y);
                     foreach (View child in Children)
                     {
                         child.Click(x - X, y - Y);

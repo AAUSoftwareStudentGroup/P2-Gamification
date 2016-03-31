@@ -53,11 +53,12 @@
         },
         draw$3: function (view, offsetX, offsetY) {
             this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
-            this.context.font = view.getHeight() + "px Cambria Math";
+            this.context.font = view.getFontSize() + "px " + view.getFont();
+            this.context.fillStyle = view.getFontColor();
             this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + view.getWidth() / 2)), Bridge.Int.trunc((view.getY() + offsetY + view.getHeight() / 2)));
+            this.context.fillStyle = "#000000";
         },
         draw$4: function (view, offsetX, offsetY) {
-            console.log(view);
             this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                 this.context.beginPath();
@@ -131,24 +132,22 @@
             var img = new Image();
             img.src = "img/" + view.getImage();
             this.context.fillStyle = "transparent";
-            console.log(view);
             this.context.drawImage(img, view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
             this.context.fillStyle = "#000000";
         },
         draw$6: function (view, offsetX, offsetY) {
+            this.context.fillStyle = view.fillStyle;
             if (view.getcornerPositions().getCount() < 3) {
                 throw new Bridge.Exception("Polygon does not contain enough corners");
             }
             this.context.beginPath();
-            console.log("Line at: " + (view.getcornerPositions().getItem(0).x + offsetX) + " x " + (view.getcornerPositions().getItem(0).y + offsetY));
             this.context.moveTo(view.getcornerPositions().getItem(0).x + offsetX, view.getcornerPositions().getItem(0).y + offsetY);
             for (var i = 1; i < view.getcornerPositions().getCount(); i++) {
-                console.log("Line at: " + (view.getcornerPositions().getItem(i).x + offsetX) + " x " + (view.getcornerPositions().getItem(i).y + offsetY));
                 this.context.lineTo(view.getcornerPositions().getItem(i).x + offsetX, view.getcornerPositions().getItem(i).y + offsetY);
             }
             this.context.closePath();
             this.context.stroke();
-            //context.Fill();
+            this.context.fill();
         }
     });
     

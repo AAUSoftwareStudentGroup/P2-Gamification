@@ -15,7 +15,7 @@ namespace ThreeOneSevenBee.Model.Game
         public ExpressionBase CurrentExpression { get { return ExprModel.Expression; } }
         public ExpressionBase StartExpression { get; private set; }
         public List<ExpressionBase> StarExpressions { get; private set; }
-        public event Action<GameModel> OnChanged;
+        public Action<GameModel> OnChanged;
         public ProgressbarStar Progress;
 
         public bool LevelCompleted
@@ -56,8 +56,8 @@ namespace ThreeOneSevenBee.Model.Game
                 Progress.Add(starExpressionBase.Size);
             }
             ExprModel = new ExpressionModel(User.Categories[category].Levels[level].CurrentExpression, (m) => onExpressionChanged(m), 
-                Rules.ExponentToProductRule, Rules.NumericBinaryRule, Rules.NumericVariadicRule, 
-                Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators);
+                Rules.ExponentToProductRule, Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators, 
+                Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.ExponentProduct);
             onExpressionChanged(ExprModel);
         }
 
@@ -86,11 +86,12 @@ namespace ThreeOneSevenBee.Model.Game
             {
                 User.CurrentLevel++;
             }
+            SetLevel(User.CurrentLevel, User.CurrentCategory);
         }
 
         public GameModel(GameAPI api, Action<GameModel> onChanged)
         {
-            OnChanged += onChanged;
+            OnChanged = onChanged;
             API = api;
             User = api.GetCurrentPlayer();
             SetLevel(User.CurrentLevel, User.CurrentCategory);

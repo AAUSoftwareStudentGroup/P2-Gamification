@@ -19,7 +19,11 @@ namespace ThreeOneSevenBee.Model.UI
         {
             this.context = context;
             titleView = new TitleView();
-            levelView = new LevelView(game, context.Width, context.Height) { OnChanged = () => context.Draw() };
+            levelView = new LevelView(game, context.Width, context.Height)
+            {
+                OnChanged = () => context.Draw(),
+                OnExit = () => setContent(titleView)
+            };
             titleView.PlayButton.OnClick = () => setContent(levelView);
             setContent(titleView);
         }

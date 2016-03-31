@@ -162,14 +162,15 @@ namespace ThreeOneSevenBee.Model.UI
                 Width = 3 * NUMVAR_SIZE / 5 * expression.ToString().Length,
                 Height = NUMVAR_SIZE,
                 Baseline = NUMVAR_SIZE / 2,
+                FontSize = NUMVAR_SIZE,
                 BackgroundColor = model.SelectionIndex(expression) != -1 ? "#cccccc" : "transparent"
             };
 
         }
 
-        public ExpressionView(ExpressionModel model, double width, double height) : base(width, height, Build(model.Expression, model), 2)
+        public ExpressionView(ExpressionModel model, double width, double height) : base(width, height, Build(model.Expression, model), 4)
         {
-            model.OnChanged += (m) =>
+            model.OnChanged = (m) =>
             {
                 setContent(Build(m.Expression, m));
                 if(OnChanged != null)

@@ -19,7 +19,7 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 int indexCopy = index;
                 View view = ExpressionView.Build(identities[index].Suggestion, model);
-                FrameView frameView = new FrameView(Width / identities.Count, Height, view, 1)
+                FrameView frameView = new FrameView(Width / identities.Count, Height, view, 2)
                 {
                     PropagateClick = false
                 };
@@ -34,7 +34,6 @@ namespace ThreeOneSevenBee.Model.UI
         public IdentityMenuView(ExpressionModel model, double width, double height) : base(width, height)
         {
             Children = Build(model.Identities, model);
-            model.OnChanged += (m) => Children = Build(m.Identities, m);
         }
 
         public override void Click(double x, double y)

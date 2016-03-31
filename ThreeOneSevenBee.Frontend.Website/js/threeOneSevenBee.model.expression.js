@@ -21,7 +21,6 @@
             this.rules.remove(rule);
         },
         getCommonParent$1: function (selection) {
-            //Console.WriteLine(selection);
             if (selection.getCount() === 0) {
                 return null;
             }
@@ -31,9 +30,7 @@
                 }
                 else  {
                     var parentPaths = new Bridge.List$1(Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase))();
-                    //Console.WriteLine(selection.Count);
                     for (var index = 0; index < selection.getCount(); index++) {
-                        //Console.WriteLine(selection[index].GetParentPath().Reverse().ToList());
                         parentPaths.add(Bridge.Linq.Enumerable.from(selection.getItem(index).getParentPath()).reverse().toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
                     }
                     return this.getCommonParent(parentPaths);
@@ -130,11 +127,7 @@
         identities: null,
         analyzer: null,
         serializer: null,
-        config: {
-            events: {
-                OnChanged: null
-            }
-        },
+        onChanged: null,
         constructor: function (expression, onChange, rules) {
             var $t;
             if (rules === void 0) { rules = []; }
@@ -149,7 +142,7 @@
                 var rule = $t.getCurrent();
                 this.analyzer.add(rule);
             }
-            this.addOnChanged(onChange);
+            this.onChanged = onChange;
             this.callOnChanged();
     },
     getExpression: function () {
@@ -165,8 +158,8 @@
         return this.selectionParent;
     },
     callOnChanged: function () {
-        if (Bridge.hasValue(this.OnChanged)) {
-            this.OnChanged(this);
+        if (Bridge.hasValue(this.onChanged)) {
+            this.onChanged(this);
         }
     },
     selectionIndex: function (expression) {
@@ -199,8 +192,8 @@
         this.selectionParent = this.analyzer.getCommonParent$1(this.selection);
     
         this.identities = this.analyzer.getIdentities(expression, this.selection);
-        if (Bridge.hasValue(this.OnChanged)) {
-            this.OnChanged(this);
+        if (Bridge.hasValue(this.onChanged)) {
+            this.onChanged(this);
         }
     },
     unSelectAll: function () {

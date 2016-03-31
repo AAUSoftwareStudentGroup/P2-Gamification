@@ -28,7 +28,7 @@ namespace ThreeOneSevenBee.Model.Expression
             {
                 analyzer.Add(rule);
             }
-            OnChanged += onChange;
+            OnChanged = onChange;
             callOnChanged();
         }
 
@@ -52,7 +52,7 @@ namespace ThreeOneSevenBee.Model.Expression
             get { return selectionParent; }
         }
 
-        public event Action<ExpressionModel> OnChanged;
+        public Action<ExpressionModel> OnChanged;
 
         private void callOnChanged()
         {

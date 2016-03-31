@@ -7,9 +7,22 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class LabelView : View
     {
+        public string FontColor { get; set; }
+        public string Font { get; set; }
+        public double FontSize { get; set; }
+
         public LabelView(string text) : base(0, 0, 10, 10)
         {
             Text = text;
+            FontColor = "#000000";
+            Font = "Cambria Math";
+            FontSize = Height;
+        }
+
+        public override View Scale(double factor)
+        {
+            FontSize *= factor;
+            return base.Scale(factor);
         }
 
         public string Text { get; set; }

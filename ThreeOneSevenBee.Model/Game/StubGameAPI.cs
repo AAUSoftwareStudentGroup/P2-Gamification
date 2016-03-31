@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 
 namespace ThreeOneSevenBee.Model.Game
 {
@@ -27,7 +30,9 @@ namespace ThreeOneSevenBee.Model.Game
                 new LevelCategory("Numbers") {
                     Levels = new List<Level>()
                         {
-                            new Level("a^2*a*a*a*a*a", "a^2*a*a*a^3", "a^2*a^5", "a^7")
+                            new Level("a^2*a*a*a*a*a", "a^2*a*a*a^3", "a^2*a^5", "a^7"),
+                            new Level("4+5*5", "4+5*5", "4+25", "25"),
+                            new Level("4+5*5", "4+10*5", "4+50", "54")
                         }
                 }
             };

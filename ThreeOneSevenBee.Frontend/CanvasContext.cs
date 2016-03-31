@@ -45,13 +45,14 @@ namespace ThreeOneSevenBee.Frontend
         public override void Draw(LabelView view, double offsetX, double offsetY)
         {
             Draw(view as View, offsetX, offsetY);
-            context.Font = view.Height + "px Cambria Math";
+            context.Font = view.FontSize + "px " + view.Font;
+            context.FillStyle = view.FontColor;
             context.FillText(view.Text, (int)(view.X + offsetX + view.Width / 2), (int)(view.Y + offsetY + view.Height / 2));
+            context.FillStyle = "#000000";
         }
 
         public override void Draw(OperatorView view, double offsetX, double offsetY)
         {
-            Console.WriteLine(view);
             Draw(view as View, offsetX, offsetY);
             if (view.type == OperatorType.Divide)
             {
@@ -131,7 +132,6 @@ namespace ThreeOneSevenBee.Frontend
             ImageElement img = new ImageElement();
             img.Src = "img/" + view.Image;
             context.FillStyle = "transparent";
-            Console.WriteLine(view);
             context.DrawImage(img, view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
             context.FillStyle = "#000000";
         }
