@@ -22,7 +22,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             if (product != null && product.Type == OperatorType.Multiply)
             {
 
-                if (selection.TakeWhile((e) => { return ReferenceEquals(selection[0], e) && ReferenceEquals(e.Parent, expression); }).Count() == selection.Count)
+                if (selection.TakeWhile((e) => { return selection[0] == e && ReferenceEquals(e.Parent, expression); }).Count() == selection.Count)
                 {
                     BinaryExpression suggestion = new BinaryOperatorExpression(selection[0].Clone(), new NumericExpression(selection.Count), OperatorType.Power);
 
