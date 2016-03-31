@@ -120,6 +120,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override string TreePrint(string indent, bool isLast)
         {
+            
             Console.WriteLine(indent + "|-" + Symbol);
             indent += (isLast ? "  " : "| ");
             Left.TreePrint(indent, false);

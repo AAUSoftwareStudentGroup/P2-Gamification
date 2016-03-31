@@ -71,6 +71,9 @@
         getValue: function () {
             return Bridge.Enum.toString(ThreeOneSevenBee.Model.Expression.Expressions.ConstantType, this.getType());
         },
+        getSize: function () {
+            return 1;
+        },
         clone: function () {
             return new ThreeOneSevenBee.Model.Expression.Expressions.ConstantExpression(this.getType());
         },
@@ -128,6 +131,9 @@
         },
         getValue: function () {
             return "(" + this.getExpression().toString() + ")";
+        },
+        getSize: function () {
+            return 3 + this.getExpression().getSize();
         },
         canCalculate: function () {
             return this.getExpression().canCalculate();
@@ -204,6 +210,9 @@
         getValue: function () {
             return this.getFunction() + this.getExpression();
         },
+        getSize: function () {
+            return 3 + this.getExpression().getSize();
+        },
         canCalculate: function () {
             if (Bridge.get(ThreeOneSevenBee.Model.Expression.Expressions.FunctionExpression).functions.containsKey(this.getFunction())) {
                 return this.getExpression().canCalculate();
@@ -267,6 +276,9 @@
         getValue: function () {
             return Bridge.Int.format(this.number, 'G');
         },
+        getSize: function () {
+            return 1;
+        },
         clone: function () {
             return new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(this.number);
         },
@@ -309,6 +321,9 @@
         },
         getValue: function () {
             return this.value;
+        },
+        getSize: function () {
+            return 2;
         },
         setValue: function (value) {
             this.value = value;
@@ -510,6 +525,18 @@
         getValue: function () {
             return this.getLeft().getValue() + this.getSymbol() + this.getRight().getValue();
         },
+        getSize: function () {
+            var result = 0;
+            if (this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
+                result = 1 + this.getLeft().getSize() + this.getRight().getSize();
+            }
+            else  {
+                if (this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
+                    result = 3 + this.getLeft().getSize() + this.getRight().getSize();
+                }
+            }
+            return result;
+        },
         canCalculate: function () {
             switch (this.getType()) {
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add: 
@@ -588,6 +615,7 @@
             throw new Bridge.NotImplementedException();
         },
         treePrint: function (indent, isLast) {
+    
             console.log(indent + "|-" + this.getSymbol());
             indent += (isLast ? "  " : "| ");
             this.getLeft().treePrint(indent, false);
@@ -604,6 +632,9 @@
         },
         getValue: function () {
             return "-" + this.getExpression().toString();
+        },
+        getSize: function () {
+            return 3 + this.getExpression().getSize();
         },
         canCalculate: function () {
             return this.getExpression().canCalculate();
@@ -664,6 +695,16 @@
         },
         getValue: function () {
             return Bridge.Linq.Enumerable.from(this).skip(1).aggregate(Bridge.Linq.Enumerable.from(this).first().getValue(), Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression.f1));
+        },
+        getSize: function () {
+            var $t;
+            var result = 3;
+            $t = Bridge.getEnumerator(this);
+            while ($t.moveNext()) {
+                var expression = $t.getCurrent();
+                result += expression.getSize();
+            }
+            return result;
         },
         canCalculate: function () {
             var $t;

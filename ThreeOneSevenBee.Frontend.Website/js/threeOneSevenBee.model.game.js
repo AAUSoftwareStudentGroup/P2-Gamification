@@ -18,21 +18,45 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Game.GameAPI');
     
+    Bridge.define('ThreeOneSevenBee.Model.Game.GameModel', {
+        aPI: null,
+        currentLevel: null,
+        config: {
+            properties: {
+                Player: null,
+                Expression: null
+            }
+        },
+        constructor: function (api) {
+            this.aPI = api;
+            this.setPlayer(api.getCurrentPlayer());
+            this.currentLevel = null;
+        },
+        setLevel: function (level) {
+            this.currentLevel = level;
+        }
+    });
+    
     Bridge.define('ThreeOneSevenBee.Model.Game.Level', {
-        progress: null,
-        expression: null,
-        constructor: function (expression, expressionGoals) {
+        startExpression: null,
+        starExpressions: null,
+        currentExpression: null,
+        constructor: function (startExpression, currentExpression, starExpressions) {
             var $t;
-            if (expressionGoals === void 0) { expressionGoals = []; }
-            var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
-            this.expression = serializer.deserialize(expression);
-            this.progress = new ThreeOneSevenBee.Model.Game.ProgressbarStar(this.expression.getSize(), this.expression.getSize());
-            $t = Bridge.getEnumerator(expressionGoals);
+            if (starExpressions === void 0) { starExpressions = []; }
+            this.startExpression = startExpression;
+            this.currentExpression = currentExpression;
+            $t = Bridge.getEnumerator(starExpressions);
             while ($t.moveNext()) {
-                var expressionGoal = $t.getCurrent();
-                this.progress.add(serializer.deserialize(expressionGoal).getSize());
+                var star = $t.getCurrent();
+                this.starExpressions.add(star);
             }
     }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.Game.LevelCategory', {
+        name: null,
+        levels: null
     });
     
     Bridge.define('ThreeOneSevenBee.Model.Game.ProgressbarStar', {
@@ -93,7 +117,7 @@
         inherits: [ThreeOneSevenBee.Model.Game.Player],
         config: {
             init: function () {
-                this.levels = new Bridge.List$1(ThreeOneSevenBee.Model.Game.Level)() || null;
+                this.categories = new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)() || null;
             }
         },
         constructor: function (player) {

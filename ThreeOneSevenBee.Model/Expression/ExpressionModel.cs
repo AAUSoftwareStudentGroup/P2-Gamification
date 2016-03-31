@@ -12,7 +12,7 @@ namespace ThreeOneSevenBee.Model.Expression
         private ExpressionBase expression;
         private ExpressionBase selectionParent;
         private List<ExpressionBase> selection;
-        private List<ExpressionBase> identities;
+        private List<Identity> identities;
         private ExpressionAnalyzer analyzer;
         private ExpressionSerializer serializer;
 
@@ -20,7 +20,7 @@ namespace ThreeOneSevenBee.Model.Expression
         {
             selectionParent = null;
             selection = new List<ExpressionBase>();
-            identities = new List<ExpressionBase>();
+            identities = new List<Identity>();
             serializer = new ExpressionSerializer();
             analyzer = new ExpressionAnalyzer();
             this.expression = serializer.Deserialize(expression);
@@ -35,7 +35,7 @@ namespace ThreeOneSevenBee.Model.Expression
             get { return expression; }
         }
 
-        public List<ExpressionBase> Identities
+        public List<Identity> Identities
         {
             get { return identities; }
         }
@@ -82,7 +82,9 @@ namespace ThreeOneSevenBee.Model.Expression
             {
                 selection.RemoveAt(index);
             }
+            
             selectionParent = analyzer.GetCommonParent(selection);
+         
             identities = analyzer.GetIdentities(expression, selection);
             OnChanged(this);
         }

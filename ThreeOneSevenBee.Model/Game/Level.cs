@@ -8,17 +8,17 @@ namespace ThreeOneSevenBee.Model.Game
 {
     public class Level
     {
-        public ProgressbarStar Progress;
-        public ExpressionBase Expression;
+        public string StartExpression;
+        public List<string> StarExpressions;
+        public string CurrentExpression;
 
-        public Level(string expression, params string[] expressionGoals)
+        public Level(string startExpression, string currentExpression, params string[] starExpressions)
         {
-            ExpressionSerializer serializer = new ExpressionSerializer();
-            Expression = serializer.Deserialize(expression);
-            Progress = new ProgressbarStar(Expression.Size, Expression.Size);
-            foreach (string expressionGoal in expressionGoals)
+            StartExpression = startExpression;
+            CurrentExpression = currentExpression;
+            foreach (var star in starExpressions)
             {
-                Progress.Add(serializer.Deserialize(expressionGoal).Size);
+                StarExpressions.Add(star);
             }
         }
     }

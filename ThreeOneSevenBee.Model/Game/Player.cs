@@ -17,7 +17,5 @@ namespace ThreeOneSevenBee.Model.Game
         public string PlayerName { get; private set; }
 
         public string LastLoginTime { get; set; }
-
-      
     }
 }

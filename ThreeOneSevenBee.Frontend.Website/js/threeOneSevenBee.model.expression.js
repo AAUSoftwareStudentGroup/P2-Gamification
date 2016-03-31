@@ -21,6 +21,7 @@
             this.rules.remove(rule);
         },
         getCommonParent$1: function (selection) {
+            //Console.WriteLine(selection);
             if (selection.getCount() === 0) {
                 return null;
             }
@@ -30,7 +31,9 @@
                 }
                 else  {
                     var parentPaths = new Bridge.List$1(Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase))();
+                    //Console.WriteLine(selection.Count);
                     for (var index = 0; index < selection.getCount(); index++) {
+                        //Console.WriteLine(selection[index].GetParentPath().Reverse().ToList());
                         parentPaths.add(Bridge.Linq.Enumerable.from(selection.getItem(index).getParentPath()).reverse().toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
                     }
                     return this.getCommonParent(parentPaths);
@@ -52,7 +55,7 @@
         },
         getIdentities: function (expression, selection) {
             var $t;
-            var identities = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
+            var identities = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.Identity)();
     
             if (Bridge.Linq.Enumerable.from(selection).count() === 0) {
                 return identities;
@@ -62,9 +65,9 @@
             while ($t.moveNext()) {
                 var rule = $t.getCurrent();
                 var commonParent = this.getCommonParent$1(selection);
-                var identity = { };
-                if (rule(commonParent, selection, identity)) {
-                    identities.add(identity.v);
+                var identity = rule(commonParent, selection);
+                if (Bridge.hasValue(identity)) {
+                    identities.add(identity);
                 }
             }
     
@@ -96,9 +99,6 @@
             properties: {
                 Parent: null
             }
-        },
-        getSize: function () {
-            return 10;
         },
         getParentPath: function () {
             var $yield = [];
@@ -140,7 +140,7 @@
             if (rules === void 0) { rules = []; }
             this.selectionParent = null;
             this.selection = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
-            this.identities = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
+            this.identities = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.Identity)();
             this.serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
             this.analyzer = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer();
             this.expression = this.serializer.deserialize(expression);
@@ -188,7 +188,9 @@
         else  {
             this.selection.removeAt(index);
         }
+    
         this.selectionParent = this.analyzer.getCommonParent$1(this.selection);
+    
         this.identities = this.analyzer.getIdentities(expression, this.selection);
         this.OnChanged(this);
     },
@@ -271,8 +273,8 @@
         [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "^", 4, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.right)],
         [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "*", 3, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)],
         [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "/", 3, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)],
-        [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "+", 2, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)],
-        [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "-", 2, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)]
+        [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "-", 2, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)],
+        [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "+", 1, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)]
     ] ) || null;
                 this.functions = Bridge.merge(new Bridge.List$1(String)(), [
         ["sqrt"]
@@ -691,6 +693,15 @@
         },
         deserialize: function (expression) {
             return this.parser.parse$1(expression);
+        }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.Expression.Identity', {
+        suggestion: null,
+        result: null,
+        constructor: function (suggestion, result) {
+            this.suggestion = suggestion;
+            this.result = result;
         }
     });
     
