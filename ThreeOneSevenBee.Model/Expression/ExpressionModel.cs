@@ -16,7 +16,7 @@ namespace ThreeOneSevenBee.Model.Expression
         private ExpressionAnalyzer analyzer;
         private ExpressionSerializer serializer;
 
-        public ExpressionModel(string expression, params ExpressionRule[] rules)
+        public ExpressionModel(string expression, Action<ExpressionModel> onChange, params ExpressionRule[] rules)
         {
             selectionParent = null;
             selection = new List<ExpressionBase>();
@@ -28,6 +28,8 @@ namespace ThreeOneSevenBee.Model.Expression
             {
                 analyzer.Add(rule);
             }
+            OnChanged += onChange;
+            callOnChanged();
         }
 
         public ExpressionBase Expression
@@ -51,6 +53,14 @@ namespace ThreeOneSevenBee.Model.Expression
         }
 
         public event Action<ExpressionModel> OnChanged;
+
+        private void callOnChanged()
+        {
+            if (OnChanged != null)
+            {
+                OnChanged(this);
+            }
+        }
 
         public int SelectionIndex(ExpressionBase expression)
         {
@@ -86,7 +96,8 @@ namespace ThreeOneSevenBee.Model.Expression
             selectionParent = analyzer.GetCommonParent(selection);
          
             identities = analyzer.GetIdentities(expression, selection);
-            OnChanged(this);
+            if(OnChanged != null)
+                OnChanged(this);
         }
 
         public void UnSelectAll()
@@ -94,7 +105,7 @@ namespace ThreeOneSevenBee.Model.Expression
             selection.Clear();
             identities.Clear();
             selectionParent = null;
-            OnChanged(this);
+            callOnChanged();
         }
 
 

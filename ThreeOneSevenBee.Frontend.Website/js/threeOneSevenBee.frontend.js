@@ -15,15 +15,10 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a*a*a", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule]);
+                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a/c + b/c + d/c + e/c", null, [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators]);
     
     
-                var polygon = new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor$1", 4);
-                var cornerpos = new Bridge.List$1(ThreeOneSevenBee.Model.Euclidean.Vector2)();
-                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 0));
-                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 1));
-                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 1, 1));
-                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 1, 0));
+                var polygon = new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor$1", 5);
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(canvas.width, canvas.height), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(new ThreeOneSevenBee.Model.Game.ProgressbarStar(50, 100, [30, 60, 75]), canvas.width, 20), {
                         setY: 30
@@ -83,6 +78,8 @@
             this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + view.getWidth() / 2)), Bridge.Int.trunc((view.getY() + offsetY + view.getHeight() / 2)));
         },
         draw$4: function (view, offsetX, offsetY) {
+            console.log(view);
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                 this.context.beginPath();
                 this.context.moveTo(view.getX() + offsetX, view.getY() + offsetY + view.getHeight() / 2);
@@ -156,19 +153,18 @@
             this.context.drawImage(img, view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
         },
         draw$6: function (view, offsetX, offsetY) {
+            this.context.fillStyle = view.fillStyle;
             if (view.getcornerPositions().getCount() < 3) {
                 throw new Bridge.Exception("Polygon does not contain enough corners");
             }
             this.context.beginPath();
-            console.log("Line at: " + (view.getcornerPositions().getItem(0).x + offsetX) + " x " + (view.getcornerPositions().getItem(0).y + offsetY));
             this.context.moveTo(view.getcornerPositions().getItem(0).x + offsetX, view.getcornerPositions().getItem(0).y + offsetY);
             for (var i = 1; i < view.getcornerPositions().getCount(); i++) {
-                console.log("Line at: " + (view.getcornerPositions().getItem(i).x + offsetX) + " x " + (view.getcornerPositions().getItem(i).y + offsetY));
                 this.context.lineTo(view.getcornerPositions().getItem(i).x + offsetX, view.getcornerPositions().getItem(i).y + offsetY);
             }
             this.context.closePath();
             this.context.stroke();
-            //context.Fill();
+            this.context.fill();
         }
     });
     

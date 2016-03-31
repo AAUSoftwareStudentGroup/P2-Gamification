@@ -100,9 +100,6 @@
                 Parent: null
             }
         },
-        getSize: function () {
-            return 10;
-        },
         getParentPath: function () {
             var $yield = [];
             var currentParent = this;
@@ -138,7 +135,7 @@
                 OnChanged: null
             }
         },
-        constructor: function (expression, rules) {
+        constructor: function (expression, onChange, rules) {
             var $t;
             if (rules === void 0) { rules = []; }
             this.selectionParent = null;
@@ -152,6 +149,8 @@
                 var rule = $t.getCurrent();
                 this.analyzer.add(rule);
             }
+            this.addOnChanged(onChange);
+            this.callOnChanged();
     },
     getExpression: function () {
         return this.expression;
@@ -164,6 +163,11 @@
     },
     getSelected: function () {
         return this.selectionParent;
+    },
+    callOnChanged: function () {
+        if (Bridge.hasValue(this.OnChanged)) {
+            this.OnChanged(this);
+        }
     },
     selectionIndex: function (expression) {
         for (var i = 0; i < this.selection.getCount(); i++) {
@@ -195,13 +199,15 @@
         this.selectionParent = this.analyzer.getCommonParent$1(this.selection);
     
         this.identities = this.analyzer.getIdentities(expression, this.selection);
-        this.OnChanged(this);
+        if (Bridge.hasValue(this.OnChanged)) {
+            this.OnChanged(this);
+        }
     },
     unSelectAll: function () {
         this.selection.clear();
         this.identities.clear();
         this.selectionParent = null;
-        this.OnChanged(this);
+        this.callOnChanged();
     },
     applyIdentity: function (identity) {
         var $t;
@@ -276,8 +282,8 @@
         [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "^", 4, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.right)],
         [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "*", 3, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)],
         [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "/", 3, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)],
-        [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "+", 2, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)],
-        [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "-", 2, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)]
+        [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "-", 2, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)],
+        [new ThreeOneSevenBee.Model.Expression.Operator("constructor$1", "+", 1, ThreeOneSevenBee.Model.Expression.OperatorAssociativity.left)]
     ] ) || null;
                 this.functions = Bridge.merge(new Bridge.List$1(String)(), [
         ["sqrt"]

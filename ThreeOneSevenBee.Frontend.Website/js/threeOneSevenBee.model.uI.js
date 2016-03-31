@@ -86,6 +86,8 @@
         }
     });
     
+    Bridge.define('ThreeOneSevenBee.Model.UI.GameView');
+    
     Bridge.define('ThreeOneSevenBee.Model.UI.ParenthesisType', {
         statics: {
             left: 0,
@@ -310,32 +312,39 @@
     
     Bridge.define('ThreeOneSevenBee.Model.UI.PolygonView', {
         inherits: [ThreeOneSevenBee.Model.UI.View],
+        fillStyle: null,
         config: {
             properties: {
                 model: null,
                 cornerPositions: null
             }
         },
-        constructor$1: function (model, x, y, width, height) {
+        constructor$1: function (model, fillStyle, x, y, width, height) {
             ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, x, y, width, height);
     
-            // Draw model as is
+            this.fillStyle = fillStyle;
             this.setcornerPositions(new Bridge.List$1(ThreeOneSevenBee.Model.Euclidean.Vector2)());
             var vector = new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 0);
-            var angle = 2 * Math.PI / (Bridge.Linq.Enumerable.from(model.getcorners()).count() - 2);
+            if (Bridge.Linq.Enumerable.from(model.getcorners()).count() < 3) {
+                throw new Bridge.Exception("[Polygonview]: Model has less than 3 corners");
+            }
+            var totalAngle = Math.PI * (Bridge.Linq.Enumerable.from(model.getcorners()).count() - 2);
+            var angle = totalAngle / Bridge.Linq.Enumerable.from(model.getcorners()).count();
+            angle = Math.PI - angle;
+            console.log("Angle: " + angle);
             this.getcornerPositions().add(vector.$clone());
             for (var i = 1; i < Bridge.Linq.Enumerable.from(model.getcorners()).count(); i++) {
-                vector.x = Math.cos(angle * i);
-                vector.y = Math.sin(angle * i);
-                vector.normalize();
-                this.getcornerPositions().add(ThreeOneSevenBee.Model.Euclidean.Vector2.op_Addition(vector, this.getcornerPositions().getItem(i - 1)));
+                vector.x += Math.cos(angle * i);
+                vector.y += Math.sin(angle * i);
+                this.getcornerPositions().add(vector.$clone());
             }
             this.setcornerPositions(this.getcornerPositions());
             this.centerAndScale(width, height);
         },
-        constructor: function (model, cornerPositions, x, y, width, height) {
+        constructor: function (model, cornerPositions, fillStyle, x, y, width, height) {
             ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, x, y, width, height);
     
+            this.fillStyle = fillStyle;
             // Draw model per specifications
             if (Bridge.Linq.Enumerable.from(model.getcorners()).count() !== Bridge.Linq.Enumerable.from(cornerPositions).count()) {
                 throw new Bridge.ArgumentException("Non-equal amounts of cornerpositions(" + Bridge.Linq.Enumerable.from(cornerPositions).count() + ") and corners(" + Bridge.Linq.Enumerable.from(model.getcorners()).count() + ")!");
@@ -354,21 +363,20 @@
                 if (corner.x < min.x) {
                     min.x = corner.x;
                 }
-                if (corner.y < min.y) {
-                    min.y = corner.y;
-                }
                 if (corner.x > max.x) {
                     max.x = corner.x;
                 }
                 if (corner.y > max.y) {
                     max.y = corner.y;
                 }
+                if (corner.y < min.y) {
+                    min.y = corner.y;
+                }
             }
-            max = ThreeOneSevenBee.Model.Euclidean.Vector2.op_Addition(max.$clone(), min.$clone());
-            var scale = (max.x - width < max.y - height) ? width / max.x : height / max.y;
-    
+            max = ThreeOneSevenBee.Model.Euclidean.Vector2.op_Subtraction(max.$clone(), min.$clone());
+            var scale = (max.x - width < max.y - height) ? height / max.y : width / max.x;
             for (var i = 0; i < Bridge.Linq.Enumerable.from(this.getcornerPositions()).count(); i++) {
-                this.getcornerPositions().setItem(i, ThreeOneSevenBee.Model.Euclidean.Vector2.op_Addition(this.getcornerPositions().getItem(i), min.$clone()));
+                this.getcornerPositions().setItem(i, ThreeOneSevenBee.Model.Euclidean.Vector2.op_Subtraction(this.getcornerPositions().getItem(i), min.$clone()));
                 this.getcornerPositions().setItem(i, ThreeOneSevenBee.Model.Euclidean.Vector2.op_Multiply$1(this.getcornerPositions().getItem(i), scale)); //  Take the biggest offset and scale accordingly
             }
     
@@ -427,6 +435,10 @@
                     operatorView.setWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                     operatorView.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                     operatorView.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
+                    operatorView.onClick = function () {
+                        model.select(expression);
+                    };
+                    operatorView.setBackgroundColor(model.selectionIndex(expression) !== -1 ? "#cccccc" : "transparent");
                     view.setX(operatorView.getWidth());
                     operatorView.setY(view.getBaseline() - operatorView.getBaseline());
                     var minusView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(operatorView.getWidth() + view.getWidth(), view.getHeight()), [
@@ -448,6 +460,10 @@
                             operatorView1.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                             operatorView1.setY(left.getHeight());
                             operatorView1.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
+                            operatorView1.onClick = function () {
+                                model.select(expression);
+                            };
+                            operatorView1.setBackgroundColor(model.selectionIndex(expression) !== -1 ? "#cccccc" : "transparent");
                             right.setY(left.getHeight() + operatorView1.getHeight());
                             left.setX((width - left.getWidth()) / 2);
                             right.setX((width - right.getWidth()) / 2);
@@ -568,7 +584,7 @@
                 return Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView(expression.toString(), function () {
                     model.select(expression);
                 }), {
-                    setWidth: 3 * Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4,
+                    setWidth: 3 * Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 5 * expression.toString().length,
                     setHeight: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
                     setBaseline: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2,
                     setBackgroundColor: model.selectionIndex(expression) !== -1 ? "#cccccc" : "transparent"

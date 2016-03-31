@@ -24,6 +24,8 @@ namespace ThreeOneSevenBee.Model.UI
                 operatorView.Width = NUMVAR_SIZE;
                 operatorView.Height = NUMVAR_SIZE;
                 operatorView.Baseline = NUMVAR_SIZE / 2;
+                operatorView.OnClick = () => model.Select(expression);
+                operatorView.BackgroundColor = model.SelectionIndex(expression) != -1 ? "#cccccc" : "transparent";
                 view.X = operatorView.Width;
                 operatorView.Y = view.Baseline - operatorView.Baseline;
                 View minusView = new CompositeView(operatorView.Width + view.Width, view.Height) { operatorView, view };
@@ -44,6 +46,8 @@ namespace ThreeOneSevenBee.Model.UI
                         operatorView.Height = NUMVAR_SIZE;
                         operatorView.Y = left.Height;
                         operatorView.Baseline = NUMVAR_SIZE / 2;
+                        operatorView.OnClick = () => model.Select(expression);
+                        operatorView.BackgroundColor = model.SelectionIndex(expression) != -1 ? "#cccccc" : "transparent";
                         right.Y = left.Height + operatorView.Height;
                         left.X = (width - left.Width) / 2;
                         right.X = (width - right.Width) / 2;
@@ -155,7 +159,7 @@ namespace ThreeOneSevenBee.Model.UI
             }
             return new ButtonView(expression.ToString(), () => model.Select(expression))
             {
-                Width = 3 * NUMVAR_SIZE / 4,
+                Width = 3 * NUMVAR_SIZE / 5 * expression.ToString().Length,
                 Height = NUMVAR_SIZE,
                 Baseline = NUMVAR_SIZE / 2,
                 BackgroundColor = model.SelectionIndex(expression) != -1 ? "#cccccc" : "transparent"

@@ -45,6 +45,8 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void Draw(OperatorView view, double offsetX, double offsetY)
         {
+            Console.WriteLine(view);
+            Draw(view as View, offsetX, offsetY);
             if (view.type == OperatorType.Divide)
             {
                 context.BeginPath();
@@ -126,19 +128,18 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void Draw(PolygonView view, double offsetX, double offsetY)
         {
+            context.FillStyle = view.fillStyle;
             if (view.cornerPositions.Count < 3)
                 throw new Exception("Polygon does not contain enough corners");
             context.BeginPath();
-            Console.WriteLine("Line at: " + (view.cornerPositions[0].X + offsetX) + " x " + (view.cornerPositions[0].Y + offsetY));
             context.MoveTo(view.cornerPositions[0].X + offsetX, view.cornerPositions[0].Y + offsetY);
             for (int i = 1; i < view.cornerPositions.Count; i++)
             {
-                Console.WriteLine("Line at: " + (view.cornerPositions[i].X + offsetX) + " x " + (view.cornerPositions[i].Y + offsetY));
                 context.LineTo(view.cornerPositions[i].X + offsetX, view.cornerPositions[i].Y + offsetY);
             }
             context.ClosePath();
             context.Stroke();
-            //context.Fill();
+            context.Fill();
         }
     }
 }
