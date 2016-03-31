@@ -22,8 +22,8 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel expressionModel = new ExpressionModel("a/c + b/c + d/c + e/c", null,
-                Rules.ProductToExponentRule, Rules.ExponentToProductRule, Rules.NumericVariadicRule, Rules.NumericBinaryRule, Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.AddFractionsWithSameNumerators);
+            ExpressionModel expressionModel = new ExpressionModel("{a+b+3+2}/5", null,
+                Rules.ProductToExponentRule, Rules.ExponentToProductRule, Rules.NumericVariadicRule, Rules.NumericBinaryRule, Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.AddFractionsWithSameNumerators, Rules.SplittingFractions);
            
 
             PolygonModel polygon = new PolygonModel(5);
