@@ -8,6 +8,11 @@ namespace ThreeOneSevenBee.Model.Game
     public class LevelCategory
     {
         public string Name;
-        List<Level> Levels;
+        public List<Level> Levels;
+
+        public LevelCategory(string name)
+        {
+            Name = name;
+        }
     }
 }
