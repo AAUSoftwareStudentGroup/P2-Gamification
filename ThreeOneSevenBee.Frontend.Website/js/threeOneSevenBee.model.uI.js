@@ -86,6 +86,8 @@
         }
     });
     
+    Bridge.define('ThreeOneSevenBee.Model.UI.GameView');
+    
     Bridge.define('ThreeOneSevenBee.Model.UI.ParenthesisType', {
         statics: {
             left: 0,
@@ -435,6 +437,10 @@
                     operatorView.setWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                     operatorView.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                     operatorView.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
+                    operatorView.onClick = function () {
+                        model.select(expression);
+                    };
+                    operatorView.setBackgroundColor(model.selectionIndex(expression) !== -1 ? "#cccccc" : "transparent");
                     view.setX(operatorView.getWidth());
                     operatorView.setY(view.getBaseline() - operatorView.getBaseline());
                     var minusView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(operatorView.getWidth() + view.getWidth(), view.getHeight()), [
@@ -456,6 +462,10 @@
                             operatorView1.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                             operatorView1.setY(left.getHeight());
                             operatorView1.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
+                            operatorView1.onClick = function () {
+                                model.select(expression);
+                            };
+                            operatorView1.setBackgroundColor(model.selectionIndex(expression) !== -1 ? "#cccccc" : "transparent");
                             right.setY(left.getHeight() + operatorView1.getHeight());
                             left.setX((width - left.getWidth()) / 2);
                             right.setX((width - right.getWidth()) / 2);

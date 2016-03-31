@@ -15,7 +15,7 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a*b*5*a*b*5", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule]);
+                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a/b*{a/b}", null, [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule]);
     
     
                 var polygon = new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor$1", 4);
@@ -34,8 +34,7 @@
                     } )],
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(expressionModel, canvas.width, 100), {
                         setY: canvas.height - 100
-                    } )],
-                    [new ThreeOneSevenBee.Model.UI.PolygonView("constructor$1", polygon, "#3C78D8", 100, 100, 100, 100)]
+                    } )]
                 ] );
     
                 window.addEventListener("resize", function () {
@@ -84,6 +83,8 @@
             this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + view.getWidth() / 2)), Bridge.Int.trunc((view.getY() + offsetY + view.getHeight() / 2)));
         },
         draw$4: function (view, offsetX, offsetY) {
+            console.log(view);
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                 this.context.beginPath();
                 this.context.moveTo(view.getX() + offsetX, view.getY() + offsetY + view.getHeight() / 2);
