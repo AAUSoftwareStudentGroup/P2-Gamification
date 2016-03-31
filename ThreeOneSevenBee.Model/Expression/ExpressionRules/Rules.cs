@@ -61,7 +61,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 if (ReferenceEquals(selection[0].Parent, exponent) && ReferenceEquals(selection[1].Parent, exponent))
                 {
                     NumericExpression numericExpression = exponent.Right as NumericExpression;
-                    if(numericExpression == null)
+                    if (numericExpression == null)
                     {
                         return null;
                     }
@@ -165,7 +165,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     {
                         result = new NumericExpression(numericLeft.Number - numericRight.Number);
                     }
-                    else if(binaryExpression.Type == OperatorType.Power)
+                    else if (binaryExpression.Type == OperatorType.Power)
                     {
                         result = new NumericExpression(Math.Pow(numericLeft.Number, numericRight.Number));
                     }
@@ -173,7 +173,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     {
                         return null;
                     }
-                    if(result.Number >= 0)
+                    if (result.Number >= 0)
                     {
                         return new Identity(result, result);
                     }
@@ -183,7 +183,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         UnaryMinusExpression positiveResult = new UnaryMinusExpression(result);
                         return new Identity(positiveResult, positiveResult);
                     }
-                    
+
                 }
             }
             return null;
@@ -198,41 +198,104 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
 
             VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
-            if (variadicExpression != null)
+            if (variadicExpression != null && variadicExpression.Type == OperatorType.Add)
             {
-                if (variadicExpression.Type == OperatorType.Add)
+                //Makes a variable for the two first fractions, since it is needed to make a VariadicOperatorExpression later on (it has to take at least two elements).
+                BinaryOperatorExpression firstFraction = selection[0] as BinaryOperatorExpression;
+                BinaryOperatorExpression secondFraction = selection[1] as BinaryOperatorExpression;
+
+                if (firstFraction != null && secondFraction != null && firstFraction.Type == OperatorType.Divide && secondFraction.Type == OperatorType.Divide)
                 {
-                    //Makes a variable for the two first fractions, since it is needed to make a VariadicOperatorExpression later on (it has to take at least two elements).
-                    BinaryOperatorExpression firstFraction = selection[0] as BinaryOperatorExpression;
-                    BinaryOperatorExpression secondFraction = selection[1] as BinaryOperatorExpression;
+                    List<ExpressionBase> numeratorList = new List<ExpressionBase>();
+                    numeratorList.Add(firstFraction.Left.Clone());
+                    numeratorList.Add(secondFraction.Left.Clone());
 
-                    if (firstFraction != null && secondFraction != null &&  firstFraction.Type == OperatorType.Divide && secondFraction.Type == OperatorType.Divide)
+                    foreach (ExpressionBase selected in selection.Skip(2))
                     {
-                        List<ExpressionBase> numeratorList = new List<ExpressionBase>();
-                        numeratorList.Add(firstFraction.Left.Clone());
-                        numeratorList.Add(secondFraction.Left.Clone());
-
-                        foreach (ExpressionBase selected in selection.Skip(2))
+                        BinaryOperatorExpression fraction = selected as BinaryOperatorExpression;
+                        if (fraction != null && ReferenceEquals(fraction.Parent, variadicExpression) && fraction.Right == firstFraction.Right)
                         {
-                            BinaryOperatorExpression fraction = selected as BinaryOperatorExpression;
-                            if (fraction != null && ReferenceEquals(fraction.Parent, variadicExpression) && fraction.Right == firstFraction.Right)
-                            {
-                                numeratorList.Add(fraction.Left.Clone());
-                            }
-                            else
-                            {
-                                return null;    
-                            }
+                            numeratorList.Add(fraction.Left.Clone());
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+
+                    VariadicOperatorExpression suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, firstFraction.Left.Clone(), secondFraction.Left.Clone());
+                    foreach (var i in numeratorList.Skip(2))
+                    {
+                        suggestionNumerator.Add(i);
+                    }
+                    BinaryOperatorExpression suggestion = new BinaryOperatorExpression(suggestionNumerator, firstFraction.Right.Clone(), OperatorType.Divide);
+                    //SHOULD NOT BE SUGGESTION,SUGGESTION, BUT SUGGESTION,RESULT, THIS IS FIXED WHEN THE CORRECT FUNCTION IS IMPLEMENTED!!!!!
+                    return new Identity(suggestion, suggestion);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        //(a+b)/c = a/c + b/c
+        // Vælg nævner og tæller man ønsker at rykke ud. Husk at tjekke, at deres common parent er samme (ref equals)
+        // Overvej! Hvad hvis man vil rykke flere ud?
+        // Suggestion skal vel have ny brøk + gamle brøk
+        // Først tjekkes kun hvis man vælger TO!!! tæller!
+        public static Identity SplittingFractions(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count < 2)
+            {
+                return null;
+            }
+
+            BinaryOperatorExpression binaryExpression = expression as BinaryOperatorExpression;
+            if (binaryExpression != null && binaryExpression.Type == OperatorType.Divide)
+            {
+                VariadicOperatorExpression numeratorType = binaryExpression.Left as VariadicOperatorExpression;
+                if (numeratorType != null && numeratorType.Type == OperatorType.Add)
+                {
+                    List<ExpressionBase> selectedNumerators = new List<ExpressionBase>();
+                    foreach (var selected in selection)
+                    {
+                        if (!ReferenceEquals(selected.Parent, binaryExpression))
+                        {
+                            return null;
                         }
 
-                        VariadicOperatorExpression suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, firstFraction, secondFraction);
-                        foreach (var i in numeratorList.Skip(2))
+
+                        /*if (ReferenceEquals(selected, //ÆNDRE TIL NUMERATORTYPE.LEFT?))
                         {
-                            suggestionNumerator.Add(i);
+                            selectedNumerators.Add(selected);
+                        }*/
+
+                        else
+                        {
+                            return null;
                         }
-                        BinaryOperatorExpression suggestion = new BinaryOperatorExpression(suggestionNumerator, firstFraction.Right.Clone(), OperatorType.Divide);
-                       
-                        return new Identity(suggestion, suggestion);
+                    }
+
+                    if(selectedNumerators.Count < 2)
+                    {
+                        BinaryOperatorExpression newFraction = new BinaryOperatorExpression(selectedNumerators[0], binaryExpression.Right.Clone(), OperatorType.Divide);
+                        return new Identity(newFraction, newFraction);
+                    }
+                    else if(selectedNumerators.Count >= 2)
+                    {
+                        VariadicOperatorExpression listOfNumerators = new VariadicOperatorExpression(OperatorType.Add, selectedNumerators[0], selectedNumerators[1]);
+                        foreach (var i in selectedNumerators.Skip(2))
+                        {
+                            listOfNumerators.Add(i);
+                        }
+
+                        BinaryOperatorExpression newFraction = new BinaryOperatorExpression(listOfNumerators, binaryExpression.Right.Clone(), OperatorType.Divide);
+                        return new Identity(newFraction, newFraction);
                     }
                     else
                     {
@@ -253,7 +316,41 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
 
 
+        /*
+        //a/b * c/d
+        public static Identity FractionsMultiplied(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count < 2)
+            {
+                return null;
+            }
 
-        
+            VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
+            if (variadicExpression != null && variadicExpression.Type == OperatorType.Multiply)
+            {
+
+
+
+
+
+
+
+            }
+        }
+        */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
