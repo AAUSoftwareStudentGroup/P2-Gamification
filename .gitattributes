@@ -2,4 +2,4 @@
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
 * text=auto
-ThreeOneSevenBee.Frontend.Website/js/* linguist-vendored
+ThreeOneSevenBee.Frontend.Website/js/* binary
