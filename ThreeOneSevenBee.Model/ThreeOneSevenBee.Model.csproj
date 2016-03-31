@@ -75,6 +75,7 @@
     <Compile Include="Game\LevelCategory.cs" />
     <Compile Include="Game\Player.cs" />
     <Compile Include="Game\ProgressbarStar.cs" />
+    <Compile Include="Game\StubGameAPI.cs" />
     <Compile Include="Polygon\PolygonCorner.cs" />
     <Compile Include="Polygon\PolygonModel.cs" />
     <Compile Include="Polygon\PolygonRelation.cs" />

@@ -45,6 +45,8 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void Draw(OperatorView view, double offsetX, double offsetY)
         {
+            Console.WriteLine(view);
+            Draw(view as View, offsetX, offsetY);
             if (view.type == OperatorType.Divide)
             {
                 context.BeginPath();
