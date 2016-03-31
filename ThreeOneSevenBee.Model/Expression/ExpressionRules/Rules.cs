@@ -155,7 +155,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     {
                         result = new NumericExpression(numericLeft.Number - numericRight.Number);
                     }
-                    else if(binaryExpression.Type == OperatorType.Power)
+                    else if (binaryExpression.Type == OperatorType.Power)
                     {
                         result = new NumericExpression(Math.Pow(numericLeft.Number, numericRight.Number));
                     }
@@ -163,7 +163,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     {
                         return null;
                     }
-                    if(result.Number >= 0)
+                    if (result.Number >= 0)
                     {
                         return new Identity(result, result);
                     }
@@ -173,10 +173,36 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         UnaryMinusExpression positiveResult = new UnaryMinusExpression(result);
                         return new Identity(positiveResult, positiveResult);
                     }
-                    
+
                 }
             }
             return null;
+        }
+
+        // a^-n = 1/a^n
+        public static Identity VariableWithNegativeExponent(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count < 2)
+                return null;
+
+            BinaryOperatorExpression binaryexpression = expression as BinaryOperatorExpression;
+            if (binaryexpression != null && binaryexpression.Type == OperatorType.Power && selection[0].Parent == binaryexpression && selection[1].Parent == binaryexpression)
+            {
+                VariableExpression variableexpression = binaryexpression.Left as VariableExpression;
+                UnaryMinusExpression unaryexpression = binaryexpression.Right as UnaryMinusExpression;
+                NumericExpression numericexpression = unaryexpression.Expression as NumericExpression;
+                if (variableexpression != null && unaryexpression != null && numericexpression != null)
+                {
+                    ExpressionSerializer serializer = new ExpressionSerializer();
+                    BinaryExpression power = new BinaryOperatorExpression(variableexpression.Clone(), numericexpression.Clone(), OperatorType.Power);
+                    BinaryExpression mysuggestion = new BinaryOperatorExpression(new NumericExpression(1), power, OperatorType.Divide);
+                    return new Identity(mysuggestion, mysuggestion);
+                }
+
+            }
+
+            return null;
+
         }
     }
 }

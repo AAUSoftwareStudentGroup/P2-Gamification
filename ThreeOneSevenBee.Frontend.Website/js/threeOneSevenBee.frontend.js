@@ -15,7 +15,7 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a*b*5*a*b*5", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule]);
+                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("2+2+2+2+2", [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent]);
     
     
                 var polygon = new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor$1", 4);

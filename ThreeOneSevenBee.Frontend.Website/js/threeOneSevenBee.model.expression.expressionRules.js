@@ -155,6 +155,28 @@
                     }
                 }
                 return null;
+            },
+            variableWithNegativeExponent: function (expression, selection) {
+                if (selection.getCount() < 2) {
+                    return null;
+                }
+    
+                var binaryexpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                if (Bridge.hasValue(binaryexpression) && binaryexpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0).getParent(), binaryexpression) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(1).getParent(), binaryexpression)) {
+                    var variableexpression = Bridge.as(binaryexpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.VariableExpression);
+                    var unaryexpression = Bridge.as(binaryexpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
+                    var numericexpression = Bridge.as(unaryexpression.getExpression(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
+                    if (Bridge.hasValue(variableexpression) && Bridge.hasValue(unaryexpression) && Bridge.hasValue(numericexpression)) {
+                        var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
+                        var power = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(variableexpression.clone(), numericexpression.clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
+                        var mysuggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1), power, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
+                        return new ThreeOneSevenBee.Model.Expression.Identity(mysuggestion, mysuggestion);
+                    }
+    
+                }
+    
+                return null;
+    
             }
         }
     });

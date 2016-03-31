@@ -192,7 +192,9 @@
         this.selectionParent = this.analyzer.getCommonParent$1(this.selection);
     
         this.identities = this.analyzer.getIdentities(expression, this.selection);
-        this.OnChanged(this);
+        if (Bridge.hasValue(this.OnChanged)) {
+            this.OnChanged(this);
+        }
     },
     unSelectAll: function () {
         this.selection.clear();

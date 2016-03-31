@@ -86,7 +86,8 @@ namespace ThreeOneSevenBee.Model.Expression
             selectionParent = analyzer.GetCommonParent(selection);
          
             identities = analyzer.GetIdentities(expression, selection);
-            OnChanged(this);
+            if(OnChanged != null)
+                OnChanged(this);
         }
 
         public void UnSelectAll()
