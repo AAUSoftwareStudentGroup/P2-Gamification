@@ -13,7 +13,7 @@
                 if (Bridge.hasValue(product) && product.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
     
                     if (Bridge.Linq.Enumerable.from(selection).takeWhile(function (e) {
-                        return selection.getItem(0) === e && e.getParent() === expression;
+                        return ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0), e) && e.getParent() === expression;
                     }).count() === selection.getCount()) {
                         var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(selection.getItem(0).clone(), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(selection.getCount()), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
     
@@ -160,27 +160,57 @@
                 }
                 return null;
             },
-            variableWithNegativeExponent: function (expression, selection) {
+            addFractionsWithSameNumerators: function (expression, selection) {
+                var $t, $t1;
                 if (selection.getCount() < 2) {
                     return null;
                 }
     
-                var binaryexpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
-                if (Bridge.hasValue(binaryexpression) && binaryexpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0).getParent(), binaryexpression) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(1).getParent(), binaryexpression)) {
-                    var variableexpression = Bridge.as(binaryexpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.VariableExpression);
-                    var unaryexpression = Bridge.as(binaryexpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
-                    var numericexpression = Bridge.as(unaryexpression.getExpression(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
-                    if (Bridge.hasValue(variableexpression) && Bridge.hasValue(unaryexpression) && Bridge.hasValue(numericexpression)) {
-                        var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
-                        var power = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(variableexpression.clone(), numericexpression.clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
-                        var mysuggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1), power, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
-                        return new ThreeOneSevenBee.Model.Expression.Identity(mysuggestion, mysuggestion);
+                var variadicExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                if (Bridge.hasValue(variadicExpression)) {
+                    if (variadicExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
+                        //Makes a variable for the two first fractions, since it is needed to make a VariadicOperatorExpression later on (it has to take at least two elements).
+                        var firstFraction = Bridge.as(selection.getItem(0), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                        var secondFraction = Bridge.as(selection.getItem(1), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+    
+                        if (Bridge.hasValue(firstFraction) && Bridge.hasValue(secondFraction) && firstFraction.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide && secondFraction.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
+                            var numeratorList = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
+                            numeratorList.add(firstFraction.getLeft().clone());
+                            numeratorList.add(secondFraction.getLeft().clone());
+    
+                            $t = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(selection).skip(2));
+                            while ($t.moveNext()) {
+                                var selected = $t.getCurrent();
+                                var fraction = Bridge.as(selected, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                                if (Bridge.hasValue(fraction) && fraction.getParent() === variadicExpression && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(fraction.getRight(), firstFraction.getRight())) {
+                                    numeratorList.add(fraction.getLeft().clone());
+                                }
+                                else  {
+                                    return null;
+                                }
+                            }
+    
+                            var suggestionNumerator = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, firstFraction, secondFraction);
+                            $t1 = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(numeratorList).skip(2));
+                            while ($t1.moveNext()) {
+                                var i = $t1.getCurrent();
+                                suggestionNumerator.add(i);
+                            }
+                            var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(suggestionNumerator, firstFraction.getRight().clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
+    
+                            return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
+                        }
+                        else  {
+                            return null;
+                        }
                     }
-    
+                    else  {
+                        return null;
+                    }
                 }
-    
-                return null;
-    
+                else  {
+                    return null;
+                }
             }
         }
     });

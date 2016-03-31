@@ -22,7 +22,7 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel expressionModel = new ExpressionModel("a^-1", null,
+            ExpressionModel expressionModel = new ExpressionModel("a/b*{a/b}", null,
                 Rules.ProductToExponentRule, Rules.ExponentToProductRule, Rules.NumericVariadicRule, Rules.NumericBinaryRule);
            
 
