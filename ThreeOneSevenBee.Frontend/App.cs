@@ -37,7 +37,7 @@ namespace ThreeOneSevenBee.Frontend
                 new ProgressbarStarView(new ProgressbarStar(50, 100, 30, 60, 75), canvas.Width, 20) { Y=30 },
                 new ExpressionView(expressionModel, canvas.Width, canvas.Height - 150) { X = 0, Y = 50 },
                 new IdentityMenuView(expressionModel, canvas.Width, 100) { Y = canvas.Height - 100 }
-                //new PolygonView(polygon, cornerpos, 200, 200, 100, 100)
+                //new PolygonView(polygon, "#3C78D8", 100, 100, 100, 100)
             };
 
             Window.AddEventListener(EventType.Resize, () =>

@@ -34,7 +34,8 @@
                     } )],
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(expressionModel, canvas.width, 100), {
                         setY: canvas.height - 100
-                    } )]
+                    } )],
+                    [new ThreeOneSevenBee.Model.UI.PolygonView("constructor$1", polygon, "#3C78D8", 100, 100, 100, 100)]
                 ] );
     
                 window.addEventListener("resize", function () {
@@ -156,10 +157,12 @@
             this.context.drawImage(img, view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
         },
         draw$6: function (view, offsetX, offsetY) {
+            this.context.fillStyle = view.fillStyle;
             if (view.getcornerPositions().getCount() < 3) {
                 throw new Bridge.Exception("Polygon does not contain enough corners");
             }
             this.context.beginPath();
+            console.log("count: " + view.getcornerPositions().getCount());
             console.log("Line at: " + (view.getcornerPositions().getItem(0).x + offsetX) + " x " + (view.getcornerPositions().getItem(0).y + offsetY));
             this.context.moveTo(view.getcornerPositions().getItem(0).x + offsetX, view.getcornerPositions().getItem(0).y + offsetY);
             for (var i = 1; i < view.getcornerPositions().getCount(); i++) {
@@ -168,7 +171,7 @@
             }
             this.context.closePath();
             this.context.stroke();
-            //context.Fill();
+            this.context.fill();
         }
     });
     
