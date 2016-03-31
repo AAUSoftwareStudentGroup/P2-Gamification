@@ -22,7 +22,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             if (product != null && product.Type == OperatorType.Multiply)
             {
 
-                if (selection.TakeWhile((e) => { return selection[0] == e && e.Parent == expression; }).Count() == selection.Count)
+                if (selection.TakeWhile((e) => { return ReferenceEquals(selection[0], e) && ReferenceEquals(e.Parent, expression); }).Count() == selection.Count)
                 {
                     BinaryExpression suggestion = new BinaryOperatorExpression(selection[0].Clone(), new NumericExpression(selection.Count), OperatorType.Power);
 
@@ -56,9 +56,14 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             if (exponent != null && exponent.Type == OperatorType.Power)
             {
-                if (selection[0].Parent == exponent && selection[1].Parent == exponent)
+                if (ReferenceEquals(selection[0].Parent, exponent) && ReferenceEquals(selection[1].Parent, exponent))
                 {
-                    int number = (int)(exponent.Right as NumericExpression).Number;
+                    NumericExpression numericExpression = exponent.Right as NumericExpression;
+                    if(numericExpression == null)
+                    {
+                        return null;
+                    }
+                    int number = (int)numericExpression.Number;
                     if (number == 0)
                     {
                         return new Identity(new NumericExpression(1), new NumericExpression(1));
@@ -108,7 +113,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 }
                 foreach (ExpressionBase selected in selection)
                 {
-                    if (selected.Parent != variadicExpression)
+                    if (!ReferenceEquals(selected.Parent, variadicExpression))
                     {
                         return null;
                     }
@@ -144,7 +149,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 return null;
 
             BinaryOperatorExpression binaryExpression = expression as BinaryOperatorExpression;
-            if (binaryExpression != null && selection[0].Parent == binaryExpression && selection[1].Parent == binaryExpression)
+            if (binaryExpression != null && ReferenceEquals(selection[0].Parent, binaryExpression) && ReferenceEquals(selection[1].Parent, binaryExpression))
             {
                 NumericExpression numericLeft = binaryExpression.Left as NumericExpression;
                 NumericExpression numericRight = binaryExpression.Right as NumericExpression;

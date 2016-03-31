@@ -13,7 +13,7 @@
                 if (Bridge.hasValue(product) && product.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
     
                     if (Bridge.Linq.Enumerable.from(selection).takeWhile(function (e) {
-                        return ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0), e) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(e.getParent(), expression);
+                        return selection.getItem(0) === e && e.getParent() === expression;
                     }).count() === selection.getCount()) {
                         var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(selection.getItem(0).clone(), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(selection.getCount()), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
     
@@ -44,8 +44,12 @@
                 var exponent = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
     
                 if (Bridge.hasValue(exponent) && exponent.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
-                    if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0).getParent(), exponent) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(1).getParent(), exponent)) {
-                        var number = Bridge.Int.trunc((Bridge.as(exponent.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression)).number);
+                    if (selection.getItem(0).getParent() === exponent && selection.getItem(1).getParent() === exponent) {
+                        var numericExpression = Bridge.as(exponent.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
+                        if (!Bridge.hasValue(numericExpression)) {
+                            return null;
+                        }
+                        var number = Bridge.Int.trunc(numericExpression.number);
                         if (number === 0) {
                             return new ThreeOneSevenBee.Model.Expression.Identity(new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1));
                         }
@@ -94,7 +98,7 @@
                     $t = Bridge.getEnumerator(selection);
                     while ($t.moveNext()) {
                         var selected = $t.getCurrent();
-                        if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Inequality(selected.getParent(), variadicExpression)) {
+                        if (!selected.getParent() === variadicExpression) {
                             return null;
                         }
                         else  {
@@ -127,7 +131,7 @@
                 }
     
                 var binaryExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
-                if (Bridge.hasValue(binaryExpression) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0).getParent(), binaryExpression) && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(1).getParent(), binaryExpression)) {
+                if (Bridge.hasValue(binaryExpression) && selection.getItem(0).getParent() === binaryExpression && selection.getItem(1).getParent() === binaryExpression) {
                     var numericLeft = Bridge.as(binaryExpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
                     var numericRight = Bridge.as(binaryExpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
                     if (Bridge.hasValue(numericLeft) && Bridge.hasValue(numericRight)) {

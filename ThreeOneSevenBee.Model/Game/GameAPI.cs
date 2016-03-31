@@ -10,5 +10,6 @@ namespace ThreeOneSevenBee.Model.Game
         public abstract List<Player> GetPlayers();
         public abstract CurrentPlayer GetCurrentPlayer();
         public abstract void UpdateCurrentPlayer(CurrentPlayer currentPlayer);
+        public abstract bool Ready { get; }
     }
 }
