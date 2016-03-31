@@ -189,6 +189,45 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
+        // a^-n = 1/a^n
+        public static Identity VariableWithNegativeExponent(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count < 2)
+                return null;
+
+            BinaryOperatorExpression binaryexpression = expression as BinaryOperatorExpression;
+            if (binaryexpression != null && binaryexpression.Type == OperatorType.Power && ReferenceEquals(selection[0].Parent, binaryexpression) && ReferenceEquals(selection[1].Parent, binaryexpression))
+            {
+                UnaryMinusExpression unaryexpression = binaryexpression.Right as UnaryMinusExpression;
+                if (unaryexpression != null && binaryexpression.Left != null && binaryexpression.Right != null)
+                {
+                    ExpressionSerializer serializer = new ExpressionSerializer();
+                    BinaryExpression power = new BinaryOperatorExpression(binaryexpression.Left.Clone(), unaryexpression.Expression.Clone(), OperatorType.Power);
+                    BinaryExpression mysuggestion = new BinaryOperatorExpression(new NumericExpression(1), power, OperatorType.Divide);
+                    return new Identity(mysuggestion, mysuggestion);
+                }
+            }
+            return null;
+        }
+                    
+        public static Identity ReverseVariableWithNegativeExponent(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            BinaryOperatorExpression binaryexpression = expression as BinaryOperatorExpression;
+            if (binaryexpression != null && binaryexpression.Type == OperatorType.Divide)
+            {
+                NumericExpression numericexpression = binaryexpression.Left as NumericExpression;
+                BinaryExpression power = binaryexpression.Right as BinaryExpression;
+                if (numericexpression != null && numericexpression.Value == "1" && power != null)
+                {
+                    UnaryMinusExpression unaryminus = new UnaryMinusExpression(power.Right);
+                    BinaryExpression mysuggestion = new BinaryOperatorExpression(power.Left.Clone(), unaryminus.Clone(), OperatorType.Power);
+                    return new Identity(mysuggestion, mysuggestion);
+                }
+            }
+
+            return null;
+        }
+
         //a/c + b/c = (a+b)/c
         public static Identity AddFractionsWithSameNumerators(ExpressionBase expression, List<ExpressionBase> selection)
         {
@@ -200,35 +239,35 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
             if (variadicExpression != null && variadicExpression.Type == OperatorType.Add)
             {
-                //Makes a variable for the two first fractions, since it is needed to make a VariadicOperatorExpression later on (it has to take at least two elements).
-                BinaryOperatorExpression firstFraction = selection[0] as BinaryOperatorExpression;
-                BinaryOperatorExpression secondFraction = selection[1] as BinaryOperatorExpression;
+                    //Makes a variable for the two first fractions, since it is needed to make a VariadicOperatorExpression later on (it has to take at least two elements).
+                    BinaryOperatorExpression firstFraction = selection[0] as BinaryOperatorExpression;
+                    BinaryOperatorExpression secondFraction = selection[1] as BinaryOperatorExpression;
 
-                if (firstFraction != null && secondFraction != null && firstFraction.Type == OperatorType.Divide && secondFraction.Type == OperatorType.Divide)
-                {
-                    List<ExpressionBase> numeratorList = new List<ExpressionBase>();
-                    numeratorList.Add(firstFraction.Left.Clone());
-                    numeratorList.Add(secondFraction.Left.Clone());
-
-                    foreach (ExpressionBase selected in selection.Skip(2))
+                    if (firstFraction != null && secondFraction != null && firstFraction.Type == OperatorType.Divide && secondFraction.Type == OperatorType.Divide)
                     {
-                        BinaryOperatorExpression fraction = selected as BinaryOperatorExpression;
-                        if (fraction != null && ReferenceEquals(fraction.Parent, variadicExpression) && fraction.Right == firstFraction.Right)
+                        List<ExpressionBase> numeratorList = new List<ExpressionBase>();
+                        numeratorList.Add(firstFraction.Left.Clone());
+                        numeratorList.Add(secondFraction.Left.Clone());
+
+                        foreach (ExpressionBase selected in selection.Skip(2))
                         {
-                            numeratorList.Add(fraction.Left.Clone());
+                            BinaryOperatorExpression fraction = selected as BinaryOperatorExpression;
+                            if (fraction != null && ReferenceEquals(fraction.Parent, variadicExpression) && fraction.Right == firstFraction.Right)
+                            {
+                                numeratorList.Add(fraction.Left.Clone());
+                            }
+                            else
+                            {
+                                return null;    
+                            }
                         }
-                        else
-                        {
-                            return null;
-                        }
-                    }
 
                     VariadicOperatorExpression suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, firstFraction.Left.Clone(), secondFraction.Left.Clone());
-                    foreach (var i in numeratorList.Skip(2))
-                    {
-                        suggestionNumerator.Add(i);
-                    }
-                    BinaryOperatorExpression suggestion = new BinaryOperatorExpression(suggestionNumerator, firstFraction.Right.Clone(), OperatorType.Divide);
+                        foreach (var i in numeratorList.Skip(2))
+                        {
+                            suggestionNumerator.Add(i);
+                        }
+                        BinaryOperatorExpression suggestion = new BinaryOperatorExpression(suggestionNumerator, firstFraction.Right.Clone(), OperatorType.Divide);
                     //SHOULD NOT BE SUGGESTION,SUGGESTION, BUT SUGGESTION,RESULT, THIS IS FIXED WHEN THE CORRECT FUNCTION IS IMPLEMENTED!!!!!
                     return new Identity(suggestion, suggestion);
                 }
@@ -254,7 +293,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 return null;
             }
-
+                       
             BinaryOperatorExpression binaryExpression = expression as BinaryOperatorExpression;
             if (binaryExpression != null && binaryExpression.Type == OperatorType.Divide)
             {
@@ -312,45 +351,20 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 return null;
             }
         }
-
-
-
-
-        /*
-        //a/b * c/d
-        public static Identity FractionsMultiplied(ExpressionBase expression, List<ExpressionBase> selection)
+        // a^n * a^p = a^n+p
+        public static Identity ExponentProduct(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count < 2)
-            {
                 return null;
-            }
-
-            VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
-            if (variadicExpression != null && variadicExpression.Type == OperatorType.Multiply)
+            VariadicOperatorExpression variadicexpression = expression as VariadicOperatorExpression;
+            if (variadicexpression != null && variadicexpression.Type == OperatorType.Multiply)
             {
 
-
-
-
-
-
-
             }
+
+
+            return null;
         }
-        */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
     }
 }

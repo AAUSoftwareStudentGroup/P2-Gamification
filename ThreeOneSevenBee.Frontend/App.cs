@@ -22,22 +22,17 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel expressionModel = new ExpressionModel("a/b + {c/b}", null,
-                Rules.ProductToExponentRule, Rules.ExponentToProductRule, Rules.NumericVariadicRule, Rules.NumericBinaryRule, Rules.AddFractionsWithSameNumerators, Rules.SplittingFractions);
+            ExpressionModel expressionModel = new ExpressionModel("a/c + b/c + d/c + e/c", null,
+                Rules.ProductToExponentRule, Rules.ExponentToProductRule, Rules.NumericVariadicRule, Rules.NumericBinaryRule, Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.AddFractionsWithSameNumerators);
            
 
-            PolygonModel polygon = new PolygonModel(4);
-            List<Vector2> cornerpos = new List<Vector2>();
-            cornerpos.Add(new Vector2(0, 0));
-            cornerpos.Add(new Vector2(0, 1));
-            cornerpos.Add(new Vector2(1, 1));
-            cornerpos.Add(new Vector2(1, 0));
+            PolygonModel polygon = new PolygonModel(5);
             View view = new CompositeView(canvas.Width, canvas.Height)
             {
                 new ProgressbarStarView(new ProgressbarStar(50, 100, 30, 60, 75), canvas.Width, 20) { Y=30 },
                 new ExpressionView(expressionModel, canvas.Width, canvas.Height - 150) { X = 0, Y = 50 },
                 new IdentityMenuView(expressionModel, canvas.Width, 100) { Y = canvas.Height - 100 }
-                //new PolygonView(polygon, cornerpos, 200, 200, 100, 100)
+                //new PolygonView(polygon, "#3C78D8", 100, 100, 100, 100)
             };
 
             Window.AddEventListener(EventType.Resize, () =>
