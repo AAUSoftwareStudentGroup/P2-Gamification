@@ -92,11 +92,12 @@ namespace ThreeOneSevenBee.Model.Expression
             {
                 selection.RemoveAt(index);
             }
-
+            
             selectionParent = analyzer.GetCommonParent(selection);
-
+         
             identities = analyzer.GetIdentities(expression, selection);
-            callOnChanged();
+            if(OnChanged != null)
+                OnChanged(this);
         }
 
         public void UnSelectAll()

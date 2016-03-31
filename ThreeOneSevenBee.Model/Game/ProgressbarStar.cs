@@ -8,32 +8,32 @@ namespace ThreeOneSevenBee.Model.Game
 {
     public class ProgressbarStar
     {
-        private int _maxProgress;
-        private int _currentProgress;
+        private int maxProgress;
+        private int currentProgress;
 
         public int Progress
         {
-            get { return _currentProgress; }
-            set { _currentProgress = value; }
+            get { return currentProgress; }
+            set { currentProgress = value; }
         }
 
         public double Percentage
         {
-            get { return (double)_currentProgress / _maxProgress; }
+            get { return (double)currentProgress / maxProgress; }
         }
 
         public int MaxProgress
         {
-            get { return _maxProgress; }
-            set { _maxProgress = value; }
+            get { return maxProgress; }
+            set { maxProgress = value; }
         }
 
         public List<int> Stars;
 
         public ProgressbarStar(int progress, int maxValue, params int[] stars)
         {
-            this._currentProgress = progress;
-            this._maxProgress = maxValue;
+            this.currentProgress = progress;
+            this.maxProgress = maxValue;
             Stars = new List<int>(stars);
             GetStars();
         }
@@ -62,7 +62,7 @@ namespace ThreeOneSevenBee.Model.Game
             foreach (int i in Stars)
             {
                 totalStars++;
-                if (i <= _currentProgress)
+                if (i <= currentProgress)
                 {
                     starsCount++;
                 }

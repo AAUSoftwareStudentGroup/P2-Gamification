@@ -61,7 +61,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 if (ReferenceEquals(selection[0].Parent, exponent) && ReferenceEquals(selection[1].Parent, exponent))
                 {
                     NumericExpression numericExpression = exponent.Right as NumericExpression;
-                    if(numericExpression == null)
+                    if (numericExpression == null)
                     {
                         return null;
                     }
@@ -165,7 +165,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     {
                         result = new NumericExpression(numericLeft.Number - numericRight.Number);
                     }
-                    else if(binaryExpression.Type == OperatorType.Power)
+                    else if (binaryExpression.Type == OperatorType.Power)
                     {
                         result = new NumericExpression(Math.Pow(numericLeft.Number, numericRight.Number));
                     }
@@ -173,7 +173,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     {
                         return null;
                     }
-                    if(result.Number >= 0)
+                    if (result.Number >= 0)
                     {
                         return new Identity(result, result);
                     }
@@ -183,9 +183,48 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         UnaryMinusExpression positiveResult = new UnaryMinusExpression(result);
                         return new Identity(positiveResult, positiveResult);
                     }
-                    
+
                 }
             }
+            return null;
+        }
+
+        // a^-n = 1/a^n
+        public static Identity VariableWithNegativeExponent(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count < 2)
+                return null;
+
+            BinaryOperatorExpression binaryexpression = expression as BinaryOperatorExpression;
+            if (binaryexpression != null && binaryexpression.Type == OperatorType.Power && ReferenceEquals(selection[0].Parent, binaryexpression) && ReferenceEquals(selection[1].Parent, binaryexpression))
+            {
+                UnaryMinusExpression unaryexpression = binaryexpression.Right as UnaryMinusExpression;
+                if (unaryexpression != null && binaryexpression.Left != null && binaryexpression.Right != null)
+                {
+                    ExpressionSerializer serializer = new ExpressionSerializer();
+                    BinaryExpression power = new BinaryOperatorExpression(binaryexpression.Left.Clone(), unaryexpression.Expression.Clone(), OperatorType.Power);
+                    BinaryExpression mysuggestion = new BinaryOperatorExpression(new NumericExpression(1), power, OperatorType.Divide);
+                    return new Identity(mysuggestion, mysuggestion);
+                }
+            }
+            return null;
+        }
+                    
+        public static Identity ReverseVariableWithNegativeExponent(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            BinaryOperatorExpression binaryexpression = expression as BinaryOperatorExpression;
+            if (binaryexpression != null && binaryexpression.Type == OperatorType.Divide)
+            {
+                NumericExpression numericexpression = binaryexpression.Left as NumericExpression;
+                BinaryExpression power = binaryexpression.Right as BinaryExpression;
+                if (numericexpression != null && numericexpression.Value == "1" && power != null)
+                {
+                    UnaryMinusExpression unaryminus = new UnaryMinusExpression(power.Right);
+                    BinaryExpression mysuggestion = new BinaryOperatorExpression(power.Left.Clone(), unaryminus.Clone(), OperatorType.Power);
+                    return new Identity(mysuggestion, mysuggestion);
+                }
+            }
+
             return null;
         }
 
@@ -198,15 +237,13 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
 
             VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
-            if (variadicExpression != null)
+            if (variadicExpression != null && variadicExpression.Type == OperatorType.Add)
             {
-                if (variadicExpression.Type == OperatorType.Add)
-                {
                     //Makes a variable for the two first fractions, since it is needed to make a VariadicOperatorExpression later on (it has to take at least two elements).
                     BinaryOperatorExpression firstFraction = selection[0] as BinaryOperatorExpression;
                     BinaryOperatorExpression secondFraction = selection[1] as BinaryOperatorExpression;
 
-                    if (firstFraction != null && secondFraction != null &&  firstFraction.Type == OperatorType.Divide && secondFraction.Type == OperatorType.Divide)
+                    if (firstFraction != null && secondFraction != null && firstFraction.Type == OperatorType.Divide && secondFraction.Type == OperatorType.Divide)
                     {
                         List<ExpressionBase> numeratorList = new List<ExpressionBase>();
                         numeratorList.Add(firstFraction.Left.Clone());
@@ -225,35 +262,124 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                             }
                         }
 
-                        VariadicOperatorExpression suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, firstFraction, secondFraction);
+                    VariadicOperatorExpression suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, firstFraction.Left.Clone(), secondFraction.Left.Clone());
                         foreach (var i in numeratorList.Skip(2))
                         {
                             suggestionNumerator.Add(i);
                         }
                         BinaryOperatorExpression suggestion = new BinaryOperatorExpression(suggestionNumerator, firstFraction.Right.Clone(), OperatorType.Divide);
-                       
-                        return new Identity(suggestion, suggestion);
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    //SHOULD NOT BE SUGGESTION,SUGGESTION, BUT SUGGESTION,RESULT, THIS IS FIXED WHEN THE CORRECT FUNCTION IS IMPLEMENTED!!!!!
+                    return new Identity(suggestion, suggestion);
                 }
-                else
+                }
+                return null;
+            }
+
+
+        public static Identity ExponentProduct(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count < 2)
+                return null;
+            VariadicOperatorExpression variadicexpression = expression as VariadicOperatorExpression;
+            if (variadicexpression != null && variadicexpression.Type == OperatorType.Multiply)
+            {
+                ExpressionBase baseSelection = null;
+                BinaryExpression firstSelection = null;
+                BinaryExpression secondSelection = null;
+
+                baseSelection = selection[0];
+                firstSelection = selection[0].Parent as BinaryExpression;
+                secondSelection = selection[1].Parent as BinaryExpression;
+                if (firstSelection != null && secondSelection != null)
                 {
-                    return null;
+                    List<ExpressionBase> numeratorList = new List<ExpressionBase>();
+                    foreach (var selected in selection)
+                    {
+                        if (baseSelection == selected)
+                        {   
+                            BinaryExpression parent = selected.Parent as BinaryExpression;
+                            if (parent != null && parent.Type == OperatorType.Power)
+                            {
+                                numeratorList.Add(parent.Right);
+                            }
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                    VariadicOperatorExpression suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, firstSelection.Right.Clone(), secondSelection.Right.Clone());
+                    foreach (var i in numeratorList.Skip(2))
+                    {
+                        suggestionNumerator.Add(i);
+                    }
+                    BinaryOperatorExpression suggestion = new BinaryOperatorExpression(baseSelection.Clone(), suggestionNumerator, OperatorType.Power);
+                    return new Identity(suggestion, suggestion);
                 }
             }
-            else
+            return null;
+        }
+
+        //(a+b)/c = a/c + b/c
+        // Vælg nævner og tæller man ønsker at rykke ud. Husk at tjekke, at deres common parent er samme (ref equals)
+        // Overvej! Hvad hvis man vil rykke flere ud?
+        // Suggestion skal vel have ny brøk + gamle brøk
+        // Først tjekkes kun hvis man vælger TO!!! tæller!
+        public static Identity SplittingFractions(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count < 2)
             {
                 return null;
             }
-        }
+            BinaryOperatorExpression binaryExpression = expression as BinaryOperatorExpression;
+            if (binaryExpression != null && binaryExpression.Type == OperatorType.Divide)
+            {
+                VariadicOperatorExpression numeratorType = binaryExpression.Left as VariadicOperatorExpression;
+                if (numeratorType != null && numeratorType.Type == OperatorType.Add)
+                {
+                    List<ExpressionBase> selectedNumerators = new List<ExpressionBase>();
+                    foreach (var selected in selection)
+                    {
+                        if (!ReferenceEquals(selected.Parent, binaryExpression))
+                        {
+                            return null;
+                        }
+
+                        if (ReferenceEquals(selected.Parent, binaryExpression.Left))
+                        {
+                            selectedNumerators.Add(selected.Clone());
+                        }
+
+                        }
+
+                    if (selectedNumerators.Count < 2)
+                    {
+                        BinaryOperatorExpression newFraction = new BinaryOperatorExpression(selectedNumerators[0], binaryExpression.Right.Clone(), OperatorType.Divide);
 
 
+                        //VariadicOperatorExpression result = new VariadicOperatorExpression(OperatorType.Add, newFraction, something);
+                        
+                        return new Identity(newFraction, newFraction);
+                    }
+                    else if (selectedNumerators.Count >= 2)
+                    {
+                        VariadicOperatorExpression listOfNumerators = new VariadicOperatorExpression(OperatorType.Add, selectedNumerators[0], selectedNumerators[1]);
+                        foreach (var i in selectedNumerators.Skip(2))
+                        {
+                            listOfNumerators.Add(i);
+                        }
+
+                        BinaryOperatorExpression newFraction = new BinaryOperatorExpression(listOfNumerators, binaryExpression.Right.Clone(), OperatorType.Divide);
+                        //Is missing result instead of two times suggestion! The above is missing the same!
+                        return new Identity(newFraction, newFraction);
+                    }
+                    }
+                }
+                    return null;
+                }
 
 
-
+        // a^n * a^p = a^n+p
         
     }
 }

@@ -172,6 +172,10 @@ namespace ThreeOneSevenBee.Model.UI
             model.OnChanged += (m) =>
             {
                 setContent(Build(m.Expression, m));
+                if(OnChanged != null)
+                {
+                    OnChanged();
+                }
             };
         }
     }

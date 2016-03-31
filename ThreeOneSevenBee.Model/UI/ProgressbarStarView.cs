@@ -9,6 +9,7 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class ProgressbarStarView : CompositeView
     {
+
         public ProgressbarStarView(ProgressbarStar progressbar, double width, double height) : base(width, height)
         {
             PropagateClick = false;

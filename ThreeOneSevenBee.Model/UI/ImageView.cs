@@ -12,6 +12,7 @@ namespace ThreeOneSevenBee.Model.UI
         public ImageView(string image, double width, double height) : base(0, 0, width, height)
         {
             Image = image;
+            BackgroundColor = "transparent";
         }
 
         public override void DrawWithContext(Context context, double offsetX, double offsetY)
