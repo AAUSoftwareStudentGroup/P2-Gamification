@@ -16,7 +16,6 @@ namespace ThreeOneSevenBee.Model.UI
         public PolygonView(PolygonModel model, string fillStyle, double x, double y, double width, double height) : base(x, y, width, height)
         {
             this.fillStyle = fillStyle;
-            // Draw model as is
             cornerPositions = new List<Vector2>();
             Vector2 vector = new Vector2(0,0);
             if( model.corners.Count() < 3 )
@@ -25,14 +24,13 @@ namespace ThreeOneSevenBee.Model.UI
             }
             double totalAngle = Math.PI * (model.corners.Count() - 2);
             double angle = totalAngle / model.corners.Count();
+            angle = Math.PI - angle;
             Console.WriteLine("Angle: " + angle);
             cornerPositions.Add(vector);
-            Console.WriteLine("Vector: " + Math.Round(vector.X, 2) + " x " + Math.Round(vector.Y, 2));
             for (int i = 1; i < model.corners.Count(); i++)
             {
                 vector.X += Math.Cos(angle * i);
                 vector.Y += Math.Sin(angle * i);
-                Console.WriteLine("Vector: " + Math.Round(vector.X, 2) + " x " + Math.Round(vector.Y, 2));
                 cornerPositions.Add(vector);
             }
             this.cornerPositions = cornerPositions;
@@ -66,7 +64,7 @@ namespace ThreeOneSevenBee.Model.UI
                     min.Y = corner.Y;
             }
             max -= min;
-            double scale = (max.X - width < max.Y - height) ? width / max.X : height / max.Y;
+            double scale = (max.X - width < max.Y - height) ? height / max.Y : width / max.X;
             for (int i = 0; i < cornerPositions.Count();i++)
             {
                 cornerPositions[i] -= min;

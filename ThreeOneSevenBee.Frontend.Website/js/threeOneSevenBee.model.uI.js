@@ -323,7 +323,6 @@
             ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, x, y, width, height);
     
             this.fillStyle = fillStyle;
-            // Draw model as is
             this.setcornerPositions(new Bridge.List$1(ThreeOneSevenBee.Model.Euclidean.Vector2)());
             var vector = new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 0);
             if (Bridge.Linq.Enumerable.from(model.getcorners()).count() < 3) {
@@ -331,13 +330,12 @@
             }
             var totalAngle = Math.PI * (Bridge.Linq.Enumerable.from(model.getcorners()).count() - 2);
             var angle = totalAngle / Bridge.Linq.Enumerable.from(model.getcorners()).count();
+            angle = Math.PI - angle;
             console.log("Angle: " + angle);
             this.getcornerPositions().add(vector.$clone());
-            console.log("Vector: " + Bridge.Math.round(vector.x, 2, 6) + " x " + Bridge.Math.round(vector.y, 2, 6));
             for (var i = 1; i < Bridge.Linq.Enumerable.from(model.getcorners()).count(); i++) {
                 vector.x += Math.cos(angle * i);
                 vector.y += Math.sin(angle * i);
-                console.log("Vector: " + Bridge.Math.round(vector.x, 2, 6) + " x " + Bridge.Math.round(vector.y, 2, 6));
                 this.getcornerPositions().add(vector.$clone());
             }
             this.setcornerPositions(this.getcornerPositions());
@@ -376,7 +374,7 @@
                 }
             }
             max = ThreeOneSevenBee.Model.Euclidean.Vector2.op_Subtraction(max.$clone(), min.$clone());
-            var scale = (max.x - width < max.y - height) ? width / max.x : height / max.y;
+            var scale = (max.x - width < max.y - height) ? height / max.y : width / max.x;
             for (var i = 0; i < Bridge.Linq.Enumerable.from(this.getcornerPositions()).count(); i++) {
                 this.getcornerPositions().setItem(i, ThreeOneSevenBee.Model.Euclidean.Vector2.op_Subtraction(this.getcornerPositions().getItem(i), min.$clone()));
                 this.getcornerPositions().setItem(i, ThreeOneSevenBee.Model.Euclidean.Vector2.op_Multiply$1(this.getcornerPositions().getItem(i), scale)); //  Take the biggest offset and scale accordingly

@@ -18,12 +18,7 @@
                 var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a/b*{a/b}", null, [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule]);
     
     
-                var polygon = new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor$1", 4);
-                var cornerpos = new Bridge.List$1(ThreeOneSevenBee.Model.Euclidean.Vector2)();
-                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 0));
-                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 1));
-                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 1, 1));
-                cornerpos.add(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 1, 0));
+                var polygon = new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor$1", 5);
                 var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(canvas.width, canvas.height), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(new ThreeOneSevenBee.Model.Game.ProgressbarStar(50, 100, [30, 60, 75]), canvas.width, 20), {
                         setY: 30
@@ -163,11 +158,8 @@
                 throw new Bridge.Exception("Polygon does not contain enough corners");
             }
             this.context.beginPath();
-            console.log("count: " + view.getcornerPositions().getCount());
-            console.log("Line at: " + (view.getcornerPositions().getItem(0).x + offsetX) + " x " + (view.getcornerPositions().getItem(0).y + offsetY));
             this.context.moveTo(view.getcornerPositions().getItem(0).x + offsetX, view.getcornerPositions().getItem(0).y + offsetY);
             for (var i = 1; i < view.getcornerPositions().getCount(); i++) {
-                console.log("Line at: " + (view.getcornerPositions().getItem(i).x + offsetX) + " x " + (view.getcornerPositions().getItem(i).y + offsetY));
                 this.context.lineTo(view.getcornerPositions().getItem(i).x + offsetX, view.getcornerPositions().getItem(i).y + offsetY);
             }
             this.context.closePath();

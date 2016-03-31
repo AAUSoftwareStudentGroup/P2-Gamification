@@ -26,12 +26,7 @@ namespace ThreeOneSevenBee.Frontend
                 Rules.ProductToExponentRule, Rules.ExponentToProductRule, Rules.NumericVariadicRule, Rules.NumericBinaryRule);
            
 
-            PolygonModel polygon = new PolygonModel(4);
-            List<Vector2> cornerpos = new List<Vector2>();
-            cornerpos.Add(new Vector2(0, 0));
-            cornerpos.Add(new Vector2(0, 1));
-            cornerpos.Add(new Vector2(1, 1));
-            cornerpos.Add(new Vector2(1, 0));
+            PolygonModel polygon = new PolygonModel(5);
             View view = new CompositeView(canvas.Width, canvas.Height)
             {
                 new ProgressbarStarView(new ProgressbarStar(50, 100, 30, 60, 75), canvas.Width, 20) { Y=30 },
