@@ -10,6 +10,7 @@ namespace ThreeOneSevenBee.Model.UI
     {
         public Context(double width, double height)
         {
+            contentView = new View(0,0,0,0);
             Width = width;
             Height = height;
         }
@@ -17,19 +18,19 @@ namespace ThreeOneSevenBee.Model.UI
         public virtual double Width { get; protected set; }
         public virtual double Height { get; protected set; }
 
-        private View _contentView;
+        protected View contentView;
 
         public abstract void Clear();
 
         public virtual void SetContentView(View view)
         {
-            _contentView = view;
+            contentView = view;
         }
 
         public void Draw()
         {
             Clear();
-            _contentView.DrawWithContext(this, 0, 0);
+            contentView.DrawWithContext(this, 0, 0);
         }
 
         public abstract void Draw(View view, double offsetX, double offsetY);

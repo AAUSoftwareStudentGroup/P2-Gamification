@@ -3,32 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ThreeOneSevenBee.Model.Expression;
+using ThreeOneSevenBee.Model.Expression.ExpressionRules;
 
 namespace ThreeOneSevenBee.Model.Game
 {
     public class GameModel
     {
-        public CurrentPlayer Player { get; }
+        public CurrentPlayer User { get; }
         private GameAPI API;
         public ExpressionModel ExprModel { get; private set; }
         public ExpressionBase CurrentExpression { get { return ExprModel.Expression; } }
         public ExpressionBase StartExpression { get; private set; }
         public List<ExpressionBase> StarExpressions { get; private set; }
         public event Action<GameModel> OnChanged;
-        private ProgressbarStar progress;
-
-        private int currentCategory;
-        private int currentLevel;
+        public ProgressbarStar Progress;
 
         public bool LevelCompleted
         {
             get
             {
-                if (currentLevel == -1)
-                {
-                    return false;
-                }
-                return progress.GetStars() > 0;
+                return Progress.GetStars() > 0;
             }
         }
 
@@ -36,11 +30,7 @@ namespace ThreeOneSevenBee.Model.Game
         {
             get
             {
-                if (currentCategory == -1)
-                {
-                    return false;
-                }
-                return LevelCompleted && currentLevel == Player.Categories[currentCategory].Levels.Count - 1;
+                return LevelCompleted && User.CurrentLevel == User.Categories[User.CurrentCategory].Levels.Count - 1;
             }
         }
 
@@ -48,29 +38,36 @@ namespace ThreeOneSevenBee.Model.Game
         {
             get
             {
-                return CategoryCompleted && currentCategory == Player.Categories.Count - 1;
+                return CategoryCompleted && User.CurrentCategory == User.Categories.Count - 1;
             }
         }
 
         public void SetLevel(int level, int category)
         {
-            currentLevel = level;
-            currentCategory = category;
-            ExprModel = new ExpressionModel(Player.Categories[category].Levels[level].CurrentExpression, (m) => onExpressionChanged(m));
-            progress = new ProgressbarStar(ExprModel.Expression.Size, ExprModel.Expression.Size);
+            User.CurrentLevel = level;
+            User.CurrentCategory = category;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            foreach (string starExpression in Player.Categories[category].Levels[level].StarExpressions)
+            Progress = new ProgressbarStar(serializer.Deserialize(User.Categories[category].Levels[level].StarExpressions.Last()).Size, serializer.Deserialize(User.Categories[category].Levels[level].StartExpression).Size);
+            StarExpressions = new List<ExpressionBase>();
+            foreach (string starExpression in User.Categories[User.CurrentCategory].Levels[User.CurrentLevel].StarExpressions)
             {
                 ExpressionBase starExpressionBase = serializer.Deserialize(starExpression);
                 StarExpressions.Add(starExpressionBase);
-                progress.Add(starExpressionBase.Size);
+                Progress.Add(starExpressionBase.Size);
             }
+            ExprModel = new ExpressionModel(User.Categories[category].Levels[level].CurrentExpression, (m) => onExpressionChanged(m), 
+                Rules.ExponentToProductRule, Rules.NumericBinaryRule, Rules.NumericVariadicRule, 
+                Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators);
+            onExpressionChanged(ExprModel);
         }
 
         private void onExpressionChanged(ExpressionModel model)
         {
-            progress.Progress = model.Expression.Size;
-            OnChanged(this);
+            Progress.Progress = model.Expression.Size;
+            if (OnChanged != null)
+            {
+                OnChanged(this);
+            }
         }
 
         public void NextLevel()
@@ -81,23 +78,26 @@ namespace ThreeOneSevenBee.Model.Game
             }
             else if (CategoryCompleted)
             {
-                currentCategory++;
-                currentLevel = 0;
+                User.CurrentCategory++;
+                User.CurrentLevel = 0;
 
             }
             else if (LevelCompleted)
             {
-                currentLevel++;
+                User.CurrentLevel++;
             }
         }
 
-        public GameModel(GameAPI api)
+        public GameModel(GameAPI api, Action<GameModel> onChanged)
         {
+            OnChanged += onChanged;
             API = api;
-            Player = api.GetCurrentPlayer();
-            currentLevel = -1;
-            currentCategory = -1;
+            User = api.GetCurrentPlayer();
+            SetLevel(User.CurrentLevel, User.CurrentCategory);
         }
+
+        public GameModel(GameAPI api) : this(api, null)
+        { }
 
     }
 }

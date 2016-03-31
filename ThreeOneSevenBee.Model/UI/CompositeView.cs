@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-
+#if BRIDGE
+using Bridge.Html5;
+#endif
+using System;
 namespace ThreeOneSevenBee.Model.UI
 {
     public class CompositeView : View, IEnumerable<View>
@@ -26,10 +29,13 @@ namespace ThreeOneSevenBee.Model.UI
 
         public override void Click(double x, double y)
         {
+            Console.WriteLine(x + "; " + y);
             if (base.ContainsPoint(x, y))
             {
-                if(PropagateClick)
+                Console.WriteLine(x + "; " + y);
+                if (PropagateClick)
                 {
+                    Console.WriteLine(x + "; " + y);
                     foreach (View child in Children)
                     {
                         child.Click(x - X, y - Y);

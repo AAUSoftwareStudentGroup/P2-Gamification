@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ThreeOneSevenBee.Model.Game
 {
-    class StubGameAPI : GameAPI
+    public class StubGameAPI : GameAPI
     {
         CurrentPlayer currentPlayer;
 
@@ -21,11 +21,13 @@ namespace ThreeOneSevenBee.Model.Game
         {
             currentPlayer = new CurrentPlayer("morten");
             currentPlayer.Badges = new List<string> { "FractionBadge", "ExponentBadge" };
+            currentPlayer.CurrentCategory = 0;
+            currentPlayer.CurrentLevel = 0;
             currentPlayer.Categories = new List<LevelCategory>() {
                 new LevelCategory("Numbers") {
                     Levels = new List<Level>()
                         {
-                            new Level("5*5*5", "5*5*5", "5^2*5", "5^3", "125")
+                            new Level("a^2*a*a*a*a*a", "a^2*a*a*a^3", "a^2*a^5", "a^7")
                         }
                 }
             };

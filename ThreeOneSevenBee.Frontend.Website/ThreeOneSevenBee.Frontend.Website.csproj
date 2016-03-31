@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="img\playbutton.png" />
     <Content Include="img\star.png" />
     <Content Include="img\star_activated.png" />
     <Content Include="js\bridge.js" />

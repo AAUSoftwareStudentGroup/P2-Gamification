@@ -16,24 +16,30 @@ namespace ThreeOneSevenBee.Frontend
             context.LineWidth = 2;
             context.TextBaseline = CanvasTypes.CanvasTextBaselineAlign.Middle;
             context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
+            double canvasLeft = context.Canvas.GetBoundingClientRect().Left;
+            double canvasRight = context.Canvas.GetBoundingClientRect().Left;
+            context.Canvas.AddEventListener(EventType.MouseDown,
+                (e) =>
+                {
+                    click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
+                        e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
+                });
         }
 
         public override void SetContentView(View view)
         {
-            double canvasLeft = context.Canvas.GetBoundingClientRect().Left;
-            double canvasRight = context.Canvas.GetBoundingClientRect().Left;
-            context.Canvas.AddEventListener(EventType.MouseDown, 
-                (e) =>
-                {
-                    view.Click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft, 
-                        e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
-                });
             base.SetContentView(view);
+            Draw();
         }
 
         public override void Clear()
         {
             context.ClearRect(0, 0, (int)Width, (int)Height);
+        }
+
+        private void click(double x, double y)
+        {
+            contentView.Click(x, y);
         }
 
         public override void Draw(LabelView view, double offsetX, double offsetY)
@@ -121,9 +127,13 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void Draw(ImageView view, double offsetX, double offsetY)
         {
+            Draw(view as View, offsetX, offsetY);
             ImageElement img = new ImageElement();
             img.Src = "img/" + view.Image;
+            context.FillStyle = "transparent";
+            Console.WriteLine(view);
             context.DrawImage(img, view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
+            context.FillStyle = "#000000";
         }
 
         public override void Draw(PolygonView view, double offsetX, double offsetY)
