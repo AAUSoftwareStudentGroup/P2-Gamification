@@ -1,31 +1,31 @@
 <?
-    session_start();
-    if(!isset($_SESSION['authorized']) && $_SESSION['authorized'] != true)
-        header("location: /login.php");
+ob_start();
+session_start();
+header('Content-Type: text/html; charset=utf-8');
+
+require('db.php');
+require('helpers.php');
+
+$requestURI = urldecode($_SERVER["REQUEST_URI"]); 
+// test if file was requested but does not exsist
+if(preg_match("/\..+$/", $requestURI)) {
+    header("HTTP/1.0 404 Not Found");
+    require("404.php");
+    die();
+}
+// split request uri into parts
+preg_match("/^\/([^?]*)\??(.*?)$/", $requestURI, $elm);
+if(strlen($elm[1]) == 0) {
+    $elm[1] = "forside";
+}
+
+
+if(strlen($elm[0]) <= 1) {
+    $elm[1] = "game";
+}
+
+$db = new DB();
+$_scripts = array();
+
+@include('pages/'.$elm[1].'.php');
 ?>
-
-<!DOCTYPE html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title>317B</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src="js/bridge.js"></script>
-
-    <script src="js/threeOneSevenBee.model.uI.js"></script>
-    <script src="js/threeOneSevenBee.model.expression.js"></script>
-    <script src="js/threeOneSevenBee.model.expression.expressionRules.js"></script>
-    <script src="js/threeOneSevenBee.model.collections.js"></script>
-    <script src="js/threeOneSevenBee.model.expression.expressions.js"></script>
-    <script src="js/threeOneSevenBee.model.js"></script>
-    <script src="js/threeOneSevenBee.model.game.js"></script>
-    <script src="js/threeOneSevenBee.frontend.js"></script>
-    <script src="js/threeOneSevenBee.model.euclidean.js"></script>
-    <script src="js/threeOneSevenBee.model.geometry.js"></script>
-    <script src="js/threeOneSevenBee.model.polygon.js"></script>
-</head>
-<body style="margin: 0;overflow:hidden">
-    <canvas id="canvas" width="600" height="400"></canvas>
-    <a href="#" onclick="$.get('/api?action=userlogout').done(function() {location ='/'});">Log ud</a>
-</body>
-</html>
