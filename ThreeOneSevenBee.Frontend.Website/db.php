@@ -6,6 +6,7 @@ class DB {
     private $dbname = "gamedb";
     private $queryResult = false;
     public $conn = null;
+    private $lastQuery = null;
 
     public function __construct() {
     // Create connection
@@ -62,9 +63,15 @@ class DB {
             }
         }
 
+        $this->lastQuery = $query;
+
         if($this->queryResult = mysqli_query($this->conn, $query))
             return (strpos($query, "INSERT") === false ? true : mysqli_insert_id($this->conn));
         return false;
+    }
+
+    function getLastQuery() {
+        return $this->lastQuery;
     }
 }
 ?>
