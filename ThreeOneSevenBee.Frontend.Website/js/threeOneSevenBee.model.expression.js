@@ -135,7 +135,7 @@
                 OnChanged: null
             }
         },
-        constructor: function (expression, rules) {
+        constructor: function (expression, onChange, rules) {
             var $t;
             if (rules === void 0) { rules = []; }
             this.selectionParent = null;
@@ -149,6 +149,8 @@
                 var rule = $t.getCurrent();
                 this.analyzer.add(rule);
             }
+            this.addOnChanged(onChange);
+            this.callOnChanged();
     },
     getExpression: function () {
         return this.expression;
@@ -161,6 +163,11 @@
     },
     getSelected: function () {
         return this.selectionParent;
+    },
+    callOnChanged: function () {
+        if (Bridge.hasValue(this.OnChanged)) {
+            this.OnChanged(this);
+        }
     },
     selectionIndex: function (expression) {
         for (var i = 0; i < this.selection.getCount(); i++) {
@@ -200,7 +207,7 @@
         this.selection.clear();
         this.identities.clear();
         this.selectionParent = null;
-        this.OnChanged(this);
+        this.callOnChanged();
     },
     applyIdentity: function (identity) {
         var $t;

@@ -160,6 +160,37 @@
                 }
                 return null;
             },
+            variableWithNegativeExponent: function (expression, selection) {
+                if (selection.getCount() < 2) {
+                    return null;
+                }
+    
+                var binaryexpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                if (Bridge.hasValue(binaryexpression) && binaryexpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power && selection.getItem(0).getParent() === binaryexpression && selection.getItem(1).getParent() === binaryexpression) {
+                    var unaryexpression = Bridge.as(binaryexpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
+                    if (Bridge.hasValue(unaryexpression) && Bridge.hasValue(binaryexpression.getLeft()) && Bridge.hasValue(binaryexpression.getRight())) {
+                        var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
+                        var power = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(binaryexpression.getLeft().clone(), unaryexpression.getExpression().clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
+                        var mysuggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1), power, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
+                        return new ThreeOneSevenBee.Model.Expression.Identity(mysuggestion, mysuggestion);
+                    }
+                }
+                return null;
+            },
+            reverseVariableWithNegativeExponent: function (expression, selection) {
+                var binaryexpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                if (Bridge.hasValue(binaryexpression) && binaryexpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
+                    var numericexpression = Bridge.as(binaryexpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
+                    var power = Bridge.as(binaryexpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryExpression);
+                    if (Bridge.hasValue(numericexpression) && numericexpression.getValue() === "1" && Bridge.hasValue(power)) {
+                        var unaryminus = new ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression(power.getRight());
+                        var mysuggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(power.getLeft().clone(), unaryminus.clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
+                        return new ThreeOneSevenBee.Model.Expression.Identity(mysuggestion, mysuggestion);
+                    }
+                }
+    
+                return null;
+            },
             addFractionsWithSameNumerators: function (expression, selection) {
                 var $t, $t1;
                 if (selection.getCount() < 2) {
@@ -211,6 +242,18 @@
                 else  {
                     return null;
                 }
+            },
+            exponentProduct: function (expression, selection) {
+                if (selection.getCount() < 2) {
+                    return null;
+                }
+                var variadicexpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                if (Bridge.hasValue(variadicexpression) && variadicexpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
+    
+                }
+    
+    
+                return null;
             }
         }
     });
