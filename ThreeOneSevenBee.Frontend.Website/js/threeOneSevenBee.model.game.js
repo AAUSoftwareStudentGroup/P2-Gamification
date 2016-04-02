@@ -39,7 +39,7 @@
             return this.getExprModel().getExpression();
         },
         getLevelCompleted: function () {
-            return this.progressBar.getPercentage() >= Bridge.Linq.Enumerable.from(this.progressBar).first();
+            return Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() >= 1;
         },
         getCategoryCompleted: function () {
             return this.getLevelCompleted() && this.getUser().currentLevel === this.getUser().categories.getItem(this.getUser().currentCategory).levels.getCount() - 1;
@@ -54,7 +54,7 @@
             var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
             var endValue = serializer.deserialize(Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(category).levels.getItem(level).starExpressions).last()).getSize();
             var currentValue = serializer.deserialize(this.getUser().categories.getItem(category).levels.getItem(level).startExpression).getSize();
-            this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(currentValue, 0, currentValue);
+            this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(currentValue, endValue, currentValue);
             console.log(this.progressBar);
             this.setStarExpressions(new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)());
     
@@ -66,12 +66,13 @@
                 this.progressBar.add(starExpressionBase.getSize());
             }
     
-            this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel(this.getUser().categories.getItem(category).levels.getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f1), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct]));
+            this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel(this.getUser().categories.getItem(category).levels.getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f1), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule]));
     
             this.onExpressionChanged(this.getExprModel());
         },
         onExpressionChanged: function (model) {
             this.progressBar.currentValue = model.getExpression().getSize();
+            console.log(model.getExpression());
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged(this);
             }
@@ -136,7 +137,7 @@
     });
     
     Bridge.define('ThreeOneSevenBee.Model.Game.ProgressbarStar', {
-        inherits: [Bridge.IEnumerable$1(Number)],
+        inherits: [Bridge.IEnumerable$1(Bridge.Int)],
         startValue: 0,
         endValue: 0,
         currentValue: 0,
@@ -164,8 +165,14 @@
                 this.stars.remove(star);
             }
         },
+        activatedStarPercentages: function () {
+            return Bridge.Linq.Enumerable.from(this.stars).where(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f1)).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f2));
+        },
+        deactivatedStarPercentages: function () {
+            return Bridge.Linq.Enumerable.from(this.stars).where(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f3)).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f2));
+        },
         getEnumerator$1: function () {
-            return Bridge.Linq.Enumerable.from(this.stars).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f1)).getEnumerator();
+            return this.stars.getEnumerator();
         },
         getEnumerator: function () {
             return this.getEnumerator$1();
@@ -176,7 +183,13 @@
     
     Bridge.apply($_.ThreeOneSevenBee.Model.Game.ProgressbarStar, {
         f1: function (s) {
+            return s >= this.currentValue;
+        },
+        f2: function (s) {
             return this.calculatePercentage(s);
+        },
+        f3: function (s) {
+            return s < this.currentValue;
         }
     });
     
@@ -212,7 +225,7 @@
                 [Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("Numbers"), {
                     levels: Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.Level)(), [
                         [new ThreeOneSevenBee.Model.Game.Level("a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
-                        [new ThreeOneSevenBee.Model.Game.Level("4+5*5", "4+5*5", ["4+25", "25"])],
+                        [new ThreeOneSevenBee.Model.Game.Level("4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
                         [new ThreeOneSevenBee.Model.Game.Level("4+5*5", "4+10*5", ["4+50", "54"])],
                         [new ThreeOneSevenBee.Model.Game.Level("{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])]
                     ] )

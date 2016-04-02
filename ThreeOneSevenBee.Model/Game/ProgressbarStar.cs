@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ThreeOneSevenBee.Model.Game
 {
-    public class ProgressbarStar : IEnumerable<double>
+    public class ProgressbarStar : IEnumerable<int>
     {
         public int StartValue;
         public int EndValue;
@@ -49,9 +49,19 @@ namespace ThreeOneSevenBee.Model.Game
             }
         }
 
-        public IEnumerator<double> GetEnumerator()
+        public IEnumerable<double> ActivatedStarPercentages()
         {
-            return stars.Select((s) => CalculatePercentage(s)).GetEnumerator();
+            return stars.Where((s) => s >= CurrentValue).Select((s) => CalculatePercentage(s));
+        }
+
+        public IEnumerable<double> DeactivatedStarPercentages()
+        {
+            return stars.Where((s) => s < CurrentValue).Select((s) => CalculatePercentage(s));
+        }
+
+        public IEnumerator<int> GetEnumerator()
+        {
+            return stars.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

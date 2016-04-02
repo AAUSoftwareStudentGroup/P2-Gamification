@@ -98,7 +98,7 @@
                     $t = Bridge.getEnumerator(selection);
                     while ($t.moveNext()) {
                         var selected = $t.getCurrent();
-                        if (!selected.getParent() === variadicExpression) {
+                        if (selected.getParent() === variadicExpression === false) {
                             return null;
                         }
                         else  {
@@ -110,6 +110,9 @@
                                 return null;
                             }
                         }
+                    }
+                    if (variadicExpression.getCount() === selection.getCount()) {
+                        return new ThreeOneSevenBee.Model.Expression.Identity(new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(sum), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(sum));
                     }
                     var indexes = Bridge.Linq.Enumerable.from(selection).select(function (s) {
                         return variadicExpression.indexOfReference(s);

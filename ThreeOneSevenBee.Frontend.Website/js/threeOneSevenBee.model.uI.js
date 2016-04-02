@@ -814,23 +814,29 @@
                 setBackgroundColor: "#27AE61"
             } );
             this.stars = new Bridge.List$1(ThreeOneSevenBee.Model.UI.ImageView)();
-            this.stars.addRange(Bridge.Linq.Enumerable.from(progressbar).select(Bridge.fn.bind(this, function (starPercentage) {
-                return Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(starPercentage < progressbar.getPercentage() ? "star_activated.png" : "star.png", this.getHeight(), this.getHeight()), {
-                    setX: starPercentage * this.getWidth() - this.getHeight()
-                } );
-            })));
+            this.stars.addRange(Bridge.Linq.Enumerable.from(progressbar.activatedStarPercentages()).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.ProgressbarStarView.f1)));
+            this.stars.addRange(Bridge.Linq.Enumerable.from(progressbar.deactivatedStarPercentages()).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.ProgressbarStarView.f2)));
+            this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
             this.children.add(this.progress);
             this.children.addRange(this.stars);
         },
         update: function (progressbar) {
-            var $t;
-            var index = 0;
-            $t = Bridge.getEnumerator(progressbar);
-            while ($t.moveNext()) {
-                var starPercentage = $t.getCurrent();
-                this.stars.getItem(index++).setImage(starPercentage < progressbar.getPercentage() ? "star_activated.png" : "star.png");
-            }
-            this.progress.setWidth(this.getWidth() * progressbar.getPercentage());
+            this.build(progressbar);
+        }
+    });
+    
+    Bridge.ns("ThreeOneSevenBee.Model.UI.ProgressbarStarView", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Model.UI.ProgressbarStarView, {
+        f1: function (starPercentage) {
+            return Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("star_activated.png", this.getHeight(), this.getHeight()), {
+                setX: starPercentage * this.getWidth() - this.getHeight()
+            } );
+        },
+        f2: function (starPercentage) {
+            return Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("star.png", this.getHeight(), this.getHeight()), {
+                setX: starPercentage * this.getWidth() - this.getHeight()
+            } );
         }
     });
     
