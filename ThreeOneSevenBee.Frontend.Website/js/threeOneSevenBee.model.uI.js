@@ -752,7 +752,7 @@
                 setFontSize: 25
             } );
     
-            this.progressbar = Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(game.progress, this.getWidth() - 220, 30), {
+            this.progressbar = Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(game.progressBar, this.getWidth() - 220, 30), {
                 setX: 110,
                 setY: 10
             } );
@@ -779,9 +779,10 @@
             }
         },
         update: function (game) {
-            this.progressbar.update(game.progress);
+            this.progressbar.update(game.progressBar);
             this.identityMenu.update(game.getExprModel().getIdentities(), game.getExprModel());
             this.expression.update(game.getExprModel());
+            this.nextButton.setBackgroundColor(game.getLevelCompleted() ? "#16A086" : "#BEC3C7");
     
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged();
@@ -813,17 +814,21 @@
                 setBackgroundColor: "#27AE61"
             } );
             this.stars = new Bridge.List$1(ThreeOneSevenBee.Model.UI.ImageView)();
-            this.stars.addRange(Bridge.Linq.Enumerable.from(progressbar.stars).select(Bridge.fn.bind(this, function (star) {
-                return Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(star < progressbar.getProgress() ? "star_activated.png" : "star.png", this.getHeight(), this.getHeight()), {
-                    setX: Bridge.cast(star, Number) / progressbar.getMaxProgress() * this.getWidth() - this.getHeight()
+            this.stars.addRange(Bridge.Linq.Enumerable.from(progressbar).select(Bridge.fn.bind(this, function (starPercentage) {
+                return Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(starPercentage < progressbar.getPercentage() ? "star_activated.png" : "star.png", this.getHeight(), this.getHeight()), {
+                    setX: starPercentage * this.getWidth() - this.getHeight()
                 } );
             })));
             this.children.add(this.progress);
             this.children.addRange(this.stars);
         },
         update: function (progressbar) {
-            for (var index = 0; index < progressbar.stars.getCount(); index++) {
-                this.stars.getItem(index).setImage(progressbar.stars.getItem(index) < progressbar.getProgress() ? "star_activated.png" : "star.png");
+            var $t;
+            var index = 0;
+            $t = Bridge.getEnumerator(progressbar);
+            while ($t.moveNext()) {
+                var starPercentage = $t.getCurrent();
+                this.stars.getItem(index++).setImage(starPercentage < progressbar.getPercentage() ? "star_activated.png" : "star.png");
             }
             this.progress.setWidth(this.getWidth() * progressbar.getPercentage());
         }

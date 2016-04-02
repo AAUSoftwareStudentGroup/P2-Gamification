@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,69 +7,56 @@ using System.Threading.Tasks;
 
 namespace ThreeOneSevenBee.Model.Game
 {
-    public class ProgressbarStar
+    public class ProgressbarStar : IEnumerable<double>
     {
-        private int maxProgress;
-        private int currentProgress;
+        public int StartValue;
+        public int EndValue;
+        public int CurrentValue;
 
-        public int Progress
+        public double CalculatePercentage(int value)
         {
-            get { return currentProgress; }
-            set { currentProgress = value; }
+            return (double)(value - StartValue) / (EndValue - StartValue);
         }
 
         public double Percentage
         {
-            get { return (double)currentProgress / maxProgress; }
+            get { return CalculatePercentage(CurrentValue); }
         }
 
-        public int MaxProgress
-        {
-            get { return maxProgress; }
-            set { maxProgress = value; }
-        }
+        private List<int> stars;
 
-        public List<int> Stars;
-
-        public ProgressbarStar(int progress, int maxValue, params int[] stars)
+        public ProgressbarStar(int startValue, int endValue, int currentValue, params int[] stars)
         {
-            this.currentProgress = progress;
-            this.maxProgress = maxValue;
-            Stars = new List<int>(stars);
-            GetStars();
+            StartValue = startValue;
+            EndValue = endValue;
+            CurrentValue = currentValue;
+            this.stars = new List<int>(stars);
         }
 
         public void Add(int star)
         {
-            if (!Stars.Contains(star))
+            if (!stars.Contains(star))
             {
-                Stars.Add(star);
+                stars.Add(star);
             }
         }
 
         public void Remove(int star)
         {
-            if (Stars.Contains(star))
+            if (stars.Contains(star))
             {
-                Stars.Remove(star);
+                stars.Remove(star);
             }
         }
 
-        public int GetStars()
+        public IEnumerator<double> GetEnumerator()
         {
-            int starsCount = 0;
-            int totalStars = 0;
+            return stars.Select((s) => CalculatePercentage(s)).GetEnumerator();
+        }
 
-            foreach (int i in Stars)
-            {
-                totalStars++;
-                if (i <= currentProgress)
-                {
-                    starsCount++;
-                }
-            }
-            // Returns amount of reached stars.
-            return starsCount;
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

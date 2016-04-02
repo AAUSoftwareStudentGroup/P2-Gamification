@@ -21,7 +21,7 @@
     Bridge.define('ThreeOneSevenBee.Model.Game.GameModel', {
         aPI: null,
         onChanged: null,
-        progress: null,
+        progressBar: null,
         config: {
             properties: {
                 User: null,
@@ -39,7 +39,7 @@
             return this.getExprModel().getExpression();
         },
         getLevelCompleted: function () {
-            return this.progress.getStars() > 0;
+            return this.progressBar.getPercentage() >= Bridge.Linq.Enumerable.from(this.progressBar).first();
         },
         getCategoryCompleted: function () {
             return this.getLevelCompleted() && this.getUser().currentLevel === this.getUser().categories.getItem(this.getUser().currentCategory).levels.getCount() - 1;
@@ -52,7 +52,10 @@
             this.getUser().currentLevel = level;
             this.getUser().currentCategory = category;
             var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
-            this.progress = new ThreeOneSevenBee.Model.Game.ProgressbarStar(serializer.deserialize(Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(category).levels.getItem(level).starExpressions).last()).getSize(), serializer.deserialize(this.getUser().categories.getItem(category).levels.getItem(level).startExpression).getSize());
+            var endValue = serializer.deserialize(Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(category).levels.getItem(level).starExpressions).last()).getSize();
+            var currentValue = serializer.deserialize(this.getUser().categories.getItem(category).levels.getItem(level).startExpression).getSize();
+            this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(currentValue, 0, currentValue);
+            console.log(this.progressBar);
             this.setStarExpressions(new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)());
     
             $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategory).levels.getItem(this.getUser().currentLevel).starExpressions);
@@ -60,7 +63,7 @@
                 var starExpression = $t.getCurrent();
                 var starExpressionBase = serializer.deserialize(starExpression);
                 this.getStarExpressions().add(starExpressionBase);
-                this.progress.add(starExpressionBase.getSize());
+                this.progressBar.add(starExpressionBase.getSize());
             }
     
             this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel(this.getUser().categories.getItem(category).levels.getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f1), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct]));
@@ -68,7 +71,7 @@
             this.onExpressionChanged(this.getExprModel());
         },
         onExpressionChanged: function (model) {
-            this.progress.setProgress(model.getExpression().getSize());
+            this.progressBar.currentValue = model.getExpression().getSize();
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged(this);
             }
@@ -86,6 +89,9 @@
                 else  {
                     if (this.getLevelCompleted()) {
                         this.getUser().currentLevel++;
+                    }
+                    else  {
+                        return;
                     }
                 }
             }
@@ -130,30 +136,23 @@
     });
     
     Bridge.define('ThreeOneSevenBee.Model.Game.ProgressbarStar', {
-        maxProgress: 0,
-        currentProgress: 0,
+        inherits: [Bridge.IEnumerable$1(Number)],
+        startValue: 0,
+        endValue: 0,
+        currentValue: 0,
         stars: null,
-        constructor: function (progress, maxValue, stars) {
+        constructor: function (startValue, endValue, currentValue, stars) {
             if (stars === void 0) { stars = []; }
-            this.currentProgress = progress;
-            this.maxProgress = maxValue;
+            this.startValue = startValue;
+            this.endValue = endValue;
+            this.currentValue = currentValue;
             this.stars = new Bridge.List$1(Bridge.Int)(stars);
-            this.getStars();
-        },
-        getProgress: function () {
-            return this.currentProgress;
-        },
-        setProgress: function (value) {
-            this.currentProgress = value;
         },
         getPercentage: function () {
-            return Bridge.cast(this.currentProgress, Number) / this.maxProgress;
+            return this.calculatePercentage(this.currentValue);
         },
-        getMaxProgress: function () {
-            return this.maxProgress;
-        },
-        setMaxProgress: function (value) {
-            this.maxProgress = value;
+        calculatePercentage: function (value) {
+            return Bridge.cast((value - this.startValue), Number) / (this.endValue - this.startValue);
         },
         add: function (star) {
             if (!this.stars.contains(star)) {
@@ -165,21 +164,19 @@
                 this.stars.remove(star);
             }
         },
-        getStars: function () {
-            var $t;
-            var starsCount = 0;
-            var totalStars = 0;
+        getEnumerator$1: function () {
+            return Bridge.Linq.Enumerable.from(this.stars).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f1)).getEnumerator();
+        },
+        getEnumerator: function () {
+            return this.getEnumerator$1();
+        }
+    });
     
-            $t = Bridge.getEnumerator(this.stars);
-            while ($t.moveNext()) {
-                var i = $t.getCurrent();
-                totalStars++;
-                if (i <= this.currentProgress) {
-                    starsCount++;
-                }
-            }
-            // Returns amount of reached stars.
-            return starsCount;
+    Bridge.ns("ThreeOneSevenBee.Model.Game.ProgressbarStar", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Model.Game.ProgressbarStar, {
+        f1: function (s) {
+            return this.calculatePercentage(s);
         }
     });
     

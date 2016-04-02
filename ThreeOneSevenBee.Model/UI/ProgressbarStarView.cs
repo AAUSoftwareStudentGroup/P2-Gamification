@@ -16,12 +16,12 @@ namespace ThreeOneSevenBee.Model.UI
         {
             progress = new View(0, 0, Width * progressbar.Percentage, Height) { BackgroundColor = "#27AE61" };
             stars = new List<ImageView>();
-            stars.AddRange(progressbar.Stars.Select(
-                (star) =>
+            stars.AddRange(progressbar.Select(
+                (starPercentage) =>
                 {
-                    return new ImageView(star < progressbar.Progress ? "star_activated.png" : "star.png", Height, Height)
+                    return new ImageView(starPercentage < progressbar.Percentage ? "star_activated.png" : "star.png", Height, Height)
                     {
-                        X = (double)star / progressbar.MaxProgress * Width - Height
+                        X = (double)starPercentage * Width - Height
                     };
                 }
                 ));
@@ -31,9 +31,10 @@ namespace ThreeOneSevenBee.Model.UI
 
         public void Update(ProgressbarStar progressbar)
         {
-            for (int index = 0; index < progressbar.Stars.Count; index++)
+            int index = 0;
+            foreach (int starPercentage in progressbar)
             {
-                stars[index].Image = progressbar.Stars[index] < progressbar.Progress ? "star_activated.png" : "star.png";
+                stars[index++].Image = starPercentage < progressbar.Percentage ? "star_activated.png" : "star.png";
             }
             progress.Width = Width * progressbar.Percentage;
         }
