@@ -37,6 +37,7 @@ namespace ThreeOneSevenBee.Model.UI
         }
 
         public Action OnClick;
+        public Action OnChanged;
         
         public virtual View Scale(double factor)
         {

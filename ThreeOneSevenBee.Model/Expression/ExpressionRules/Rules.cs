@@ -116,7 +116,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 }
                 foreach (ExpressionBase selected in selection)
                 {
-                    if (!ReferenceEquals(selected.Parent, variadicExpression))
+                    if (ReferenceEquals(selected.Parent, variadicExpression) == false)
                     {
                         return null;
                     }
@@ -132,6 +132,10 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                             return null;
                         }
                     }
+                }
+                if(variadicExpression.Count == selection.Count)
+                {
+                    return new Identity(new NumericExpression(sum), new NumericExpression(sum));
                 }
                 var indexes = selection.Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
                 indexes.Sort();

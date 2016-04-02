@@ -22,32 +22,11 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            ExpressionModel expressionModel = new ExpressionModel("a^5 * a^3 * a^6 + a^11 + a^2", null,
-                Rules.ProductToExponentRule, Rules.ExponentToProductRule, Rules.NumericVariadicRule, Rules.NumericBinaryRule, Rules.VariableWithNegativeExponent,
-                Rules.ReverseVariableWithNegativeExponent, Rules.AddFractionsWithSameNumerators, Rules.ExponentProduct);
-           
+            StubGameAPI gameAPI = new StubGameAPI();
 
-            PolygonModel polygon = new PolygonModel(5);
-            View view = new CompositeView(canvas.Width, canvas.Height)
-            {
-                new ProgressbarStarView(new ProgressbarStar(50, 100, 30, 60, 75), canvas.Width, 20) { Y=30 },
-                new ExpressionView(expressionModel, canvas.Width, canvas.Height - 150) { X = 0, Y = 50 },
-                new IdentityMenuView(expressionModel, canvas.Width, 100) { Y = canvas.Height - 100 }
-                //new PolygonView(polygon, "#3C78D8", 100, 100, 100, 100)
-            };
+            GameModel gameModel = new GameModel(gameAPI);
 
-            Window.AddEventListener(EventType.Resize, () =>
-            {
-                canvas.Width = Document.DocumentElement.ClientWidth;
-                canvas.Height = Document.DocumentElement.ClientHeight;
-                view.Width = canvas.Width;
-                view.Height = canvas.Height;
-                context.Draw();
-            });
-
-            context.SetContentView(view);
-            expressionModel.OnChanged += (m) => context.Draw();
-            context.Draw();
+            GameView gameView = new GameView(gameModel, context);
         }
     }
 }

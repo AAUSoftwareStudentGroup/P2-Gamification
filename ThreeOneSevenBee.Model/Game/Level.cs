@@ -16,6 +16,7 @@ namespace ThreeOneSevenBee.Model.Game
         {
             StartExpression = startExpression;
             CurrentExpression = currentExpression;
+            StarExpressions = new List<string>();
             foreach (var star in starExpressions)
             {
                 StarExpressions.Add(star);

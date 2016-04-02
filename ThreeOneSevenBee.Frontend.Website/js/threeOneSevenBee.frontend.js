@@ -15,36 +15,11 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var expressionModel = new ThreeOneSevenBee.Model.Expression.ExpressionModel("a^{2+4+4+4}*a^3*a^3", null, [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct]);
+                var gameAPI = new ThreeOneSevenBee.Model.Game.StubGameAPI();
     
+                var gameModel = new ThreeOneSevenBee.Model.Game.GameModel(gameAPI);
     
-                var polygon = new ThreeOneSevenBee.Model.Geometry.PolygonModel("constructor$1", 5);
-                var view = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(canvas.width, canvas.height), [
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(new ThreeOneSevenBee.Model.Game.ProgressbarStar(50, 100, [30, 60, 75]), canvas.width, 20), {
-                        setY: 30
-                    } )],
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView(expressionModel, canvas.width, canvas.height - 150), {
-                        setX: 0,
-                        setY: 50
-                    } )],
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.IdentityMenuView(expressionModel, canvas.width, 100), {
-                        setY: canvas.height - 100
-                    } )]
-                ] );
-    
-                window.addEventListener("resize", function () {
-                    canvas.width = document.documentElement.clientWidth;
-                    canvas.height = document.documentElement.clientHeight;
-                    view.setWidth(canvas.width);
-                    view.setHeight(canvas.height);
-                    context.draw();
-                });
-    
-                context.setContentView(view);
-                expressionModel.addOnChanged(function (m) {
-                    context.draw();
-                });
-                context.draw();
+                var gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
             }
         }
     });
@@ -59,26 +34,32 @@
             this.context.fillStyle = "#000000";
             this.context.lineWidth = 2;
             this.context.textBaseline = "middle";
-            this.context.textAlign = "center";
-        },
-        setContentView: function (view) {
+    
             var canvasLeft = this.context.canvas.getBoundingClientRect().left;
             var canvasRight = this.context.canvas.getBoundingClientRect().left;
-            this.context.canvas.addEventListener("mousedown", function (e) {
-                view.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
-            });
+            this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
+                this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
+            }));
+        },
+        setContentView: function (view) {
             ThreeOneSevenBee.Model.UI.Context.prototype.setContentView.call(this, view);
+            this.draw();
         },
         clear: function () {
             this.context.clearRect(0, 0, Bridge.Int.trunc(this.getWidth()), Bridge.Int.trunc(this.getHeight()));
         },
+        click: function (x, y) {
+            this.contentView.click(x, y);
+        },
         draw$3: function (view, offsetX, offsetY) {
             this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
-            this.context.font = view.getHeight() + "px Cambria Math";
-            this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + view.getWidth() / 2)), Bridge.Int.trunc((view.getY() + offsetY + view.getHeight() / 2)));
+            this.context.font = view.getFontSize() + "px " + view.getFont();
+            this.context.textAlign = view.getAlign() === "center" ? "center" : "left";
+            this.context.fillStyle = view.getFontColor();
+            this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + (view.getAlign() === "center" ? view.getWidth() / 2 : 5))), Bridge.Int.trunc((view.getY() + offsetY + view.getHeight() / 2)));
+            this.context.fillStyle = "#000000";
         },
         draw$4: function (view, offsetX, offsetY) {
-            console.log(view);
             this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                 this.context.beginPath();
@@ -148,9 +129,14 @@
             this.context.fillStyle = "#000000";
         },
         draw$2: function (view, offsetX, offsetY) {
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             var img = new Image();
             img.src = "img/" + view.getImage();
+            img.onload = Bridge.fn.bind(this, function (e) {
+                this.context.fillStyle = "transparent";
             this.context.drawImage(img, view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
+                this.context.fillStyle = "#000000";
+            });
         },
         draw$6: function (view, offsetX, offsetY) {
             this.context.fillStyle = view.fillStyle;

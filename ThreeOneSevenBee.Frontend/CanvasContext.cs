@@ -15,20 +15,21 @@ namespace ThreeOneSevenBee.Frontend
             context.FillStyle = "#000000";
             context.LineWidth = 2;
             context.TextBaseline = CanvasTypes.CanvasTextBaselineAlign.Middle;
-            context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
+            
+            double canvasLeft = context.Canvas.GetBoundingClientRect().Left;
+            double canvasRight = context.Canvas.GetBoundingClientRect().Left;
+            context.Canvas.AddEventListener(EventType.MouseDown,
+                (e) =>
+                {
+                    click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
+                        e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
+                });
         }
 
         public override void SetContentView(View view)
         {
-            double canvasLeft = context.Canvas.GetBoundingClientRect().Left;
-            double canvasRight = context.Canvas.GetBoundingClientRect().Left;
-            context.Canvas.AddEventListener(EventType.MouseDown, 
-                (e) =>
-                {
-                    view.Click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft, 
-                        e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
-                });
             base.SetContentView(view);
+            Draw();
         }
 
         public override void Clear()
@@ -36,16 +37,25 @@ namespace ThreeOneSevenBee.Frontend
             context.ClearRect(0, 0, (int)Width, (int)Height);
         }
 
+        private void click(double x, double y)
+        {
+            contentView.Click(x, y);
+        }
+
         public override void Draw(LabelView view, double offsetX, double offsetY)
         {
             Draw(view as View, offsetX, offsetY);
-            context.Font = view.Height + "px Cambria Math";
-            context.FillText(view.Text, (int)(view.X + offsetX + view.Width / 2), (int)(view.Y + offsetY + view.Height / 2));
+            context.Font = view.FontSize + "px " + view.Font;
+            context.TextAlign = view.Align == "center" ? CanvasTypes.CanvasTextAlign.Center : 
+                CanvasTypes.CanvasTextAlign.Left;
+            context.FillStyle = view.FontColor;
+            context.FillText(view.Text, (int)(view.X + offsetX + (view.Align == "center" ? view.Width / 2 : 5)), 
+                (int)(view.Y + offsetY + view.Height / 2));
+            context.FillStyle = "#000000";
         }
 
         public override void Draw(OperatorView view, double offsetX, double offsetY)
         {
-            Console.WriteLine(view);
             Draw(view as View, offsetX, offsetY);
             if (view.type == OperatorType.Divide)
             {
@@ -121,9 +131,15 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void Draw(ImageView view, double offsetX, double offsetY)
         {
+            Draw(view as View, offsetX, offsetY);
             ImageElement img = new ImageElement();
             img.Src = "img/" + view.Image;
-            context.DrawImage(img, view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
+            img.OnLoad = (e) =>
+            {
+                context.FillStyle = "transparent";
+                context.DrawImage(img, view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
+                context.FillStyle = "#000000";
+            };
         }
 
         public override void Draw(PolygonView view, double offsetX, double offsetY)
