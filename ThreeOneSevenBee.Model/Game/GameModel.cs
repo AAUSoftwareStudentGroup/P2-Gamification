@@ -49,15 +49,18 @@ namespace ThreeOneSevenBee.Model.Game
             ExpressionSerializer serializer = new ExpressionSerializer();
             Progress = new ProgressbarStar(serializer.Deserialize(User.Categories[category].Levels[level].StarExpressions.Last()).Size, serializer.Deserialize(User.Categories[category].Levels[level].StartExpression).Size);
             StarExpressions = new List<ExpressionBase>();
+
             foreach (string starExpression in User.Categories[User.CurrentCategory].Levels[User.CurrentLevel].StarExpressions)
             {
                 ExpressionBase starExpressionBase = serializer.Deserialize(starExpression);
                 StarExpressions.Add(starExpressionBase);
                 Progress.Add(starExpressionBase.Size);
             }
+
             ExprModel = new ExpressionModel(User.Categories[category].Levels[level].CurrentExpression, (m) => onExpressionChanged(m), 
                 Rules.ExponentToProductRule, Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators, 
                 Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.ExponentProduct);
+
             onExpressionChanged(ExprModel);
         }
 
@@ -89,16 +92,11 @@ namespace ThreeOneSevenBee.Model.Game
             SetLevel(User.CurrentLevel, User.CurrentCategory);
         }
 
-        public GameModel(GameAPI api, Action<GameModel> onChanged)
+        public GameModel(GameAPI api)
         {
-            OnChanged = onChanged;
             API = api;
             User = api.GetCurrentPlayer();
             SetLevel(User.CurrentLevel, User.CurrentCategory);
         }
-
-        public GameModel(GameAPI api) : this(api, null)
-        { }
-
     }
 }

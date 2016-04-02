@@ -171,18 +171,8 @@
         return -1;
     },
     select: function (expression) {
-        var $t;
         var index = this.selectionIndex(expression);
         if (index === -1) {
-    
-            $t = Bridge.getEnumerator(expression.getNodesRecursive());
-            while ($t.moveNext()) {
-                var descendant = $t.getCurrent();
-                var i = this.selectionIndex(descendant);
-                if (i !== -1) {
-                    this.selection.removeAt(i);
-                }
-            }
             this.selection.add(expression);
         }
         else  {

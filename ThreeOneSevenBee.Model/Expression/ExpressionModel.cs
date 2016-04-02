@@ -79,13 +79,6 @@ namespace ThreeOneSevenBee.Model.Expression
             int index = SelectionIndex(expression);
             if (index == -1)
             {
-
-                foreach (var descendant in expression.GetNodesRecursive())
-                {
-                    int i = SelectionIndex(descendant);
-                    if (i != -1)
-                        selection.RemoveAt(i);
-                }
                 selection.Add(expression);
             }
             else

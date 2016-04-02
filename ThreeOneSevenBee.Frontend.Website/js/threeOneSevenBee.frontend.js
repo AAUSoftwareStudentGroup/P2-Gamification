@@ -17,7 +17,7 @@
     
                 var gameAPI = new ThreeOneSevenBee.Model.Game.StubGameAPI();
     
-                var gameModel = new ThreeOneSevenBee.Model.Game.GameModel("constructor", gameAPI);
+                var gameModel = new ThreeOneSevenBee.Model.Game.GameModel(gameAPI);
     
                 var gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
             }
@@ -131,9 +131,11 @@
             this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             var img = new Image();
             img.src = "img/" + view.getImage();
-            this.context.fillStyle = "transparent";
-            this.context.drawImage(img, view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
-            this.context.fillStyle = "#000000";
+            img.onload = Bridge.fn.bind(this, function (e) {
+                this.context.fillStyle = "transparent";
+                this.context.drawImage(img, view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
+                this.context.fillStyle = "#000000";
+            });
         },
         draw$6: function (view, offsetX, offsetY) {
             this.context.fillStyle = view.fillStyle;

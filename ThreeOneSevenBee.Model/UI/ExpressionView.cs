@@ -168,16 +168,16 @@ namespace ThreeOneSevenBee.Model.UI
 
         }
 
-        public ExpressionView(ExpressionModel model, double width, double height) : base(width, height, Build(model.Expression, model), 4)
+        public void Update(ExpressionModel model)
         {
-            model.OnChanged = (m) =>
+            setContent(Build(model.Expression, model));
+            if (OnChanged != null)
             {
-                setContent(Build(m.Expression, m));
-                if(OnChanged != null)
-                {
-                    OnChanged();
-                }
-            };
+                OnChanged();
+            }
         }
+
+        public ExpressionView(ExpressionModel model, double width, double height) : base(width, height, Build(model.Expression, model), 4)
+        { }
     }
 }
