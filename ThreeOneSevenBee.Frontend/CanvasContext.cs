@@ -15,7 +15,7 @@ namespace ThreeOneSevenBee.Frontend
             context.FillStyle = "#000000";
             context.LineWidth = 2;
             context.TextBaseline = CanvasTypes.CanvasTextBaselineAlign.Middle;
-            context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
+            
             double canvasLeft = context.Canvas.GetBoundingClientRect().Left;
             double canvasRight = context.Canvas.GetBoundingClientRect().Left;
             context.Canvas.AddEventListener(EventType.MouseDown,
@@ -46,8 +46,11 @@ namespace ThreeOneSevenBee.Frontend
         {
             Draw(view as View, offsetX, offsetY);
             context.Font = view.FontSize + "px " + view.Font;
+            context.TextAlign = view.Align == "center" ? CanvasTypes.CanvasTextAlign.Center : 
+                CanvasTypes.CanvasTextAlign.Left;
             context.FillStyle = view.FontColor;
-            context.FillText(view.Text, (int)(view.X + offsetX + view.Width / 2), (int)(view.Y + offsetY + view.Height / 2));
+            context.FillText(view.Text, (int)(view.X + offsetX + (view.Align == "center" ? view.Width / 2 : 5)), 
+                (int)(view.Y + offsetY + view.Height / 2));
             context.FillStyle = "#000000";
         }
 

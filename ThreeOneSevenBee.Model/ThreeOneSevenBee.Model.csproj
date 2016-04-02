@@ -95,6 +95,7 @@
     <Compile Include="UI\LevelView.cs" />
     <Compile Include="UI\OperatorView.cs" />
     <Compile Include="UI\ParenthesisView.cs" />
+    <Compile Include="UI\PlayerListView.cs" />
     <Compile Include="UI\PolygonView.cs" />
     <Compile Include="UI\ProgressbarCircle.cs" />
     <Compile Include="UI\ProgressbarStarView.cs" />

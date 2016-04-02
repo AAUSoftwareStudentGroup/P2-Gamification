@@ -32,7 +32,7 @@ namespace ThreeOneSevenBee.Model.UI
                 FontSize = 25
             };
 
-            nextButton = new ButtonView("Næste", () => game.NextLevel())
+            nextButton = new ButtonView("Næste", () => OnNextLevel())
             {
                 X = Width - 100,
                 Width = 100,
@@ -54,10 +54,10 @@ namespace ThreeOneSevenBee.Model.UI
                 Y = Height - 100
             };
 
-            expression = new ExpressionView(game.ExprModel, Width, Height - 150)
+            expression = new ExpressionView(game.ExprModel, Width, Height - 150, 4)
             {
                 X = 0,
-                Y = 50
+                Y = 50,
             };
 
             Children = new List<View>()

@@ -26,11 +26,21 @@ namespace ThreeOneSevenBee.Model.UI
         {
             this.context = context;
 
-            titleView = new TitleView();
+            titleView = new TitleView(game.Players);
 
             levelView = new LevelView(game, context.Width, context.Height)
             {
-                OnExit = () => setContent(titleView)
+                OnExit = () =>
+                {
+                    game.Save();
+                    setContent(titleView);
+                },
+                OnNextLevel = () =>
+                {
+                    game.Save();
+                    game.NextLevel();
+                }
+                
             };
 
             titleView.PlayButton.OnClick = () => setContent(levelView);

@@ -25,6 +25,7 @@
         config: {
             properties: {
                 User: null,
+                Players: null,
                 ExprModel: null,
                 StartExpression: null,
                 StarExpressions: null
@@ -33,6 +34,7 @@
         constructor: function (api) {
             this.aPI = api;
             this.setUser(api.getCurrentPlayer());
+            this.setPlayers(api.getPlayers());
             this.setLevel(this.getUser().currentLevel, this.getUser().currentCategory);
         },
         getCurrentExpression: function () {
@@ -97,6 +99,10 @@
                 }
             }
             this.setLevel(this.getUser().currentLevel, this.getUser().currentCategory);
+        },
+        save: function () {
+            this.getUser().categories.getItem(this.getUser().currentCategory).levels.getItem(this.getUser().currentLevel).currentExpression = this.getCurrentExpression().toString();
+            this.aPI.updateCurrentPlayer(this.getUser());
         }
     });
     
@@ -214,7 +220,7 @@
         constructor: function () {
             ThreeOneSevenBee.Model.Game.GameAPI.prototype.$constructor.call(this);
     
-            this.currentPlayer = new ThreeOneSevenBee.Model.Game.CurrentPlayer("morten");
+            this.currentPlayer = new ThreeOneSevenBee.Model.Game.CurrentPlayer("Morten");
             this.currentPlayer.badges = Bridge.merge(new Bridge.List$1(String)(), [
                 ["FractionBadge"],
                 ["ExponentBadge"]
@@ -240,7 +246,13 @@
         },
         getPlayers: function () {
             return Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.Player)(), [
-                [this.currentPlayer]
+                [this.currentPlayer],
+                [new ThreeOneSevenBee.Model.Game.Player("Anton")],
+                [new ThreeOneSevenBee.Model.Game.Player("Christian")],
+                [new ThreeOneSevenBee.Model.Game.Player("Lasse")],
+                [new ThreeOneSevenBee.Model.Game.Player("Mathias P.")],
+                [new ThreeOneSevenBee.Model.Game.Player("Mathias I.")],
+                [new ThreeOneSevenBee.Model.Game.Player("Nikolaj")]
             ] );
         },
         updateCurrentPlayer: function (currentPlayer) {

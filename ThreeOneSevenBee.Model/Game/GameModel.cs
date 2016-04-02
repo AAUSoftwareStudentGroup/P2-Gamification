@@ -13,6 +13,7 @@ namespace ThreeOneSevenBee.Model.Game
     public class GameModel
     {
         public CurrentPlayer User { get; }
+        public IEnumerable<Player> Players { get; private set; }
         private GameAPI API;
         public ExpressionModel ExprModel { get; private set; }
         public ExpressionBase CurrentExpression { get { return ExprModel.Expression; } }
@@ -104,10 +105,17 @@ namespace ThreeOneSevenBee.Model.Game
             SetLevel(User.CurrentLevel, User.CurrentCategory);
         }
 
+        public void Save()
+        {
+            User.Categories[User.CurrentCategory].Levels[User.CurrentLevel].CurrentExpression = CurrentExpression.ToString();
+            API.UpdateCurrentPlayer(User);
+        }
+
         public GameModel(GameAPI api)
         {
             API = api;
             User = api.GetCurrentPlayer();
+            Players = api.GetPlayers();
             SetLevel(User.CurrentLevel, User.CurrentCategory);
         }
     }

@@ -18,7 +18,8 @@ namespace ThreeOneSevenBee.Model.UI
             for (int index = 0; index < identities.Count; index++)
             {
                 int indexCopy = index;
-                View view = ExpressionView.Build(identities[index].Suggestion, model);
+                ExpressionView expressionView = new ExpressionView();
+                View view = expressionView.BuildView(identities[index].Suggestion, model);
                 FrameView frameView = new FrameView(Width / identities.Count, Height, view, 2)
                 {
                     PropagateClick = false

@@ -22,7 +22,7 @@ namespace ThreeOneSevenBee.Model.Game
 
         public StubGameAPI()
         {
-            currentPlayer = new CurrentPlayer("morten");
+            currentPlayer = new CurrentPlayer("Morten");
             currentPlayer.Badges = new List<string> { "FractionBadge", "ExponentBadge" };
             currentPlayer.CurrentCategory = 0;
             currentPlayer.CurrentLevel = 0;
@@ -46,7 +46,15 @@ namespace ThreeOneSevenBee.Model.Game
 
         public override List<Player> GetPlayers()
         {
-            return new List<Player>() { currentPlayer };
+            return new List<Player>() {
+                currentPlayer,
+                new Player("Anton"),
+                new Player("Christian"),
+                new Player("Lasse"),
+                new Player("Mathias P."),
+                new Player("Mathias I."),
+                new Player("Nikolaj")
+            };
         }
 
         public override void UpdateCurrentPlayer(CurrentPlayer currentPlayer)

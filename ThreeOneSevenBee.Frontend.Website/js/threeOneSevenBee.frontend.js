@@ -34,7 +34,7 @@
             this.context.fillStyle = "#000000";
             this.context.lineWidth = 2;
             this.context.textBaseline = "middle";
-            this.context.textAlign = "center";
+    
             var canvasLeft = this.context.canvas.getBoundingClientRect().left;
             var canvasRight = this.context.canvas.getBoundingClientRect().left;
             this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
@@ -54,8 +54,9 @@
         draw$3: function (view, offsetX, offsetY) {
             this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             this.context.font = view.getFontSize() + "px " + view.getFont();
+            this.context.textAlign = view.getAlign() === "center" ? "center" : "left";
             this.context.fillStyle = view.getFontColor();
-            this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + view.getWidth() / 2)), Bridge.Int.trunc((view.getY() + offsetY + view.getHeight() / 2)));
+            this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + (view.getAlign() === "center" ? view.getWidth() / 2 : 5))), Bridge.Int.trunc((view.getY() + offsetY + view.getHeight() / 2)));
             this.context.fillStyle = "#000000";
         },
         draw$4: function (view, offsetX, offsetY) {

@@ -10,6 +10,7 @@ namespace ThreeOneSevenBee.Model.UI
         public string FontColor { get; set; }
         public string Font { get; set; }
         public double FontSize { get; set; }
+        public string Align { get; set; }
 
         public LabelView(string text) : base(0, 0, 10, 10)
         {
@@ -17,6 +18,7 @@ namespace ThreeOneSevenBee.Model.UI
             FontColor = "#000000";
             Font = "Cambria Math";
             FontSize = Height;
+            Align = "center";
         }
 
         public override View Scale(double factor)

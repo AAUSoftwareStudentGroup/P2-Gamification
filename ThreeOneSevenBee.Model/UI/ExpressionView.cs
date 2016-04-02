@@ -14,12 +14,12 @@ namespace ThreeOneSevenBee.Model.UI
     public class ExpressionView : FrameView
     {
         public static double NUMVAR_SIZE = 20;
-        public static View Build(ExpressionBase expression, ExpressionModel model)
+        public View BuildView(ExpressionBase expression, ExpressionModel model)
         {
             UnaryMinusExpression minusExpression = expression as UnaryMinusExpression;
             if(minusExpression != null)
             {
-                View view = Build(minusExpression.Expression, model);
+                View view = BuildView(minusExpression.Expression, model);
                 View operatorView = new OperatorView(minusExpression.Type);
                 operatorView.Width = NUMVAR_SIZE;
                 operatorView.Height = NUMVAR_SIZE;
@@ -35,8 +35,8 @@ namespace ThreeOneSevenBee.Model.UI
             BinaryOperatorExpression operatorExpression = expression as BinaryOperatorExpression;
             if (operatorExpression != null)
             {
-                View left = Build(operatorExpression.Left, model);
-                View right = Build(operatorExpression.Right, model);
+                View left = BuildView(operatorExpression.Left, model);
+                View right = BuildView(operatorExpression.Right, model);
                 View operatorView = new OperatorView(operatorExpression.Type);
                 switch (operatorExpression.Type)
                 {
@@ -110,7 +110,7 @@ namespace ThreeOneSevenBee.Model.UI
                         views.Add(operatorView);
                         offsetX += operatorView.Width;
                     }
-                    View operand = Build(expr, model);
+                    View operand = BuildView(expr, model);
                     maxBaseline = System.Math.Max(maxBaseline, operand.Baseline);
                     operand.X = offsetX;
                     offsetX += operand.Width;
@@ -126,7 +126,7 @@ namespace ThreeOneSevenBee.Model.UI
             DelimiterExpression delimiterExpression = expression as DelimiterExpression;
             if(delimiterExpression != null)
             {
-                View view = Build(delimiterExpression.Expression, model);
+                View view = BuildView(delimiterExpression.Expression, model);
                 view.X = view.Height / 4;
                 view.Y = NUMVAR_SIZE / 8;
                 View compositeView = new CompositeView(view.Width + view.Height / 2, view.Height + NUMVAR_SIZE / 4)
@@ -141,7 +141,7 @@ namespace ThreeOneSevenBee.Model.UI
             FunctionExpression functionExpression = expression as FunctionExpression;
             if(functionExpression != null && functionExpression.Function == "sqrt")
             {
-                View view = Build(functionExpression.Expression, model);
+                View view = BuildView(functionExpression.Expression, model);
                 SqrtView sqrtView = new SqrtView();
                 sqrtView.SignWidth = view.Height / 2;
                 sqrtView.TopHeight = NUMVAR_SIZE / 2;
@@ -168,16 +168,33 @@ namespace ThreeOneSevenBee.Model.UI
 
         }
 
+        public void Build(ExpressionModel model)
+        {
+            if (model != null)
+            {
+                setContent(BuildView(model.Expression, model));
+            }
+        }
+
         public void Update(ExpressionModel model)
         {
-            setContent(Build(model.Expression, model));
+            Build(model);
             if (OnChanged != null)
             {
                 OnChanged();
             }
         }
 
-        public ExpressionView(ExpressionModel model, double width, double height) : base(width, height, Build(model.Expression, model), 4)
+        public ExpressionView() : this(0, 0)
         { }
+
+        public ExpressionView(double width, double height) : this(null, width, height, 0)
+        { }
+
+        public ExpressionView(ExpressionModel model, double width, double height, double maxScale) : base(width, height)
+        {
+            MaxScale = maxScale;
+            Build(model);
+        }
     }
 }
