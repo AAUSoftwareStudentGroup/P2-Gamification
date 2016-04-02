@@ -11,7 +11,7 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class IdentityMenuView : CompositeView
     {
-        public List<View> Build(List<Identity> identities, ExpressionModel model)
+        public void Update(List<Identity> identities, ExpressionModel model)
         {
             List<View> views = new List<View>();
             double x = 0;
@@ -28,12 +28,12 @@ namespace ThreeOneSevenBee.Model.UI
                 frameView.OnClick = () => model.ApplyIdentity(identities[indexCopy].Result);
                 views.Add(frameView);
             }
-            return views;
+            Children = views;
         }
 
         public IdentityMenuView(ExpressionModel model, double width, double height) : base(width, height)
         {
-            Children = Build(model.Identities, model);
+            Update(model.Identities, model);
         }
 
         public override void Click(double x, double y)

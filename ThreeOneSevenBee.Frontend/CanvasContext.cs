@@ -131,9 +131,12 @@ namespace ThreeOneSevenBee.Frontend
             Draw(view as View, offsetX, offsetY);
             ImageElement img = new ImageElement();
             img.Src = "img/" + view.Image;
-            context.FillStyle = "transparent";
-            context.DrawImage(img, view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
-            context.FillStyle = "#000000";
+            img.OnLoad = (e) =>
+            {
+                context.FillStyle = "transparent";
+                context.DrawImage(img, view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
+                context.FillStyle = "#000000";
+            };
         }
 
         public override void Draw(PolygonView view, double offsetX, double offsetY)
