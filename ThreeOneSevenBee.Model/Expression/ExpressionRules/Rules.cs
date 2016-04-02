@@ -133,7 +133,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         }
                     }
                 }
-                if(variadicExpression.Count == selection.Count)
+                if (variadicExpression.Count == selection.Count)
                 {
                     return new Identity(new NumericExpression(sum), new NumericExpression(sum));
                 }
@@ -294,6 +294,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 baseSelection = selection[0];
                 firstSelection = selection[0].Parent as BinaryExpression;
                 secondSelection = selection[1].Parent as BinaryExpression;
+                VariadicOperatorExpression numbers;
                 if (firstSelection != null && secondSelection != null)
                 {
                     List<ExpressionBase> numeratorList = new List<ExpressionBase>();
@@ -304,7 +305,18 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                             BinaryExpression parent = selected.Parent as BinaryExpression;
                             if (parent != null && parent.Type == OperatorType.Power)
                             {
-                                numeratorList.Add(parent.Right.Clone());
+                                if (parent.Right is NumericExpression)
+                                {
+                                    numeratorList.Add(parent.Right.Clone());
+                                }
+                                else if (parent.Right is VariadicOperatorExpression)
+                                {
+                                    numbers = (VariadicOperatorExpression)parent.Right.Clone();
+                                    for (int i = 0; i < numbers.Count; i++)
+                                    {
+                                        numeratorList.Add(numbers[i]);
+                                    }
+                                }
                             }
                         }
                         else
@@ -312,7 +324,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                             return null;
                         }
                     }
-                    VariadicOperatorExpression suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, firstSelection.Right.Clone(), secondSelection.Right.Clone());
+                    VariadicOperatorExpression suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, numeratorList[0], numeratorList[1]);
                     foreach (var i in numeratorList.Skip(2))
                     {
                         suggestionNumerator.Add(i);

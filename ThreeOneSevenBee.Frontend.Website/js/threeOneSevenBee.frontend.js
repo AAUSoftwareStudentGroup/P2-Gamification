@@ -134,7 +134,7 @@
             img.src = "img/" + view.getImage();
             img.onload = Bridge.fn.bind(this, function (e) {
                 this.context.fillStyle = "transparent";
-            this.context.drawImage(img, view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
+                this.context.drawImage(img, view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
                 this.context.fillStyle = "#000000";
             });
         },
