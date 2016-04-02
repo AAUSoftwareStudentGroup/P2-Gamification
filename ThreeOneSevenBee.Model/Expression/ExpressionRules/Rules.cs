@@ -209,7 +209,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
             return null;
         }
-                    
+
         public static Identity ReverseVariableWithNegativeExponent(ExpressionBase expression, List<ExpressionBase> selection)
         {
             BinaryOperatorExpression binaryexpression = expression as BinaryOperatorExpression;
@@ -239,41 +239,41 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
             if (variadicExpression != null && variadicExpression.Type == OperatorType.Add)
             {
-                    //Makes a variable for the two first fractions, since it is needed to make a VariadicOperatorExpression later on (it has to take at least two elements).
-                    BinaryOperatorExpression firstFraction = selection[0] as BinaryOperatorExpression;
-                    BinaryOperatorExpression secondFraction = selection[1] as BinaryOperatorExpression;
+                //Makes a variable for the two first fractions, since it is needed to make a VariadicOperatorExpression later on (it has to take at least two elements).
+                BinaryOperatorExpression firstFraction = selection[0] as BinaryOperatorExpression;
+                BinaryOperatorExpression secondFraction = selection[1] as BinaryOperatorExpression;
 
-                    if (firstFraction != null && secondFraction != null && firstFraction.Type == OperatorType.Divide && secondFraction.Type == OperatorType.Divide)
+                if (firstFraction != null && secondFraction != null && firstFraction.Type == OperatorType.Divide && secondFraction.Type == OperatorType.Divide)
+                {
+                    List<ExpressionBase> numeratorList = new List<ExpressionBase>();
+                    numeratorList.Add(firstFraction.Left.Clone());
+                    numeratorList.Add(secondFraction.Left.Clone());
+
+                    foreach (ExpressionBase selected in selection.Skip(2))
                     {
-                        List<ExpressionBase> numeratorList = new List<ExpressionBase>();
-                        numeratorList.Add(firstFraction.Left.Clone());
-                        numeratorList.Add(secondFraction.Left.Clone());
-
-                        foreach (ExpressionBase selected in selection.Skip(2))
+                        BinaryOperatorExpression fraction = selected as BinaryOperatorExpression;
+                        if (fraction != null && ReferenceEquals(fraction.Parent, variadicExpression) && fraction.Right == firstFraction.Right)
                         {
-                            BinaryOperatorExpression fraction = selected as BinaryOperatorExpression;
-                            if (fraction != null && ReferenceEquals(fraction.Parent, variadicExpression) && fraction.Right == firstFraction.Right)
-                            {
-                                numeratorList.Add(fraction.Left.Clone());
-                            }
-                            else
-                            {
-                                return null;    
-                            }
+                            numeratorList.Add(fraction.Left.Clone());
                         }
+                        else
+                        {
+                            return null;
+                        }
+                    }
 
                     VariadicOperatorExpression suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, firstFraction.Left.Clone(), secondFraction.Left.Clone());
-                        foreach (var i in numeratorList.Skip(2))
-                        {
-                            suggestionNumerator.Add(i);
-                        }
-                        BinaryOperatorExpression suggestion = new BinaryOperatorExpression(suggestionNumerator, firstFraction.Right.Clone(), OperatorType.Divide);
+                    foreach (var i in numeratorList.Skip(2))
+                    {
+                        suggestionNumerator.Add(i);
+                    }
+                    BinaryOperatorExpression suggestion = new BinaryOperatorExpression(suggestionNumerator, firstFraction.Right.Clone(), OperatorType.Divide);
                     //SHOULD NOT BE SUGGESTION,SUGGESTION, BUT SUGGESTION,RESULT, THIS IS FIXED WHEN THE CORRECT FUNCTION IS IMPLEMENTED!!!!!
                     return new Identity(suggestion, suggestion);
                 }
-                }
-                return null;
             }
+            return null;
+        }
 
 
         public static Identity ExponentProduct(ExpressionBase expression, List<ExpressionBase> selection)
@@ -296,11 +296,11 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     foreach (var selected in selection)
                     {
                         if (baseSelection == selected)
-                        {   
+                        {
                             BinaryExpression parent = selected.Parent as BinaryExpression;
                             if (parent != null && parent.Type == OperatorType.Power)
                             {
-                                numeratorList.Add(parent.Right);
+                                numeratorList.Add(parent.Right.Clone());
                             }
                         }
                         else
@@ -314,7 +314,33 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         suggestionNumerator.Add(i);
                     }
                     BinaryOperatorExpression suggestion = new BinaryOperatorExpression(baseSelection.Clone(), suggestionNumerator, OperatorType.Power);
-                    return new Identity(suggestion, suggestion);
+                    if (variadicexpression.Count == selection.Count)
+                    {
+                        return new Identity(suggestion, suggestion);
+                    }
+                    else
+                    {
+                        List<BinaryOperatorExpression> list = new List<BinaryOperatorExpression>();
+                        BinaryOperatorExpression temp = null;
+                        for (int i = 0; i < selection.Count; i++)
+                        {
+                            temp = selection[i].Parent as BinaryOperatorExpression;
+                            if (temp != null)
+                            {
+                                list.Add(temp);
+                            }
+                        }
+                        var indexes = list.Select((s) => variadicexpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
+                        indexes.Sort();
+                        VariadicOperatorExpression result = variadicexpression.Clone() as VariadicOperatorExpression;
+
+                        for (int i = 0; i < indexes.Count; i++)
+                        {
+                            result.RemoveAt(indexes[i] - i);
+                        }
+                        result.Insert(indexes[0], suggestion);
+                        return new Identity(suggestion, result);
+                    }
                 }
             }
             return null;
@@ -350,7 +376,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                             selectedNumerators.Add(selected.Clone());
                         }
 
-                        }
+                    }
 
                     if (selectedNumerators.Count < 2)
                     {
@@ -358,7 +384,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
 
                         //VariadicOperatorExpression result = new VariadicOperatorExpression(OperatorType.Add, newFraction, something);
-                        
+
                         return new Identity(newFraction, newFraction);
                     }
                     else if (selectedNumerators.Count >= 2)
@@ -373,13 +399,13 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         //Is missing result instead of two times suggestion! The above is missing the same!
                         return new Identity(newFraction, newFraction);
                     }
-                    }
                 }
-                    return null;
-                }
+            }
+            return null;
+        }
 
 
         // a^n * a^p = a^n+p
-        
+
     }
 }

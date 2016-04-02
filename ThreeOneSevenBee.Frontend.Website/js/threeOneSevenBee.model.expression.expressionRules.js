@@ -255,7 +255,7 @@
                             if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(baseSelection, selected)) {
                                 var parent = Bridge.as(selected.getParent(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryExpression);
                                 if (Bridge.hasValue(parent) && parent.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
-                                    numeratorList.add(parent.getRight());
+                                    numeratorList.add(parent.getRight().clone());
                                 }
                             }
                             else  {
@@ -269,7 +269,30 @@
                             suggestionNumerator.add(i);
                         }
                         var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(baseSelection.clone(), suggestionNumerator, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
-                        return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
+                        if (variadicexpression.getCount() === selection.getCount()) {
+                            return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
+                        }
+                        else  {
+                            var list = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression)();
+                            var temp = null;
+                            for (var i1 = 0; i1 < selection.getCount(); i1++) {
+                                temp = Bridge.as(selection.getItem(i1).getParent(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                                if (Bridge.hasValue(temp)) {
+                                    list.add(temp);
+                                }
+                            }
+                            var indexes = Bridge.Linq.Enumerable.from(list).select(function (s) {
+                                return variadicexpression.indexOfReference(s);
+                            }).where($_.ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules.f4).toList(Bridge.Int);
+                            indexes.sort();
+                            var result = Bridge.as(variadicexpression.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+    
+                            for (var i2 = 0; i2 < indexes.getCount(); i2++) {
+                                result.removeAt(indexes.getItem(i2) - i2);
+                            }
+                            result.insert(indexes.getItem(0), suggestion);
+                            return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, result);
+                        }
                     }
                 }
                 return null;
@@ -339,6 +362,9 @@
         },
         f3: function (a, b) {
             return a + b;
+        },
+        f4: function (i2) {
+            return i2 !== -1;
         }
     });
     
