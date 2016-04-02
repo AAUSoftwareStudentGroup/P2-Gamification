@@ -43,7 +43,7 @@ namespace ThreeOneSevenBee.Model.UI
                 FontSize = 25
             };
 
-            progressbar = new ProgressbarStarView(game.Progress, Width - 220, 30)
+            progressbar = new ProgressbarStarView(game.ProgressBar, Width - 220, 30)
             {
                 X = 110,
                 Y = 10
@@ -77,9 +77,10 @@ namespace ThreeOneSevenBee.Model.UI
 
         public void Update(GameModel game)
         {
-            progressbar.Update(game.Progress);
+            progressbar.Update(game.ProgressBar);
             identityMenu.Update(game.ExprModel.Identities, game.ExprModel);
             expression.Update(game.ExprModel);
+            nextButton.BackgroundColor = game.LevelCompleted ? "#16A086" : "#BEC3C7";
 
             if (OnChanged != null)
             {

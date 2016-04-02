@@ -1,4 +1,7 @@
 ﻿using System;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,13 +19,13 @@ namespace ThreeOneSevenBee.Model.Game
         public ExpressionBase StartExpression { get; private set; }
         public List<ExpressionBase> StarExpressions { get; private set; }
         public Action<GameModel> OnChanged;
-        public ProgressbarStar Progress;
+        public ProgressbarStar ProgressBar;
 
         public bool LevelCompleted
         {
             get
             {
-                return Progress.GetStars() > 0;
+                return ProgressBar.Percentage >= ProgressBar.First();
             }
         }
 
@@ -47,14 +50,17 @@ namespace ThreeOneSevenBee.Model.Game
             User.CurrentLevel = level;
             User.CurrentCategory = category;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            Progress = new ProgressbarStar(serializer.Deserialize(User.Categories[category].Levels[level].StarExpressions.Last()).Size, serializer.Deserialize(User.Categories[category].Levels[level].StartExpression).Size);
+            int endValue = serializer.Deserialize(User.Categories[category].Levels[level].StarExpressions.Last()).Size;
+            int currentValue = serializer.Deserialize(User.Categories[category].Levels[level].StartExpression).Size;
+            ProgressBar = new ProgressbarStar(currentValue, 0, currentValue);
+            Console.WriteLine(ProgressBar);
             StarExpressions = new List<ExpressionBase>();
 
             foreach (string starExpression in User.Categories[User.CurrentCategory].Levels[User.CurrentLevel].StarExpressions)
             {
                 ExpressionBase starExpressionBase = serializer.Deserialize(starExpression);
                 StarExpressions.Add(starExpressionBase);
-                Progress.Add(starExpressionBase.Size);
+                ProgressBar.Add(starExpressionBase.Size);
             }
 
             ExprModel = new ExpressionModel(User.Categories[category].Levels[level].CurrentExpression, (m) => onExpressionChanged(m), 
@@ -66,7 +72,7 @@ namespace ThreeOneSevenBee.Model.Game
 
         private void onExpressionChanged(ExpressionModel model)
         {
-            Progress.Progress = model.Expression.Size;
+            ProgressBar.CurrentValue = model.Expression.Size;
             if (OnChanged != null)
             {
                 OnChanged(this);
@@ -77,7 +83,7 @@ namespace ThreeOneSevenBee.Model.Game
         {
             if (GameCompleted)
             {
-
+                
             }
             else if (CategoryCompleted)
             {
@@ -88,6 +94,10 @@ namespace ThreeOneSevenBee.Model.Game
             else if (LevelCompleted)
             {
                 User.CurrentLevel++;
+            }
+            else
+            {
+                return;
             }
             SetLevel(User.CurrentLevel, User.CurrentCategory);
         }
