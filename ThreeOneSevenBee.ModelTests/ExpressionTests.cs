@@ -152,6 +152,11 @@ namespace ThreeOneSevenBee.ModelTests
             return new BinaryOperatorExpression(left, right, OperatorType.Subtract);
         }
 
+        private ExpressionBase Sqrt(ExpressionBase expression)
+        {
+            return new FunctionExpression(expression, "sqrt");
+        }
+
         [TestMethod]
         public void ExpressionEquals()
         {
@@ -194,6 +199,9 @@ namespace ThreeOneSevenBee.ModelTests
             Assert.IsTrue(Multiply(New("a"), Multiply(New("b"), Multiply(New("c"), New("d")))) == Multiply(New("a"), Multiply(New("b"), Multiply(New("d"), New("c")))), "a*(b*(c*d)) == a*(b*(d*c))");
             Assert.IsFalse(Multiply(New("a"), Multiply(New("b"), Multiply(New("c"), New("d")))) == Multiply(New("a"), New("b"), New("c"), New("d")), "a*(b*(c*d)) != a*b*c*d");
             Assert.IsTrue(Multiply(New(ConstantType.Pi), New(1)) == Multiply(New(1), New(ConstantType.Pi)), "pi*1 == 1*pi");
+
+            // function
+            Assert.IsTrue(Sqrt(New("a")) == Sqrt(New("a")));
         }
     }
 }
