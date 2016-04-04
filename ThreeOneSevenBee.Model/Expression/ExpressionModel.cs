@@ -32,6 +32,8 @@ namespace ThreeOneSevenBee.Model.Expression
             callOnChanged();
         }
 
+        public ExpressionModel(string expression, params ExpressionRule[] rules) : this(expression, null, rules) { }
+
         public ExpressionBase Expression
         {
             get { return expression; }
