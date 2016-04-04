@@ -305,7 +305,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     return null;
                 }
 
-                if (!selection.All((s) => s.Parent is BinaryOperatorExpression && ReferenceEquals((s.Parent as BinaryOperatorExpression).Left, s)))
+                if (!selection.All((s) => s.Parent is BinaryOperatorExpression && ReferenceEquals((s.Parent as BinaryOperatorExpression).Left, s) || s.Parent is VariadicOperatorExpression))
                 {
                     return null;
                 }
