@@ -230,7 +230,6 @@
                             suggestionNumerator.add(i);
                         }
                         var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(suggestionNumerator, firstFraction.getRight().clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
-                        //SHOULD NOT BE SUGGESTION,SUGGESTION, BUT SUGGESTION,RESULT, THIS IS FIXED WHEN THE CORRECT FUNCTION IS IMPLEMENTED!!!!!
                         return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
                     }
                 }
@@ -360,43 +359,6 @@
                         }
                     }
                 }
-                return null;
-            },
-            splittingFractions: function (expression, selection) {
-                if (selection.getCount() !== 1) {
-                    return null;
-                }
-                var binaryExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
-                if (Bridge.hasValue(binaryExpression) && binaryExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
-                    var numeratorType = Bridge.as(binaryExpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
-                    if (Bridge.hasValue(numeratorType) && numeratorType.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
-                        if (numeratorType.getCount() < 2) {
-                            return null;
-                        }
-                        var divisionlist = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression)();
-                        for (var i = 2; i < numeratorType.getCount(); i++) {
-                            divisionlist.add(Bridge.as(Bridge.Linq.Enumerable.from(numeratorType).elementAt(i).clone(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression));
-                        }
-    
-                        var resultExpression = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, numeratorType.getItem(0).clone(), numeratorType.getItem(1).clone(), [divisionlist.toArray()]);
-                        return new ThreeOneSevenBee.Model.Expression.Identity(resultExpression, resultExpression);
-                    }
-                }
-                return null;
-            },
-            twoFractionsMultiplied: function (expression, selection) {
-                if (selection.getCount() < 2) {
-                    return null;
-                }
-    
-    
-    
-    
-    
-    
-    
-    
-    
                 return null;
             }
         }
