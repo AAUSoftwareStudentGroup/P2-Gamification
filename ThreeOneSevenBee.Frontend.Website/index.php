@@ -15,13 +15,12 @@ if(preg_match("/\..+$/", $requestURI)) {
 }
 // split request uri into parts
 preg_match("/^\/([^?]*)\??(.*?)$/", $requestURI, $elm);
-if(strlen($elm[1]) == 0) {
-    $elm[1] = "forside";
-}
-
-
 if(strlen($elm[0]) <= 1) {
     $elm[1] = "game";
+}
+else if($elm[1][0] == '!') {
+    $classKey = substr($elm[1], 1);
+    $elm[1] = "usercreate";
 }
 
 $db = new DB();

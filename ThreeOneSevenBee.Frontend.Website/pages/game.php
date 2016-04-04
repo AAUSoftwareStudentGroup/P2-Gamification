@@ -17,6 +17,6 @@ $_scripts[] = "js/threeOneSevenBee.model.polygon.js";
 <? require('header.php'); ?>
 
     <canvas id="canvas" width="600" height="400"></canvas>
-    <a href="#" onclick="$.get('/api?action=userlogout').done(function() {location ='/'});">Log ud</a>
+    <a href="#" onclick="$.get('/api?action=user_logout').done(function() {location ='/'});">Log ud</a>
 
 <? require('footer.php'); ?>
