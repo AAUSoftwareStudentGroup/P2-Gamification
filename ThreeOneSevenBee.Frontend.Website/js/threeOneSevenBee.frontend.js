@@ -45,6 +45,7 @@
             ThreeOneSevenBee.Model.UI.Context.prototype.$constructor.call(this, canvas.width, canvas.height);
     
             this.imageCache = new Bridge.Dictionary$2(String,HTMLImageElement)();
+            this.imageCacheIsReady = new Bridge.Dictionary$2(String,Boolean)();
     
             this.context = canvas.getContext("2d");
             this.context.fillStyle = "#000000";
