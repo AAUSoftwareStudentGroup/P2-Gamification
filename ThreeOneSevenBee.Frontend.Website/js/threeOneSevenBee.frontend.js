@@ -26,9 +26,12 @@
     
     Bridge.define('ThreeOneSevenBee.Frontend.CanvasContext', {
         inherits: [ThreeOneSevenBee.Model.UI.Context],
+        imageCache: null,
         context: null,
         constructor: function (canvas) {
             ThreeOneSevenBee.Model.UI.Context.prototype.$constructor.call(this, canvas.width, canvas.height);
+    
+            this.imageCache = new Bridge.Dictionary$2(String,HTMLImageElement)();
     
             this.context = canvas.getContext("2d");
             this.context.fillStyle = "#000000";
@@ -130,13 +133,21 @@
         },
         draw$2: function (view, offsetX, offsetY) {
             this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
-            var img = new Image();
-            img.src = "img/" + view.getImage();
-            img.onload = Bridge.fn.bind(this, function (e) {
+    
+            if (this.imageCache.containsKey(view.getImage())) {
                 this.context.fillStyle = "transparent";
-                this.context.drawImage(img, view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
+                this.context.drawImage(this.imageCache.get(view.getImage()), view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
                 this.context.fillStyle = "#000000";
-            });
+            }
+            else  {
+                this.imageCache.set(view.getImage(), new Image());
+                this.imageCache.get(view.getImage()).src = "img/" + view.getImage();
+                this.imageCache.get(view.getImage()).onload = Bridge.fn.bind(this, function (e) {
+                    this.context.fillStyle = "transparent";
+                    this.context.drawImage(this.imageCache.get(view.getImage()), view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
+                    this.context.fillStyle = "#000000";
+                });
+            }
         },
         draw$6: function (view, offsetX, offsetY) {
             this.context.fillStyle = view.fillStyle;
