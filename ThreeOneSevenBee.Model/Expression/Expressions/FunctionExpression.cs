@@ -6,7 +6,7 @@ using Bridge.Html5;
 
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
-    class FunctionExpression : ExpressionBase
+    public class FunctionExpression : ExpressionBase
     {
         private static Dictionary<string, Func<double, double>> functions = new Dictionary<string, Func<double, double>>()
         {
@@ -91,12 +91,12 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 yield return node;
         }
 
-		public override string TreePrint(string indent, bool isLast)
-		{
-			Console.WriteLine (indent + "|-" + Function);
+        public override string TreePrint(string indent, bool isLast)
+        {
+            Console.WriteLine(indent + "|-" + Function);
             indent += (isLast ? "  " : "| ");
-            this.Expression.TreePrint (indent, true);
-			return indent;
-		}
+            this.Expression.TreePrint(indent, true);
+            return indent;
+        }
     }
 }
