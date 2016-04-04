@@ -57,7 +57,6 @@
             var endValue = serializer.deserialize(Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(category).levels.getItem(level).starExpressions).last()).getSize();
             var currentValue = serializer.deserialize(this.getUser().categories.getItem(category).levels.getItem(level).startExpression).getSize();
             this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(currentValue, endValue, currentValue);
-            console.log(this.progressBar);
             this.setStarExpressions(new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)());
     
             $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategory).levels.getItem(this.getUser().currentLevel).starExpressions);
@@ -74,7 +73,6 @@
         },
         onExpressionChanged: function (model) {
             this.progressBar.currentValue = model.getExpression().getSize();
-            console.log(model.getExpression());
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged(this);
             }
@@ -120,9 +118,13 @@
         startExpression: null,
         starExpressions: null,
         currentExpression: null,
-        constructor: function (startExpression, currentExpression, starExpressions) {
+        levelIndex: 0,
+        categoryIndex: 0,
+        constructor: function (levelIndex, categoryIndex, startExpression, currentExpression, starExpressions) {
             var $t;
             if (starExpressions === void 0) { starExpressions = []; }
+            this.levelIndex = levelIndex;
+            this.categoryIndex = categoryIndex;
             this.startExpression = startExpression;
             this.currentExpression = currentExpression;
             this.starExpressions = new Bridge.List$1(String)();
@@ -230,10 +232,22 @@
             this.currentPlayer.categories = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)(), [
                 [Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("Numbers"), {
                     levels: Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.Level)(), [
-                        [new ThreeOneSevenBee.Model.Game.Level("a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
-                        [new ThreeOneSevenBee.Model.Game.Level("4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
-                        [new ThreeOneSevenBee.Model.Game.Level("4+5*5", "4+10*5", ["4+50", "54"])],
-                        [new ThreeOneSevenBee.Model.Game.Level("{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])]
+                        [new ThreeOneSevenBee.Model.Game.Level(0, 0, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
+                        [new ThreeOneSevenBee.Model.Game.Level(1, 0, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
+                        [new ThreeOneSevenBee.Model.Game.Level(2, 0, "4+5*5", "4+10*5", ["4+50", "54"])],
+                        [new ThreeOneSevenBee.Model.Game.Level(3, 0, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])]
+                    ] )
+                } )],
+                [Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("Variables"), {
+                    levels: Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.Level)(), [
+                        [new ThreeOneSevenBee.Model.Game.Level(0, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
+                        [new ThreeOneSevenBee.Model.Game.Level(1, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
+                        [new ThreeOneSevenBee.Model.Game.Level(2, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
+                        [new ThreeOneSevenBee.Model.Game.Level(3, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                        [new ThreeOneSevenBee.Model.Game.Level(4, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
+                        [new ThreeOneSevenBee.Model.Game.Level(5, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
+                        [new ThreeOneSevenBee.Model.Game.Level(6, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
+                        [new ThreeOneSevenBee.Model.Game.Level(7, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])]
                     ] )
                 } )]
             ] );

@@ -30,10 +30,23 @@ namespace ThreeOneSevenBee.Model.Game
                 new LevelCategory("Numbers") {
                     Levels = new List<Level>()
                         {
-                            new Level("a^2*a*a*a*a*a", "a^2*a*a*a^3", "a^2*a^5", "a^7"),
-                            new Level("4+5*5", "4+5*5", "4+5^2", "4+25", "29"),
-                            new Level("4+5*5", "4+10*5", "4+50", "54"),
-                            new Level("{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", "{a+b+c+d}/c"),
+                            new Level(0, 0, "a^2*a*a*a*a*a", "a^2*a*a*a^3", "a^2*a^5", "a^7"),
+                            new Level(1, 0, "4+5*5", "4+5*5", "4+5^2", "4+25", "29"),
+                            new Level(2, 0, "4+5*5", "4+10*5", "4+50", "54"),
+                            new Level(3, 0, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", "{a+b+c+d}/c"),
+                        }
+                },
+                new LevelCategory("Variables") {
+                    Levels = new List<Level>()
+                        {
+                            new Level(0, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", "a^2*a^5", "a^7"),
+                            new Level(1, 1, "4+5*5", "4+5*5", "4+5^2", "4+25", "29"),
+                            new Level(2, 1, "4+5*5", "4+10*5", "4+50", "54"),
+                            new Level(3, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", "{a+b+c+d}/c"),
+                            new Level(4, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", "a^2*a^5", "a^7"),
+                            new Level(5, 1, "4+5*5", "4+5*5", "4+5^2", "4+25", "29"),
+                            new Level(6, 1, "4+5*5", "4+10*5", "4+50", "54"),
+                            new Level(7, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", "{a+b+c+d}/c"),
                         }
                 }
             };
