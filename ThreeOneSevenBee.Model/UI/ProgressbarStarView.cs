@@ -9,18 +9,46 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class ProgressbarStarView : CompositeView
     {
+        View progress;
+        List<ImageView> stars;
+
+        public void Build(ProgressbarStar progressbar)
+        {
+            progress = new View(0, 0, Width * progressbar.Percentage, Height) { BackgroundColor = "#27AE61" };
+            stars = new List<ImageView>();
+            stars.AddRange(progressbar.ActivatedStarPercentages().Select(
+                (starPercentage) =>
+                {
+                    return new ImageView("star_activated.png", Height, Height)
+                    {
+                        X = (double)starPercentage * Width - Height
+                    };
+                }
+                ));
+            stars.AddRange(progressbar.DeactivatedStarPercentages().Select(
+                (starPercentage) =>
+                {
+                    return new ImageView("star.png", Height, Height)
+                    {
+                        X = (double)starPercentage * Width - Height
+                    };
+                }
+                ));
+            Children = new List<View>();
+            Children.Add(progress);
+            Children.AddRange(stars);
+        }
+
+        public void Update(ProgressbarStar progressbar)
+        {
+            Build(progressbar);
+        }
+
         public ProgressbarStarView(ProgressbarStar progressbar, double width, double height) : base(width, height)
         {
             PropagateClick = false;
             BackgroundColor = "#E2E2E2";
-            Children = new List<View>()
-            {
-                new View(0, 0, Width * progressbar.Percentage, height) { BackgroundColor = "#2A9300" }
-            };
-            foreach (int star in progressbar.Stars)
-            {
-                Children.Add(new ImageView(star < progressbar.Progress ? "star_activated.png" : "star.png", 3*height, 3*height) { Y=-height, X = (double)star / progressbar.MaxProgress * Width - Height / 2, BackgroundColor = "#000000" });
-            }
+            Build(progressbar);
         }
     }
 }

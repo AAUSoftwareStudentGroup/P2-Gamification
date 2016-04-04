@@ -10,6 +10,9 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class FrameView : View
     {
+        public FrameView(double width, double height) : this(width, height, new View(0,0,0,0), true, 0)
+        { }
+
         public FrameView(double width, double height, View content) :
             this(width, height, content, true, height / content.Height)
         { }
@@ -38,7 +41,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public double MaxScale;
 
-        public void setContent(View content)
+        public virtual void setContent(View content)
         {
             Content = Align(Fit(content));
         }
@@ -75,7 +78,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public View Fit(View view)
         {
-            return view.Scale(System.Math.Min(InnerWidth / view.Width, Math.Min(InnerHeight / view.Height, MaxScale)));
+            return view.Scale(System.Math.Min(InnerWidth / view.Width, Math.Min(InnerHeight / view.Height, MaxScale == 0 ? Double.MaxValue : MaxScale)));
         }
     }
 }

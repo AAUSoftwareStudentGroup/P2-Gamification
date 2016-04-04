@@ -9,6 +9,9 @@ namespace ThreeOneSevenBee.Model.Game
     {
         public CurrentPlayer(string player) : base(player){ }
 
+        public int CurrentCategory;
+        public int CurrentLevel;
+
         public List<LevelCategory> Categories = new List<LevelCategory>();
     }
 }

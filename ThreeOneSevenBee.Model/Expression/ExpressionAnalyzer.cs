@@ -33,7 +33,6 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public ExpressionBase GetCommonParent(List<ExpressionBase> selection)
         {
-            //Console.WriteLine(selection);
             if (selection.Count == 0)
             {
                 return null;
@@ -45,10 +44,8 @@ namespace ThreeOneSevenBee.Model.Expression
             else
             {
                 var parentPaths = new List<List<ExpressionBase>>();
-                //Console.WriteLine(selection.Count);
                 for (int index = 0; index < selection.Count; index++)
                 {
-                    //Console.WriteLine(selection[index].GetParentPath().Reverse().ToList());
                     parentPaths.Add(selection[index].GetParentPath().Reverse().ToList());
                 }
                 return GetCommonParent(parentPaths);

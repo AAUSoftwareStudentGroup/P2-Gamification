@@ -1,34 +1,32 @@
 ﻿using System;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ThreeOneSevenBee.Model.Expression;
+using ThreeOneSevenBee.Model.Expression.ExpressionRules;
 
 namespace ThreeOneSevenBee.Model.Game
 {
     public class GameModel
     {
-        public CurrentPlayer Player { get; }
+        public CurrentPlayer User { get; }
+        public IEnumerable<Player> Players { get; private set; }
         private GameAPI API;
         public ExpressionModel ExprModel { get; private set; }
         public ExpressionBase CurrentExpression { get { return ExprModel.Expression; } }
         public ExpressionBase StartExpression { get; private set; }
         public List<ExpressionBase> StarExpressions { get; private set; }
-        public event Action<GameModel> OnChanged;
-        private ProgressbarStar progress;
-
-        private int currentCategory;
-        private int currentLevel;
+        public Action<GameModel> OnChanged;
+        public ProgressbarStar ProgressBar;
 
         public bool LevelCompleted
         {
             get
             {
-                if (currentLevel == -1)
-                {
-                    return false;
-                }
-                return progress.GetStars() > 0;
+                return ProgressBar.ActivatedStarPercentages().Count() >= 1;
             }
         }
 
@@ -36,11 +34,7 @@ namespace ThreeOneSevenBee.Model.Game
         {
             get
             {
-                if (currentCategory == -1)
-                {
-                    return false;
-                }
-                return LevelCompleted && currentLevel == Player.Categories[currentCategory].Levels.Count - 1;
+                return LevelCompleted && User.CurrentLevel == User.Categories[User.CurrentCategory].Levels.Count - 1;
             }
         }
 
@@ -48,56 +42,81 @@ namespace ThreeOneSevenBee.Model.Game
         {
             get
             {
-                return CategoryCompleted && currentCategory == Player.Categories.Count - 1;
+                return CategoryCompleted && User.CurrentCategory == User.Categories.Count - 1;
             }
         }
 
         public void SetLevel(int level, int category)
         {
-            currentLevel = level;
-            currentCategory = category;
-            ExprModel = new ExpressionModel(Player.Categories[category].Levels[level].CurrentExpression, (m) => onExpressionChanged(m));
-            progress = new ProgressbarStar(ExprModel.Expression.Size, ExprModel.Expression.Size);
+            User.CurrentLevel = level;
+            User.CurrentCategory = category;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            foreach (string starExpression in Player.Categories[category].Levels[level].StarExpressions)
+            int endValue = serializer.Deserialize(User.Categories[category].Levels[level].StarExpressions.Last()).Size;
+            int currentValue = serializer.Deserialize(User.Categories[category].Levels[level].StartExpression).Size;
+            ProgressBar = new ProgressbarStar(currentValue, endValue, currentValue);
+            Console.WriteLine(ProgressBar);
+            StarExpressions = new List<ExpressionBase>();
+
+            foreach (string starExpression in User.Categories[User.CurrentCategory].Levels[User.CurrentLevel].StarExpressions)
             {
                 ExpressionBase starExpressionBase = serializer.Deserialize(starExpression);
                 StarExpressions.Add(starExpressionBase);
-                progress.Add(starExpressionBase.Size);
+                ProgressBar.Add(starExpressionBase.Size);
             }
+
+            ExprModel = new ExpressionModel(User.Categories[category].Levels[level].CurrentExpression, (m) => onExpressionChanged(m), 
+                Rules.ExponentToProductRule, Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators, 
+                Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.ExponentProduct,
+                Rules.NumericBinaryRule, Rules.NumericVariadicRule);
+
+            onExpressionChanged(ExprModel);
         }
 
         private void onExpressionChanged(ExpressionModel model)
         {
-            progress.Progress = model.Expression.Size;
-            OnChanged(this);
+            ProgressBar.CurrentValue = model.Expression.Size;
+            Console.WriteLine(model.Expression);
+            if (OnChanged != null)
+            {
+                OnChanged(this);
+            }
         }
 
         public void NextLevel()
         {
             if (GameCompleted)
             {
-
+                
             }
             else if (CategoryCompleted)
             {
-                currentCategory++;
-                currentLevel = 0;
+                User.CurrentCategory++;
+                User.CurrentLevel = 0;
 
             }
             else if (LevelCompleted)
             {
-                currentLevel++;
+                User.CurrentLevel++;
             }
+            else
+            {
+                return;
+            }
+            SetLevel(User.CurrentLevel, User.CurrentCategory);
+        }
+
+        public void Save()
+        {
+            User.Categories[User.CurrentCategory].Levels[User.CurrentLevel].CurrentExpression = CurrentExpression.ToString();
+            API.UpdateCurrentPlayer(User);
         }
 
         public GameModel(GameAPI api)
         {
             API = api;
-            Player = api.GetCurrentPlayer();
-            currentLevel = -1;
-            currentCategory = -1;
+            User = api.GetCurrentPlayer();
+            Players = api.GetPlayers();
+            SetLevel(User.CurrentLevel, User.CurrentCategory);
         }
-
     }
 }

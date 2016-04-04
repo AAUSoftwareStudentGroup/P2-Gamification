@@ -28,9 +28,11 @@ namespace ThreeOneSevenBee.Model.Expression
             {
                 analyzer.Add(rule);
             }
-            OnChanged += onChange;
+            OnChanged = onChange;
             callOnChanged();
         }
+
+        public ExpressionModel(string expression, params ExpressionRule[] rules) : this(expression, null, rules) { }
 
         public ExpressionBase Expression
         {
@@ -52,7 +54,7 @@ namespace ThreeOneSevenBee.Model.Expression
             get { return selectionParent; }
         }
 
-        public event Action<ExpressionModel> OnChanged;
+        public Action<ExpressionModel> OnChanged;
 
         private void callOnChanged()
         {
@@ -79,13 +81,6 @@ namespace ThreeOneSevenBee.Model.Expression
             int index = SelectionIndex(expression);
             if (index == -1)
             {
-
-                foreach (var descendant in expression.GetNodesRecursive())
-                {
-                    int i = SelectionIndex(descendant);
-                    if (i != -1)
-                        selection.RemoveAt(i);
-                }
                 selection.Add(expression);
             }
             else

@@ -54,7 +54,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DelimiterTest.cs" />
-    <Compile Include="ExpressionSerializer.cs" />
     <Compile Include="ExpressionSizeTests.cs" />
     <Compile Include="QueueStackandCloneTests.cs" />
     <Compile Include="ExpressionTests.cs" />

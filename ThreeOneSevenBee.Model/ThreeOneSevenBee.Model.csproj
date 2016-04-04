@@ -87,15 +87,20 @@
     <Compile Include="UI\Context.cs" />
     <Compile Include="UI\ExpressionView.cs" />
     <Compile Include="UI\FrameView.cs" />
+    <Compile Include="UI\GameView.cs" />
     <Compile Include="UI\IdentityMenuView.cs" />
     <Compile Include="UI\ImageView.cs" />
     <Compile Include="UI\LabelView.cs" />
+    <Compile Include="UI\LevelSelectView.cs" />
+    <Compile Include="UI\LevelView.cs" />
     <Compile Include="UI\OperatorView.cs" />
     <Compile Include="UI\ParenthesisView.cs" />
+    <Compile Include="UI\PlayerListView.cs" />
     <Compile Include="UI\PolygonView.cs" />
     <Compile Include="UI\ProgressbarCircle.cs" />
     <Compile Include="UI\ProgressbarStarView.cs" />
     <Compile Include="UI\SqrtView.cs" />
+    <Compile Include="UI\TitleView.cs" />
     <Compile Include="UI\View.cs" />
   </ItemGroup>
   <ItemGroup />
