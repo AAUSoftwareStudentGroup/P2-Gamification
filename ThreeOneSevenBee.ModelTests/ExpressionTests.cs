@@ -203,5 +203,14 @@ namespace ThreeOneSevenBee.ModelTests
             // function
             Assert.IsTrue(Sqrt(New("a")) == Sqrt(New("a")));
         }
+
+        [TestMethod]
+        public void ExpressionStructureTest()
+        {
+            var a = Add(New("a"), New("b"), Add(New("2"), New("2")));
+            var b = Add(New("a"), New("b"), New("2"), New("2"));
+
+            Assert.IsTrue(a == b, "a+b+(2+2) == a+b+2+2");
+        }
     }
 }
