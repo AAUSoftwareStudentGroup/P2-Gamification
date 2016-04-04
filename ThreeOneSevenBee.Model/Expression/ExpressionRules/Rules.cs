@@ -465,18 +465,63 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
+        public static Identity CommonPowerParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count < 2)
+            {
+                return null;
+            }
+            VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
+            if (variadicExpression != null && variadicExpression.Type == OperatorType.Multiply)
+            {
+                if (selection.All(s => s.Parent is BinaryOperatorExpression && (s.Parent as BinaryOperatorExpression).Type == OperatorType.Power))
+                {
+                    ExpressionBase commonPower = null;
+                    var selectionOne = selection[0].Parent as BinaryOperatorExpression;
+                    var selectionTwo = selection[1].Parent as BinaryOperatorExpression;
+                    if (ReferenceEquals(selection[0], selectionOne.Right)
+                        && ReferenceEquals(selection[1], selectionTwo.Right))
+                    {
+                        commonPower = selection[0].Clone();
+                    }
+                    else { return null; }
 
-
-
-
-
-
-
-
-
-
-
-
-
+                    VariadicOperatorExpression baselist = new VariadicOperatorExpression(OperatorType.Multiply, selectionOne.Left.Clone(), selectionTwo.Left.Clone());
+                    foreach (var item in selection.Skip(2))
+                    {
+                        BinaryOperatorExpression selectionParent = item.Parent as BinaryOperatorExpression;
+                        if (item == commonPower && ReferenceEquals(selectionParent.Right, item))
+                        {
+                            baselist.Add(selectionParent.Left.Clone());
+                        }
+                        else { return null; }
+                    }
+                    BinaryOperatorExpression suggestion = new BinaryOperatorExpression(new DelimiterExpression(baselist), commonPower, OperatorType.Power);
+                    if (variadicExpression.Count == selection.Count)
+                    {
+                        return new Identity(suggestion, suggestion);
+                    }
+                    else
+                    {
+                        var list = new List<ExpressionBase>();
+                        BinaryOperatorExpression temp = null;
+                        for (int i = 0; i < selection.Count; i++)
+                        {
+                            temp = selection[i].Parent as BinaryOperatorExpression;
+                            if (temp != null)
+                            {
+                                list.Add(temp);
+                            }
+                        }
+                        var indexes = list.Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
+                        indexes.Sort();
+                        var result = variadicExpression.Clone() as VariadicOperatorExpression;
+                        result = InsertSuggestion(indexes, result, suggestion);
+                        return new Identity(suggestion, result);
+                    }
+                }
+            }
+            return null;
+        }
     }
 }
