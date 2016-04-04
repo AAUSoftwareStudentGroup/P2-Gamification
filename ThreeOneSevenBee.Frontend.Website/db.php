@@ -5,7 +5,7 @@ class DB {
     private $password = "gamedb";
     private $dbname = "gamedb";
     private $queryResult = false;
-    public $conn = null;
+    private $conn = null;
     private $lastQuery = null;
 
     public function __construct() {
@@ -20,6 +20,10 @@ class DB {
 
     public function __destruct() {
         mysqli_close($this->conn);
+    }
+
+    public function error_msg() {
+        return $this->conn->error;
     }
 
     public function results() {
@@ -54,7 +58,7 @@ class DB {
                         $querySafeString = 'NULL';
                     }
                     else {
-                        $querySafeString = "'" . mysql_escape_string($nextParameter) . "'";
+                        $querySafeString = "'" . @mysql_escape_string($nextParameter) . "'";
                     }
 
                     $offset = $placeToInsertParameter + strlen($querySafeString);

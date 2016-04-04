@@ -54,7 +54,6 @@ namespace ThreeOneSevenBee.Model.Game
             int endValue = serializer.Deserialize(User.Categories[category].Levels[level].StarExpressions.Last()).Size;
             int currentValue = serializer.Deserialize(User.Categories[category].Levels[level].StartExpression).Size;
             ProgressBar = new ProgressbarStar(currentValue, endValue, currentValue);
-            Console.WriteLine(ProgressBar);
             StarExpressions = new List<ExpressionBase>();
 
             foreach (string starExpression in User.Categories[User.CurrentCategory].Levels[User.CurrentLevel].StarExpressions)
@@ -67,7 +66,7 @@ namespace ThreeOneSevenBee.Model.Game
             ExprModel = new ExpressionModel(User.Categories[category].Levels[level].CurrentExpression, (m) => onExpressionChanged(m), 
                 Rules.ExponentToProductRule, Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators, 
                 Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.ExponentProduct,
-                Rules.NumericBinaryRule, Rules.NumericVariadicRule, Rules.ProductParenthesis);
+                Rules.NumericBinaryRule, Rules.NumericVariadicRule, Rules.CommonPowerParenthesisRule, Rules.ProductParenthesis);
 
             onExpressionChanged(ExprModel);
         }
@@ -75,7 +74,6 @@ namespace ThreeOneSevenBee.Model.Game
         private void onExpressionChanged(ExpressionModel model)
         {
             ProgressBar.CurrentValue = model.Expression.Size;
-            Console.WriteLine(model.Expression);
             if (OnChanged != null)
             {
                 OnChanged(this);

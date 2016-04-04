@@ -13,12 +13,13 @@ namespace ThreeOneSevenBee.Model.UI
     {
         TitleView titleView;
         LevelView levelView;
+        LevelSelectView levelSelectView;
         Context context;
 
         public void Update(GameModel game)
         {
             levelView.Update(game);
-
+            levelSelectView.Update(game.User);
             context.Draw();
         }
 
@@ -43,12 +44,24 @@ namespace ThreeOneSevenBee.Model.UI
                 
             };
 
+            levelSelectView = new LevelSelectView(game.User)
+            {
+                OnChanged = () => {
+                    setContent(levelSelectView);
+                    Update(game);
+                    levelSelectView.Update(game.User);
+                },
+                OnLevelSelect = (level) =>
+                {
+                    setContent(levelView);
+                    Update(game);
+                    game.SetLevel(level.LevelIndex, level.CategoryIndex);
+                }
+            };
+
             titleView.PlayButton.OnClick = () => setContent(levelView);
 
-            titleView.LevelButton.OnClick = () =>
-            {
-                game.SetLevel(int.Parse(Console.ReadLine()) - 1, 0); setContent(levelView);
-            };
+            titleView.LevelButton.OnClick = () => setContent(levelSelectView);
 
             game.OnChanged = Update;
 
