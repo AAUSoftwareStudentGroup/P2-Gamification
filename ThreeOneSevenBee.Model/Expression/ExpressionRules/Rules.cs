@@ -457,7 +457,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         continue;
                     rest.Add(subOp);
                     if (variadicExpression != null)
-                        variadicExpression.EqualityRemove(op);
+                        variadicExpression.Remove(op);
                 }
             }
 
