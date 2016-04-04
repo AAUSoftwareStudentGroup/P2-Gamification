@@ -1,8 +1,8 @@
 <?
 function isAuthed() {
     if(!isset($_SESSION['authorized']) && $_SESSION['authorized'] != true)
-        return true;
-    return false;
+        return false;
+    return true;
 }
 
 function requireAuth() {
@@ -11,7 +11,7 @@ function requireAuth() {
 }
 
 function getRandomString($length = 6) {
-    $characters = 'abcdefghijklmnopqrstuvwxyz';
+    $characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ123456789';
     $string = '';
     for ($i = 0; $i < $length; $i++) {
         $string .= $characters[rand(0, strlen($characters) - 1)];
