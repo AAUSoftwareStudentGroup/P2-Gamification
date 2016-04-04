@@ -12,6 +12,16 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 {
     public static class Rules
     {
+        public static VariadicOperatorExpression InsertSuggestion(List<int> indexes, VariadicOperatorExpression result, ExpressionBase suggestion)
+        {
+            for (int i = 0; i < indexes.Count; i++)
+            {
+                result.RemoveAt(indexes[i] - i);
+            }
+            result.Insert(indexes[0], suggestion);
+            return result;
+        }
+
         //a*a = a^2
         public static Identity ProductToExponentRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
@@ -36,11 +46,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         var indexes = selection.Select((s) => product.IndexOfReference(s)).Where((i) => i != -1).ToList();
                         indexes.Sort();
                         VariadicOperatorExpression result = product.Clone() as VariadicOperatorExpression;
-                        for (int i = 0; i < indexes.Count; i++)
-                        {
-                            result.RemoveAt(indexes[i] - i);
-                        }
-                        result.Insert(indexes[0], suggestion);
+                        result = InsertSuggestion(indexes, result, suggestion);
                         return new Identity(suggestion, result);
                     }
                 }
@@ -140,13 +146,8 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 var indexes = selection.Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
                 indexes.Sort();
                 VariadicOperatorExpression result = variadicExpression.Clone() as VariadicOperatorExpression;
-                for (int i = 0; i < indexes.Count; i++)
-                {
-                    result.RemoveAt(indexes[i] - i);
-                }
-                result.Insert(indexes[0], new NumericExpression(sum));
+                result = InsertSuggestion(indexes, result, new NumericExpression(sum));
                 return new Identity(new NumericExpression(sum), result);
-
             }
             return null;
         }
@@ -407,11 +408,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         indexes.Sort();
                         var result = variadicExpression.Clone() as VariadicOperatorExpression;
 
-                        for (int i = 0; i < indexes.Count; i++)
-                        {
-                            result.RemoveAt(indexes[i] - i);
-                        }
-                        result.Insert(indexes[0], suggestion);
+                        result = InsertSuggestion(indexes, result, suggestion);
                         return new Identity(suggestion, result);
                     }
                 }
@@ -450,22 +447,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
-        /*
-        // a^n * a^p = a^n+p
-        public static Identity ExponentProduct(ExpressionBase expression, List<ExpressionBase> selection)
-        {
-            if (selection.Count < 2)
-                return null;
-            VariadicOperatorExpression variadicexpression = expression as VariadicOperatorExpression;
-            if (variadicexpression != null && variadicexpression.Type == OperatorType.Multiply)
-            {
-
-            }
-
-
-            return null;
-        }
-        */
         public static Identity TwoFractionsMultiplied(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count < 2)
