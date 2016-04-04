@@ -58,6 +58,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="api\Default.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="img\arrow_left.png" />
     <Content Include="img\arrow_right.png" />

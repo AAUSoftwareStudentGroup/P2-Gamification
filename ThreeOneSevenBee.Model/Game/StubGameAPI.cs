@@ -52,14 +52,14 @@ namespace ThreeOneSevenBee.Model.Game
             };
         }
 
-        public override CurrentPlayer GetCurrentPlayer()
+        public override void GetCurrentPlayer(Action<CurrentPlayer> callback)
         {
-            return currentPlayer;
+            callback(currentPlayer);
         }
 
-        public override List<Player> GetPlayers()
+        public override void GetPlayers(Action<List<Player>> callback)
         {
-            return new List<Player>() {
+            callback(new List<Player>() {
                 currentPlayer,
                 new Player("Anton"),
                 new Player("Christian"),
@@ -67,7 +67,7 @@ namespace ThreeOneSevenBee.Model.Game
                 new Player("Mathias P."),
                 new Player("Mathias I."),
                 new Player("Nikolaj")
-            };
+            });
         }
 
         public override void UpdateCurrentPlayer(CurrentPlayer currentPlayer)
