@@ -297,13 +297,19 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     powerToOneCount++;
                 }
                 if (selection[1].Parent is VariadicOperatorExpression)
-                    {
+                {
                     powerToOneCount++;
                 }
                 if (powerToOneCount == 2)
-                        {
+                {
                     return null;
                 }
+
+                if (!selection.All((s) => s.Parent is BinaryOperatorExpression && ReferenceEquals((s.Parent as BinaryOperatorExpression).Left, s)))
+                {
+                    return null;
+                }
+
                 if ((selection[0].Parent is BinaryOperatorExpression && selection[1].Parent is BinaryOperatorExpression) || powerToOneCount > 0)
                 {
                     var numeratorList = new List<ExpressionBase>();
@@ -312,7 +318,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         if (baseSelection == selection[j])
                         {
                             var parent = selection[j].Parent as BinaryOperatorExpression;
-                            //  ReferenceEquals(parent.Left, selection[j])
                             if (parent != null && parent.Type == OperatorType.Power)
                             {
                                 if (parent.Right is NumericExpression)
@@ -324,13 +329,13 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                                     var numbers = (VariadicOperatorExpression)parent.Right.Clone();
                                     if (numbers.Type == OperatorType.Add)
                                     {
-                                    for (int i = 0; i < numbers.Count; i++)
-                                    {
-                                        numeratorList.Add(numbers[i]);
+                                        for (int i = 0; i < numbers.Count; i++)
+                                        {
+                                            numeratorList.Add(numbers[i]);
+                                        }
                                     }
                                 }
                             }
-                        }
                             else if (selection[j].Parent is VariadicOperatorExpression)
                             {
                                 variableIsPowerToOne.Add(new NumericExpression(1));
@@ -347,9 +352,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     {
                         suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, numeratorList[0], numeratorList[1]);
 
-                    foreach (var i in numeratorList.Skip(2))
-                    {
-                        suggestionNumerator.Add(i);
+                        foreach (var i in numeratorList.Skip(2))
+                        {
+                            suggestionNumerator.Add(i);
                         }
 
                         foreach (var i in variableIsPowerToOne)
@@ -368,7 +373,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         foreach (var i in variableIsPowerToOne.Skip(1))
                         {
                             suggestionNumerator.Add(i);
-                    }
+                        }
                     }
                     if (variableIsPowerToOne.Count == selection.Count)
                     {
@@ -501,6 +506,11 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     }
                     else { return null; }
 
+                    if (!selection.All((e) => e == commonPower))
+                    {
+                        return null;
+                    }
+
                     VariadicOperatorExpression baselist = new VariadicOperatorExpression(OperatorType.Multiply, selectionOne.Left.Clone(), selectionTwo.Left.Clone());
                     foreach (var item in selection.Skip(2))
                     {
@@ -538,5 +548,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
             return null;
         }
+        
+
     }
 }
