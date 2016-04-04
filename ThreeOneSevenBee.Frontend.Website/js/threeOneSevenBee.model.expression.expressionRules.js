@@ -241,16 +241,10 @@
                 if (selection.getCount() < 2) {
                     return null;
                 }
-                var variadicexpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
-                if (Bridge.hasValue(variadicexpression) && variadicexpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
-                    var baseSelection = null;
-                    var firstSelection = null;
-                    var secondSelection = null;
-                    baseSelection = selection.getItem(0).clone();
-                    firstSelection = Bridge.as(selection.getItem(0).getParent(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
-                    secondSelection = Bridge.as(selection.getItem(1).getParent(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
-                    var numbers;
-                    var varialbeIsPowerToOne = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression)();
+                var variadicExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                if (Bridge.hasValue(variadicExpression) && variadicExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
+                    var baseSelection = selection.getItem(0).clone();
+                    var variableIsPowerToOne = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression)();
                     var powerToOneCount = 0;
     
                     if (Bridge.is(selection.getItem(0).getParent(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression)) {
@@ -262,8 +256,7 @@
                     if (powerToOneCount === 2) {
                         return null;
                     }
-                    if ((Bridge.hasValue(firstSelection) && Bridge.hasValue(secondSelection)) || powerToOneCount > 0) {
-    
+                    if ((Bridge.is(selection.getItem(0).getParent(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression) && Bridge.is(selection.getItem(1).getParent(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression)) || powerToOneCount > 0) {
                         var numeratorList = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
                         for (var j = 0; j < selection.getCount(); j++) {
                             if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(baseSelection, selection.getItem(j))) {
@@ -275,7 +268,7 @@
                                     }
                                     else  {
                                         if (Bridge.is(parent.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression)) {
-                                            numbers = Bridge.cast(parent.getRight().clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                                            var numbers = Bridge.cast(parent.getRight().clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
                                             if (numbers.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
                                                 for (var i = 0; i < numbers.getCount(); i++) {
                                                     numeratorList.add(numbers.getItem(i));
@@ -286,7 +279,7 @@
                                 }
                                 else  {
                                     if (Bridge.is(selection.getItem(j).getParent(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression)) {
-                                        varialbeIsPowerToOne.add(new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1));
+                                        variableIsPowerToOne.add(new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1));
     
                                     }
                                 }
@@ -305,7 +298,7 @@
                                 suggestionNumerator.add(i1);
                             }
     
-                            $t1 = Bridge.getEnumerator(varialbeIsPowerToOne);
+                            $t1 = Bridge.getEnumerator(variableIsPowerToOne);
                             while ($t1.moveNext()) {
                                 var i2 = $t1.getCurrent();
                                 suggestionNumerator.add(i2);
@@ -314,30 +307,30 @@
                         }
                         else  {
                             if ((Bridge.is(selection.getItem(0).getParent(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression) && powerToOneCount === 1) || (Bridge.is(selection.getItem(1).getParent(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression) && powerToOneCount === 1)) {
-                                suggestionNumerator = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, numeratorList.getItem(0), varialbeIsPowerToOne.getItem(0));
+                                suggestionNumerator = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, numeratorList.getItem(0), variableIsPowerToOne.getItem(0));
                                 $t2 = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(numeratorList).skip(1));
                                 while ($t2.moveNext()) {
                                     var i3 = $t2.getCurrent();
                                     suggestionNumerator.add(i3);
                                 }
-                                $t3 = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(varialbeIsPowerToOne).skip(1));
+                                $t3 = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(variableIsPowerToOne).skip(1));
                                 while ($t3.moveNext()) {
                                     var i4 = $t3.getCurrent();
                                     suggestionNumerator.add(i4);
                                 }
                             }
                         }
-                        if (varialbeIsPowerToOne.getCount() === selection.getCount()) {
+                        if (variableIsPowerToOne.getCount() === selection.getCount()) {
                             return null;
                         }
                         var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(baseSelection.clone(), suggestionNumerator, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
-                        if (variadicexpression.getCount() === selection.getCount()) {
+                        if (variadicExpression.getCount() === selection.getCount()) {
                             return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
                         }
                         else  {
                             var list = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression)();
-                            var temp = null;
                             var list2 = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
+                            var temp = null;
                             var temp2 = null;
                             for (var i5 = 0; i5 < selection.getCount(); i5++) {
                                 temp = Bridge.as(selection.getItem(i5).getParent(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
@@ -353,14 +346,14 @@
                             }
     
                             var indexes = Bridge.Linq.Enumerable.from(list).select(function (s) {
-                                return variadicexpression.indexOfReference(s);
+                                return variadicExpression.indexOfReference(s);
                             }).where($_.ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules.f4).toList(Bridge.Int);
                             var indexes2 = Bridge.Linq.Enumerable.from(list2).select(function (s) {
-                                return variadicexpression.indexOfReference(s);
+                                return variadicExpression.indexOfReference(s);
                             }).where($_.ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules.f4).toList(Bridge.Int);
                             indexes = Bridge.Linq.Enumerable.from(indexes).concat(indexes2).toList(Bridge.Int);
                             indexes.sort();
-                            var result = Bridge.as(variadicexpression.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                            var result = Bridge.as(variadicExpression.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
     
                             for (var i6 = 0; i6 < indexes.getCount(); i6++) {
                                 result.removeAt(indexes.getItem(i6) - i6);
@@ -371,6 +364,59 @@
                     }
                 }
                 return null;
+            },
+            productParenthesis: function (expression, selection) {
+                var $t, $t1;
+                var variadicExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                if (!Bridge.hasValue(variadicExpression)) {
+                    return null;
+                }
+    
+                if (variadicExpression.getType() !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
+                    return null;
+                }
+    
+                // at least 2 items must be selected or the rule doesn't apply
+                if (selection.getCount() < 2) {
+                    return null;
+                }
+    
+                // all selected items must be variadic multiply or the rule doesn't apply
+                if (!Bridge.Linq.Enumerable.from(selection).all($_.ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules.f5)) {
+                    return null;
+                }
+    
+                // find common multiplicator
+                var common = Bridge.Linq.Enumerable.from(Bridge.Linq.Enumerable.from(selection).select(function(x) { return Bridge.cast(x, Bridge.IEnumerable$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)); }).aggregate($_.ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules.f6)).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase);
+    
+                // if no common multiplicators are found, the rule doesn't apply
+                if (!Bridge.Linq.Enumerable.from(common).any()) {
+                    return null;
+                }
+    
+                variadicExpression = Bridge.cast(variadicExpression.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                var rest = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
+                $t = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(selection).select(function(x) { return Bridge.cast(x, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression); }));
+                while ($t.moveNext()) {
+                    var op = $t.getCurrent();
+                    $t1 = Bridge.getEnumerator(op);
+                    while ($t1.moveNext()) {
+                        var subOp = $t1.getCurrent();
+                        if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(subOp, Bridge.Linq.Enumerable.from(common).first())) {
+                            continue;
+                        }
+                        rest.add(subOp);
+                        if (Bridge.hasValue(variadicExpression)) {
+                            variadicExpression.remove(op);
+                        }
+                    }
+                }
+    
+                var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, Bridge.Linq.Enumerable.from(common).first(), new ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression(new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, rest.getItem(0), rest.getItem(1), [Bridge.Linq.Enumerable.from(rest).skip(2).toArray()])));
+    
+                var result = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, variadicExpression, suggestion);
+    
+                return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, result);
             },
             splittingFractions: function (expression, selection) {
                 if (selection.getCount() !== 1) {
@@ -428,6 +474,12 @@
         },
         f4: function (i6) {
             return i6 !== -1;
+        },
+        f5: function (e) {
+            return Bridge.is(e, ThreeOneSevenBee.Model.Expression.Expressions.VariadicExpression) && (Bridge.as(e, ThreeOneSevenBee.Model.Expression.Expressions.VariadicExpression)).getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply;
+        },
+        f6: function (x, y) {
+            return Bridge.Linq.Enumerable.from(x).intersect(y);
         }
     });
     
