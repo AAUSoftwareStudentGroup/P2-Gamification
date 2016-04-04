@@ -230,7 +230,6 @@
                             suggestionNumerator.add(i);
                         }
                         var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(suggestionNumerator, firstFraction.getRight().clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
-                        //SHOULD NOT BE SUGGESTION,SUGGESTION, BUT SUGGESTION,RESULT, THIS IS FIXED WHEN THE CORRECT FUNCTION IS IMPLEMENTED!!!!!
                         return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
                     }
                 }
@@ -312,52 +311,46 @@
                 return null;
             },
             splittingFractions: function (expression, selection) {
-                var $t, $t1;
+                var $t;
+                console.log("Hello");
+                if (selection.getCount() !== 1) {
+                    return null;
+                }
+                console.log("Hello2");
+                var binaryExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                var test = Bridge.as(selection.getItem(0), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                if (!binaryExpression === test) {
+                    return null;
+                }
+                if (Bridge.hasValue(binaryExpression) && binaryExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
+                    var numerators = Bridge.as(binaryExpression.getLeft().clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                    if (Bridge.hasValue(numerators) && numerators.getCount() > 1) {
+                        var fractionList = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
+                        $t = Bridge.getEnumerator(numerators);
+                        while ($t.moveNext()) {
+                            var i = $t.getCurrent();
+                            fractionList.add(new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(i, binaryExpression.getRight().clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide));
+                            console.log(fractionList);
+                        }
+                        var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, fractionList.getItem(0), fractionList.getItem(1));
+                        return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
+                    }
+                }
+                return null;
+            },
+            twoFractionsMultiplied: function (expression, selection) {
                 if (selection.getCount() < 2) {
                     return null;
                 }
-                var binaryExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
-                if (Bridge.hasValue(binaryExpression) && binaryExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
-                    var numeratorType = Bridge.as(binaryExpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
-                    if (Bridge.hasValue(numeratorType) && numeratorType.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
-                        var selectedNumerators = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
-                        $t = Bridge.getEnumerator(selection);
-                        while ($t.moveNext()) {
-                            var selected = $t.getCurrent();
-                            if (!selected.getParent() === binaryExpression) {
-                                return null;
-                            }
-    
-                            if (selected.getParent() === binaryExpression.getLeft()) {
-                                selectedNumerators.add(selected.clone());
-                            }
-    
-                        }
-    
-                        if (selectedNumerators.getCount() < 2) {
-                            var newFraction = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(selectedNumerators.getItem(0), binaryExpression.getRight().clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
     
     
-                            //VariadicOperatorExpression result = new VariadicOperatorExpression(OperatorType.Add, newFraction, something);
     
-                            return new ThreeOneSevenBee.Model.Expression.Identity(newFraction, newFraction);
-                        }
-                        else  {
-                            if (selectedNumerators.getCount() >= 2) {
-                                var listOfNumerators = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, selectedNumerators.getItem(0), selectedNumerators.getItem(1));
-                                $t1 = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(selectedNumerators).skip(2));
-                                while ($t1.moveNext()) {
-                                    var i = $t1.getCurrent();
-                                    listOfNumerators.add(i);
-                                }
     
-                                var newFraction1 = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(listOfNumerators, binaryExpression.getRight().clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
-                                //Is missing result instead of two times suggestion! The above is missing the same!
-                                return new ThreeOneSevenBee.Model.Expression.Identity(newFraction1, newFraction1);
-                            }
-                        }
-                    }
-                }
+    
+    
+    
+    
+    
                 return null;
             }
         }

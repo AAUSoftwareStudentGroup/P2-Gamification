@@ -33,7 +33,7 @@ namespace ThreeOneSevenBee.Model.Game
                             new Level("a^2*a*a*a*a*a", "a^2*a*a*a^3", "a^2*a^5", "a^7"),
                             new Level("4+5*5", "4+5*5", "4+5^2", "4+25", "29"),
                             new Level("4+5*5", "4+10*5", "4+50", "54"),
-                            new Level("{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", "{a+b+c+d}/c"),
+                            new Level("{a+b}/c", "{a+b}/c", "c"),
                         }
                 }
             };

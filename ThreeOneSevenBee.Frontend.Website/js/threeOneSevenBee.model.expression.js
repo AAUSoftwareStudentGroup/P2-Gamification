@@ -145,6 +145,11 @@
             this.onChanged = onChange;
             this.callOnChanged();
     },
+    constructor$1: function (expression, rules) {
+        ThreeOneSevenBee.Model.Expression.ExpressionModel.prototype.$constructor.call(this, expression, null, rules);
+    
+        if (rules === void 0) { rules = []; }
+    },
     getExpression: function () {
         return this.expression;
     },
