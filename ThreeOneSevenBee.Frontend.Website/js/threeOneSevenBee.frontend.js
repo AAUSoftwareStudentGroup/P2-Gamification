@@ -165,5 +165,13 @@
         }
     });
     
+    Bridge.define('ThreeOneSevenBee.Frontend.JQueryGameAPI', {
+        inherits: [ThreeOneSevenBee.Model.Game.StubGameAPI],
+        getPlayers: function () {
+    
+            return ThreeOneSevenBee.Model.Game.StubGameAPI.prototype.getPlayers.call(this);
+        }
+    });
+    
     Bridge.init();
 })(this);

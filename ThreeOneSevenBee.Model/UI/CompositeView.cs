@@ -69,5 +69,10 @@ namespace ThreeOneSevenBee.Model.UI
         {
             Children.Add(view);
         }
+
+        public void Clear()
+        {
+            Children.Clear();
+        }
     }
 }

@@ -80,5 +80,11 @@ namespace ThreeOneSevenBee.Model.UI
         {
             return view.Scale(System.Math.Min(InnerWidth / view.Width, Math.Min(InnerHeight / view.Height, MaxScale == 0 ? Double.MaxValue : MaxScale)));
         }
+
+        public override View Scale(double factor)
+        {
+            Content.Scale(factor);
+            return base.Scale(factor);
+        }
     }
 }

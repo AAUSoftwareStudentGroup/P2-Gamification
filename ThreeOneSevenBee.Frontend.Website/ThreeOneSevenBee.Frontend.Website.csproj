@@ -59,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="img\arrow_left.png" />
+    <Content Include="img\arrow_right.png" />
     <Content Include="img\levelbutton.png" />
     <Content Include="img\playbutton.png" />
     <Content Include="img\star.png" />
