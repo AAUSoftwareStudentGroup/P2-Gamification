@@ -39,6 +39,7 @@
     Bridge.define('ThreeOneSevenBee.Frontend.CanvasContext', {
         inherits: [ThreeOneSevenBee.Model.UI.Context],
         imageCache: null,
+        imageCacheIsReady: null,
         context: null,
         constructor: function (canvas) {
             ThreeOneSevenBee.Model.UI.Context.prototype.$constructor.call(this, canvas.width, canvas.height);
@@ -147,9 +148,18 @@
             this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
     
             if (this.imageCache.containsKey(view.getImage())) {
-                this.context.fillStyle = "transparent";
-                this.context.drawImage(this.imageCache.get(view.getImage()), view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
-                this.context.fillStyle = "#000000";
+                if (this.imageCacheIsReady.containsKey(view.getImage())) {
+                    this.context.fillStyle = "transparent";
+                    this.context.drawImage(this.imageCache.get(view.getImage()), view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
+                    this.context.fillStyle = "#000000";
+                }
+                else  {
+                    this.imageCache.get(view.getImage()).onload = Bridge.fn.bind(this, function (e) {
+                        this.context.fillStyle = "transparent";
+                        this.context.drawImage(this.imageCache.get(view.getImage()), view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
+                        this.context.fillStyle = "#000000";
+                    });
+                }
             }
             else  {
                 this.imageCache.set(view.getImage(), new Image());
@@ -158,6 +168,7 @@
                     this.context.fillStyle = "transparent";
                     this.context.drawImage(this.imageCache.get(view.getImage()), view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
                     this.context.fillStyle = "#000000";
+                    this.imageCacheIsReady.set(view.getImage(), true);
                 });
             }
         },
