@@ -29,6 +29,14 @@ class API {
         API::respond();
     }
 
+    static function get_users($IN, $db) {
+        $result = array();
+        $db->query("SELECT user.name FROM gamedb.user AS user");
+        while($row = $db->fetch())
+            $result[] = $row;
+        API::respond(true, $result);
+    }
+
     // static function delete_user_by_id($IN, $db) {
     //     $db->query("UPDATE gamedb.user
     //                   SET deleted_at=UNIX_TIMESTAMP()
