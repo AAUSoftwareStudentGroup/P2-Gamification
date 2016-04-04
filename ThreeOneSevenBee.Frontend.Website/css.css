@@ -35,6 +35,10 @@ body {
     margin: auto;
 }
 
+.textcenter {
+    text-align: center;
+}
+
 input {
     margin-bottom: 10px;
 }
@@ -77,6 +81,7 @@ table {
     width: 640px; 
     border-collapse: 
     collapse; border-spacing: 0; 
+    table-layout: fixed;
 }
 
 td, th { 

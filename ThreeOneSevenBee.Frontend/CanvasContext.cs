@@ -2,20 +2,25 @@
 using Bridge.Html5;
 using ThreeOneSevenBee.Model.UI;
 using ThreeOneSevenBee.Model.Expression.Expressions;
+using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Frontend
 {
     class CanvasContext : Context
     {
+        private Dictionary<string, ImageElement> imageCache;
+
         CanvasRenderingContext2D context;
 
         public CanvasContext(CanvasElement canvas) : base(canvas.Width, canvas.Height)
         {
+            imageCache = new Dictionary<string, ImageElement>();
+
             context = canvas.GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D);
             context.FillStyle = "#000000";
             context.LineWidth = 2;
             context.TextBaseline = CanvasTypes.CanvasTextBaselineAlign.Middle;
-            
+
             double canvasLeft = context.Canvas.GetBoundingClientRect().Left;
             double canvasRight = context.Canvas.GetBoundingClientRect().Left;
             context.Canvas.AddEventListener(EventType.MouseDown,
@@ -46,10 +51,10 @@ namespace ThreeOneSevenBee.Frontend
         {
             Draw(view as View, offsetX, offsetY);
             context.Font = view.FontSize + "px " + view.Font;
-            context.TextAlign = view.Align == "center" ? CanvasTypes.CanvasTextAlign.Center : 
+            context.TextAlign = view.Align == "center" ? CanvasTypes.CanvasTextAlign.Center :
                 CanvasTypes.CanvasTextAlign.Left;
             context.FillStyle = view.FontColor;
-            context.FillText(view.Text, (int)(view.X + offsetX + (view.Align == "center" ? view.Width / 2 : 5)), 
+            context.FillText(view.Text, (int)(view.X + offsetX + (view.Align == "center" ? view.Width / 2 : 5)),
                 (int)(view.Y + offsetY + view.Height / 2));
             context.FillStyle = "#000000";
         }
@@ -86,7 +91,8 @@ namespace ThreeOneSevenBee.Frontend
                 context.MoveTo(view.X + offsetX + view.Width / 2 - view.Height / 3, view.Y + offsetY + view.Height / 2);
                 context.LineTo(view.X + offsetX + view.Width / 2 + view.Height / 3, view.Y + offsetY + view.Height / 2);
                 context.Stroke();
-            }else if(view.type == OperatorType.Minus)
+            }
+            else if (view.type == OperatorType.Minus)
             {
                 context.BeginPath();
                 context.MoveTo(view.X + offsetX + view.Width / 3, view.Y + offsetY + view.Height / 2);
@@ -97,7 +103,7 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void Draw(ParenthesisView view, double offsetX, double offsetY)
         {
-            if(view.Type == ParenthesisType.Left)
+            if (view.Type == ParenthesisType.Left)
             {
                 context.BeginPath();
                 context.Ellipse(view.X + view.Width + offsetX, view.Y + view.Height / 2 + offsetY, view.Width, 1.1 * view.Height / 2, 0, -1.141096661 + Math.PI, 1.141096661 + Math.PI);
@@ -132,14 +138,24 @@ namespace ThreeOneSevenBee.Frontend
         public override void Draw(ImageView view, double offsetX, double offsetY)
         {
             Draw(view as View, offsetX, offsetY);
-            ImageElement img = new ImageElement();
-            img.Src = "img/" + view.Image;
-            img.OnLoad = (e) =>
+
+            if (imageCache.ContainsKey(view.Image))
             {
                 context.FillStyle = "transparent";
-                context.DrawImage(img, view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
+                context.DrawImage(imageCache[view.Image], view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
                 context.FillStyle = "#000000";
-            };
+            }
+            else
+            {
+                imageCache[view.Image] = new ImageElement();
+                imageCache[view.Image].Src = "img/" + view.Image;
+                imageCache[view.Image].OnLoad = (e) =>
+                {
+                    context.FillStyle = "transparent";
+                    context.DrawImage(imageCache[view.Image], view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
+                    context.FillStyle = "#000000";
+                };
+            }
         }
 
         public override void Draw(PolygonView view, double offsetX, double offsetY)
