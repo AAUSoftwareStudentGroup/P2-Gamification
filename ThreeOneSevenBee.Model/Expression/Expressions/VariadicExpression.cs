@@ -14,7 +14,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         protected VariadicExpression(OperatorType type, ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
             : base(type)
         {
-            
+
             if (type != OperatorType.Add && type != OperatorType.Multiply)
                 throw new ArgumentException("Invalid Type: " + type, "type");
             if (first == null)
@@ -23,12 +23,10 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 throw new ArgumentNullException("second");
 
             this.expressions = new List<ExpressionBase>();
-            this.expressions.Add(first);
-            this.expressions.Add(second);
-            this.expressions.AddRange(expressions);
-
-            foreach (var expression in this)
-                expression.Parent = this;
+            this.Add(first);
+            this.Add(second);
+            foreach (var expression in expressions)
+                this.Add(expression);
         }
 
         protected VariadicExpression(OperatorType type, params ExpressionBase[] expressions)
@@ -42,10 +40,8 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 throw new ArgumentOutOfRangeException("Must give at least two expressions.", "expression");
 
             this.expressions = new List<ExpressionBase>();
-            this.expressions.AddRange(expressions);
-
-            foreach (var expression in this)
-                expression.Parent = this;
+            foreach (var expression in expressions)
+                this.Add(expression);
         }
 
         public Int32 Count { get { return expressions.Count; } }
@@ -65,10 +61,45 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             }
         }
 
+        public void Add(VariadicExpression item)
+        {
+            if (item.Type == OperatorType.Add && item.Type == this.Type)
+            {
+                foreach (var subItem in item)
+                    this.Add(subItem);
+            }
+            else
+            {
+                expressions.Add(item);
+                item.Parent = this;
+            }
+        }
+
+        public void Add(BinaryExpression item)
+        {
+            if (item.Type == OperatorType.Add && item.Type == this.Type)
+            {
+                this.Add(item.Left);
+                this.Add(item.Right);
+            }
+            else
+            {
+                expressions.Add(item);
+                item.Parent = this;
+            }
+        }
+
         public void Add(ExpressionBase item)
         {
-            expressions.Add(item);
-            item.Parent = this;
+            if (item is VariadicExpression)
+                this.Add((VariadicExpression)item);
+            else if (item is BinaryExpression)
+                this.Add((BinaryExpression)item);
+            else
+            {
+                expressions.Add(item);
+                item.Parent = this;
+            }
         }
 
         public Boolean Remove(ExpressionBase item)
