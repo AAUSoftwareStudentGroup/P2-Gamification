@@ -373,52 +373,40 @@
                 return null;
             },
             splittingFractions: function (expression, selection) {
-                var $t, $t1;
-                if (selection.getCount() < 2) {
+                if (selection.getCount() !== 1) {
                     return null;
                 }
                 var binaryExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
                 if (Bridge.hasValue(binaryExpression) && binaryExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                     var numeratorType = Bridge.as(binaryExpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
                     if (Bridge.hasValue(numeratorType) && numeratorType.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
-                        var selectedNumerators = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
-                        $t = Bridge.getEnumerator(selection);
-                        while ($t.moveNext()) {
-                            var selected = $t.getCurrent();
-                            if (!selected.getParent() === binaryExpression) {
-                                return null;
-                            }
-    
-                            if (selected.getParent() === binaryExpression.getLeft()) {
-                                selectedNumerators.add(selected.clone());
-                            }
-    
+                        if (numeratorType.getCount() < 2) {
+                            return null;
+                        }
+                        var divisionlist = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression)();
+                        for (var i = 2; i < numeratorType.getCount(); i++) {
+                            divisionlist.add(Bridge.as(Bridge.Linq.Enumerable.from(numeratorType).elementAt(i).clone(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression));
                         }
     
-                        if (selectedNumerators.getCount() < 2) {
-                            var newFraction = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(selectedNumerators.getItem(0), binaryExpression.getRight().clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
-    
-    
-                            //VariadicOperatorExpression result = new VariadicOperatorExpression(OperatorType.Add, newFraction, something);
-    
-                            return new ThreeOneSevenBee.Model.Expression.Identity(newFraction, newFraction);
-                        }
-                        else  {
-                            if (selectedNumerators.getCount() >= 2) {
-                                var listOfNumerators = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, selectedNumerators.getItem(0), selectedNumerators.getItem(1));
-                                $t1 = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(selectedNumerators).skip(2));
-                                while ($t1.moveNext()) {
-                                    var i = $t1.getCurrent();
-                                    listOfNumerators.add(i);
-                                }
-    
-                                var newFraction1 = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(listOfNumerators, binaryExpression.getRight().clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
-                                //Is missing result instead of two times suggestion! The above is missing the same!
-                                return new ThreeOneSevenBee.Model.Expression.Identity(newFraction1, newFraction1);
-                            }
-                        }
+                        var resultExpression = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, numeratorType.getItem(0).clone(), numeratorType.getItem(1).clone(), [divisionlist.toArray()]);
+                        return new ThreeOneSevenBee.Model.Expression.Identity(resultExpression, resultExpression);
                     }
                 }
+                return null;
+            },
+            twoFractionsMultiplied: function (expression, selection) {
+                if (selection.getCount() < 2) {
+                    return null;
+                }
+    
+    
+    
+    
+    
+    
+    
+    
+    
                 return null;
             }
         }

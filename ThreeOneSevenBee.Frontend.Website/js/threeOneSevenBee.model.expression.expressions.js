@@ -427,14 +427,12 @@
             }
     
             this.expressions = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
-            this.expressions.add(first);
-            this.expressions.add(second);
-            this.expressions.addRange(expressions);
-    
-            $t = Bridge.getEnumerator(this);
+            this.add(first);
+            this.add(second);
+            $t = Bridge.getEnumerator(expressions);
             while ($t.moveNext()) {
                 var expression = $t.getCurrent();
-                expression.setParent(this);
+                this.add(expression);
             }
     },
     constructor$1: function (type, expressions) {
@@ -453,12 +451,10 @@
         }
     
         this.expressions = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
-        this.expressions.addRange(expressions);
-    
-        $t = Bridge.getEnumerator(this);
+        $t = Bridge.getEnumerator(expressions);
         while ($t.moveNext()) {
             var expression = $t.getCurrent();
-            expression.setParent(this);
+            this.add(expression);
         }
     },
     getCount: function () {
@@ -473,9 +469,43 @@
     setItem: function (index, value) {
         this.expressions.setItem(index, value);
     },
+    add$2: function (item) {
+        var $t;
+        if (item.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && item.getType() === this.getType()) {
+            $t = Bridge.getEnumerator(item);
+            while ($t.moveNext()) {
+                var subItem = $t.getCurrent();
+                this.add(subItem);
+            }
+        }
+        else  {
+            this.expressions.add(item);
+            item.setParent(this);
+        }
+    },
+    add$1: function (item) {
+        if (item.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && item.getType() === this.getType()) {
+            this.add(item.getLeft());
+            this.add(item.getRight());
+        }
+        else  {
+            this.expressions.add(item);
+            item.setParent(this);
+        }
+    },
     add: function (item) {
-        this.expressions.add(item);
-        item.setParent(this);
+        if (Bridge.is(item, ThreeOneSevenBee.Model.Expression.Expressions.VariadicExpression)) {
+            this.add$2(Bridge.cast(item, ThreeOneSevenBee.Model.Expression.Expressions.VariadicExpression));
+        }
+        else  {
+            if (Bridge.is(item, ThreeOneSevenBee.Model.Expression.Expressions.BinaryExpression)) {
+                this.add$1(Bridge.cast(item, ThreeOneSevenBee.Model.Expression.Expressions.BinaryExpression));
+            }
+            else  {
+                this.expressions.add(item);
+                item.setParent(this);
+            }
+        }
     },
     remove: function (item) {
         return this.expressions.remove(item);
