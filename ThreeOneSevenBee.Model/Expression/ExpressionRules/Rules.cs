@@ -478,6 +478,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             return null;
         }
+        */
 
         public static Identity CommonPowerParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
