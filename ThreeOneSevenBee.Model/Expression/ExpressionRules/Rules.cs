@@ -419,6 +419,63 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
+        // a * b + a * c = a * (b + c)
+        public static Identity ProductParenthesis(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            var variadicExpression = expression as VariadicOperatorExpression;
+            if (variadicExpression == null)
+                return null;
+
+            if (variadicExpression.Type != OperatorType.Add)
+                return null;
+
+            // at least 2 items must be selected or the rule doesn't apply
+            if (selection.Count < 2)
+                return null;
+
+            // all selected items must be variadic multiply or the rule doesn't apply
+            if (!selection.All(e => e is VariadicExpression && (e as VariadicExpression).Type == OperatorType.Multiply))
+                return null;
+
+            // find common multiplicator
+            var common = selection
+                .Cast<IEnumerable<ExpressionBase>>()
+                .Aggregate((x, y) => x.Intersect(y))
+                .ToList();
+
+            // if no common multiplicators are found, the rule doesn't apply
+            if (!common.Any())
+                return null;
+
+            variadicExpression = (VariadicOperatorExpression)variadicExpression.Clone();
+            var rest = new List<ExpressionBase>();
+            foreach (var op in selection.Cast<VariadicOperatorExpression>())
+            {
+                foreach (var subOp in op)
+                {
+                    if (subOp == common.First())
+                        continue;
+                    rest.Add(subOp);
+                    if (variadicExpression != null)
+                        variadicExpression.EqualityRemove(op);
+                }
+            }
+
+            var suggestion = new VariadicOperatorExpression(
+                OperatorType.Multiply,
+                common.First(),
+                new DelimiterExpression(
+                    new VariadicOperatorExpression(
+                        OperatorType.Add,
+                        rest[0], rest[1], rest.Skip(2).ToArray())));
+
+            var result = new VariadicOperatorExpression(
+                OperatorType.Add,
+                variadicExpression,
+                suggestion);
+
+            return new Identity(suggestion, result);
+        }
 
         //(a+b)/c = a/c + b/c
         public static Identity SplittingFractions(ExpressionBase expression, List<ExpressionBase> selection)
