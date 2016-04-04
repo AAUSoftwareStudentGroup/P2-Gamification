@@ -277,7 +277,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
         public static Identity SplittingFractions(ExpressionBase expression, List<ExpressionBase> selection)
         {
-            if (selection.Count < 2)
+            if (selection.Count != 1)
             {
                 return null;
             }
@@ -287,42 +287,17 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 VariadicOperatorExpression numeratorType = binaryExpression.Left as VariadicOperatorExpression;
                 if (numeratorType != null && numeratorType.Type == OperatorType.Add)
                 {
-                    List<ExpressionBase> selectedNumerators = new List<ExpressionBase>();
-                    foreach (var selected in selection)
+                    if (numeratorType.Count < 2)
                     {
-                        if (!ReferenceEquals(selected.Parent, binaryExpression))
-                        {
-                            return null;
-                        }
-
-                        if (ReferenceEquals(selected.Parent, binaryExpression.Left))
-                        {
-                            selectedNumerators.Add(selected.Clone());
-                        }
-
+                        return null;
+                    }
+                    List<BinaryOperatorExpression> divisionlist = new List<BinaryOperatorExpression>();
+                    for(int i = 2; i < numeratorType.Count; i++) {
+                        divisionlist.Add(numeratorType.ElementAt(i).Clone() as BinaryOperatorExpression);
                     }
 
-                    if (selectedNumerators.Count < 2)
-                    {
-                        BinaryOperatorExpression newFraction = new BinaryOperatorExpression(selectedNumerators[0], binaryExpression.Right.Clone(), OperatorType.Divide);
-
-
-                        //VariadicOperatorExpression result = new VariadicOperatorExpression(OperatorType.Add, newFraction, something);
-                        
-                        return new Identity(newFraction, newFraction);
-                    }
-                    else if (selectedNumerators.Count >= 2)
-                    {
-                        VariadicOperatorExpression listOfNumerators = new VariadicOperatorExpression(OperatorType.Add, selectedNumerators[0], selectedNumerators[1]);
-                        foreach (var i in selectedNumerators.Skip(2))
-                        {
-                            listOfNumerators.Add(i);
-                        }
-
-                        BinaryOperatorExpression newFraction = new BinaryOperatorExpression(listOfNumerators, binaryExpression.Right.Clone(), OperatorType.Divide);
-                        //Is missing result instead of two times suggestion! The above is missing the same!
-                        return new Identity(newFraction, newFraction);
-                    }
+                    VariadicOperatorExpression resultExpression = new VariadicOperatorExpression(OperatorType.Add, numeratorType[0].Clone(), numeratorType[1].Clone(), divisionlist.ToArray());
+                    return new Identity(resultExpression, resultExpression);
                 }
             }
             return null;
@@ -343,6 +318,37 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             return null;
         }
+
+        public static Identity TwoFractionsMultiplied(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if(selection.Count < 2)
+            {
+                return null;
+            }
+
+
+
+
+
+
+
+
+
+            return null;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }
