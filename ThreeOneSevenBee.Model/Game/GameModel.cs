@@ -47,6 +47,7 @@ namespace ThreeOneSevenBee.Model.Game
 
         public void SetLevel(int level, int category)
         {
+            Console.WriteLine(level + "; " + category);
             User.CurrentLevel = level;
             User.CurrentCategory = category;
             ExpressionSerializer serializer = new ExpressionSerializer();
@@ -65,7 +66,7 @@ namespace ThreeOneSevenBee.Model.Game
             ExprModel = new ExpressionModel(User.Categories[category][level].CurrentExpression, (m) => onExpressionChanged(m), 
                 Rules.ExponentToProductRule, Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators, 
                 Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.ExponentProduct,
-                Rules.NumericBinaryRule, Rules.NumericVariadicRule);
+                Rules.NumericBinaryRule, Rules.NumericVariadicRule, Rules.CommonPowerParenthesisRule, Rules.ReverseCommonPowerParenthesisRule);
 
             onExpressionChanged(ExprModel);
         }

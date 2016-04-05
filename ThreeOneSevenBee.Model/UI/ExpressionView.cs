@@ -135,6 +135,7 @@ namespace ThreeOneSevenBee.Model.UI
                     view,
                     new ParenthesisView(ParenthesisType.Right) { OnClick = () => model.Select(expression), X = view.Width + view.Height / 4, Width = view.Height / 4, Height = view.Height +  NUMVAR_SIZE / 4},
                 };
+                compositeView.BackgroundColor = model.SelectionIndex(expression) != -1 ? "#cccccc" : "transparent";
                 compositeView.Baseline = view.Y + view.Baseline;
                 return compositeView;
             }
