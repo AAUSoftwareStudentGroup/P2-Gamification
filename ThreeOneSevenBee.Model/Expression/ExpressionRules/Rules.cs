@@ -582,25 +582,25 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             VariadicOperatorExpression suggestion;
             if (binaryExpression != null && binaryExpression.Type == OperatorType.Power)
             {
-                var commonparrent = binaryExpression.Right;
+                var commonparrent = binaryExpression.Right.Clone();
                 if (binaryExpression.Left is DelimiterExpression)
                 {
                     var delimiterExpression = binaryExpression.Left as DelimiterExpression;
                     if (delimiterExpression.Expression is VariadicOperatorExpression)
                     {
-                        var variadicExpression = delimiterExpression.Expression as VariadicOperatorExpression;
+                        var variadicExpression = delimiterExpression.Expression.Clone() as VariadicOperatorExpression;
                         if (variadicExpression.Type == OperatorType.Multiply)
                         {
                             foreach (var item in variadicExpression)
                             {
                                 itemsInParenthesis.Add(new BinaryOperatorExpression(item, commonparrent, OperatorType.Power));
                             }
-                            suggestion = new VariadicOperatorExpression(OperatorType.Multiply, itemsInParenthesis[0], itemsInParenthesis[1]);
+                            suggestion = new VariadicOperatorExpression(OperatorType.Multiply, itemsInParenthesis[0].Clone(), itemsInParenthesis[1].Clone());
                             if (itemsInParenthesis.Count > 2)
                             {
                                 foreach (var item in itemsInParenthesis.Skip(2))
                                 {
-                                    suggestion.Add(item);
+                                    suggestion.Add(item.Clone());
                                 }
                                 return new Identity(suggestion, suggestion);
                             }
