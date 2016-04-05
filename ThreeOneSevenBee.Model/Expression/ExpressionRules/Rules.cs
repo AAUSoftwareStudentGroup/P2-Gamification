@@ -567,6 +567,50 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
+        public static Identity ReverseCommonPowerParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count != 2)
+            {
+                return null;
+            }
+            var binaryExpression = expression as BinaryOperatorExpression;
+            List<ExpressionBase> itemsInParenthesis = new List<ExpressionBase>();
+            VariadicOperatorExpression suggestion;
+            if (binaryExpression != null && binaryExpression.Type == OperatorType.Power)
+            {
+                var commonparrent = binaryExpression.Right;
+                if (binaryExpression.Left is DelimiterExpression)
+                {
+                    var delimiterExpression = binaryExpression.Left as DelimiterExpression;
+                    if (delimiterExpression.Expression is VariadicOperatorExpression)
+                    {
+                        var variadicExpression = delimiterExpression.Expression as VariadicOperatorExpression;
+                        if (variadicExpression.Type == OperatorType.Multiply)
+                        {
+                            foreach (var item in variadicExpression)
+                            {
+                                itemsInParenthesis.Add(new BinaryOperatorExpression(item, commonparrent, OperatorType.Power));
+                            }
+                            suggestion = new VariadicOperatorExpression(OperatorType.Multiply, itemsInParenthesis[0], itemsInParenthesis[1]);
+                            if (itemsInParenthesis.Count > 2)
+                            {
+                                foreach (var item in itemsInParenthesis.Skip(2))
+                                {
+                                    suggestion.Add(item);
+                                }
+                                return new Identity(suggestion, suggestion);
+                            }
+                            else
+                            {
+                                return new Identity(suggestion, suggestion);
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
 
     }
 }
