@@ -20,7 +20,7 @@ class API {
                 ($data    != null ? ',"data": '.json_encode($data) : '').
                 ($message != null ? ',"message": "'.$message.'"' : '').
               '}');
-        exit();
+        die();
     }
 
     static function user_logout($IN, $db) {
@@ -99,6 +99,15 @@ class API {
         if($result = $db->fetch())
             API::respond(true, $result);
         API::respond(false, null, "user not authorized");
+    }
+
+    static function set_current_user($IN, $db) {
+        session_start();
+        if(isset($IN['id']) && is_int((integer)$IN['id'])) {
+            $_SESSION['authorized'] = $IN['id'];
+            API::respond();
+        }
+        API::respond(false, null, "No id set");
     }
 }
 
