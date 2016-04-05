@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 
 namespace ThreeOneSevenBee.Model.Game
 {
