@@ -10,11 +10,14 @@ namespace ThreeOneSevenBee.Frontend
     {
         private Dictionary<string, ImageElement> imageCache;
 
+        private Dictionary<string, bool> imageCacheIsReady;
+
         CanvasRenderingContext2D context;
 
         public CanvasContext(CanvasElement canvas) : base(canvas.Width, canvas.Height)
         {
             imageCache = new Dictionary<string, ImageElement>();
+            imageCacheIsReady = new Dictionary<string, bool>();
 
             context = canvas.GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D);
             context.FillStyle = "#000000";
@@ -141,9 +144,21 @@ namespace ThreeOneSevenBee.Frontend
 
             if (imageCache.ContainsKey(view.Image))
             {
-                context.FillStyle = "transparent";
-                context.DrawImage(imageCache[view.Image], view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
-                context.FillStyle = "#000000";
+                if (imageCacheIsReady.ContainsKey(view.Image))
+                {
+                    context.FillStyle = "transparent";
+                    context.DrawImage(imageCache[view.Image], view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
+                    context.FillStyle = "#000000";
+                }
+                else
+                {
+                    imageCache[view.Image].OnLoad = (e) =>
+                    {
+                        context.FillStyle = "transparent";
+                        context.DrawImage(imageCache[view.Image], view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
+                        context.FillStyle = "#000000";
+                    };
+                }
             }
             else
             {
@@ -154,6 +169,7 @@ namespace ThreeOneSevenBee.Frontend
                     context.FillStyle = "transparent";
                     context.DrawImage(imageCache[view.Image], view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
                     context.FillStyle = "#000000";
+                    imageCacheIsReady[view.Image] = true;
                 };
             }
         }
