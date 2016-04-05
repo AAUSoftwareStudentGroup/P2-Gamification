@@ -15,11 +15,11 @@ else
 
 class API {
     static function respond($success = true, $data = null, $message = null) {
-        echo ("{".
-                "success: ".($success ? "true" : "false").
-                ($data    != null ? ",data: ".json_encode($data) : "").
-                ($message != null ? ",message: \"".$message."\"" : "").
-              "}");
+        echo ('{'.
+                '"success": '.($success ? '"true"' : '"false"').
+                ($data    != null ? ',"data": '.json_encode($data) : '').
+                ($message != null ? ',"message": "'.$message.'"' : '').
+              '}');
         exit();
     }
 
