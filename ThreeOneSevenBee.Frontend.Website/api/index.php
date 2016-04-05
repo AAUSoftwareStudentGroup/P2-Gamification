@@ -90,6 +90,16 @@ class API {
         }
         API::respond(true, $categories);
     }
+
+    static function get_current_user($IN, $db) {
+        session_start();
+        $db->query("SELECT user.name FROM gamedb.user AS user
+                    WHERE user.id = ?",
+                    (isset($_SESSION['authorized']) ? $_SESSION['authorized'] : 0));
+        if($result = $db->fetch())
+            API::respond(true, $result);
+        API::respond(false, null, "user not authorized");
+    }
 }
 
 ?>
