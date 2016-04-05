@@ -7,10 +7,9 @@ namespace ThreeOneSevenBee.Model.Game
 {
     public abstract class GameAPI
     {
-        public abstract void GetPlayers(Action<List<Player>> callback);
-        public abstract void GetCurrentPlayer(Action<CurrentPlayer> callback);
+        public abstract List<Player> GetPlayers();
+        public abstract CurrentPlayer GetCurrentPlayer();
         public abstract void UpdateCurrentPlayer(CurrentPlayer currentPlayer);
-
         public abstract bool Ready { get; }
     }
 }

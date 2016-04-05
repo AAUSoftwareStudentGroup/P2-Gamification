@@ -30,19 +30,6 @@ class API {
         API::respond();
     }
 
-    static function get_authorized_user($IN, $db) {
-        session_start();
-        if(isset($_SESSION['authorized'])) {
-            if($db->query("SELECT * FROM gamedb.user AS user WHERE user.id=?", $_SESSION['authorized'])) {
-                respond(true, $db->fetch());                
-            }
-            respond(false, null, "No user found");
-        }
-        else {
-            respond(false, null, "No user logged in");
-        }
-    }
-
     static function get_users($IN, $db) {
         $result = array();
         $db->query("SELECT user.name FROM gamedb.user AS user");

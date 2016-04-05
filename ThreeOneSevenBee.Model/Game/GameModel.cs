@@ -14,6 +14,7 @@ namespace ThreeOneSevenBee.Model.Game
     {
         public CurrentPlayer User { get; }
         public IEnumerable<Player> Players { get; private set; }
+        private GameAPI API;
         public ExpressionModel ExprModel { get; private set; }
         public ExpressionBase CurrentExpression { get { return ExprModel.Expression; } }
         public ExpressionBase StartExpression { get; private set; }
@@ -65,7 +66,7 @@ namespace ThreeOneSevenBee.Model.Game
             ExprModel = new ExpressionModel(User.Categories[category].Levels[level].CurrentExpression, (m) => onExpressionChanged(m), 
                 Rules.ExponentToProductRule, Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators, 
                 Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.ExponentProduct,
-                Rules.NumericBinaryRule, Rules.NumericVariadicRule);
+                Rules.NumericBinaryRule, Rules.NumericVariadicRule, Rules.SplittingFractions);
 
             onExpressionChanged(ExprModel);
         }
@@ -105,12 +106,14 @@ namespace ThreeOneSevenBee.Model.Game
         public void Save()
         {
             User.Categories[User.CurrentCategory].Levels[User.CurrentLevel].CurrentExpression = CurrentExpression.ToString();
+            API.UpdateCurrentPlayer(User);
         }
 
-        public GameModel(CurrentPlayer user, List<Player> players)
+        public GameModel(GameAPI api)
         {
-            User = user;
-            Players = players;
+            API = api;
+            User = api.GetCurrentPlayer();
+            Players = api.GetPlayers();
             SetLevel(User.CurrentLevel, User.CurrentCategory);
         }
     }

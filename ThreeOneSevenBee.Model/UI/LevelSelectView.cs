@@ -71,6 +71,7 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 X = ArrowLeft.X + ArrowLeft.Width - 5,
                 Y = CategoryName.Y + CategoryName.Height,
+                BackgroundColor = "#ff0000"
             };
             
             Children.Add(CategoryName);
@@ -83,30 +84,26 @@ namespace ThreeOneSevenBee.Model.UI
 
         public void Update(CurrentPlayer user)
         {
+
             CategoryName.Text = user.Categories[Category].Name;
-            ArrowLeft.Height = (Category == 0 ? 0 : ArrowLeft.Width * 1.5);
-            ArrowRight.Height = (Category == user.Categories.Count - 1 ? 0 : ArrowRight.Width * 1.5);
+            ArrowLeft.Height = (Category == 0 ? 0 : ArrowLeft.Width * 3);
+            ArrowRight.Height = (Category == user.Categories.Count - 1 ? 0 : ArrowRight.Width * 3);
 
-            CompositeView levelButtons = new CompositeView(400, 400) ;
+            CompositeView levelButtons = new CompositeView(400, 400) { BackgroundColor = "#0000ff" };
 
-            int levelNumber = 0;
-            int numberOfLevels = user.Categories[Category].Levels.Count;
+            int levelNumber = 1;
             foreach (Level level in user.Categories[Category].Levels)
             {
                 levelButtons.Add(
-                    new ButtonView((levelNumber + 1).ToString(), () => OnLevelSelect(level))
+                    new ButtonView((levelNumber++).ToString(), () => OnLevelSelect(level))
                     {
-                        Width = 50 - 10,
-                        Height = 50 - 10,
-                        X = levelNumber % (int)Math.Sqrt(numberOfLevels) * 50 + 5,
-                        Y = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50 + 5,
-                        BackgroundColor = "#16a085"
+                        Width = 20,
+                        Height = 20,
+                        X = levelNumber * 20,
+                        BackgroundColor = "#00ff00"
                     });
-                levelNumber += 1;
-                
             }
-            levelButtons.Width = (int)Math.Sqrt(numberOfLevels) * 50;
-            levelButtons.Height = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50;
+
             Levels.setContent(levelButtons);
         }
 
