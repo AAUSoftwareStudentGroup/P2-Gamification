@@ -97,62 +97,62 @@ namespace ThreeOneSevenBee.ModelTests
             Assert.AreEqual("1+1", parser.Serialize(exp), "'1   +  1' = '1+1'");
         }
 
-        private ExpressionBase New(int value)
+        public static ExpressionBase New(int value)
         {
             return new NumericExpression(value);
         }
 
-        private ExpressionBase New(string value)
+        public static ExpressionBase New(string value)
         {
             return new VariableExpression(value);
         }
 
-        private ExpressionBase New(ConstantType type)
+        public static ExpressionBase New(ConstantType type)
         {
             return new ConstantExpression(type);
         }
 
-        private ExpressionBase Minus(ExpressionBase expression)
+        public static ExpressionBase Minus(ExpressionBase expression)
         {
             return new UnaryMinusExpression(expression);
         }
 
-        private ExpressionBase Add(ExpressionBase left, ExpressionBase right)
+        public static ExpressionBase Add(ExpressionBase left, ExpressionBase right)
         {
             return new BinaryOperatorExpression(left, right, OperatorType.Add);
         }
 
-        private ExpressionBase Add(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
+        public static ExpressionBase Add(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
         {
             return new VariadicOperatorExpression(OperatorType.Add, first, second, expressions);
         }
 
-        private ExpressionBase Divide(ExpressionBase left, ExpressionBase right)
+        public static ExpressionBase Divide(ExpressionBase left, ExpressionBase right)
         {
             return new BinaryOperatorExpression(left, right, OperatorType.Divide);
         }
 
-        private ExpressionBase Multiply(ExpressionBase left, ExpressionBase right)
+        public static ExpressionBase Multiply(ExpressionBase left, ExpressionBase right)
         {
             return new BinaryOperatorExpression(left, right, OperatorType.Multiply);
         }
 
-        private ExpressionBase Multiply(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
+        public static ExpressionBase Multiply(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
         {
             return new VariadicOperatorExpression(OperatorType.Multiply, first, second, expressions);
         }
 
-        private ExpressionBase Power(ExpressionBase left, ExpressionBase right)
+        public static ExpressionBase Power(ExpressionBase left, ExpressionBase right)
         {
             return new BinaryOperatorExpression(left, right, OperatorType.Power);
         }
 
-        private ExpressionBase Subtract(ExpressionBase left, ExpressionBase right)
+        public static ExpressionBase Subtract(ExpressionBase left, ExpressionBase right)
         {
             return new BinaryOperatorExpression(left, right, OperatorType.Subtract);
         }
 
-        private ExpressionBase Sqrt(ExpressionBase expression)
+        public static ExpressionBase Sqrt(ExpressionBase expression)
         {
             return new FunctionExpression(expression, "sqrt");
         }
