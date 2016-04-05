@@ -17,6 +17,7 @@ namespace ThreeOneSevenBee.Frontend
         public CanvasContext(CanvasElement canvas) : base(canvas.Width, canvas.Height)
         {
             imageCache = new Dictionary<string, ImageElement>();
+            imageCacheIsReady = new Dictionary<string, bool>();
 
             context = canvas.GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D);
             context.FillStyle = "#000000";

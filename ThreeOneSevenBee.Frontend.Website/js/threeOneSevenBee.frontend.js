@@ -15,11 +15,23 @@
     
                 var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
     
-                var gameAPI = new ThreeOneSevenBee.Model.Game.StubGameAPI();
+                var gameAPI = new ThreeOneSevenBee.Frontend.JQueryGameAPI();
     
-                var gameModel = new ThreeOneSevenBee.Model.Game.GameModel(gameAPI);
+                var gameModel;
+                var gameView;
     
-                var gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
+                gameAPI.getCurrentPlayer(function (u) {
+                    console.log("user loaded");
+                    gameAPI.getPlayers(function (p) {
+                        console.log("players loaded");
+                        gameModel = new ThreeOneSevenBee.Model.Game.GameModel(u, p);
+                        gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
+                    });
+    
+                });
+    
+    
+    
             }
         }
     });
@@ -33,6 +45,7 @@
             ThreeOneSevenBee.Model.UI.Context.prototype.$constructor.call(this, canvas.width, canvas.height);
     
             this.imageCache = new Bridge.Dictionary$2(String,HTMLImageElement)();
+            this.imageCacheIsReady = new Bridge.Dictionary$2(String,Boolean)();
     
             this.context = canvas.getContext("2d");
             this.context.fillStyle = "#000000";
@@ -178,9 +191,25 @@
     
     Bridge.define('ThreeOneSevenBee.Frontend.JQueryGameAPI', {
         inherits: [ThreeOneSevenBee.Model.Game.StubGameAPI],
-        getPlayers: function () {
+        getCurrentPlayer: function (callback) {
+            ThreeOneSevenBee.Model.Game.StubGameAPI.prototype.getCurrentPlayer.call(this, callback);
+        },
+        getPlayers: function (callback) {
+            $.get("/api/?action=get_users", { }, function (data, textStatus, request) {
+                var jdata = JSON.parse(Bridge.cast(data, String));
+                var result = Bridge.Linq.Enumerable.from((Bridge.as(jdata.data, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f1).toList(ThreeOneSevenBee.Model.Game.Player);
+                callback(result);
+            });
+        }
+    });
     
-            return ThreeOneSevenBee.Model.Game.StubGameAPI.prototype.getPlayers.call(this);
+    var $_ = {};
+    
+    Bridge.ns("ThreeOneSevenBee.Frontend.JQueryGameAPI", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Frontend.JQueryGameAPI, {
+        f1: function (s) {
+            return new ThreeOneSevenBee.Model.Game.Player(Bridge.cast(s.name, String));
         }
     });
     
