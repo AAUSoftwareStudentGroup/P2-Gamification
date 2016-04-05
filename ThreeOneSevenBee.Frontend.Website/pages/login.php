@@ -1,11 +1,12 @@
 <?
     if(isset($_POST) && !empty($_POST)) {
-        $db->query("SELECT password_hash FROM user WHERE BINARY name = ?",
+        $db->query("SELECT password_hash, id FROM user WHERE BINARY name = ?",
                     $_POST['username']);
 
         if($row = $db->fetch()) {
             if(password_verify($_POST['password'], $row['password_hash'])) {
-                $_SESSION['authorized'] = true;
+                
+                $_SESSION['authorized'] = $row['id'];
                 header("location: /");
             }
         }
