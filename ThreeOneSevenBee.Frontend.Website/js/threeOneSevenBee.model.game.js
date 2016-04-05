@@ -254,7 +254,7 @@
     
             var numbers = new ThreeOneSevenBee.Model.Game.LevelCategory("Numbers");
             this.currentPlayer.addCategory(numbers);
-            numbers.add(new ThreeOneSevenBee.Model.Game.Level("constructor$1", "4+4+5", "4+4+5", ["4+9", "13"]));
+            numbers.add(new ThreeOneSevenBee.Model.Game.Level("constructor$1", "4+(4+5)", "4+(4+5)", ["4+9", "13"]));
             numbers.add(new ThreeOneSevenBee.Model.Game.Level("constructor$1", "4*6+5", "4*6+5", ["24+5", "29"]));
     
     

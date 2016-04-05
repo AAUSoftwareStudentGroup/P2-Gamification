@@ -26,7 +26,7 @@ namespace ThreeOneSevenBee.Model.Game
 
             LevelCategory numbers = new LevelCategory("Numbers");
             currentPlayer.AddCategory(numbers);
-            numbers.Add(new Level("4+4+5", "4+4+5", "4+9", "13"));
+            numbers.Add(new Level("4+(4+5)", "4+(4+5)", "4+9", "13"));
             numbers.Add(new Level("4*6+5", "4*6+5", "24+5", "29"));
             
 
