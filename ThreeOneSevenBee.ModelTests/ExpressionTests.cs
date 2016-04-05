@@ -134,7 +134,7 @@ namespace ThreeOneSevenBee.ModelTests
 
         public static ExpressionBase Multiply(ExpressionBase left, ExpressionBase right)
         {
-            return new BinaryOperatorExpression(left, right, OperatorType.Multiply);
+            return new VariadicOperatorExpression(OperatorType.Multiply, left, right);
         }
 
         public static ExpressionBase Multiply(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
