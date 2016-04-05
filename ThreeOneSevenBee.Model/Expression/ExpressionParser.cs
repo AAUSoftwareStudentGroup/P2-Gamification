@@ -134,7 +134,7 @@ namespace ThreeOneSevenBee.Model.Expression
             if (i >= input.Length)
                 return false;
 
-            const string validLetters = "abcdefghijklmnopqrstuvwxyz";
+            const string validLetters = "abcdefghijklmnopqrstuvwz";
 
             foreach (var validLeter in validLetters)
             {
