@@ -20,6 +20,7 @@ class API {
                 ($data    != null ? ",data: ".json_encode($data) : "").
                 ($message != null ? ",message: \"".$message."\"" : "").
               "}");
+        exit();
     }
 
     static function user_logout($IN, $db) {
@@ -29,6 +30,19 @@ class API {
         API::respond();
     }
 
+    static function get_authorized_user($IN, $db) {
+        session_start();
+        if(isset($_SESSION['authorized'])) {
+            if($db->query("SELECT * FROM gamedb.user AS user WHERE user.id=?", $_SESSION['authorized'])) {
+                respond(true, $db->fetch());                
+            }
+            respond(false, null, "No user found");
+        }
+        else {
+            respond(false, null, "No user logged in");
+        }
+    }
+
     static function get_users($IN, $db) {
         $result = array();
         $db->query("SELECT user.name FROM gamedb.user AS user");
@@ -36,14 +50,6 @@ class API {
             $result[] = $row;
         API::respond(true, $result);
     }
-
-    // static function delete_user_by_id($IN, $db) {
-    //     $db->query("UPDATE gamedb.user
-    //                   SET deleted_at=UNIX_TIMESTAMP()
-    //                   WHERE id=?;", $IN['user_id']
-    //                 );
-    //     respond();
-    // }
 
     static function delete_class_by_id($IN, $db) {
         $db->query("UPDATE gamedb.class
