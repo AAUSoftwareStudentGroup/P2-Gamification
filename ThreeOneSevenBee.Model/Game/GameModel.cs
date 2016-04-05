@@ -47,6 +47,7 @@ namespace ThreeOneSevenBee.Model.Game
 
         public void SetLevel(int level, int category)
         {
+            Console.WriteLine(level + "; " + category);
             User.CurrentLevel = level;
             User.CurrentCategory = category;
             ExpressionSerializer serializer = new ExpressionSerializer();

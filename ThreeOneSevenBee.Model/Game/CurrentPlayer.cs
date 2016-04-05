@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 
 namespace ThreeOneSevenBee.Model.Game
 {
@@ -18,8 +21,11 @@ namespace ThreeOneSevenBee.Model.Game
         public void AddCategory(LevelCategory category)
         {
             category.CategoryIndex = Categories.Count;
+
             Categories.Add(category);
         }
+
+
 
         public List<LevelCategory> Categories;
     }
