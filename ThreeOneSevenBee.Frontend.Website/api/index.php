@@ -53,6 +53,31 @@ class API {
                     );
         API::respond();
     }
+
+    static function get_levels($IN, $db) {
+        $db->query("SELECT 
+                        category.name AS category_name,
+                        level.initial_expression AS initial_expression, 
+                        level.star_expressions AS star_expressions
+                    FROM 
+                        gamedb.level AS level
+                    LEFT JOIN 
+                        gamedb.level_category AS category ON level.level_category_id=category.id
+                    ORDER BY level.level_category_id ASC;"
+                   );
+        $levels = array();
+        while($row = $db->fetch()) {
+            $level = array(
+                'initial_expression' => $row['initial_expression'],
+                'star_expressions' => $row['star_expressions']
+            );
+            if(isset($levels[ $row['category_name'] ]))
+                $levels[ $row['category_name'] ][] = $level;
+            else
+                $levels[ $row['category_name'] ] = array($level);
+        }
+        API::respond(true, $levels);
+    }
 }
 
 ?>
