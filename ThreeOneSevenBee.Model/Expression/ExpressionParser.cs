@@ -25,8 +25,6 @@ namespace ThreeOneSevenBee.Model.Expression
         /// </summary>
         private static char DecimalSeparator = (1.1).ToString()[1];
 
-        public Boolean TreatMinusAsUnaryMinusInVariadicPlus = true;
-
         /// <summary>
         /// The types of operators.
         /// </summary>
@@ -136,7 +134,7 @@ namespace ThreeOneSevenBee.Model.Expression
             if (i >= input.Length)
                 return false;
 
-            const string validLetters = "abcdefghijklmnopqrstuvwxyz";
+            const string validLetters = "abcdefghijklmnopqrstuvwz";
 
             foreach (var validLeter in validLetters)
             {
@@ -397,29 +395,10 @@ namespace ThreeOneSevenBee.Model.Expression
                                 break;
 
                             case "-":
-                                if (this.TreatMinusAsUnaryMinusInVariadicPlus)
-                                {
-                                    right = new UnaryMinusExpression(stack.Pop());
-                                    left = stack.Pop();
-                                    if (left is VariadicOperatorExpression && (left as VariadicOperatorExpression).Type == OperatorType.Add)
-                                    {
-                                        (left as VariadicOperatorExpression).Add(right);
-                                        root = left;
-                                        stack.Push(root);
-                                    }
-                                    else
-                                    {
-                                        root = new VariadicOperatorExpression(OperatorType.Add, left, right);
-                                        stack.Push(root);
-                                    }
-                                }
-                                else // treat it at binary operator
-                                {
-                                    right = stack.Pop();
-                                    left = stack.Pop();
-                                    root = new BinaryOperatorExpression(left, right, OperatorType.Subtract);
-                                    stack.Push(root);
-                                }
+                                right = stack.Pop();
+                                left = stack.Pop();
+                                root = new BinaryOperatorExpression(left, right, OperatorType.Subtract);
+                                stack.Push(root);
                                 break;
 
                             case "*":

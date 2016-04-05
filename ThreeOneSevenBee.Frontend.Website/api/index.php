@@ -15,11 +15,11 @@ else
 
 class API {
     static function respond($success = true, $data = null, $message = null) {
-        echo ("{".
-                "success: ".($success ? "true" : "false").
-                ($data    != null ? ",data: ".json_encode($data) : "").
-                ($message != null ? ",message: \"".$message."\"" : "").
-              "}");
+        echo ('{'.
+                '"success": '.($success ? '"true"' : '"false"').
+                ($data    != null ? ',"data": '.json_encode($data) : '').
+                ($message != null ? ',"message": "'.$message.'"' : '').
+              '}');
         exit();
     }
 
@@ -28,19 +28,6 @@ class API {
         if(isset($_SESSION['authorized']))
             unset($_SESSION['authorized']);
         API::respond();
-    }
-
-    static function get_authorized_user($IN, $db) {
-        session_start();
-        if(isset($_SESSION['authorized'])) {
-            if($db->query("SELECT * FROM gamedb.user AS user WHERE user.id=?", $_SESSION['authorized'])) {
-                respond(true, $db->fetch());                
-            }
-            respond(false, null, "No user found");
-        }
-        else {
-            respond(false, null, "No user logged in");
-        }
     }
 
     static function get_users($IN, $db) {

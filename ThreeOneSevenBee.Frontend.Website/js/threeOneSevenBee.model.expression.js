@@ -412,7 +412,7 @@
                 return false;
             }
     
-            var validLetters = "abcdefghijklmnopqrstuvwxyz";
+            var validLetters = "abcdefghijklmnopqrstuvwz";
     
             $t = Bridge.getEnumerator(validLetters);
             while ($t.moveNext()) {
