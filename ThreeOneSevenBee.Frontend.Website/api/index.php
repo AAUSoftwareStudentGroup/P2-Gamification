@@ -15,11 +15,12 @@ else
 
 class API {
     static function respond($success = true, $data = null, $message = null) {
-        echo ("{".
-                "success: ".($success ? "true" : "false").
-                ($data    != null ? ",data: ".json_encode($data) : "").
-                ($message != null ? ",message: \"".$message."\"" : "").
-              "}");
+        echo ('{'.
+                '"success": '.($success ? '"true"' : '"false"').
+                ($data    != null ? ',"data": '.json_encode($data) : '').
+                ($message != null ? ',"message": "'.$message.'"' : '').
+              '}');
+        exit();
     }
 
     static function user_logout($IN, $db) {
@@ -36,14 +37,6 @@ class API {
             $result[] = $row;
         API::respond(true, $result);
     }
-
-    // static function delete_user_by_id($IN, $db) {
-    //     $db->query("UPDATE gamedb.user
-    //                   SET deleted_at=UNIX_TIMESTAMP()
-    //                   WHERE id=?;", $IN['user_id']
-    //                 );
-    //     respond();
-    // }
 
     static function delete_class_by_id($IN, $db) {
         $db->query("UPDATE gamedb.class
