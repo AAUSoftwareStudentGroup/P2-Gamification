@@ -67,7 +67,7 @@
                 this.progressBar.add(starExpressionBase.getSize());
             }
     
-            this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel("constructor", this.getUser().categories.getItem(category).levels.getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f1), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).splittingFractions]));
+            this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel("constructor", this.getUser().categories.getItem(category).levels.getItem(level).currentExpression, Bridge.fn.bind(this, this.onExpressionChanged), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).splittingFractions]));
     
             this.onExpressionChanged(this.getExprModel());
         },
@@ -101,16 +101,6 @@
         save: function () {
             this.getUser().categories.getItem(this.getUser().currentCategory).levels.getItem(this.getUser().currentLevel).currentExpression = this.getCurrentExpression().toString();
             this.aPI.updateCurrentPlayer(this.getUser());
-        }
-    });
-    
-    var $_ = {};
-    
-    Bridge.ns("ThreeOneSevenBee.Model.Game.GameModel", $_)
-    
-    Bridge.apply($_.ThreeOneSevenBee.Model.Game.GameModel, {
-        f1: function (m) {
-            this.onExpressionChanged(m);
         }
     });
     
@@ -186,6 +176,8 @@
             return this.getEnumerator$1();
         }
     });
+    
+    var $_ = {};
     
     Bridge.ns("ThreeOneSevenBee.Model.Game.ProgressbarStar", $_)
     
