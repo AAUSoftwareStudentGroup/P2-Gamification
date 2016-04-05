@@ -267,45 +267,46 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                             {
                                 numeratorList.Add(fraction.Left.Clone() as UnaryMinusExpression);
                             }
-                        else if(fraction != null && ReferenceEquals(fraction.Parent.Parent, variadicExpression) && fraction.Right == firstFraction.Right)
+                            else if (fraction != null && ReferenceEquals(fraction.Parent.Parent, variadicExpression) && fraction.Right == firstFraction.Right)
                             {
-                            numeratorList.Add(new UnaryMinusExpression(fraction.Left.Clone()));
+                                numeratorList.Add(new UnaryMinusExpression(fraction.Left.Clone()));
+                            }
+                            else
+                            {
+                                return null;
+                            }
+                        }
+
+                        VariadicOperatorExpression suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, firstFraction.Left.Clone(), secondFraction.Left.Clone());
+                        foreach (var i in numeratorList.Skip(2))
+                        {
+                            suggestionNumerator.Add(i);
+                        }
+                        BinaryOperatorExpression suggestion = new BinaryOperatorExpression(suggestionNumerator, firstFraction.Right.Clone(), OperatorType.Divide);
+                        if (variadicExpression.Count == selection.Count)
+                        {
+                            return new Identity(suggestion, suggestion);
                         }
                         else
                         {
-                            return null;
-                        }
-                    }
-
-                    VariadicOperatorExpression suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, firstFraction.Left.Clone(), secondFraction.Left.Clone());
-                    foreach (var i in numeratorList.Skip(2))
-                    {
-                        suggestionNumerator.Add(i);
-                    }
-                    BinaryOperatorExpression suggestion = new BinaryOperatorExpression(suggestionNumerator, firstFraction.Right.Clone(), OperatorType.Divide);
-                    if (variadicExpression.Count == selection.Count)
-                    {
-                    return new Identity(suggestion, suggestion);
-                }
-                    else
-                    {
-                        var list = new List<ExpressionBase>();
-                        BinaryOperatorExpression temp = null;
-                        for (int i = 0; i < selection.Count; i++)
-                        {
-                            temp = selection[i] as BinaryOperatorExpression;
-                            if (temp != null)
+                            var list = new List<ExpressionBase>();
+                            BinaryOperatorExpression temp = null;
+                            for (int i = 0; i < selection.Count; i++)
                             {
-                                list.Add(temp);
-            }
+                                temp = selection[i] as BinaryOperatorExpression;
+                                if (temp != null)
+                                {
+                                    list.Add(temp);
+                                }
+                            }
+                            var indexes = list.Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
+                            indexes.Sort();
+                            var result = variadicExpression.Clone() as VariadicOperatorExpression;
+                            result = InsertSuggestion(indexes, result, suggestion);
+                            return new Identity(suggestion, result);
                         }
-                        var indexes = list.Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
-                        indexes.Sort();
-                        var result = variadicExpression.Clone() as VariadicOperatorExpression;
-                        result = InsertSuggestion(indexes, result, suggestion);
-                        return new Identity(suggestion, result);
                     }
-            }
+                }
             }
             return null;
         }
@@ -319,7 +320,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 var baseSelection = selection[0].Clone();
                 var variableIsPowerToOne = new List<NumericExpression>();
-                var powerToOneCount = 0;
 
                 if (selection.All((s) => s.Parent is BinaryOperatorExpression && ReferenceEquals((s.Parent as BinaryOperatorExpression).Left, s) || s.Parent is VariadicOperatorExpression))
                 {
