@@ -7,11 +7,20 @@ namespace ThreeOneSevenBee.Model.Game
 {
     public class CurrentPlayer : Player
     {
-        public CurrentPlayer(string player) : base(player){ }
+        public CurrentPlayer(string player) : base(player)
+        {
+            Categories = new List<LevelCategory>();
+        }
 
         public int CurrentCategory;
         public int CurrentLevel;
 
-        public List<LevelCategory> Categories = new List<LevelCategory>();
+        public void AddCategory(LevelCategory category)
+        {
+            category.CategoryIndex = Categories.Count;
+            Categories.Add(category);
+        }
+
+        public List<LevelCategory> Categories;
     }
 }

@@ -27,7 +27,7 @@ namespace ThreeOneSevenBee.Model.UI
         {
             this.context = context;
 
-            titleView = new TitleView(game.Players);
+            titleView = new TitleView(game.User, game.Players);
 
             levelView = new LevelView(game, context.Width, context.Height)
             {
