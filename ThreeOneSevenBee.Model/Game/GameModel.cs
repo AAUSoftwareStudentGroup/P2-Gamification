@@ -33,7 +33,7 @@ namespace ThreeOneSevenBee.Model.Game
         {
             get
             {
-                return LevelCompleted && User.CurrentLevel == User.Categories[User.CurrentCategory].Levels.Count - 1;
+                return LevelCompleted && User.CurrentLevel == User.Categories[User.CurrentCategory].Count - 1;
             }
         }
 
@@ -50,19 +50,19 @@ namespace ThreeOneSevenBee.Model.Game
             User.CurrentLevel = level;
             User.CurrentCategory = category;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            int endValue = serializer.Deserialize(User.Categories[category].Levels[level].StarExpressions.Last()).Size;
-            int currentValue = serializer.Deserialize(User.Categories[category].Levels[level].StartExpression).Size;
+            int endValue = serializer.Deserialize(User.Categories[category][level].StarExpressions.Last()).Size;
+            int currentValue = serializer.Deserialize(User.Categories[category][level].StartExpression).Size;
             ProgressBar = new ProgressbarStar(currentValue, endValue, currentValue);
             StarExpressions = new List<ExpressionBase>();
 
-            foreach (string starExpression in User.Categories[User.CurrentCategory].Levels[User.CurrentLevel].StarExpressions)
+            foreach (string starExpression in User.Categories[User.CurrentCategory][User.CurrentLevel].StarExpressions)
             {
                 ExpressionBase starExpressionBase = serializer.Deserialize(starExpression);
                 StarExpressions.Add(starExpressionBase);
                 ProgressBar.Add(starExpressionBase.Size);
             }
 
-            ExprModel = new ExpressionModel(User.Categories[category].Levels[level].CurrentExpression, (m) => onExpressionChanged(m), 
+            ExprModel = new ExpressionModel(User.Categories[category][level].CurrentExpression, (m) => onExpressionChanged(m), 
                 Rules.ExponentToProductRule, Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators, 
                 Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.ExponentProduct,
                 Rules.NumericBinaryRule, Rules.NumericVariadicRule);
@@ -104,7 +104,7 @@ namespace ThreeOneSevenBee.Model.Game
 
         public void Save()
         {
-            User.Categories[User.CurrentCategory].Levels[User.CurrentLevel].CurrentExpression = CurrentExpression.ToString();
+            User.Categories[User.CurrentCategory][User.CurrentLevel].CurrentExpression = CurrentExpression.ToString();
         }
 
         public GameModel(CurrentPlayer user, List<Player> players)

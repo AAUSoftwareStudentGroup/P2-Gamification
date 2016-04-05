@@ -42,7 +42,7 @@
             return Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() >= 1;
         },
         getCategoryCompleted: function () {
-            return this.getLevelCompleted() && this.getUser().currentLevel === this.getUser().categories.getItem(this.getUser().currentCategory).levels.getCount() - 1;
+            return this.getLevelCompleted() && this.getUser().currentLevel === this.getUser().categories.getItem(this.getUser().currentCategory).getCount() - 1;
         },
         getGameCompleted: function () {
             return this.getCategoryCompleted() && this.getUser().currentCategory === this.getUser().categories.getCount() - 1;
@@ -52,12 +52,12 @@
             this.getUser().currentLevel = level;
             this.getUser().currentCategory = category;
             var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
-            var endValue = serializer.deserialize(Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(category).levels.getItem(level).starExpressions).last()).getSize();
-            var currentValue = serializer.deserialize(this.getUser().categories.getItem(category).levels.getItem(level).startExpression).getSize();
+            var endValue = serializer.deserialize(Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(category).getItem(level).starExpressions).last()).getSize();
+            var currentValue = serializer.deserialize(this.getUser().categories.getItem(category).getItem(level).startExpression).getSize();
             this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(currentValue, endValue, currentValue);
             this.setStarExpressions(new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)());
     
-            $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategory).levels.getItem(this.getUser().currentLevel).starExpressions);
+            $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategory).getItem(this.getUser().currentLevel).starExpressions);
             while ($t.moveNext()) {
                 var starExpression = $t.getCurrent();
                 var starExpressionBase = serializer.deserialize(starExpression);
@@ -65,7 +65,7 @@
                 this.progressBar.add(starExpressionBase.getSize());
             }
     
-            this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel("constructor", this.getUser().categories.getItem(category).levels.getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f1), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule]));
+            this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel("constructor", this.getUser().categories.getItem(category).getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f1), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericVariadicRule]));
     
             this.onExpressionChanged(this.getExprModel());
         },
@@ -97,7 +97,7 @@
             this.setLevel(this.getUser().currentLevel, this.getUser().currentCategory);
         },
         save: function () {
-            this.getUser().categories.getItem(this.getUser().currentCategory).levels.getItem(this.getUser().currentLevel).currentExpression = this.getCurrentExpression().toString();
+            this.getUser().categories.getItem(this.getUser().currentCategory).getItem(this.getUser().currentLevel).currentExpression = this.getCurrentExpression().toString();
         }
     });
     
@@ -117,6 +117,11 @@
         currentExpression: null,
         levelIndex: 0,
         categoryIndex: 0,
+        constructor$1: function (startExpression, currentExpression, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, startExpression, currentExpression, starExpressions);
+    
+            if (starExpressions === void 0) { starExpressions = []; }
+        },
         constructor: function (levelIndex, categoryIndex, startExpression, currentExpression, starExpressions) {
             var $t;
             if (starExpressions === void 0) { starExpressions = []; }
@@ -131,14 +136,6 @@
                 this.starExpressions.add(star);
             }
     }
-    });
-    
-    Bridge.define('ThreeOneSevenBee.Model.Game.LevelCategory', {
-        name: null,
-        levels: null,
-        constructor: function (name) {
-            this.name = name;
-        }
     });
     
     Bridge.define('ThreeOneSevenBee.Model.Game.ProgressbarStar', {
@@ -202,14 +199,46 @@
         inherits: [ThreeOneSevenBee.Model.Game.Player],
         currentCategory: 0,
         currentLevel: 0,
-        config: {
-            init: function () {
-                this.categories = new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)() || null;
-            }
-        },
+        categories: null,
         constructor: function (player) {
             ThreeOneSevenBee.Model.Game.Player.prototype.$constructor.call(this, player);
     
+            this.categories = new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)();
+        },
+        addCategory: function (category) {
+            category.categoryIndex = this.categories.getCount();
+            this.categories.add(category);
+        }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.Game.LevelCategory', {
+        inherits: [Bridge.IEnumerable$1(ThreeOneSevenBee.Model.Game.Level)],
+        name: null,
+        categoryIndex: 0,
+        levels: null,
+        constructor: function (name) {
+            this.name = name;
+            this.levels = new Bridge.List$1(ThreeOneSevenBee.Model.Game.Level)();
+        },
+        getItem: function (index) {
+            return this.levels.getItem(index);
+        },
+        setItem: function (index, value) {
+            this.levels.setItem(index, value);
+        },
+        getCount: function () {
+            return this.levels.getCount();
+        },
+        add: function (level) {
+            level.categoryIndex = this.categoryIndex;
+            level.levelIndex = this.levels.getCount();
+            this.levels.add(level);
+        },
+        getEnumerator$1: function () {
+            return this.levels.getEnumerator();
+        },
+        getEnumerator: function () {
+            return this.getEnumerator$1();
         }
     });
     
@@ -220,62 +249,56 @@
             ThreeOneSevenBee.Model.Game.GameAPI.prototype.$constructor.call(this);
     
             this.currentPlayer = new ThreeOneSevenBee.Model.Game.CurrentPlayer("Morten");
+            this.currentPlayer.addCategory(Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("Numbers"), [
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 0, 0, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 1, 0, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 2, 0, "4+5*5", "4+10*5", ["4+50", "54"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 3, 0, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])]
+            ] ));
+            this.currentPlayer.addCategory(Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("Variables"), [
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 0, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 1, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 2, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 3, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 4, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 5, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 6, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 7, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 8, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 9, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 10, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 11, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 12, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 13, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 14, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 15, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 16, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 17, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 18, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 19, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 20, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 21, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 22, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 23, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 24, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 25, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 26, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 27, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 28, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 29, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 30, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 31, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 32, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 33, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 34, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
+                [new ThreeOneSevenBee.Model.Game.Level("constructor", 35, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])]
+            ] ));
             this.currentPlayer.badges = Bridge.merge(new Bridge.List$1(String)(), [
                 ["FractionBadge"],
                 ["ExponentBadge"]
             ] );
             this.currentPlayer.currentCategory = 0;
             this.currentPlayer.currentLevel = 0;
-            this.currentPlayer.categories = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)(), [
-                [Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("Numbers"), {
-                    levels: Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.Level)(), [
-                        [new ThreeOneSevenBee.Model.Game.Level(0, 0, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(1, 0, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(2, 0, "4+5*5", "4+10*5", ["4+50", "54"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(3, 0, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])]
-                    ] )
-                } )],
-                [Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("Variables"), {
-                    levels: Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.Level)(), [
-                        [new ThreeOneSevenBee.Model.Game.Level(0, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(1, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(2, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(3, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(4, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(5, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(6, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(7, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(8, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(9, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(10, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(11, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(12, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(13, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(14, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(15, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(16, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(17, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(18, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(19, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(20, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(21, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(22, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(23, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(24, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(25, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(26, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(27, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(28, 1, "a^2*a*a*a*a*a", "a^2*a*a*a^3", ["a^2*a^5", "a^7"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(29, 1, "4+5*5", "4+5*5", ["4+5^2", "4+25", "29"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(30, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(31, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(32, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(33, 1, "4+5*5", "4+10*5", ["4+50", "54"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(34, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])],
-                        [new ThreeOneSevenBee.Model.Game.Level(35, 1, "{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", ["{a+b+c+d}/c"])]
-                    ] )
-                } )]
-            ] );
         },
         getReady: function () {
             return true;

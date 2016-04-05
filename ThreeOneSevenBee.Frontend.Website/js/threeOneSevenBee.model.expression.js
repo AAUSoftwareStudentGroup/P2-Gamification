@@ -264,6 +264,7 @@
                 }
             }
         },
+        treatMinusAsUnaryMinusInVariadicPlus: true,
         config: {
             init: function () {
                 this.ops = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Expression.Operator)(), [
@@ -636,10 +637,25 @@
                                 }
                                 break;
                             case "-": 
-                                right = stack.pop();
-                                left = stack.pop();
-                                root = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(left, right, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract);
-                                stack.push(root);
+                                if (this.treatMinusAsUnaryMinusInVariadicPlus) {
+                                    right = new ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression(stack.pop());
+                                    left = stack.pop();
+                                    if (Bridge.is(left, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression) && (Bridge.as(left, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression)).getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
+                                        (Bridge.as(left, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression)).add(right);
+                                        root = left;
+                                        stack.push(root);
+                                    }
+                                    else  {
+                                        root = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, left, right);
+                                        stack.push(root);
+                                    }
+                                }
+                                else  {
+                                    right = stack.pop();
+                                    left = stack.pop();
+                                    root = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(left, right, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract);
+                                    stack.push(root);
+                                }
                                 break;
                             case "*": 
                                 right = stack.pop();

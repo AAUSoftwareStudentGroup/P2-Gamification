@@ -90,8 +90,8 @@ namespace ThreeOneSevenBee.Model.UI
             CompositeView levelButtons = new CompositeView(400, 400) ;
 
             int levelNumber = 0;
-            int numberOfLevels = user.Categories[Category].Levels.Count;
-            foreach (Level level in user.Categories[Category].Levels)
+            int numberOfLevels = user.Categories[Category].Count;
+            foreach (Level level in user.Categories[Category])
             {
                 levelButtons.Add(
                     new ButtonView((levelNumber + 1).ToString(), () => OnLevelSelect(level))
