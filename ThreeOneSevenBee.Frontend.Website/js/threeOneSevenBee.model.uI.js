@@ -600,6 +600,7 @@
                         setHeight: view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4
                     } )]
                 ] );
+                compositeView.setBackgroundColor(model.selectionIndex(expression) !== -1 ? "#cccccc" : "transparent");
                 compositeView.setBaseline(view2.getY() + view2.getBaseline());
                 return compositeView;
             }
