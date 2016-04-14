@@ -11,7 +11,7 @@ elseif(isset($_POST['action']))
 if($IN != null)
     API::$IN['action']($IN, $db);
 else
-    respond(false, null, "no action given");
+    API::respond(false, null, "no action given");
 
 class API {
     static function respond($success = true, $data = null, $message = null) {
