@@ -16,16 +16,25 @@ namespace threeonesevenbee.Frontend.Website
 				Response.Write ("no action");
 				return;
 			}
-			HttpWebRequest req = (HttpWebRequest)WebRequest.Create ("http://webmat.srv.aau.dk/api?"+Request.QueryString);
+			HttpWebRequest req = (HttpWebRequest)WebRequest.Create ("http://webmat.cs.aau.dk/api?"+Request.QueryString);
 			req.KeepAlive = false;
 			req.ProtocolVersion = HttpVersion.Version10;
 			req.Method = "GET";
-			req.Timeout = 3000;
+			req.Timeout = 30000;
 
-			Stream dataStream = req.GetResponse ().GetResponseStream ();
-			StreamReader reader = new StreamReader (dataStream);
-			string responseString = reader.ReadToEnd ();
-			Response.Write (responseString);
+		    Stream dataStream;
+
+		    try
+		    {
+		        dataStream = req.GetResponse().GetResponseStream();
+		        StreamReader reader = new StreamReader(dataStream);
+		        string responseString = reader.ReadToEnd();
+		        Response.Write(responseString);
+		    }
+		    catch (Exception)
+		    {
+		        Response.Write("404");
+		    }
 		}
 	}
 }

@@ -1,14 +1,14 @@
 <?
     if(isset($_POST) && !empty($_POST) && strcmp($_POST['password'], $_POST['password_confirm']) == 0) {
-        $db->query("INSERT INTO gamedb.user (name,password_hash,class_id, school_id)
-                    VALUES (?,?,?,?);",
-                    trim(ucfirst($_POST['fname'])." ".ucfirst($_POST['lname'])),
-                    password_hash($_POST['password'], PASSWORD_DEFAULT),
-                    $_POST['class_id'],
-                    $_POST['school_id']
-                  );
+        $newid = $db->query("INSERT INTO gamedb.user (name,password_hash,class_id, school_id)
+                             VALUES (?,?,?,?);",
+                             trim(ucfirst($_POST['fname'])." ".ucfirst($_POST['lname'])),
+                             password_hash($_POST['password'], PASSWORD_DEFAULT),
+                             $_POST['class_id'],
+                             $_POST['school_id']
+                           );
 
-        $_SESSION['authorized'] = true;
+        $_SESSION['authorized'] = $newid;
         header("location: /");
     }
     elseif(isset($_POST) && !empty($_POST) && strcmp($_POST['password'], $_POST['password_confirm']) != 0) {

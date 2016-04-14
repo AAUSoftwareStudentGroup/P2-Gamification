@@ -5,6 +5,74 @@ using ThreeOneSevenBee.Model.Expression.Expressions;
 
 namespace ThreeOneSevenBee.ModelTests
 {
+    public static class Make
+    {
+        public static ExpressionBase New(int value)
+        {
+            return new NumericExpression(value);
+        }
+
+        public static ExpressionBase New(string value)
+        {
+            return new VariableExpression(value);
+        }
+
+        public static ExpressionBase New(ConstantType type)
+        {
+            return new ConstantExpression(type);
+        }
+
+        public static ExpressionBase Minus(ExpressionBase expression)
+        {
+            return new UnaryMinusExpression(expression);
+        }
+
+        public static ExpressionBase Add(ExpressionBase left, ExpressionBase right)
+        {
+            return new VariadicOperatorExpression(OperatorType.Add, left, right);
+        }
+
+        public static ExpressionBase Add(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
+        {
+            return new VariadicOperatorExpression(OperatorType.Add, first, second, expressions);
+        }
+
+        public static ExpressionBase Divide(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Divide);
+        }
+
+        public static ExpressionBase Multiply(ExpressionBase left, ExpressionBase right)
+        {
+            return new VariadicOperatorExpression(OperatorType.Multiply, left, right);
+        }
+
+        public static ExpressionBase Multiply(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
+        {
+            return new VariadicOperatorExpression(OperatorType.Multiply, first, second, expressions);
+        }
+
+        public static ExpressionBase Power(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Power);
+        }
+
+        public static ExpressionBase Subtract(ExpressionBase left, ExpressionBase right)
+        {
+            return new BinaryOperatorExpression(left, right, OperatorType.Subtract);
+        }
+
+        public static ExpressionBase Sqrt(ExpressionBase expression)
+        {
+            return new FunctionExpression(expression, "sqrt");
+        }
+
+        public static ExpressionBase Delimiter(ExpressionBase expression)
+        {
+            return new DelimiterExpression(expression);
+        }
+    }
+
     [TestClass]
     public class ExpressionTests
     {
@@ -97,118 +165,58 @@ namespace ThreeOneSevenBee.ModelTests
             Assert.AreEqual("1+1", parser.Serialize(exp), "'1   +  1' = '1+1'");
         }
 
-        private ExpressionBase New(int value)
-        {
-            return new NumericExpression(value);
-        }
-
-        private ExpressionBase New(string value)
-        {
-            return new VariableExpression(value);
-        }
-
-        private ExpressionBase New(ConstantType type)
-        {
-            return new ConstantExpression(type);
-        }
-
-        private ExpressionBase Minus(ExpressionBase expression)
-        {
-            return new UnaryMinusExpression(expression);
-        }
-
-        private ExpressionBase Add(ExpressionBase left, ExpressionBase right)
-        {
-            return new BinaryOperatorExpression(left, right, OperatorType.Add);
-        }
-
-        private ExpressionBase Add(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
-        {
-            return new VariadicOperatorExpression(OperatorType.Add, first, second, expressions);
-        }
-
-        private ExpressionBase Divide(ExpressionBase left, ExpressionBase right)
-        {
-            return new BinaryOperatorExpression(left, right, OperatorType.Divide);
-        }
-
-        private ExpressionBase Multiply(ExpressionBase left, ExpressionBase right)
-        {
-            return new BinaryOperatorExpression(left, right, OperatorType.Multiply);
-        }
-
-        private ExpressionBase Multiply(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
-        {
-            return new VariadicOperatorExpression(OperatorType.Multiply, first, second, expressions);
-        }
-
-        private ExpressionBase Power(ExpressionBase left, ExpressionBase right)
-        {
-            return new BinaryOperatorExpression(left, right, OperatorType.Power);
-        }
-
-        private ExpressionBase Subtract(ExpressionBase left, ExpressionBase right)
-        {
-            return new BinaryOperatorExpression(left, right, OperatorType.Subtract);
-        }
-
-        private ExpressionBase Sqrt(ExpressionBase expression)
-        {
-            return new FunctionExpression(expression, "sqrt");
-        }
-
         [TestMethod]
         public void ExpressionEquals()
         {
             // numeric
-            Assert.IsTrue(New(1) == New(1), "1 == 1");
-            Assert.IsTrue(New(1) != New(2), "1 != 2");
+            Assert.IsTrue(Make.New(1) == Make.New(1), "1 == 1");
+            Assert.IsTrue(Make.New(1) != Make.New(2), "1 != 2");
 
             // variable
-            Assert.IsTrue(New("a") == New("a"), "a == a");
-            Assert.IsTrue(New("a") != New("b"), "a != b");
+            Assert.IsTrue(Make.New("a") == Make.New("a"), "a == a");
+            Assert.IsTrue(Make.New("a") != Make.New("b"), "a != b");
 
             // constant
-            Assert.IsTrue(New(ConstantType.Pi) == New(ConstantType.Pi), "Pi == Pi");
+            Assert.IsTrue(Make.New(ConstantType.Pi) == Make.New(ConstantType.Pi), "Pi == Pi");
 
             // unary minus
-            Assert.IsTrue(Minus(New(1)) == Minus(New(1)), "-1 == -1");
-            Assert.IsTrue(Minus(New("a")) == Minus(New("a")), "-a == -a");
-            Assert.IsTrue(Minus(New(1)) != Minus(New("a")), "-1 != -a");
-            Assert.IsTrue(Minus(New("a")) != Minus(New(1)), "-a != -1");
+            Assert.IsTrue(Make.Minus(Make.New(1)) == Make.Minus(Make.New(1)), "-1 == -1");
+            Assert.IsTrue(Make.Minus(Make.New("a")) == Make.Minus(Make.New("a")), "-a == -a");
+            Assert.IsTrue(Make.Minus(Make.New(1)) != Make.Minus(Make.New("a")), "-1 != -a");
+            Assert.IsTrue(Make.Minus(Make.New("a")) != Make.Minus(Make.New(1)), "-a != -1");
 
             // binary
             // - add
-            Assert.IsTrue(Add(New(1), New("a")) == Add(New(1), New("a")), "1+a == 1+a");
-            Assert.IsTrue(Add(New(1), New("a")) == Add(New("a"), New(1)), "1+a == a+1");
+            Assert.IsTrue(Make.Add(Make.New(1), Make.New("a")) == Make.Add(Make.New(1), Make.New("a")), "1+a == 1+a");
+            Assert.IsTrue(Make.Add(Make.New(1), Make.New("a")) == Make.Add(Make.New("a"), Make.New(1)), "1+a == a+1");
             // - mult
-            Assert.IsTrue(Multiply(New(1), New("a")) == Multiply(New(1), New("a")), "1*a == 1*a");
-            Assert.IsTrue(Multiply(New(1), New("a")) == Multiply(New("a"), New(1)), "1*a == a*1");
+            Assert.IsTrue(Make.Multiply(Make.New(1), Make.New("a")) == Make.Multiply(Make.New(1), Make.New("a")), "1*a == 1*a");
+            Assert.IsTrue(Make.Multiply(Make.New(1), Make.New("a")) == Make.Multiply(Make.New("a"), Make.New(1)), "1*a == a*1");
             // - sub
-            Assert.IsTrue(Subtract(New(1), New("a")) == Subtract(New(1), New("a")), "1-a == 1-a");
-            Assert.IsTrue(Subtract(New(1), New("a")) != Subtract(New("a"), New(1)), "1-a != a-1");
+            Assert.IsTrue(Make.Subtract(Make.New(1), Make.New("a")) == Make.Subtract(Make.New(1), Make.New("a")), "1-a == 1-a");
+            Assert.IsTrue(Make.Subtract(Make.New(1), Make.New("a")) != Make.Subtract(Make.New("a"), Make.New(1)), "1-a != a-1");
             // - div
-            Assert.IsTrue(Divide(New(1), New("a")) == Divide(New(1), New("a")), "1/a == 1/a");
-            Assert.IsTrue(Divide(New(1), New("a")) != Divide(New("a"), New(1)), "1/a != a/1");
+            Assert.IsTrue(Make.Divide(Make.New(1), Make.New("a")) == Make.Divide(Make.New(1), Make.New("a")), "1/a == 1/a");
+            Assert.IsTrue(Make.Divide(Make.New(1), Make.New("a")) != Make.Divide(Make.New("a"), Make.New(1)), "1/a != a/1");
             // - pow
-            Assert.IsTrue(Power(New(1), New("a")) == Power(New(1), New("a")), "1^a == 1^a");
-            Assert.IsTrue(Power(New(1), New("a")) != Power(New("a"), New(1)), "1 ^ a != a ^ 1");
+            Assert.IsTrue(Make.Power(Make.New(1), Make.New("a")) == Make.Power(Make.New(1), Make.New("a")), "1^a == 1^a");
+            Assert.IsTrue(Make.Power(Make.New(1), Make.New("a")) != Make.Power(Make.New("a"), Make.New(1)), "1 ^ a != a ^ 1");
 
             // variadic
-            Assert.IsTrue(Multiply(New("a"), New("b"), New("c")) == Multiply(New("c"), New("a"), New("b")), "a*b*c == c*a*b");
-            Assert.IsTrue(Multiply(New("a"), Multiply(New("b"), Multiply(New("c"), New("d")))) == Multiply(New("a"), Multiply(New("b"), Multiply(New("d"), New("c")))), "a*(b*(c*d)) == a*(b*(d*c))");
-            Assert.IsFalse(Multiply(New("a"), Multiply(New("b"), Multiply(New("c"), New("d")))) == Multiply(New("a"), New("b"), New("c"), New("d")), "a*(b*(c*d)) != a*b*c*d");
-            Assert.IsTrue(Multiply(New(ConstantType.Pi), New(1)) == Multiply(New(1), New(ConstantType.Pi)), "pi*1 == 1*pi");
+            Assert.IsTrue(Make.Multiply(Make.New("a"), Make.New("b"), Make.New("c")) == Make.Multiply(Make.New("c"), Make.New("a"), Make.New("b")), "a*b*c == c*a*b");
+            Assert.IsTrue(Make.Multiply(Make.New("a"), Make.Multiply(Make.New("b"), Make.Multiply(Make.New("c"), Make.New("d")))) == Make.Multiply(Make.New("a"), Make.Multiply(Make.New("b"), Make.Multiply(Make.New("d"), Make.New("c")))), "a*(b*(c*d)) == a*(b*(d*c))");
+            Assert.IsFalse(Make.Multiply(Make.New("a"), Make.Multiply(Make.New("b"), Make.Multiply(Make.New("c"), Make.New("d")))) == Make.Multiply(Make.New("a"), Make.New("b"), Make.New("c"), Make.New("d")), "a*(b*(c*d)) != a*b*c*d");
+            Assert.IsTrue(Make.Multiply(Make.New(ConstantType.Pi), Make.New(1)) == Make.Multiply(Make.New(1), Make.New(ConstantType.Pi)), "pi*1 == 1*pi");
 
             // function
-            Assert.IsTrue(Sqrt(New("a")) == Sqrt(New("a")));
+            Assert.IsTrue(Make.Sqrt(Make.New("a")) == Make.Sqrt(Make.New("a")));
         }
 
         [TestMethod]
         public void ExpressionStructureTest()
         {
-            var a = Add(New("a"), New("b"), Add(New("2"), New("2")));
-            var b = Add(New("a"), New("b"), New("2"), New("2"));
+            var a = Make.Add(Make.New("a"), Make.New("b"), Make.Add(Make.New("2"), Make.New("2")));
+            var b = Make.Add(Make.New("a"), Make.New("b"), Make.New("2"), Make.New("2"));
 
             Assert.IsTrue(a == b, "a+b+(2+2) == a+b+2+2");
         }

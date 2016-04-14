@@ -22,18 +22,18 @@ namespace ThreeOneSevenBee.Model.Game
 
         public StubGameAPI()
         {
-            currentPlayer = new CurrentPlayer("Morten");
+            //currentPlayer = new CurrentPlayer("Morten");
 
-            LevelCategory numbers = new LevelCategory("Numbers");
-            currentPlayer.AddCategory(numbers);
-            numbers.Add(new Level("4+(4+5)", "4+(4+5)", "4+9", "13"));
-            numbers.Add(new Level("4*6+5", "4*6+5", "24+5", "29"));
+            //LevelCategory numbers = new LevelCategory("Numbers");
+            //currentPlayer.AddCategory(numbers);
+            //numbers.Add(new Level("4+(4+5)", "a*a", "4+9", "13"));
+            //numbers.Add(new Level("4*6+5", "4*6+5", "24+5", "29"));
             
 
-            LevelCategory variables = new LevelCategory("Variables");
-            currentPlayer.AddCategory(variables);
-            variables.Add(new Level("a*a*a", "a*a*a", "a^{2+1}", "a^3"));
-            variables.Add(new Level("a^2*a^3", "a^2*a^3", "a^{2+3}", "a^5"));
+            //LevelCategory variables = new LevelCategory("Variables");
+            //currentPlayer.AddCategory(variables);
+            //variables.Add(new Level("a*a*a", "a*a*a", "a^{2+1}", "a^3"));
+            //variables.Add(new Level("a^2*a^3", "a^2*a^3", "a^{2+3}", "a^5"));
             
 
             //currentPlayer.AddCategory(new LevelCategory("Numbers") {
@@ -80,9 +80,9 @@ namespace ThreeOneSevenBee.Model.Game
             //                new Level("{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", "{a+b+c+d}/c"),
             //                new Level("{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", "{a+b+c+d}/c"),
             //            });
-            currentPlayer.Badges = new List<string> { "FractionBadge", "ExponentBadge" };
-            currentPlayer.CurrentCategory = 0;
-            currentPlayer.CurrentLevel = 0;
+            //currentPlayer.Badges = new List<string> { "FractionBadge", "ExponentBadge" };
+            //currentPlayer.CurrentCategory = 0;
+            //currentPlayer.CurrentLevel = 0;
         }
 
         public override void GetCurrentPlayer(Action<CurrentPlayer> callback)
