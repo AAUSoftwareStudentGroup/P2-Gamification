@@ -22,25 +22,23 @@ namespace ThreeOneSevenBee.Frontend
 
             CanvasContext context = new CanvasContext(canvas);
 
-            StubGameAPI gameAPI = new JQueryGameAPI();
+            JQueryGameAPI gameAPI = new JQueryGameAPI();
+
+            LevelCategory testCategories = new LevelCategory("test");
+            testCategories.Add(new Level("4+40", "4+40", new string[] { "44" }));
 
             GameModel gameModel;
             GameView gameView;
 
             gameAPI.GetCurrentPlayer((u) =>
             {
-                Console.WriteLine("user loaded");
                 gameAPI.GetPlayers((p) =>
                 {
-                    Console.WriteLine("players loaded");
                     gameModel = new GameModel(u, p);
+                    gameModel.User.AddCategory(testCategories);
                     gameView = new GameView(gameModel, context);
                 });
-
             });
-
-
-
         }
     }
 }

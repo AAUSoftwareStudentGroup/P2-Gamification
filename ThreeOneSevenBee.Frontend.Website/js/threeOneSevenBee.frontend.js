@@ -17,21 +17,19 @@
     
                 var gameAPI = new ThreeOneSevenBee.Frontend.JQueryGameAPI();
     
+                var testCategories = new ThreeOneSevenBee.Model.Game.LevelCategory("test");
+                testCategories.add(new ThreeOneSevenBee.Model.Game.Level("constructor$1", "4+40", "4+40", ["44"]));
+    
                 var gameModel;
                 var gameView;
     
                 gameAPI.getCurrentPlayer(function (u) {
-                    console.log("user loaded");
                     gameAPI.getPlayers(function (p) {
-                        console.log("players loaded");
                         gameModel = new ThreeOneSevenBee.Model.Game.GameModel(u, p);
+                        gameModel.getUser().addCategory(testCategories);
                         gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
                     });
-    
                 });
-    
-    
-    
             }
         }
     });
@@ -178,16 +176,61 @@
     });
     
     Bridge.define('ThreeOneSevenBee.Frontend.JQueryGameAPI', {
-        inherits: [ThreeOneSevenBee.Model.Game.StubGameAPI],
+        inherits: [ThreeOneSevenBee.Model.Game.GameAPI],
+        getReady: function () {
+            throw new Bridge.NotImplementedException();
+        },
+        getCategories: function (callback) {
+            $.get("/api/?action=get_levels", { }, function (data, textStatus, request) {
+                var $t, $t1;
+                var jdata = JSON.parse(Bridge.cast(data, String));
+    
+                var categories = new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)();
+                var categoriesData = Bridge.as(jdata.data, Array);
+    
+                $t = Bridge.getEnumerator(categoriesData);
+                while ($t.moveNext()) {
+                    var categoryData = $t.getCurrent();
+    
+                    var levelCategory = new ThreeOneSevenBee.Model.Game.LevelCategory(Bridge.cast(categoryData.name, String));
+                    var levelsData = Bridge.as(categoryData.levels, Array);
+                    $t1 = Bridge.getEnumerator(levelsData);
+                    while ($t1.moveNext()) {
+                        var levelData = $t1.getCurrent();
+                        var level = new ThreeOneSevenBee.Model.Game.Level("constructor$1", Bridge.cast(levelData.initial_expression, String), Bridge.cast(levelData.initial_expression, String), Bridge.Linq.Enumerable.from((Bridge.as(levelData.star_expressions, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f1).toArray());
+                        levelCategory.add(level);
+                    }
+                    categories.add(levelCategory);
+                }
+    
+                callback(categories);
+            });
+        },
         getCurrentPlayer: function (callback) {
-            ThreeOneSevenBee.Model.Game.StubGameAPI.prototype.getCurrentPlayer.call(this, callback);
+            $.get("/api/?action=get_current_user&debug=1", { }, Bridge.fn.bind(this, function (data, textStatus, request) {
+                var jdata = JSON.parse(Bridge.cast(data, String));
+                var currentPlayer = new ThreeOneSevenBee.Model.Game.CurrentPlayer(Bridge.cast(jdata.data.name, String));
+                this.getCategories(function (categories) {
+                    var $t;
+                    $t = Bridge.getEnumerator(categories);
+                    while ($t.moveNext()) {
+                        var category = $t.getCurrent();
+                        currentPlayer.addCategory(category);
+                    }
+                    console.log(currentPlayer);
+                    callback(currentPlayer);
+                });
+            }));
         },
         getPlayers: function (callback) {
             $.get("/api/?action=get_users", { }, function (data, textStatus, request) {
                 var jdata = JSON.parse(Bridge.cast(data, String));
-                var result = Bridge.Linq.Enumerable.from((Bridge.as(jdata.data, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f1).toList(ThreeOneSevenBee.Model.Game.Player);
+                var result = Bridge.Linq.Enumerable.from((Bridge.as(jdata.data, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f2).toList(ThreeOneSevenBee.Model.Game.Player);
                 callback(result);
             });
+        },
+        updateCurrentPlayer: function (currentPlayer) {
+            throw new Bridge.NotImplementedException();
         }
     });
     
@@ -196,7 +239,10 @@
     Bridge.ns("ThreeOneSevenBee.Frontend.JQueryGameAPI", $_)
     
     Bridge.apply($_.ThreeOneSevenBee.Frontend.JQueryGameAPI, {
-        f1: function (s) {
+        f1: function (o) {
+            return Bridge.cast(o, String);
+        },
+        f2: function (s) {
             return new ThreeOneSevenBee.Model.Game.Player(Bridge.cast(s.name, String));
         }
     });
