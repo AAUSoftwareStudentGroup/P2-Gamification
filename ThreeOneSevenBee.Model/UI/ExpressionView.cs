@@ -100,9 +100,21 @@ namespace ThreeOneSevenBee.Model.UI
                 double maxBaseline = NUMVAR_SIZE / 2;
                 foreach (ExpressionBase expr in variadicExpression)
                 {
+                    View operand;
                     if (views.Count != 0)
                     {
-                        View operatorView = new OperatorView(variadicExpression.Type);
+                        UnaryMinusExpression minus = expr as UnaryMinusExpression;
+                        View operatorView;
+                        if (variadicExpression.Type == OperatorType.Add && minus != null)
+                        {
+                            operatorView = new OperatorView(OperatorType.Subtract);
+                            operand = BuildView(minus.Expression, model);
+                        }
+                        else
+                        {
+                            operatorView = new OperatorView(variadicExpression.Type);
+                            operand = BuildView(expr, model);
+                        }
                         operatorView.X = offsetX;
                         operatorView.Width = (variadicExpression.Type == OperatorType.Multiply ? 0.5 : 1.5)  * NUMVAR_SIZE;
                         operatorView.Height = NUMVAR_SIZE;
@@ -110,7 +122,11 @@ namespace ThreeOneSevenBee.Model.UI
                         views.Add(operatorView);
                         offsetX += operatorView.Width;
                     }
-                    View operand = BuildView(expr, model);
+                    else
+                    {
+                        operand = BuildView(expr, model);
+                    }
+                    
                     maxBaseline = System.Math.Max(maxBaseline, operand.Baseline);
                     operand.X = offsetX;
                     offsetX += operand.Width;
@@ -164,9 +180,8 @@ namespace ThreeOneSevenBee.Model.UI
                 Height = NUMVAR_SIZE,
                 Baseline = NUMVAR_SIZE / 2,
                 FontSize = NUMVAR_SIZE,
-                BackgroundColor = model.SelectionIndex(expression) != -1 ? "#cccccc" : "transparent"
+                BackgroundColor = model.SelectionIndex(expression) != -1 ? "#1090FF" : "transparent"
             };
-
         }
 
         public void Build(ExpressionModel model)

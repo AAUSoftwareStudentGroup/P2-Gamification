@@ -663,7 +663,12 @@
             return "-" + this.getExpression().toString();
         },
         getSize: function () {
-            return 3 + this.getExpression().getSize();
+            if (Bridge.is(this.getExpression(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression)) {
+                return this.getExpression().getSize();
+            }
+            else  {
+                return 3 + this.getExpression().getSize();
+            }
         },
         canCalculate: function () {
             return this.getExpression().canCalculate();
