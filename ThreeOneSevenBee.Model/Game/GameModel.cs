@@ -47,10 +47,10 @@ namespace ThreeOneSevenBee.Model.Game
 
         public void SetLevel(int level, int category)
         {
-            Console.WriteLine(level + "; " + category);
             User.CurrentLevel = level;
             User.CurrentCategory = category;
             ExpressionSerializer serializer = new ExpressionSerializer();
+            Console.WriteLine(User.Categories[category][level].StarExpressions);
             int endValue = serializer.Deserialize(User.Categories[category][level].StarExpressions.Last()).Size;
             int currentValue = serializer.Deserialize(User.Categories[category][level].StartExpression).Size;
             ProgressBar = new ProgressbarStar(currentValue, endValue, currentValue);
