@@ -16,7 +16,7 @@ namespace threeonesevenbee.Frontend.Website
 				Response.Write ("no action");
 				return;
 			}
-			HttpWebRequest req = (HttpWebRequest)WebRequest.Create ("http://webmat.srv.aau.dk/api?"+Request.QueryString);
+			HttpWebRequest req = (HttpWebRequest)WebRequest.Create ("http://webmat.cs.aau.dk/api?"+Request.QueryString);
 			req.KeepAlive = false;
 			req.ProtocolVersion = HttpVersion.Version10;
 			req.Method = "GET";
