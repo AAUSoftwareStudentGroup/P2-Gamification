@@ -126,12 +126,84 @@ namespace ThreeOneSevenBee.ModelTests
             identity = Rules.CommonPowerParenthesisRule(parent, new List<ExpressionBase>() { selection1, selection2 });
             Assert.IsNotNull(identity);
             Assert.AreEqual(Make.Power(Make.Delimiter(Make.Multiply(Make.New(3), Make.New(2))), Make.New(5)), identity.Suggestion);
+
+            // 3^5+2^5 => NULL
+            parent = Make.Add(
+                Make.Power(
+                    Make.New(3),
+                    selection1 = Make.New(5)),
+                Make.Power(
+                    Make.New(2),
+                    selection2 = Make.New(5)));
+
+            identity = Rules.CommonPowerParenthesisRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNull(identity);
         }
 
         [TestMethod]
         public void Rules_ReverseCommonPowerParenthesisRule()
         {
+            ExpressionBase selection1;
+            ExpressionBase selection2;
+            ExpressionBase parent;
+            Identity identity;
 
+            // (3*2)^5 => 3^5*2^5
+            parent = Make.Power(
+                selection1 = Make.Delimiter(
+                    Make.Multiply(
+                        Make.New(3),
+                        Make.New(2))),
+                selection2 = Make.New(5));
+
+            identity = Rules.ReverseCommonPowerParenthesisRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(identity);
+            Assert.AreEqual(Make.Multiply(
+                Make.Power(
+                    Make.New(3),
+                    Make.New(5)),
+                Make.Power(
+                    Make.New(2),
+                   Make.New(5))), identity.Suggestion);
+        }
+
+        [TestMethod]
+        public void Rules_VariableWithNegativeExponent()
+        {
+            ExpressionBase selection1;
+            ExpressionBase selection2;
+            ExpressionBase parent;
+            Identity identity;
+
+            // x^-2 = 1/x^2
+            parent = Make.Power(
+                selection1 = Make.New("x"),
+                selection2 = Make.Minus(Make.New(2)));
+
+            identity = Rules.VariableWithNegativeExponent(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(identity);
+            Assert.AreEqual(Make.Divide(Make.New(1), Make.Power(Make.New("x"), Make.New(2))), identity.Suggestion);
+        }
+
+        [TestMethod]
+        public void Rules_ReverseVariableWithNegativeExponent()
+        {
+            ExpressionBase selection1;
+            ExpressionBase selection2;
+            ExpressionBase selection3;
+            ExpressionBase parent;
+            Identity identity;
+
+            // x^-2 = 1/x^2
+            parent = selection1 = Make.Divide(
+                selection2 = Make.New(1),
+                Make.Power(
+                    selection3 = Make.New("x"),
+                    Make.New(2)));
+
+            identity = Rules.ReverseVariableWithNegativeExponent(parent, new List<ExpressionBase>() { selection1, selection2, selection3 });
+            Assert.IsNotNull(identity);
+            Assert.AreEqual(Make.Power(Make.New("x"), Make.Minus(Make.New(2))), identity.Suggestion);
         }
     }
 }
