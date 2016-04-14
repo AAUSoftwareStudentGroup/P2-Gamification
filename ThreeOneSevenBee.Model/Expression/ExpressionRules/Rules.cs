@@ -427,48 +427,48 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 return null;
 
             // all selected items must be variadic multiply or the rule doesn't apply
-            if (!selection.All(e => e is VariadicExpression && (e as VariadicExpression).Type == OperatorType.Multiply))
-                return null;
-
-            // find common multiplicator
-            var common = selection
-                .Cast<IEnumerable<ExpressionBase>>()
-                .Aggregate((x, y) => x.Intersect(y))
-                .ToList();
-
-            // if no common multiplicators are found, the rule doesn't apply
-            if (!common.Any())
-                return null;
-
-            variadicExpression = (VariadicOperatorExpression)variadicExpression.Clone();
-            var rest = new List<ExpressionBase>();
-            foreach (var op in selection.Cast<VariadicOperatorExpression>())
+            if (!selection.All(e => e is VariableExpression || e is NumericExpression))
             {
-                foreach (var subOp in op)
-                {
-                    if (subOp == common.First())
-                        continue;
-                    rest.Add(subOp);
-                    if (variadicExpression != null)
-                        variadicExpression.Remove(op);
-        }
+                return null;
             }
+            var selectionBase = selection[0];
 
-            var suggestion = new VariadicOperatorExpression(
-                OperatorType.Multiply,
-                common.First(),
-                new DelimiterExpression(
-                    new VariadicOperatorExpression(
-                        OperatorType.Add,
-                        rest[0], rest[1], rest.Skip(2).ToArray())));
+            if (selection.All(s => s == selectionBase))
+            {
 
-            var result = new VariadicOperatorExpression(
-                OperatorType.Add,
-                variadicExpression,
-                suggestion);
-
-            return new Identity(suggestion, result);
+            }
+            return null;
         }
+
+        //    variadicExpression = (VariadicOperatorExpression)variadicExpression.Clone();
+        //    var rest = new List<ExpressionBase>();
+        //    foreach (var op in selection.Cast<VariadicOperatorExpression>())
+        //    {
+        //        foreach (var subOp in op)
+        //        {
+        //            if (subOp == common.First())
+        //                continue;
+        //            rest.Add(subOp);
+        //            if (variadicExpression != null)
+        //                variadicExpression.Remove(op);
+        //}
+        //    }
+
+        //    var suggestion = new VariadicOperatorExpression(
+        //        OperatorType.Multiply,
+        //        common.First(),
+        //        new DelimiterExpression(
+        //            new VariadicOperatorExpression(
+        //                OperatorType.Add,
+        //                rest[0], rest[1], rest.Skip(2).ToArray())));
+
+        //    var result = new VariadicOperatorExpression(
+        //        OperatorType.Add,
+        //        variadicExpression,
+        //        suggestion);
+
+        //    return new Identity(suggestion, result);
+        //}
 
         //(a+b)/c = a/c + b/c
         //Selection is the vinculum, it is split into all possible fractions
