@@ -49,10 +49,10 @@
         },
         setLevel: function (level, category) {
             var $t;
-            console.log(level + "; " + category);
             this.getUser().currentLevel = level;
             this.getUser().currentCategory = category;
             var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
+            console.log(this.getUser().categories.getItem(category).getItem(level).starExpressions);
             var endValue = serializer.deserialize(Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(category).getItem(level).starExpressions).last()).getSize();
             var currentValue = serializer.deserialize(this.getUser().categories.getItem(category).getItem(level).startExpression).getSize();
             this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(currentValue, endValue, currentValue);
@@ -121,7 +121,6 @@
         constructor$1: function (startExpression, currentExpression, starExpressions) {
             ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, startExpression, currentExpression, starExpressions);
     
-            if (starExpressions === void 0) { starExpressions = []; }
         },
         constructor: function (levelIndex, categoryIndex, startExpression, currentExpression, starExpressions) {
             var $t;
@@ -207,7 +206,7 @@
             this.categories = new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)();
         },
         addCategory: function (category) {
-            category.categoryIndex = this.categories.getCount();
+            category.setCategoryIndex(this.categories.getCount());
     
             this.categories.add(category);
         }
@@ -222,6 +221,18 @@
             this.name = name;
             this.levels = new Bridge.List$1(ThreeOneSevenBee.Model.Game.Level)();
         },
+        getCategoryIndex: function () {
+            return this.categoryIndex;
+        },
+        setCategoryIndex: function (value) {
+            var $t;
+            this.categoryIndex = value;
+            $t = Bridge.getEnumerator(this.levels);
+            while ($t.moveNext()) {
+                var level = $t.getCurrent();
+                level.categoryIndex = this.categoryIndex;
+            }
+        },
         getItem: function (index) {
             return this.levels.getItem(index);
         },
@@ -232,7 +243,7 @@
             return this.levels.getCount();
         },
         add: function (level) {
-            level.categoryIndex = this.categoryIndex;
+            level.categoryIndex = this.getCategoryIndex();
             level.levelIndex = this.levels.getCount();
             this.levels.add(level);
         },
@@ -250,18 +261,18 @@
         constructor: function () {
             ThreeOneSevenBee.Model.Game.GameAPI.prototype.$constructor.call(this);
     
-            this.currentPlayer = new ThreeOneSevenBee.Model.Game.CurrentPlayer("Morten");
+            //currentPlayer = new CurrentPlayer("Morten");
     
-            var numbers = new ThreeOneSevenBee.Model.Game.LevelCategory("Numbers");
-            this.currentPlayer.addCategory(numbers);
-            numbers.add(new ThreeOneSevenBee.Model.Game.Level("constructor$1", "4+(4+5)", "a*a", ["4+9", "13"]));
-            numbers.add(new ThreeOneSevenBee.Model.Game.Level("constructor$1", "4*6+5", "4*6+5", ["24+5", "29"]));
+            //LevelCategory numbers = new LevelCategory("Numbers");
+            //currentPlayer.AddCategory(numbers);
+            //numbers.Add(new Level("4+(4+5)", "a*a", "4+9", "13"));
+            //numbers.Add(new Level("4*6+5", "4*6+5", "24+5", "29"));
     
     
-            var variables = new ThreeOneSevenBee.Model.Game.LevelCategory("Variables");
-            this.currentPlayer.addCategory(variables);
-            variables.add(new ThreeOneSevenBee.Model.Game.Level("constructor$1", "a*a*a", "a*a*a", ["a^{2+1}", "a^3"]));
-            variables.add(new ThreeOneSevenBee.Model.Game.Level("constructor$1", "a^2*a^3", "a^2*a^3", ["a^{2+3}", "a^5"]));
+            //LevelCategory variables = new LevelCategory("Variables");
+            //currentPlayer.AddCategory(variables);
+            //variables.Add(new Level("a*a*a", "a*a*a", "a^{2+1}", "a^3"));
+            //variables.Add(new Level("a^2*a^3", "a^2*a^3", "a^{2+3}", "a^5"));
     
     
             //currentPlayer.AddCategory(new LevelCategory("Numbers") {
@@ -308,12 +319,9 @@
             //                new Level("{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", "{a+b+c+d}/c"),
             //                new Level("{a+b}/c+{c+d}/c", "{a+b}/c+{c+d}/c", "{a+b+c+d}/c"),
             //            });
-            this.currentPlayer.badges = Bridge.merge(new Bridge.List$1(String)(), [
-                ["FractionBadge"],
-                ["ExponentBadge"]
-            ] );
-            this.currentPlayer.currentCategory = 0;
-            this.currentPlayer.currentLevel = 0;
+            //currentPlayer.Badges = new List<string> { "FractionBadge", "ExponentBadge" };
+            //currentPlayer.CurrentCategory = 0;
+            //currentPlayer.CurrentLevel = 0;
         },
         getReady: function () {
             return true;

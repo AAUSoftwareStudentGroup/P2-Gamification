@@ -21,7 +21,7 @@ namespace ThreeOneSevenBee.Model.Game
         public void AddCategory(LevelCategory category)
         {
             category.CategoryIndex = Categories.Count;
-
+            
             Categories.Add(category);
         }
 
