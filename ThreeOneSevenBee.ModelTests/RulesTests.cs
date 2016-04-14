@@ -125,12 +125,7 @@ namespace ThreeOneSevenBee.ModelTests
 
             identity = Rules.CommonPowerParenthesisRule(parent, new List<ExpressionBase>() { selection1, selection2 });
             Assert.IsNotNull(identity);
-            Assert.AreEqual(Make.Power(
-                Make.Delimiter(
-                    Make.Multiply(
-                        Make.New(3),
-                        Make.New(2))),
-                Make.New(5)), identity.Suggestion);
+            Assert.AreEqual(Make.Power(Make.Delimiter(Make.Multiply(Make.New(3), Make.New(2))), Make.New(5)), identity.Suggestion);
         }
 
         [TestMethod]
