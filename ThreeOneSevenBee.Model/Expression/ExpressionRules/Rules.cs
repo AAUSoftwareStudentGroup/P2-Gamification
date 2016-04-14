@@ -305,7 +305,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     */
                 }
             }
-            }
             return null;
         }
 
