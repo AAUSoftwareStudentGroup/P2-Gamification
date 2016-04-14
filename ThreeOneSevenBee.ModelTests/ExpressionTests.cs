@@ -119,7 +119,7 @@ namespace ThreeOneSevenBee.ModelTests
 
         public static ExpressionBase Add(ExpressionBase left, ExpressionBase right)
         {
-            return new BinaryOperatorExpression(left, right, OperatorType.Add);
+            return new VariadicOperatorExpression(OperatorType.Add, left, right);
         }
 
         public static ExpressionBase Add(ExpressionBase first, ExpressionBase second, params ExpressionBase[] expressions)
