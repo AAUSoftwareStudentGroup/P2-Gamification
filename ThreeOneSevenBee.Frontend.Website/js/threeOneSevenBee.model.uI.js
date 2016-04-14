@@ -551,8 +551,18 @@
                 $t = Bridge.getEnumerator(variadicExpression);
                 while ($t.moveNext()) {
                     var expr = $t.getCurrent();
+                    var operand;
                     if (views.getCount() !== 0) {
-                        var operatorView2 = new ThreeOneSevenBee.Model.UI.OperatorView(variadicExpression.getType());
+                        var minus = Bridge.as(expr, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
+                        var operatorView2;
+                        if (variadicExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && Bridge.hasValue(minus)) {
+                            operatorView2 = new ThreeOneSevenBee.Model.UI.OperatorView(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract);
+                            operand = this.buildView(minus.getExpression(), model);
+                        }
+                        else  {
+                            operatorView2 = new ThreeOneSevenBee.Model.UI.OperatorView(variadicExpression.getType());
+                            operand = this.buildView(expr, model);
+                        }
                         operatorView2.setX(offsetX);
                         operatorView2.setWidth((variadicExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply ? 0.5 : 1.5) * Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                         operatorView2.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
@@ -560,7 +570,10 @@
                         views.add(operatorView2);
                         offsetX += operatorView2.getWidth();
                     }
-                    var operand = this.buildView(expr, model);
+                    else  {
+                        operand = this.buildView(expr, model);
+                    }
+    
                     maxBaseline = Math.max(maxBaseline, operand.getBaseline());
                     operand.setX(offsetX);
                     offsetX += operand.getWidth();
@@ -628,9 +641,8 @@
                 setHeight: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
                 setBaseline: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2,
                 setFontSize: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
-                setBackgroundColor: model.selectionIndex(expression) !== -1 ? "#cccccc" : "transparent"
+                setBackgroundColor: model.selectionIndex(expression) !== -1 ? "#1090FF" : "transparent"
             } );
-    
         },
         build: function (model) {
             if (Bridge.hasValue(model)) {

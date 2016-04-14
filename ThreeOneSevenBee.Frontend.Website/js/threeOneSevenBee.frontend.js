@@ -18,7 +18,8 @@
                 var gameAPI = new ThreeOneSevenBee.Frontend.JQueryGameAPI();
     
                 var testCategories = new ThreeOneSevenBee.Model.Game.LevelCategory("test");
-                testCategories.add(new ThreeOneSevenBee.Model.Game.Level("constructor$1", "4+40", "4+40", ["44"]));
+                testCategories.add(new ThreeOneSevenBee.Model.Game.Level("constructor$1", "-4-40+5-9", "-4-40+5-9", ["44"]));
+                testCategories.add(new ThreeOneSevenBee.Model.Game.Level("constructor$1", "4+44", "4+44", ["48"]));
     
                 var gameModel;
                 var gameView;

@@ -120,34 +120,55 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 {
                     return null;
                 }
+                List<ExpressionBase> selectedParents = new List<ExpressionBase>();
                 foreach (ExpressionBase selected in selection)
                 {
-                    if (ReferenceEquals(selected.Parent, variadicExpression) == false)
+                    NumericExpression numericExpression = selected as NumericExpression;
+                    if(numericExpression != null)
                     {
-                        return null;
-                    }
-                    else
-                    {
-                        NumericExpression numericExpression = selected as NumericExpression;
-                        if (numericExpression != null)
+                        if(ReferenceEquals(numericExpression.Parent, expression) == true)
                         {
                             sum = operation(sum, (int)numericExpression.Number);
                         }
                         else
                         {
-                            return null;
+                            UnaryMinusExpression minusExpression = selected.Parent as UnaryMinusExpression;
+                            if(minusExpression != null && ReferenceEquals(minusExpression.Parent, expression) == true)
+                            {
+                                sum = operation(sum, -(int)numericExpression.Number);
+                                selectedParents.Add(minusExpression);
+                            }
+                            else
+                            {
+                                return null;
+                            }
                         }
                     }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                ExpressionBase suggestion;
+                if (sum < 0)
+                {
+                    suggestion = new UnaryMinusExpression(new NumericExpression(-sum));
+                }
+                else
+                {
+                    suggestion = new NumericExpression(sum);
                 }
                 if (variadicExpression.Count == selection.Count)
                 {
-                    return new Identity(new NumericExpression(sum), new NumericExpression(sum));
+                    return new Identity(suggestion, suggestion);
                 }
-                var indexes = selection.Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
+                Console.WriteLine(selection.Concat(selectedParents).Select((s) => s.ToString()).ToArray());
+                var indexes = selection.Union(selectedParents).Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
+                Console.WriteLine(indexes.ToArray());
                 indexes.Sort();
                 VariadicOperatorExpression result = variadicExpression.Clone() as VariadicOperatorExpression;
-                result = InsertSuggestion(indexes, result, new NumericExpression(sum));
-                return new Identity(new NumericExpression(sum), result);
+                result = InsertSuggestion(indexes, result, suggestion);
+                return new Identity(suggestion, result);
             }
             return null;
         }
