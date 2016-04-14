@@ -1,4 +1,10 @@
 <?
+$_DEBUG = false;
+// $_DEBUG = true;
+if($_SERVER['HTTP_HOST'] != "localhost" || !$_DEBUG) {
+    error_reporting(0);
+}
+
 require('../db.php');
 $db = new DB();
 
@@ -8,10 +14,15 @@ if(isset($_GET['action']))
 elseif(isset($_POST['action']))
     $IN = $_POST;
 
+if(isset($IN['debug']) && $IN['debug'] == 1) {
+    session_start();
+    $_SESSION['authorized'] = 5; // Tanner helland
+}
+
 if($IN != null)
     API::$IN['action']($IN, $db);
 else
-    respond(false, null, "no action given");
+    API::respond(false, null, "no action given");
 
 class API {
     static function respond($success = true, $data = null, $message = null) {

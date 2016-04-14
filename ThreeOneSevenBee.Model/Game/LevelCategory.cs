@@ -12,7 +12,19 @@ namespace ThreeOneSevenBee.Model.Game
     public class LevelCategory : IEnumerable<Level>
     {
         public string Name;
-        public int CategoryIndex;
+        public int categoryIndex;
+        public int CategoryIndex {
+            get
+            { return categoryIndex; }
+            set
+            {
+                categoryIndex = value;
+                foreach (Level level in levels)
+                {
+                    level.CategoryIndex = categoryIndex;
+                }
+            }
+        }
         private List<Level> levels;
 
         public LevelCategory(string name)
