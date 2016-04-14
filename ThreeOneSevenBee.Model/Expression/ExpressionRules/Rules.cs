@@ -570,6 +570,45 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
             return null;
         }
+
+        public static Identity FactorizationRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count != 1)
+            {
+                return null;
+            }
+            NumericExpression a = new NumericExpression(0);
+            NumericExpression b = new NumericExpression(0);
+            VariadicOperatorExpression suggestion;
+
+            var binaryOperatorExpression = expression as BinaryOperatorExpression;
+
+            if (binaryOperatorExpression != null && binaryOperatorExpression.Type == OperatorType.Divide)
+            {
+                if (binaryOperatorExpression.Left is NumericExpression && binaryOperatorExpression.Right is NumericExpression)
+                {
+                    var leftBinaryOperatorExpression = binaryOperatorExpression.Left as NumericExpression;
+                    var rightBinaryOperatorExpression = binaryOperatorExpression.Right as NumericExpression;
+
+                    var n = rightBinaryOperatorExpression.Number / 2;
+                    for (int count = 2; count < n; count++)
+                    {
+                        if (n % count == 0)
+                        {
+                            a.Number = count;
+                            b.Number = n / count;
+
+                            suggestion = new VariadicOperatorExpression(OperatorType.Multiply, a, b);
+
+                            return new Identity(suggestion, suggestion);
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
         
         public static Identity ReverseCommonPowerParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
