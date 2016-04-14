@@ -16,7 +16,7 @@ namespace ThreeOneSevenBee.Model.UI
         {
             Text = text;
             FontColor = "#000000";
-            Font = "Cambria Math";
+            Font = "Segoe UI";
             FontSize = Height;
             Align = "center";
         }

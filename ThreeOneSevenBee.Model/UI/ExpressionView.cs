@@ -180,7 +180,7 @@ namespace ThreeOneSevenBee.Model.UI
                 Height = NUMVAR_SIZE,
                 Baseline = NUMVAR_SIZE / 2,
                 FontSize = NUMVAR_SIZE,
-                BackgroundColor = model.SelectionIndex(expression) != -1 ? "#1090FF" : "transparent"
+                BackgroundColor = model.SelectionIndex(expression) != -1 ? "#27AE61" : "transparent"
             };
         }
 

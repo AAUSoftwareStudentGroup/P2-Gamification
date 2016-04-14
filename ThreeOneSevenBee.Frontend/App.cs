@@ -27,6 +27,13 @@ namespace ThreeOneSevenBee.Frontend
             LevelCategory testCategories = new LevelCategory("test");
             testCategories.Add(new Level("-4-40+5-9", "-4-40+5-9", new string[] { "44" }));
             testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
 
             GameModel gameModel;
             GameView gameView;
