@@ -9,6 +9,8 @@ namespace ThreeOneSevenBee.ModelTests
     {
         public static ExpressionBase New(int value)
         {
+            if (value < 0)
+                return new UnaryMinusExpression(new NumericExpression(-value));
             return new NumericExpression(value);
         }
 
