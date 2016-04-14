@@ -437,11 +437,21 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     selectedParent.Remove(selected);
                     list.Add(selectedParent);
                 }
+                else if (selected.Parent is UnaryMinusExpression)
+                {
+                    var temp = selected.Parent as UnaryMinusExpression;
+                    if (temp.Parent is VariadicOperatorExpression)
+                    {
+                        selectedParent = temp.Parent as VariadicOperatorExpression;
+                        selectedParent.Remove(selected);
+                        list.Add(selectedParent);
+                    }
+                }
 
             }
             VariadicOperatorExpression withinDelimiter = new VariadicOperatorExpression(OperatorType.Add, list[0],
                 list[1]);
-            if (list.Count < 2)
+            if (list.Count > 2)
             {
                 foreach (var item in list.Skip((2)))
                 {
@@ -471,6 +481,49 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 result = InsertSuggestion(indexes, result, suggestion);
                 return new Identity(suggestion, result);
             }
+        }
+
+        public static Identity ReverseProductParenthesis(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count != 2)
+            {
+                return null;
+            }
+            var variadicExpression = expression as VariadicOperatorExpression;
+            if (!(variadicExpression != null && variadicExpression.Type == OperatorType.Multiply))
+            {
+                return null;
+            }
+            if (!(selection[0] is DelimiterExpression || selection[1] is DelimiterExpression))
+            {
+                return null;
+            }
+            DelimiterExpression delimiterExpression;
+            if (selection[0] is DelimiterExpression)
+            {
+                delimiterExpression = selection[0] as DelimiterExpression;
+            }
+            else
+            {
+                delimiterExpression = selection[1] as DelimiterExpression;
+            }
+            VariadicOperatorExpression variadicparent = null;
+            if (delimiterExpression.Parent is VariadicOperatorExpression)
+            {
+                variadicparent = delimiterExpression.Parent as VariadicOperatorExpression;
+            }
+            if (variadicparent != null && variadicparent.Type == OperatorType.Add)
+            {
+                foreach (var item in variadicparent)
+                {
+                    if (item is VariadicOperatorExpression)
+                    {
+                    }
+                }
+            }
+            //delimiterExpression.Expression 
+
+            return null;
         }
 
         //    variadicExpression = (VariadicOperatorExpression)variadicExpression.Clone();
