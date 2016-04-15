@@ -13,7 +13,7 @@ namespace ThreeOneSevenBee.Model.UI
     {
         ToolTipView toolTipView;
 
-        public TutorialLevelView(GameModel game, double width, double height) 
+        public TutorialLevelView(GameModel game, double width, double height)
             : base(game, width, height)
         {
             Build(game);

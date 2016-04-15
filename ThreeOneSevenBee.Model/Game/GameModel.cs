@@ -67,8 +67,7 @@ namespace ThreeOneSevenBee.Model.Game
             ExprModel = new ExpressionModel(User.Categories[category][level].CurrentExpression, (m) => onExpressionChanged(m), 
                 Rules.ExponentToProductRule, Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators, 
                 Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.ExponentProduct,
-                Rules.NumericBinaryRule, Rules.NumericVariadicRule, Rules.CommonPowerParenthesisRule, Rules.ReverseCommonPowerParenthesisRule, Rules.SplittingFractions, Rules.ProductParenthesis, Rules.ReverseProductParenthesis);
-
+                Rules.NumericBinaryRule, Rules.NumericVariadicRule, Rules.CommonPowerParenthesisRule, Rules.ReverseCommonPowerParenthesisRule, Rules.SplittingFractions, Rules.ProductParenthesis, Rules.ReverseProductParenthesis, Rules.ParenthesisPowerRule, Rules.FactorizationRule);
             onExpressionChanged(ExprModel);
         }
 
@@ -108,7 +107,7 @@ namespace ThreeOneSevenBee.Model.Game
         public void SaveLevel()
         {
             if(OnSaveLevel != null)
-            {
+        {
                 OnSaveLevel(User.CurrentLevel);
             }
         }

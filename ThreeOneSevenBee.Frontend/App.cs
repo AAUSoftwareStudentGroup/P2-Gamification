@@ -25,7 +25,7 @@ namespace ThreeOneSevenBee.Frontend
             JQueryGameAPI gameAPI = new JQueryGameAPI();
 
             LevelCategory testCategory = new LevelCategory("test");
-            testCategory.Add(new Level("-4-40+5-9", "-4-40+5-9", new string[] { "44" }));
+            testCategory.Add(new Level("(a^2)^3", "(a^2)^3", new string[] { "44" }));
             testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
             testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
             testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
