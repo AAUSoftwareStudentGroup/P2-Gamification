@@ -27,7 +27,7 @@ namespace ThreeOneSevenBee.Frontend
                 (data, textStatus, request) =>
                 {
                     var jdata = JSON.Parse((string)data);
-                    
+                    Console.WriteLine(jdata);
                     List<LevelCategory> categories = new List<LevelCategory>();
                     var categoriesData = jdata["data"] as object[];
                     
@@ -60,16 +60,18 @@ namespace ThreeOneSevenBee.Frontend
                 new object(),
                 (data, textStatus, request) =>
                 {
-                    var jdata = JSON.Parse((string)data);
-                    CurrentPlayer currentPlayer = new CurrentPlayer((string)jdata["data"]["name"]);
-                    getCategories((categories) =>
-                    {
-                        foreach (LevelCategory category in categories)
-                        {
-                            currentPlayer.AddCategory(category);
-                        }
-                        callback(currentPlayer);
-                    });
+                    //var jdata = JSON.Parse((string)data);
+                    //CurrentPlayer currentPlayer = new CurrentPlayer((string)jdata["data"]["name"]);
+                    //getCategories((categories) =>
+                    //{
+                    //    foreach (LevelCategory category in categories)
+                    //    {
+                    //        currentPlayer.AddCategory(category);
+                    //    }
+                    //    callback(currentPlayer);
+                    //});
+                    CurrentPlayer currentPlayer = new CurrentPlayer("AntonNoob");
+                    callback(currentPlayer);
                 }
             );
         }
