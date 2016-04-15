@@ -103,20 +103,7 @@ class API {
                         level.id AS level_id,
                         category.name AS category_name,
                         level.initial_expression AS initial_expression, 
-                        level.star_expressions AS star_expressions
-                    FROM 
-                        gamedb.level AS level
-                    LEFT JOIN 
-                        gamedb.level_category AS category ON level.level_category_id=category.id
-                    ORDER BY level.level_category_id ASC, level.id ASC;"
-                   );
-
-        $db->query("SELECT 
-                        level.id AS level_id,
-                        category.name AS category_name,
-                        level.initial_expression AS initial_expression, 
                         level.star_expressions AS star_expressions,
-                        level_progress.user_id,
                         level_progress.progress
                     FROM 
                         gamedb.level AS level
@@ -124,17 +111,19 @@ class API {
                         gamedb.level_category AS category ON level.level_category_id=category.id
                     LEFT JOIN 
                         user_level_progress AS level_progress ON level_progress.level_id = level.id
-                    WHERE level_progress.user_id=? OR level_progress.user_id IS NULL
+                    WHERE 
+                        level_progress.user_id=? OR level_progress.user_id IS NULL
                     ORDER BY level.level_category_id ASC, level.id ASC;",
                     $_SESSION['authorized']
         );
-        
+
         $categories = array();
         while($row = $db->fetch()) {
             $level = array(
                 'id' => $row['level_id'],
                 'initial_expression' => $row['initial_expression'],
-                'star_expressions' => explode('|', $row['star_expressions'])
+                'star_expressions' => explode('|', $row['star_expressions']),
+                'current_expression' => $row['progress']
             );
 
             $cat_name = $row['category_name'];
