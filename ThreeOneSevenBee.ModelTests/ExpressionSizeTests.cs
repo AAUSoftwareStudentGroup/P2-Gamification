@@ -56,7 +56,7 @@ namespace ThreeOneSevenBee.ModelTests
             // --a > a 
             Assert.IsTrue(model17.Expression.Size > model18.Expression.Size);
             // 1/2 < 2/4
-            //Assert.IsTrue(model19.Expression.Size < model20.Expression.Size);
+            Assert.IsTrue(model19.Expression.Size < model20.Expression.Size);
 
 
 

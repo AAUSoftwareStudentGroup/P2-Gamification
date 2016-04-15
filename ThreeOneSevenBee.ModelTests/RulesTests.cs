@@ -205,5 +205,22 @@ namespace ThreeOneSevenBee.ModelTests
             Assert.IsNotNull(identity);
             Assert.AreEqual(Make.Power(Make.New("x"), Make.Minus(Make.New(2))), identity.Suggestion);
         }
+
+        [TestMethod]
+        public void Rules_FactorizationRule()
+        {
+            ExpressionBase selection1;
+            ExpressionBase parent;
+            Identity identity;
+
+            // 2/10 = 2/5*2
+            parent = selection1 = Make.New(10);
+
+            identity = Rules.FactorizationRule(parent, new List<ExpressionBase>() { selection1 });
+            Assert.IsNotNull(identity);
+
+            
+
+        }
     }
 }
