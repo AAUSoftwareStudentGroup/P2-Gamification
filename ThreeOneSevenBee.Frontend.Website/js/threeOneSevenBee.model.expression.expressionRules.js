@@ -610,31 +610,23 @@
                 if (selection.getCount() !== 1) {
                     return null;
                 }
-                var a = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(0);
-                var b = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(0);
+    
                 var suggestion;
     
-                var binaryOperatorExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                if (Bridge.is(expression, ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression) && Bridge.hasValue(expression)) {
+                    var numericExpression = Bridge.as(selection.getItem(0), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
+                    var n = numericExpression.number;
+                    for (var count = 2; count < n; count++) {
+                        if (n % count === 0) {
+                            var a = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(count);
+                            var b = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(n / count);
     
-                if (Bridge.hasValue(binaryOperatorExpression) && binaryOperatorExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
-                    if (Bridge.is(binaryOperatorExpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression) && Bridge.is(binaryOperatorExpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression)) {
-                        var leftBinaryOperatorExpression = Bridge.as(binaryOperatorExpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
-                        var rightBinaryOperatorExpression = Bridge.as(binaryOperatorExpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
+                            suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, a, b);
     
-                        var n = rightBinaryOperatorExpression.number / 2;
-                        for (var count = 2; count < n; count++) {
-                            if (n % count === 0) {
-                                a.number = count;
-                                b.number = n / count;
-    
-                                suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, a, b);
-    
-                                return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
-                            }
+                            return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
                         }
                     }
                 }
-    
                 return null;
             },
             reverseCommonPowerParenthesisRule: function (expression, selection) {
