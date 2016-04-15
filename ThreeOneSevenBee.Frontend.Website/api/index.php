@@ -80,6 +80,7 @@ class API {
         $categories = array();
         while($row = $db->fetch()) {
             $level = array(
+                'id' => $row['level_id'],
                 'initial_expression' => $row['initial_expression'],
                 'star_expressions' => explode('|', $row['star_expressions'])
             );
