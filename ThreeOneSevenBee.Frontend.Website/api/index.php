@@ -67,6 +67,7 @@ class API {
 
     static function get_levels($IN, $db) {
         $db->query("SELECT 
+                        level.id AS level_id,
                         category.name AS category_name,
                         level.initial_expression AS initial_expression, 
                         level.star_expressions AS star_expressions
