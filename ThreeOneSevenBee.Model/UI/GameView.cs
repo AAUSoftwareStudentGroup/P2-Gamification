@@ -12,6 +12,7 @@ namespace ThreeOneSevenBee.Model.UI
     public class GameView : FrameView
     {
         TitleView titleView;
+        TutorialLevelView tutorialLevelView;
         LevelView levelView;
         LevelSelectView levelSelectView;
         Context context;
@@ -19,6 +20,7 @@ namespace ThreeOneSevenBee.Model.UI
         public void Update(GameModel game)
         {
             levelView.Update(game);
+            tutorialLevelView.Update(game);
             levelSelectView.Update(game.User);
             context.Draw();
         }
@@ -33,16 +35,19 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 OnExit = () =>
                 {
-                    game.Save();
+                    game.SaveLevel();
                     setContent(titleView);
                 },
                 OnNextLevel = () =>
                 {
-                    game.Save();
+                    game.SaveLevel();
                     game.NextLevel();
                 }
-                
             };
+
+            tutorialLevelView = new TutorialLevelView(game, context.Width, context.Height);
+
+            
 
             levelSelectView = new LevelSelectView(game.User)
             {
@@ -56,8 +61,9 @@ namespace ThreeOneSevenBee.Model.UI
                     setContent(levelView);
                     Update(game);
                     game.SetLevel(level.LevelIndex, level.CategoryIndex);
-                }
-            };
+                },
+                OnExit = () => setContent(titleView)
+        };
 
             titleView.PlayButton.OnClick = () => setContent(levelView);
 
@@ -65,7 +71,7 @@ namespace ThreeOneSevenBee.Model.UI
 
             game.OnChanged = Update;
 
-            setContent(titleView);
+            setContent(tutorialLevelView);
         }
 
         public override void setContent(View content)

@@ -120,34 +120,55 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 {
                     return null;
                 }
+                List<ExpressionBase> selectedParents = new List<ExpressionBase>();
                 foreach (ExpressionBase selected in selection)
                 {
-                    if (ReferenceEquals(selected.Parent, variadicExpression) == false)
+                    NumericExpression numericExpression = selected as NumericExpression;
+                    if (numericExpression != null)
                     {
-                        return null;
-                    }
-                    else
-                    {
-                        NumericExpression numericExpression = selected as NumericExpression;
-                        if (numericExpression != null)
+                        if (ReferenceEquals(numericExpression.Parent, expression) == true)
                         {
                             sum = operation(sum, (int)numericExpression.Number);
                         }
                         else
                         {
-                            return null;
+                            UnaryMinusExpression minusExpression = selected.Parent as UnaryMinusExpression;
+                            if (minusExpression != null && ReferenceEquals(minusExpression.Parent, expression) == true)
+                            {
+                                sum = operation(sum, -(int)numericExpression.Number);
+                                selectedParents.Add(minusExpression);
+                            }
+                            else
+                            {
+                                return null;
+                            }
                         }
                     }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                ExpressionBase suggestion;
+                if (sum < 0)
+                {
+                    suggestion = new UnaryMinusExpression(new NumericExpression(-sum));
+                }
+                else
+                {
+                    suggestion = new NumericExpression(sum);
                 }
                 if (variadicExpression.Count == selection.Count)
                 {
-                    return new Identity(new NumericExpression(sum), new NumericExpression(sum));
+                    return new Identity(suggestion, suggestion);
                 }
-                var indexes = selection.Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
+                Console.WriteLine(selection.Concat(selectedParents).Select((s) => s.ToString()).ToArray());
+                var indexes = selection.Union(selectedParents).Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
+                Console.WriteLine(indexes.ToArray());
                 indexes.Sort();
                 VariadicOperatorExpression result = variadicExpression.Clone() as VariadicOperatorExpression;
-                result = InsertSuggestion(indexes, result, new NumericExpression(sum));
-                return new Identity(new NumericExpression(sum), result);
+                result = InsertSuggestion(indexes, result, suggestion);
+                return new Identity(suggestion, result);
             }
             return null;
         }
@@ -234,7 +255,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         }
 
         //a/c + b/c = (a+b)/c
-        //Mangler result
         public static Identity AddFractionsWithSameNumerators(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count < 2)
@@ -245,6 +265,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             if (variadicExpression != null && variadicExpression.Type == OperatorType.Add)
             {
                 //Makes a variable for the two first fractions, since it is needed to make a VariadicOperatorExpression later on (it has to take at least two elements).
+
                 BinaryOperatorExpression firstFraction = selection[0].Clone() as BinaryOperatorExpression;
                 BinaryOperatorExpression secondFraction = selection[1].Clone() as BinaryOperatorExpression;
 
@@ -260,45 +281,53 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         if (fraction != null && ReferenceEquals(fraction.Parent, variadicExpression) && fraction.Right == firstFraction.Right)
                         {
                             numeratorList.Add(fraction.Left.Clone());
-                            }
+                        }
                         else if (minusFraction != null && ReferenceEquals(minusFraction.Parent, variadicExpression) && fraction.Right == firstFraction.Right)
-                            {
-                                numeratorList.Add(new UnaryMinusExpression(fraction.Left.Clone()));
-                            }
-                            }
+                        {
+                            numeratorList.Add(new UnaryMinusExpression(fraction.Left.Clone()));
+                        }
+                    }
                     VariadicOperatorExpression suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, numeratorList[0], numeratorList[1]);
-                        foreach (var i in numeratorList.Skip(2))
-                        {
-                            suggestionNumerator.Add(i);
-                        }
+                    foreach (var i in numeratorList.Skip(2))
+                    {
+                        suggestionNumerator.Add(i);
+                    }
 
-                        BinaryOperatorExpression suggestion = new BinaryOperatorExpression(suggestionNumerator, firstFraction.Right.Clone(), OperatorType.Divide);
-                    
-                        if (variadicExpression.Count == selection.Count)
+                    BinaryOperatorExpression suggestion = new BinaryOperatorExpression(suggestionNumerator, firstFraction.Right.Clone(), OperatorType.Divide);
+
+                    if (variadicExpression.Count == selection.Count)
+                    {
+                        return new Identity(suggestion, suggestion);
+                    }
+                    else
+                    {
+                        var list = new List<ExpressionBase>();
+                        ExpressionBase temp = null;
+                        for (int i = 0; i < selection.Count; i++)
                         {
-                            return new Identity(suggestion, suggestion);
-                        }
-                        else
-                        {
-                            var list = new List<ExpressionBase>();
-                            BinaryOperatorExpression temp = null;
-                            for (int i = 0; i < selection.Count; i++)
+                            if (selection[i].Parent is UnaryMinusExpression)
+                            {
+                                temp = selection[i].Parent as UnaryMinusExpression;
+                            }
+                            else if (selection[i] is BinaryOperatorExpression)
                             {
                                 temp = selection[i] as BinaryOperatorExpression;
-                                if (temp != null)
-                                {
-                                    list.Add(temp);
-                                }
                             }
-                            var indexes = list.Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
-                            indexes.Sort();
-                            var result = variadicExpression.Clone() as VariadicOperatorExpression;
-                            result = InsertSuggestion(indexes, result, suggestion);
-                            return new Identity(suggestion, result);
-                        }
 
+                            if (temp != null)
+                            {
+                                list.Add(temp);
+                            }
+                        }
+                        var indexes = list.Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
+                        indexes.Sort();
+                        var result = variadicExpression.Clone() as VariadicOperatorExpression;
+                        result = InsertSuggestion(indexes, result, suggestion);
+                        return new Identity(suggestion, result);
                     }
+
                 }
+            }
             return null;
         }
 
@@ -344,7 +373,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                                 else
                                 {
                                     numeratorList.Add(parent.Right.Clone());
-                            }
+                                }
                             }
                             else if (selection[j].Parent is VariadicOperatorExpression)
                             {
@@ -358,12 +387,12 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         }
                     }
                     VariadicOperatorExpression suggestionNumerator = null;
-                        suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, numeratorList[0], numeratorList[1]);
+                    suggestionNumerator = new VariadicOperatorExpression(OperatorType.Add, numeratorList[0], numeratorList[1]);
 
-                        foreach (var i in numeratorList.Skip(2))
-                        {
-                            suggestionNumerator.Add(i);
-                        }
+                    foreach (var i in numeratorList.Skip(2))
+                    {
+                        suggestionNumerator.Add(i);
+                    }
 
                     var suggestion = new BinaryOperatorExpression(baseSelection.Clone(), suggestionNumerator, OperatorType.Power);
                     if (variadicExpression.Count == selection.Count)
@@ -404,6 +433,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         }
 
         // a * b + a * c = a * (b + c)
+        // a * b - a * c = a * (b - c)
         public static Identity ProductParenthesis(ExpressionBase expression, List<ExpressionBase> selection)
         {
             var variadicExpression = expression as VariadicOperatorExpression;
@@ -432,16 +462,19 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             foreach (var selected in selection)
             {
                 var selectedParent = selected.Parent.Clone() as VariadicOperatorExpression;
-                if (selectedParent != null)
-            {
+                if (selectedParent != null && selectedParent.Type == OperatorType.Multiply)
+                {
                     selectedParent.Remove(selected);
                     list.Add(selectedParent);
                 }
-
+                else
+                {
+                    return null;
+                }
             }
             VariadicOperatorExpression withinDelimiter = new VariadicOperatorExpression(OperatorType.Add, list[0],
                 list[1]);
-            if (list.Count < 2)
+            if (list.Count > 2)
             {
                 foreach (var item in list.Skip((2)))
                 {
@@ -457,12 +490,21 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             else
             {
                 var parentList = new List<ExpressionBase>();
+                ExpressionBase temp = null;
                 foreach (var selected in selection)
                 {
-                    var tempParent = selected.Parent as VariadicOperatorExpression;
-                    if (tempParent != null)
+                    if(selected.Parent is UnaryMinusExpression)
                     {
-                        parentList.Add(tempParent);
+                        temp = selected.Parent as UnaryMinusExpression;
+                    }
+                    else if(selected.Parent is VariadicOperatorExpression)
+                    {
+                        temp = selected as VariadicOperatorExpression;
+                    }
+
+                    if (temp != null)
+                    {
+                        parentList.Add(temp);
                     }
                 }
                 var indexes = parentList.Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
@@ -471,6 +513,84 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 result = InsertSuggestion(indexes, result, suggestion);
                 return new Identity(suggestion, result);
             }
+        }
+
+        // x * (2y + c) = x*2y + x*c
+        public static Identity ReverseProductParenthesis(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count != 2)
+            {
+                return null;
+            }
+            var variadicExpression = expression as VariadicOperatorExpression;
+            if (!(variadicExpression != null && variadicExpression.Type == OperatorType.Multiply))
+            {
+                return null;
+            }
+            if (!(selection[0] is DelimiterExpression || selection[1] is DelimiterExpression))
+            {
+                return null;
+            }
+            DelimiterExpression delimiterExpression;
+            //Ændr navn på alle 'test' og måske type?
+            ExpressionBase test;
+            if (selection[0] is DelimiterExpression)
+            {
+                delimiterExpression = selection[0] as DelimiterExpression;
+                test = selection[1] as ExpressionBase;
+            }
+            else
+            {
+                delimiterExpression = selection[1] as DelimiterExpression;
+                test = selection[0] as ExpressionBase;
+            }
+            VariadicOperatorExpression variadicParent = null;
+            if (delimiterExpression.Parent is VariadicOperatorExpression)
+            {
+                variadicParent = delimiterExpression.Parent as VariadicOperatorExpression;
+            }
+            if (variadicParent != null && variadicParent.Type == OperatorType.Multiply)
+            {
+                List<ExpressionBase> suggestionList = new List<ExpressionBase>();
+                if(delimiterExpression.Expression is VariadicOperatorExpression)
+                {
+                    var variadicExpressionExpression = delimiterExpression.Expression as VariadicOperatorExpression;
+                    if(variadicExpressionExpression.Type == OperatorType.Add)
+                    {
+                        foreach (var item in variadicExpressionExpression)
+                        {
+                            var part = new VariadicOperatorExpression(OperatorType.Multiply, test, item);
+                            suggestionList.Add(part);
+                        }
+                    }
+                    else
+                    {
+                        //for gange, dette skal være det samme som det nedenfor, altså bare gange ind én gang!
+                        
+                    }
+                }
+                //for bogstav, tal, minus eller hvad det nu er skal den kun ganges ind én gang
+
+                //Skal lave nogle casts for at tjekke hvad delimiterExpression.Expression er. 
+                //Skal ganges ind på HVERT plus led, men kun ind én gang, hvis den er gange!
+                //Så der skal laves nogle tjeks!
+                var suggestion = new VariadicOperatorExpression(OperatorType.Add, suggestionList[1], suggestionList[2]);
+
+                foreach (var item in suggestionList.Skip(2))
+                {
+                    suggestion.Add(item);
+                }
+
+                return new Identity(suggestion, suggestion);
+
+
+
+
+
+
+
+            }
+            return null;
         }
 
         //    variadicExpression = (VariadicOperatorExpression)variadicExpression.Clone();
@@ -505,6 +625,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
         //(a+b)/c = a/c + b/c
         //Selection is the vinculum, it is split into all possible fractions
+        //Ved minus siger den a + -b i stedet for a - b, dette skal fikses!
         public static Identity SplittingFractions(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count != 1)
@@ -515,9 +636,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             if (binaryExpression != null && binaryExpression.Type == OperatorType.Divide)
             {
-                //Prøv at udskrive numerators, for at se hvad de er
                 VariadicOperatorExpression numerators = binaryExpression.Left.Clone() as VariadicOperatorExpression;
-                if (numerators != null && numerators.Count > 1)
+
+                if (numerators != null && numerators.Type == OperatorType.Add && numerators.Count > 1)
                 {
                     List<ExpressionBase> fractionList = new List<ExpressionBase>();
                     foreach (var i in numerators)
@@ -528,12 +649,12 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     foreach (var i in fractionList.Skip(2))
                     {
                         suggestion.Add(i);
-                        }
+                    }
                     //Den returnerer en anderledes rækkefølge, dette skal fikses
                     return new Identity(suggestion, suggestion);
                 }
             }
-        return null;
+            return null;
         }
 
 
@@ -601,35 +722,44 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
-        // 6*2 = 3*2*2
         public static Identity FactorizationRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count != 1)
             {
                 return null;
             }
-
+            NumericExpression a = new NumericExpression(0);
+            NumericExpression b = new NumericExpression(0);
             VariadicOperatorExpression suggestion;
 
-            if (expression is NumericExpression && expression != null)
+            var binaryOperatorExpression = expression as BinaryOperatorExpression;
+
+            if (binaryOperatorExpression != null && binaryOperatorExpression.Type == OperatorType.Divide)
             {
-                var numericExpression = selection[0] as NumericExpression;
-                var n = numericExpression.Number;
-                for (int count = 2; count < n; count++)
+                if (binaryOperatorExpression.Left is NumericExpression && binaryOperatorExpression.Right is NumericExpression)
                 {
-                    if (n % count == 0)
+                    var leftBinaryOperatorExpression = binaryOperatorExpression.Left as NumericExpression;
+                    var rightBinaryOperatorExpression = binaryOperatorExpression.Right as NumericExpression;
+
+                    var n = rightBinaryOperatorExpression.Number / 2;
+                    for (int count = 2; count < n; count++)
                     {
-                        NumericExpression a = new NumericExpression(count);
-                        NumericExpression b = new NumericExpression(n / count);
+                        if (n % count == 0)
+                        {
+                            a.Number = count;
+                            b.Number = n / count;
 
-                        suggestion = new VariadicOperatorExpression(OperatorType.Multiply, a, b);
+                            suggestion = new VariadicOperatorExpression(OperatorType.Multiply, a, b);
 
-                        return new Identity(suggestion, suggestion);
+                            return new Identity(suggestion, suggestion);
+                        }
                     }
                 }
             }
+
             return null;
         }
+
 
         public static Identity ReverseCommonPowerParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
         {

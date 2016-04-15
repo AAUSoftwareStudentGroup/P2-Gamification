@@ -207,20 +207,66 @@ namespace ThreeOneSevenBee.ModelTests
         }
 
         [TestMethod]
-        public void Rules_FactorizationRule()
+        public void Rules_AddFractionsWithSameNumerators()
+        {
+            ExpressionBase selection1;
+            ExpressionBase selection2;
+            ExpressionBase selection3;
+            ExpressionBase parent;
+            Identity identity;
+
+            // a/b + c/b = a+c/b
+            parent = Make.Add(
+                selection1 = Make.Divide(Make.New("a"), Make.New("b")),
+                selection2 = Make.Divide(Make.New("c"), Make.New("b")));
+
+            identity = Rules.AddFractionsWithSameNumerators(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(identity);
+            Assert.AreEqual(Make.Divide(Make.Add(Make.New("a"), Make.New("c")), Make.New("b")), identity.Suggestion);
+
+            // a/x - y/x + b/x + 3 = {a-y+b}/x + 3
+            parent = Make.Add(
+                selection1 = Make.Divide(Make.New("a"), Make.New("x")),
+                selection2 = Make.Divide(Make.Minus(Make.New("y")), Make.New("x")),
+                selection3 = Make.Divide(Make.New("b"), Make.New("x")),
+                Make.New(3));
+
+            identity = Rules.AddFractionsWithSameNumerators(parent, new List<ExpressionBase>() { selection1, selection2, selection3 });
+            Assert.IsNotNull(identity);
+            Assert.AreEqual(Make.Add(Make.Divide(Make.Add(Make.New("a"), Make.Minus(Make.New("y")), Make.New("b")), Make.New("x")), Make.New(3)), identity.Result);
+        }
+
+        [TestMethod]
+        public void Rules_SplittingFractions()
         {
             ExpressionBase selection1;
             ExpressionBase parent;
             Identity identity;
 
-            // 2/10 = 2/5*2
-            parent = selection1 = Make.New(10);
+            // {a+b}/c = a/c + b/c
+            parent = selection1 = Make.Divide(
+                Make.Add(Make.New("a"), Make.New("b")),
+                Make.New("c"));
 
-            identity = Rules.FactorizationRule(parent, new List<ExpressionBase>() { selection1 });
+            identity = Rules.SplittingFractions(parent, new List<ExpressionBase>() { selection1 });
+            Assert.IsNotNull(identity);
+            Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("c")), Make.Divide(Make.New("b"), Make.New("c"))), identity.Suggestion);
+
+            // {a-c-d+f}/x + 3 = a/x - c/x - d/x + f/x + 3
+            parent = Make.Add(
+                selection1 = Make.Divide(Make.Add(Make.New("a"), Make.Minus(Make.New("c")), Make.Minus(Make.New("d")), Make.New("f")), Make.New("x")),
+                Make.New(3));
+
+            identity = Rules.SplittingFractions(parent, new List<ExpressionBase>() { selection1 });
             Assert.IsNotNull(identity);
 
-            
+            // TODO: Nedenstående er: a/x + -c/x + -d/x + f/x + 3, denne virker
+            // Den nedenunder er: a/x - c/x - d/x + f/x + 3, den virker ikke, det skal ændres i reglen
+            //Husk at Bruge issue nummeret ved commit!
 
+            Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("x")), Make.Divide(Make.Minus(Make.New("c")), Make.New("x")), Make.Divide(Make.Minus(Make.New("d")), Make.New("x")), Make.Divide(Make.New("f"), Make.New("x")), Make.New(3)), identity.Result);
+
+            /*Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("x")), Make.Minus(Make.Divide(Make.New("c"), Make.New("x"))), Make.Minus(Make.Divide(Make.New("d"), Make.New("x"))), Make.Divide(Make.New("f"), Make.New("x")), Make.New(3)), identity.Result);*/
         }
     }
 }

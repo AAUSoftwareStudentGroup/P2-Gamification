@@ -663,7 +663,12 @@
             return "-" + this.getExpression().toString();
         },
         getSize: function () {
-            return 3 + this.getExpression().getSize();
+            if (Bridge.is(this.getExpression(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression)) {
+                return this.getExpression().getSize();
+            }
+            else  {
+                return 3 + this.getExpression().getSize();
+            }
         },
         canCalculate: function () {
             return this.getExpression().canCalculate();
@@ -731,7 +736,8 @@
             $t = Bridge.getEnumerator(this);
             while ($t.moveNext()) {
                 var expression = $t.getCurrent();
-                result += expression.getSize();
+                // Count-1 gets the total number of * signs in the variadic expression
+                result += expression.getSize() + (this.getCount() - 1);
             }
             return result;
         },
@@ -852,6 +858,8 @@
             return s + this.getSymbol() + e.getValue();
         }
     });
+    
+    
     
     Bridge.init();
 })(this);

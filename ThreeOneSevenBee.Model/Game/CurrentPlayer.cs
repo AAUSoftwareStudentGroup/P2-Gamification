@@ -15,8 +15,8 @@ namespace ThreeOneSevenBee.Model.Game
             Categories = new List<LevelCategory>();
         }
 
-        public int CurrentCategory;
-        public int CurrentLevel;
+        public int CurrentCategoryIndex;
+        public int CurrentLevelIndex;
 
         public void AddCategory(LevelCategory category)
         {
@@ -25,7 +25,12 @@ namespace ThreeOneSevenBee.Model.Game
             Categories.Add(category);
         }
 
-
+        public Level CurrentLevel {
+            get
+            {
+                return Categories[CurrentCategoryIndex][CurrentLevelIndex];
+            }
+        }
 
         public List<LevelCategory> Categories;
     }
