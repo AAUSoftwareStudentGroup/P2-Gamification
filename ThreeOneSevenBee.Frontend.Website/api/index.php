@@ -74,7 +74,7 @@ class API {
                         gamedb.level AS level
                     LEFT JOIN 
                         gamedb.level_category AS category ON level.level_category_id=category.id
-                    ORDER BY level.level_category_id ASC;"
+                    ORDER BY level.level_category_id ASC, level.id ASC;"
                    );
         $categories = array();
         while($row = $db->fetch()) {
