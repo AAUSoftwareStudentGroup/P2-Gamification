@@ -33,6 +33,7 @@ namespace ThreeOneSevenBee.Model.UI
             contentView.DrawWithContext(this, 0, 0);
         }
 
+        public abstract void Draw(ToolTipView view, double offsetX, double offsety);
         public abstract void Draw(View view, double offsetX, double offsetY);
 
         public virtual void Draw(ImageView view, double offsetX, double offsetY)

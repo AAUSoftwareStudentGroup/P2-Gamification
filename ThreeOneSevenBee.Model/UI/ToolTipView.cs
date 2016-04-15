@@ -9,11 +9,15 @@ namespace ThreeOneSevenBee.Model.UI
     {
         public ToolTipView(string text) : base(text)
         {
-            PointX = 0;
-            PointY = 0;
         }
 
-        public int PointX { get; set; }
-        public int PointY { get; set; }
+        public override void DrawWithContext(Context context, double offsetX, double offsetY)
+        {
+            context.Draw(this, offsetX, offsetY);
+        }
+
+        public position Position { get; set; }
+
     }
+    public enum position { upperLeft, upperRight, lowerLeft, lowerRight }
 }

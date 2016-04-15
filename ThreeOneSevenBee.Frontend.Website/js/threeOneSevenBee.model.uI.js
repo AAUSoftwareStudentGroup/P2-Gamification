@@ -23,7 +23,7 @@
             this.setBackgroundColor("transparent");
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$9(this, offsetX, offsetY);
+            context.draw$10(this, offsetX, offsetY);
         },
         click: function (x, y) {
             if (this.containsPoint(x, y) && Bridge.hasValue(this.onClick)) {
@@ -63,28 +63,28 @@
             this.contentView.drawWithContext(this, 0, 0);
         },
         draw$2: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$10(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$3: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$10(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$1: function (view, offsetX, offsetY) {
             this.draw$3(Bridge.as(view, ThreeOneSevenBee.Model.UI.LabelView), offsetX, offsetY);
         },
         draw$7: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$10(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$4: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$10(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$5: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$10(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$8: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$10(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         },
         draw$6: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$10(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
         }
     });
     
@@ -159,7 +159,7 @@
         },
         drawWithContext: function (context, offsetX, offsetY) {
             var $t;
-            context.draw$9(this, offsetX, offsetY);
+            context.draw$10(this, offsetX, offsetY);
             $t = Bridge.getEnumerator(this.children);
             while ($t.moveNext()) {
                 var child = $t.getCurrent();
@@ -265,7 +265,7 @@
             }
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$9(this, offsetX, offsetY);
+            context.draw$10(this, offsetX, offsetY);
             this.getContent$1().drawWithContext(context, offsetX + this.getInnerX(), offsetY + this.getInnerY());
         },
         align: function (view) {
@@ -1096,17 +1096,12 @@
     
     Bridge.define('ThreeOneSevenBee.Model.UI.ToolTipView', {
         inherits: [ThreeOneSevenBee.Model.UI.LabelView],
-        config: {
-            properties: {
-                PointX: 0,
-                PointY: 0
-            }
-        },
         constructor: function (text) {
             ThreeOneSevenBee.Model.UI.LabelView.prototype.$constructor.call(this, text);
     
-            this.setPointX(0);
-            this.setPointY(0);
+        },
+        drawWithContext: function (context, offsetX, offsetY) {
+            context.draw$9(this, offsetX, offsetY);
         }
     });
     
@@ -1121,10 +1116,12 @@
         build: function (game) {
             ThreeOneSevenBee.Model.UI.LevelView.prototype.build.call(this, game);
             this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Dette er en progressbar"), {
+                setFontSize: 11,
                 setX: this.progressbar.getX(),
-                setY: this.progressbar.getY(),
-                setWidth: 100,
-                setHeight: 20
+                setY: this.progressbar.getY() + this.progressbar.getHeight(),
+                setWidth: 150,
+                setHeight: 75,
+                setBackgroundColor: "#bbbbbb"
             } );
             this.children.add(this.toolTipView);
         }
