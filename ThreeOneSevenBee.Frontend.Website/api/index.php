@@ -1,7 +1,7 @@
 <?
 $_DEBUG = false;
 // $_DEBUG = true;
-if($_SERVER['HTTP_HOST'] != "localhost" || !$_DEBUG) {
+if($_SERVER['HTTP_HOST'] == "webmat.cs.aau.dk" || $_DEBUG == false) {
     error_reporting(0);
 }
 
@@ -104,15 +104,15 @@ class API {
                         category.name AS category_name,
                         level.initial_expression AS initial_expression, 
                         level.star_expressions AS star_expressions,
-                        level_progress.progress
+                        IFNULL(level_progress.progress,initial_expression) AS progress
                     FROM 
                         gamedb.level AS level
                     LEFT JOIN 
                         gamedb.level_category AS category ON level.level_category_id=category.id
                     LEFT JOIN 
-                        user_level_progress AS level_progress ON level_progress.level_id = level.id
+                        gamedb.user_level_progress AS level_progress ON level_progress.level_id = level.id
                     WHERE 
-                        level_progress.user_id=? OR level_progress.user_id IS NULL
+                        level_progress.user_id=5 OR level_progress.user_id IS NULL
                     ORDER BY level.level_category_id ASC, level.id ASC;",
                     $_SESSION['authorized']
         );
