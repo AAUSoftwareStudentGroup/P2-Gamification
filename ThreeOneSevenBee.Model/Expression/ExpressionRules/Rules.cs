@@ -532,30 +532,64 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 return null;
             }
             DelimiterExpression delimiterExpression;
+            //Ændr navn på alle 'test' og måske type?
+            ExpressionBase test;
             if (selection[0] is DelimiterExpression)
             {
                 delimiterExpression = selection[0] as DelimiterExpression;
+                test = selection[1] as ExpressionBase;
             }
             else
             {
                 delimiterExpression = selection[1] as DelimiterExpression;
+                test = selection[0] as ExpressionBase;
             }
-            VariadicOperatorExpression variadicparent = null;
+            VariadicOperatorExpression variadicParent = null;
             if (delimiterExpression.Parent is VariadicOperatorExpression)
             {
-                variadicparent = delimiterExpression.Parent as VariadicOperatorExpression;
+                variadicParent = delimiterExpression.Parent as VariadicOperatorExpression;
             }
-            if (variadicparent != null && variadicparent.Type == OperatorType.Add)
+            if (variadicParent != null && variadicParent.Type == OperatorType.Multiply)
             {
-                foreach (var item in variadicparent)
+                List<ExpressionBase> suggestionList = new List<ExpressionBase>();
+                if(delimiterExpression.Expression is VariadicOperatorExpression)
                 {
-                    if (item is VariadicOperatorExpression)
+                    var variadicExpressionExpression = delimiterExpression.Expression as VariadicOperatorExpression;
+                    if(variadicExpressionExpression.Type == OperatorType.Add)
                     {
+                        foreach (var item in variadicExpressionExpression)
+                        {
+                            var part = new VariadicOperatorExpression(OperatorType.Multiply, test, item);
+                            suggestionList.Add(part);
+                        }
+                    }
+                    else
+                    {
+                        //for gange, dette skal være det samme som det nedenfor, altså bare gange ind én gang!
+                        
                     }
                 }
-            }
-            //delimiterExpression.Expression 
+                //for bogstav, tal, minus eller hvad det nu er skal den kun ganges ind én gang
 
+                //Skal lave nogle casts for at tjekke hvad delimiterExpression.Expression er. 
+                //Skal ganges ind på HVERT plus led, men kun ind én gang, hvis den er gange!
+                //Så der skal laves nogle tjeks!
+                var suggestion = new VariadicOperatorExpression(OperatorType.Add, suggestionList[1], suggestionList[2]);
+
+                foreach (var item in suggestionList.Skip(2))
+                {
+                    suggestion.Add(item);
+                }
+
+                return new Identity(suggestion, suggestion);
+
+
+
+
+
+
+
+            }
             return null;
         }
 
@@ -604,7 +638,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 VariadicOperatorExpression numerators = binaryExpression.Left.Clone() as VariadicOperatorExpression;
 
-                if (numerators != null && numerators.Count > 1)
+                if (numerators != null && numerators.Type == OperatorType.Add && numerators.Count > 1)
                 {
                     List<ExpressionBase> fractionList = new List<ExpressionBase>();
                     foreach (var i in numerators)
