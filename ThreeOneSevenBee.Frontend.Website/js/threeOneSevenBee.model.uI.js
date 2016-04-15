@@ -1088,6 +1088,22 @@
         }
     });
     
+    Bridge.define('ThreeOneSevenBee.Model.UI.ToolTipView', {
+        inherits: [ThreeOneSevenBee.Model.UI.LabelView],
+        config: {
+            properties: {
+                PointX: 0,
+                PointY: 0
+            }
+        },
+        constructor: function (text, pointX, pointY) {
+            ThreeOneSevenBee.Model.UI.LabelView.prototype.$constructor.call(this, text);
+    
+            this.setPointX(pointX);
+            this.setPointY(pointY);
+        }
+    });
+    
     
     
     Bridge.init();
