@@ -18,7 +18,7 @@
                 var gameAPI = new ThreeOneSevenBee.Frontend.JQueryGameAPI();
     
                 var testCategory = new ThreeOneSevenBee.Model.Game.LevelCategory("test");
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "-4-40+5-9", "-4-40+5-9", ["44"]));
+                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "(a^2)^3", "(a^2)^3", ["44"]));
                 testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
                 testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
                 testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));

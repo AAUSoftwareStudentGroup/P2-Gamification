@@ -804,7 +804,45 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
             return null;
         }
+        public static Identity ParenthesisPowerRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count < 2)
+            {
+                return null;
+            }
+            // Check for common parent Power and if first selection is inside parenthesis
+            
+            BinaryOperatorExpression binaryOperatorExpression = expression as BinaryOperatorExpression;
+            if (binaryOperatorExpression == null)
+                return null;
+            if (!(binaryOperatorExpression.Left is DelimiterExpression))
+                return null;
+            foreach (ExpressionBase exp in selection)
+            {
+                if (!(exp is OperatorExpression) && !(exp is NumericExpression))
+                    return null;
+                OperatorExpression newExp = exp.Parent as OperatorExpression;
+                if (newExp != null && newExp.Type != OperatorType.Power)
+                    return null;
+            } 
+            // Rule confirmed, generate suggestion
+            // Remove parenthesis and add power from .Left to selected expression.
+            DelimiterExpression suggestion = binaryOperatorExpression.Left.Clone() as DelimiterExpression;
+            BinaryOperatorExpression power = suggestion.Expression.Clone() as BinaryOperatorExpression;
+            if (power == null)
+            {
+                return null;
+            }
+            else
+            {
+                BinaryOperatorExpression actualSuggestion = new BinaryOperatorExpression(power.Left, new VariadicOperatorExpression(OperatorType.Multiply, power.Right, binaryOperatorExpression.Right.Clone()), OperatorType.Power);
+                return new Identity(actualSuggestion, actualSuggestion);
+            }
+        }
 
+        /*public static Identity ReverseParenthesisPowerRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
 
+        }*/
     }
 }
