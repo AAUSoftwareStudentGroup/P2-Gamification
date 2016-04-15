@@ -13,7 +13,7 @@ namespace ThreeOneSevenBee.Model.UI
             this.PointY = pointY;
         }
 
-        public int PointX { get; }
-        public int PointY { get; }
+        public int PointX { get; set; }
+        public int PointY { get; set; }
     }
 }

@@ -73,6 +73,7 @@
         },
         onExpressionChanged: function (model) {
             this.progressBar.currentValue = model.getExpression().getSize();
+            this.getUser().getCurrentLevel().currentExpression = model.getExpression().toString();
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged(this);
             }
