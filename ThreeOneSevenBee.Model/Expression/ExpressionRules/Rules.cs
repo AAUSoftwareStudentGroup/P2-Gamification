@@ -234,7 +234,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         }
 
         //a/c + b/c = (a+b)/c
-        //Mangler result
         public static Identity AddFractionsWithSameNumerators(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count < 2)
@@ -473,13 +472,17 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             if (binaryExpression != null && binaryExpression.Type == OperatorType.Divide)
             {
-                //Prøv at udskrive numerators, for at se hvad de er
                 VariadicOperatorExpression numerators = binaryExpression.Left.Clone() as VariadicOperatorExpression;
+
                 if (numerators != null && numerators.Count > 1)
                 {
                     List<ExpressionBase> fractionList = new List<ExpressionBase>();
                     foreach (var i in numerators)
                     {
+                        //Tjek om i er variabel eller minus
+                        if(i as UnaryMinusExpression != null)
+
+
                         fractionList.Add(new BinaryOperatorExpression(i, binaryExpression.Right.Clone(), OperatorType.Divide));
                     }
                     VariadicOperatorExpression suggestion = new VariadicOperatorExpression(OperatorType.Add, fractionList[0], fractionList[1]);
