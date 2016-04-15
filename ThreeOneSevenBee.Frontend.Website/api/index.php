@@ -67,6 +67,7 @@ class API {
 
     static function get_levels($IN, $db) {
         $db->query("SELECT 
+                        level.id AS level_id,
                         category.name AS category_name,
                         level.initial_expression AS initial_expression, 
                         level.star_expressions AS star_expressions
@@ -74,11 +75,12 @@ class API {
                         gamedb.level AS level
                     LEFT JOIN 
                         gamedb.level_category AS category ON level.level_category_id=category.id
-                    ORDER BY level.level_category_id ASC;"
+                    ORDER BY level.level_category_id ASC, level.id ASC;"
                    );
         $categories = array();
         while($row = $db->fetch()) {
             $level = array(
+                'id' => $row['level_id'],
                 'initial_expression' => $row['initial_expression'],
                 'star_expressions' => explode('|', $row['star_expressions'])
             );
