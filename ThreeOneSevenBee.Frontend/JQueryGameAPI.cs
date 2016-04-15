@@ -38,7 +38,9 @@ namespace ThreeOneSevenBee.Frontend
                         var levelsData = categoryData["levels"] as object[];
                         foreach (var levelData in levelsData)
                         {
-                            Level level = new Level((string)levelData["initial_expression"], 
+                            Level level = new Level(
+                                int.Parse((string)levelData["id"]),
+                                (string)levelData["initial_expression"], 
                                 (string)levelData["initial_expression"], 
                                 (levelData["star_expressions"] as object[]).Select((o) => (string)o).ToArray());
                             levelCategory.Add(level);
@@ -66,7 +68,6 @@ namespace ThreeOneSevenBee.Frontend
                         {
                             currentPlayer.AddCategory(category);
                         }
-                        Console.WriteLine(currentPlayer);
                         callback(currentPlayer);
                     });
                 }
@@ -87,9 +88,23 @@ namespace ThreeOneSevenBee.Frontend
             );
         }
 
-        public override void UpdateCurrentPlayer(CurrentPlayer currentPlayer)
+        public override void SaveUserLevelProgress(int levelID, string currentExpression, Action<bool> callback)
         {
-            throw new NotImplementedException();
+            jQuery.Post(
+                "/api/", 
+                new {
+                    action = "save_user_level_progress",
+                    debug = 1,
+                    level_id = levelID,
+                    current_expression = currentExpression
+                },
+                (data, textStatus, request) =>
+                {
+                    Console.WriteLine(data);
+                    var jdata = JSON.Parse((string)data);
+                    callback((string)jdata["success"] == "true");
+                }
+            );
         }
     }
 }

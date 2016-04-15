@@ -20,6 +20,7 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Game.GameModel', {
         onChanged: null,
+        onSaveLevel: null,
         progressBar: null,
         config: {
             properties: {
@@ -33,7 +34,7 @@
         constructor: function (user, players) {
             this.setUser(user);
             this.setPlayers(players);
-            this.setLevel(this.getUser().currentLevel, this.getUser().currentCategory);
+            this.setLevel(this.getUser().currentLevelIndex, this.getUser().currentCategoryIndex);
         },
         getCurrentExpression: function () {
             return this.getExprModel().getExpression();
@@ -42,15 +43,15 @@
             return Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() >= 1;
         },
         getCategoryCompleted: function () {
-            return this.getLevelCompleted() && this.getUser().currentLevel === this.getUser().categories.getItem(this.getUser().currentCategory).getCount() - 1;
+            return this.getLevelCompleted() && this.getUser().currentLevelIndex === this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getCount() - 1;
         },
         getGameCompleted: function () {
-            return this.getCategoryCompleted() && this.getUser().currentCategory === this.getUser().categories.getCount() - 1;
+            return this.getCategoryCompleted() && this.getUser().currentCategoryIndex === this.getUser().categories.getCount() - 1;
         },
         setLevel: function (level, category) {
             var $t;
-            this.getUser().currentLevel = level;
-            this.getUser().currentCategory = category;
+            this.getUser().currentLevelIndex = level;
+            this.getUser().currentCategoryIndex = category;
             var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
             console.log(this.getUser().categories.getItem(category).getItem(level).starExpressions);
             var endValue = serializer.deserialize(Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(category).getItem(level).starExpressions).last()).getSize();
@@ -58,7 +59,7 @@
             this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(currentValue, endValue, currentValue);
             this.setStarExpressions(new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)());
     
-            $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategory).getItem(this.getUser().currentLevel).starExpressions);
+            $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getItem(this.getUser().currentLevelIndex).starExpressions);
             while ($t.moveNext()) {
                 var starExpression = $t.getCurrent();
                 var starExpressionBase = serializer.deserialize(starExpression);
@@ -82,23 +83,25 @@
             }
             else  {
                 if (this.getCategoryCompleted()) {
-                    this.getUser().currentCategory++;
-                    this.getUser().currentLevel = 0;
+                    this.getUser().currentCategoryIndex++;
+                    this.getUser().currentLevelIndex = 0;
     
                 }
                 else  {
                     if (this.getLevelCompleted()) {
-                        this.getUser().currentLevel++;
+                        this.getUser().currentLevelIndex++;
                     }
                     else  {
                         return;
                     }
                 }
             }
-            this.setLevel(this.getUser().currentLevel, this.getUser().currentCategory);
+            this.setLevel(this.getUser().currentLevelIndex, this.getUser().currentCategoryIndex);
         },
-        save: function () {
-            this.getUser().categories.getItem(this.getUser().currentCategory).getItem(this.getUser().currentLevel).currentExpression = this.getCurrentExpression().toString();
+        saveLevel: function () {
+            if (Bridge.hasValue(this.onSaveLevel)) {
+                this.onSaveLevel(this.getUser().getCurrentLevel());
+            }
         }
     });
     
@@ -116,15 +119,21 @@
         startExpression: null,
         starExpressions: null,
         currentExpression: null,
+        levelID: 0,
         levelIndex: 0,
         categoryIndex: 0,
-        constructor$1: function (startExpression, currentExpression, starExpressions) {
-            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, startExpression, currentExpression, starExpressions);
+        constructor$2: function (startExpression, currentExpression, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, -1, startExpression, currentExpression, starExpressions);
     
         },
-        constructor: function (levelIndex, categoryIndex, startExpression, currentExpression, starExpressions) {
+        constructor$1: function (levelID, startExpression, currentExpression, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, levelID, -1, -1, startExpression, currentExpression, starExpressions);
+    
+        },
+        constructor: function (levelID, levelIndex, categoryIndex, startExpression, currentExpression, starExpressions) {
             var $t;
             if (starExpressions === void 0) { starExpressions = []; }
+            this.levelID = levelID;
             this.levelIndex = levelIndex;
             this.categoryIndex = categoryIndex;
             this.startExpression = startExpression;
@@ -197,13 +206,16 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Game.CurrentPlayer', {
         inherits: [ThreeOneSevenBee.Model.Game.Player],
-        currentCategory: 0,
-        currentLevel: 0,
+        currentCategoryIndex: 0,
+        currentLevelIndex: 0,
         categories: null,
         constructor: function (player) {
             ThreeOneSevenBee.Model.Game.Player.prototype.$constructor.call(this, player);
     
             this.categories = new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)();
+        },
+        getCurrentLevel: function () {
+            return this.categories.getItem(this.currentCategoryIndex).getItem(this.currentLevelIndex);
         },
         addCategory: function (category) {
             category.setCategoryIndex(this.categories.getCount());
@@ -340,8 +352,8 @@
                 [new ThreeOneSevenBee.Model.Game.Player("Nikolaj")]
             ] ));
         },
-        updateCurrentPlayer: function (currentPlayer) {
-            this.currentPlayer = currentPlayer;
+        saveUserLevelProgress: function (levelID, currentExpression, callback) {
+            throw new Bridge.NotImplementedException();
         }
     });
     

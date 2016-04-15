@@ -33,12 +33,12 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 OnExit = () =>
                 {
-                    game.Save();
+                    game.SaveLevel();
                     setContent(titleView);
                 },
                 OnNextLevel = () =>
                 {
-                    game.Save();
+                    game.SaveLevel();
                     game.NextLevel();
                 }
             };

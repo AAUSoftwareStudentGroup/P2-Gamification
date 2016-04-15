@@ -672,11 +672,11 @@
     
             this.levelView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LevelView(game, context.getWidth(), context.getHeight()), {
                 setOnExit: Bridge.fn.bind(this, function () {
-                    game.save();
+                    game.saveLevel();
                     this.setContent(this.titleView);
                 }),
                 setOnNextLevel: function () {
-                    game.save();
+                    game.saveLevel();
                     game.nextLevel();
                 }
             } );
@@ -780,7 +780,7 @@
         constructor: function (user) {
             ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, 400, 300);
     
-            this.setCategory(user.currentCategory);
+            this.setCategory(user.currentCategoryIndex);
             this.build(user);
         },
         nextCategory: function () {

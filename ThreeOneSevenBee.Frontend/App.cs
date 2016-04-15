@@ -42,7 +42,16 @@ namespace ThreeOneSevenBee.Frontend
             {
                 gameAPI.GetPlayers((p) =>
                 {
-                    gameModel = new GameModel(u, p);
+                    gameModel = new GameModel(u, p)
+                    {
+                        OnSaveLevel = (level) => 
+                        gameAPI.SaveUserLevelProgress
+                        (
+                            level.LevelID,
+                            level.CurrentExpression,
+                            (success) => Console.WriteLine(success)
+                        )
+                    };
                     gameModel.User.AddCategory(testCategories);
                     gameView = new GameView(gameModel, context);
                 });

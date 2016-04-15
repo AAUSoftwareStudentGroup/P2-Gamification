@@ -19,6 +19,7 @@ namespace ThreeOneSevenBee.Model.Game
         public ExpressionBase StartExpression { get; private set; }
         public List<ExpressionBase> StarExpressions { get; private set; }
         public Action<GameModel> OnChanged;
+        public Action<Level> OnSaveLevel;
         public ProgressbarStar ProgressBar;
 
         public bool LevelCompleted
@@ -33,7 +34,7 @@ namespace ThreeOneSevenBee.Model.Game
         {
             get
             {
-                return LevelCompleted && User.CurrentLevel == User.Categories[User.CurrentCategory].Count - 1;
+                return LevelCompleted && User.CurrentLevelIndex == User.Categories[User.CurrentCategoryIndex].Count - 1;
             }
         }
 
@@ -41,14 +42,14 @@ namespace ThreeOneSevenBee.Model.Game
         {
             get
             {
-                return CategoryCompleted && User.CurrentCategory == User.Categories.Count - 1;
+                return CategoryCompleted && User.CurrentCategoryIndex == User.Categories.Count - 1;
             }
         }
 
         public void SetLevel(int level, int category)
         {
-            User.CurrentLevel = level;
-            User.CurrentCategory = category;
+            User.CurrentLevelIndex = level;
+            User.CurrentCategoryIndex = category;
             ExpressionSerializer serializer = new ExpressionSerializer();
             Console.WriteLine(User.Categories[category][level].StarExpressions);
             int endValue = serializer.Deserialize(User.Categories[category][level].StarExpressions.Last()).Size;
@@ -56,7 +57,7 @@ namespace ThreeOneSevenBee.Model.Game
             ProgressBar = new ProgressbarStar(currentValue, endValue, currentValue);
             StarExpressions = new List<ExpressionBase>();
 
-            foreach (string starExpression in User.Categories[User.CurrentCategory][User.CurrentLevel].StarExpressions)
+            foreach (string starExpression in User.Categories[User.CurrentCategoryIndex][User.CurrentLevelIndex].StarExpressions)
             {
                 ExpressionBase starExpressionBase = serializer.Deserialize(starExpression);
                 StarExpressions.Add(starExpressionBase);
@@ -88,31 +89,34 @@ namespace ThreeOneSevenBee.Model.Game
             }
             else if (CategoryCompleted)
             {
-                User.CurrentCategory++;
-                User.CurrentLevel = 0;
+                User.CurrentCategoryIndex++;
+                User.CurrentLevelIndex = 0;
 
             }
             else if (LevelCompleted)
             {
-                User.CurrentLevel++;
+                User.CurrentLevelIndex++;
             }
             else
             {
                 return;
             }
-            SetLevel(User.CurrentLevel, User.CurrentCategory);
+            SetLevel(User.CurrentLevelIndex, User.CurrentCategoryIndex);
         }
 
-        public void Save()
+        public void SaveLevel()
         {
-            User.Categories[User.CurrentCategory][User.CurrentLevel].CurrentExpression = CurrentExpression.ToString();
+            if(OnSaveLevel != null)
+            {
+                OnSaveLevel(User.CurrentLevel);
+            }
         }
 
         public GameModel(CurrentPlayer user, List<Player> players)
         {
             User = user;
             Players = players;
-            SetLevel(User.CurrentLevel, User.CurrentCategory);
+            SetLevel(User.CurrentLevelIndex, User.CurrentCategoryIndex);
         }
     }
 }
