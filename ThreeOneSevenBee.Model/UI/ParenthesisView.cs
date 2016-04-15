@@ -10,6 +10,10 @@ namespace ThreeOneSevenBee.Model.UI
     {
         public ParenthesisType Type { get; set; }
 
+        public string LineColor { get; set; }
+
+        public double LineWidth { get; set; }
+
         public ParenthesisView(ParenthesisType type) : base(0, 0, 10, 10)
         {
             Type = type;
@@ -18,6 +22,12 @@ namespace ThreeOneSevenBee.Model.UI
         public override void DrawWithContext(Context context, double offsetX, double offsetY)
         {
             context.Draw(this, offsetX, offsetY);
+        }
+
+        public override View Scale(double factor)
+        {
+            LineWidth *= factor;
+            return base.Scale(factor);
         }
     }
 }

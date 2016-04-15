@@ -17,26 +17,10 @@
     
                 var gameAPI = new ThreeOneSevenBee.Frontend.JQueryGameAPI();
     
-                var testCategory = new ThreeOneSevenBee.Model.Game.LevelCategory("test");
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "(a^2)^3", "(a^2)^3", ["44"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-    
-                var tutorialCategory = new ThreeOneSevenBee.Model.Game.LevelCategory("Tutorial");
-                tutorialCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "a*a", "a*a", ["a^2"]));
-    
                 var gameModel;
                 var gameView;
     
                 gameAPI.getCurrentPlayer(function (u) {
-                    u.addCategory(tutorialCategory);
-                    u.addCategory(testCategory);
                     gameAPI.getPlayers(function (p) {
                         gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
                             onSaveLevel: function (level) {
@@ -232,13 +216,12 @@
             throw new Bridge.NotImplementedException();
         },
         getCategories: function (callback) {
-            $.get("/api/?action=get_levels", { }, function (data, textStatus, request) {
+            $.get("/api/?action=get_levels&debug=1", { }, function (data, textStatus, request) {
                 var $t, $t1;
                 var jdata = JSON.parse(Bridge.cast(data, String));
-                console.log(jdata);
                 var categories = new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)();
                 var categoriesData = Bridge.as(jdata.data, Array);
-    
+                console.log(jdata);
                 $t = Bridge.getEnumerator(categoriesData);
                 while ($t.moveNext()) {
                     var categoryData = $t.getCurrent();
@@ -258,20 +241,20 @@
             });
         },
         getCurrentPlayer: function (callback) {
-            $.get("/api/?action=get_current_user&debug=1", { }, function (data, textStatus, request) {
-                //var jdata = JSON.Parse((string)data);
-                //CurrentPlayer currentPlayer = new CurrentPlayer((string)jdata["data"]["name"]);
-                //getCategories((categories) =>
-                //{
-                //    foreach (LevelCategory category in categories)
-                //    {
-                //        currentPlayer.AddCategory(category);
-                //    }
-                //    callback(currentPlayer);
-                //});
-                var currentPlayer = new ThreeOneSevenBee.Model.Game.CurrentPlayer("AntonNoob");
+            $.get("/api/?action=get_current_user&debug=1", { }, Bridge.fn.bind(this, function (data, textStatus, request) {
+                var jdata = JSON.parse(Bridge.cast(data, String));
+                var currentPlayer = new ThreeOneSevenBee.Model.Game.CurrentPlayer(Bridge.cast(jdata.data.name, String));
+                this.getCategories(function (categories) {
+                    var $t;
+                    $t = Bridge.getEnumerator(categories);
+                    while ($t.moveNext()) {
+                        var category = $t.getCurrent();
+                        currentPlayer.addCategory(category);
+                    }
+                    callback(currentPlayer);
+                });
                 callback(currentPlayer);
-            });
+            }));
         },
         getPlayers: function (callback) {
             $.get("/api/?action=get_users", { }, function (data, textStatus, request) {
@@ -282,7 +265,6 @@
         },
         saveUserLevelProgress: function (levelID, currentExpression, callback) {
             $.post("/api/", { action: "save_user_level_progress", debug: 1, level_id: levelID, current_expression: currentExpression }, function (data, textStatus, request) {
-                console.log(data);
                 var jdata = JSON.parse(Bridge.cast(data, String));
                 callback(Bridge.cast(jdata.success, String) === "true");
             });

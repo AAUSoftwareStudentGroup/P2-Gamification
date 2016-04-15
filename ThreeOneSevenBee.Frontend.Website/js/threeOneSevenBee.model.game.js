@@ -56,7 +56,6 @@
             this.getUser().currentLevelIndex = level;
             this.getUser().currentCategoryIndex = category;
             var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
-            console.log(this.getUser().categories.getItem(category).getItem(level).starExpressions);
             var endValue = serializer.deserialize(Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(category).getItem(level).starExpressions).last()).getSize();
             var currentValue = serializer.deserialize(this.getUser().categories.getItem(category).getItem(level).startExpression).getSize();
             this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(currentValue, endValue, currentValue);

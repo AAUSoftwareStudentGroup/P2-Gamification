@@ -33,7 +33,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             if (product != null && product.Type == OperatorType.Multiply)
             {
 
-                if (selection.TakeWhile((e) => { return selection[0] == e && ReferenceEquals(e.Parent, expression); }).Count() == selection.Count)
+                if (selection.Where((e) => { return selection[0] == e && ReferenceEquals(e.Parent, expression); }).Count() == selection.Count)
                 {
                     BinaryExpression suggestion = new BinaryOperatorExpression(selection[0].Clone(), new NumericExpression(selection.Count), OperatorType.Power);
 
@@ -162,9 +162,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 {
                     return new Identity(suggestion, suggestion);
                 }
-                Console.WriteLine(selection.Concat(selectedParents).Select((s) => s.ToString()).ToArray());
                 var indexes = selection.Concat(selectedParents).Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
-                Console.WriteLine(indexes.ToArray());
                 indexes.Sort();
                 VariadicOperatorExpression result = InsertSuggestion(indexes, variadicExpression.Clone() as VariadicOperatorExpression, suggestion);
                 return new Identity(suggestion, result);
