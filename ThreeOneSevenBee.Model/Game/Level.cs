@@ -12,15 +12,19 @@ namespace ThreeOneSevenBee.Model.Game
         public List<string> StarExpressions;
         public string CurrentExpression;
 
+        public int LevelID;
         public int LevelIndex;
         public int CategoryIndex;
 
-
-        public Level(string startExpression, string currentExpression, string[] starExpressions) : this(-1, -1, startExpression, currentExpression, starExpressions)
+        public Level(string startExpression, string currentExpression, string[] starExpressions) : this(-1, -1, -1, startExpression, currentExpression, starExpressions)
         { }
 
-        public Level(int levelIndex, int categoryIndex, string startExpression, string currentExpression, params string[] starExpressions)
+        public Level(int levelID, string startExpression, string currentExpression, string[] starExpressions) : this(levelID, -1, -1, startExpression, currentExpression, starExpressions)
+        { }
+
+        public Level(int levelID, int levelIndex, int categoryIndex, string startExpression, string currentExpression, params string[] starExpressions)
         {
+            LevelID = levelID;
             LevelIndex = levelIndex;
             CategoryIndex = categoryIndex;
             StartExpression = startExpression;

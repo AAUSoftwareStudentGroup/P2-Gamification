@@ -24,26 +24,40 @@ namespace ThreeOneSevenBee.Frontend
 
             JQueryGameAPI gameAPI = new JQueryGameAPI();
 
-            LevelCategory testCategories = new LevelCategory("test");
-            testCategories.Add(new Level("x*(b+c)", "x*(b+c)", new string[] { "0" }));
-            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategories.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            LevelCategory testCategory = new LevelCategory("test");
+            testCategory.Add(new Level("-4-40+5-9", "-4-40+5-9", new string[] { "44" }));
+            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
+            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
+
+            LevelCategory tutorialCategory = new LevelCategory("Tutorial");
+            tutorialCategory.Add(new Level("a*a", "a*a", new string[] { "a^2" }));
 
             GameModel gameModel;
             GameView gameView;
 
             gameAPI.GetCurrentPlayer((u) =>
             {
+                u.AddCategory(testCategory);
+                u.AddCategory(tutorialCategory);
                 gameAPI.GetPlayers((p) =>
                 {
-                    gameModel = new GameModel(u, p);
-                    gameModel.User.AddCategory(testCategories);
+                    gameModel = new GameModel(u, p)
+                    {
+                        OnSaveLevel = (level) => 
+                        gameAPI.SaveUserLevelProgress
+                        (
+                            level.LevelID,
+                            level.CurrentExpression,
+                            (success) => Console.WriteLine(success)
+                        )
+                    };
+                    
                     gameView = new GameView(gameModel, context);
                 });
             });

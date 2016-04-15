@@ -103,9 +103,10 @@ namespace ThreeOneSevenBee.Model.Game
             });
         }
 
-        public override void UpdateCurrentPlayer(CurrentPlayer currentPlayer)
+
+        public override void SaveUserLevelProgress(int levelID, string currentExpression, Action<bool> callback)
         {
-            this.currentPlayer = currentPlayer;
+            throw new NotImplementedException();
         }
     }
 }

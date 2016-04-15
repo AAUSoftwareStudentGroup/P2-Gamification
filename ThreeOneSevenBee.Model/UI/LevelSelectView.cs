@@ -130,7 +130,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public LevelSelectView(CurrentPlayer user) : base(400, 300)
         {
-            Category = user.CurrentCategory;
+            Category = user.CurrentCategoryIndex;
             Build(user);
         }
     }
