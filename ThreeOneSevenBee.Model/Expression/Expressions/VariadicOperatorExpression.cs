@@ -29,7 +29,8 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 int result = 3;
                 foreach (ExpressionBase expression in this)
                 {
-                    result += expression.Size;
+                    // Count-1 gets the total number of * signs in the variadic expression
+                    result += expression.Size + (Count-1);
                 }
                 return result;
             }

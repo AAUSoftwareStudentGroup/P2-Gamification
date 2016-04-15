@@ -41,7 +41,6 @@ namespace ThreeOneSevenBee.Model.UI
                     game.Save();
                     game.NextLevel();
                 }
-                
             };
 
             levelSelectView = new LevelSelectView(game.User)
@@ -56,8 +55,9 @@ namespace ThreeOneSevenBee.Model.UI
                     setContent(levelView);
                     Update(game);
                     game.SetLevel(level.LevelIndex, level.CategoryIndex);
-                }
-            };
+                },
+                OnExit = () => setContent(titleView)
+        };
 
             titleView.PlayButton.OnClick = () => setContent(levelView);
 
