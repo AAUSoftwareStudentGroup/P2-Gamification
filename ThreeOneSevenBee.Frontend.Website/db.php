@@ -58,7 +58,8 @@ class DB {
                         $querySafeString = 'NULL';
                     }
                     else {
-                        $querySafeString = "'" . @mysql_escape_string($nextParameter) . "'";
+                        $querySafeString = "'" . $nextParameter . "'";
+                        // $querySafeString = "'" . @mysql_escape_string($nextParameter) . "'";
                     }
 
                     $offset = $placeToInsertParameter + strlen($querySafeString);
@@ -66,7 +67,6 @@ class DB {
                 }
             }
         }
-
         $this->lastQuery = $query;
 
         if($this->queryResult = mysqli_query($this->conn, $query))
