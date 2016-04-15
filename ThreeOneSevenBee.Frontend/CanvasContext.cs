@@ -176,24 +176,26 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void Draw(ToolTipView view, double offsetX, double offsety)
         {
+            if (view.Visible == true)
+            {
+                context.FillStyle = view.BackgroundColor;
 
-            context.FillStyle = view.BackgroundColor;
+                context.BeginPath();
+                context.MoveTo(view.X + offsetX, view.Y + offsety + 10);
+                context.LineTo(view.X + offsetX + 10, view.Y + offsety);
+                context.LineTo(view.X + offsetX + 20, view.Y + offsety + 10);
+                context.LineTo(view.X + offsetX + view.Width, view.Y + offsety + 10);
+                context.LineTo(view.X + offsety + view.Width, view.Y + offsety + view.Height);
+                context.LineTo(view.X + offsetX, view.Y + offsetX + view.Height);
+                context.ClosePath();
 
-            context.BeginPath();
-            context.MoveTo(view.X + offsetX, view.Y + offsety + 10);
-            context.LineTo(view.X + offsetX + 10, view.Y + offsety);
-            context.LineTo(view.X + offsetX + 20, view.Y + offsety + 10);
-            context.LineTo(view.X + offsetX + view.Width, view.Y + offsety + 10);
-            context.LineTo(view.X + offsety + view.Width, view.Y + offsety + view.Height);
-            context.LineTo(view.X + offsetX, view.Y + offsetX + view.Height);
-            context.ClosePath();
-            context.Stroke();
-            context.Fill();
+                context.Fill();
 
-            context.Font = view.FontSize + "px " + view.Font;
-            context.FillStyle = view.FontColor;
-            context.FillText(view.Text, (int)(view.X + offsetX + (view.Align == "center" ? view.Width / 2 : 5)),
-                (int)(view.Y + offsety + view.Height / 2));
+                context.Font = view.FontSize + "px " + view.Font;
+                context.FillStyle = view.FontColor;
+                context.FillText(view.Text, (int)(view.X + offsetX + (view.Align == "center" ? view.Width / 2 : 5)),
+                    (int)(view.Y + offsety + view.Height / 2));
+            }
         }
     }
 }

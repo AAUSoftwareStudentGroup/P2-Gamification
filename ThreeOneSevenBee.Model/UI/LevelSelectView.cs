@@ -48,12 +48,12 @@ namespace ThreeOneSevenBee.Model.UI
         {
             MenuButton = new ButtonView("Menu", () => { if (OnExit != null) { OnExit(); } })
             {
-                Width = 100,
-                Height = 50,
+                Width = 75,
+                Height = 30,
                 BackgroundColor = "#C1392B",
                 FontColor = "#FFFFFF",
                 Font = "Segoe UI",
-                FontSize = 25
+                FontSize = 18
             };
 
             CategoryName = new LabelView(user.Categories[Category].Name)

@@ -129,21 +129,21 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         if (ReferenceEquals(numericExpression.Parent, expression) == true)
                         {
                             sum = operation(sum, (int)numericExpression.Number);
-                    }
-                    else
-                    {
-                            UnaryMinusExpression minusExpression = selected.Parent as UnaryMinusExpression;
-                            if (minusExpression != null && ReferenceEquals(minusExpression.Parent, expression) == true)
-                        {
-                                sum = operation(sum, -(int)numericExpression.Number);
-                                selectedParents.Add(minusExpression);
                         }
                         else
                         {
-                            return null;
+                            UnaryMinusExpression minusExpression = selected.Parent as UnaryMinusExpression;
+                            if (minusExpression != null && ReferenceEquals(minusExpression.Parent, expression) == true)
+                            {
+                                sum = operation(sum, -(int)numericExpression.Number);
+                                selectedParents.Add(minusExpression);
+                            }
+                            else
+                            {
+                                return null;
+                            }
                         }
                     }
-                }
                     else
                     {
                         return null;
@@ -163,11 +163,10 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     return new Identity(suggestion, suggestion);
                 }
                 Console.WriteLine(selection.Concat(selectedParents).Select((s) => s.ToString()).ToArray());
-                var indexes = selection.Union(selectedParents).Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
+                var indexes = selection.Concat(selectedParents).Select((s) => variadicExpression.IndexOfReference(s)).Where((i) => i != -1).ToList();
                 Console.WriteLine(indexes.ToArray());
                 indexes.Sort();
-                VariadicOperatorExpression result = variadicExpression.Clone() as VariadicOperatorExpression;
-                result = InsertSuggestion(indexes, result, suggestion);
+                VariadicOperatorExpression result = InsertSuggestion(indexes, variadicExpression.Clone() as VariadicOperatorExpression, suggestion);
                 return new Identity(suggestion, result);
             }
             return null;

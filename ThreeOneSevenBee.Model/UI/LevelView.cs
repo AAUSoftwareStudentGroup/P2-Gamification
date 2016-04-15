@@ -61,14 +61,16 @@ namespace ThreeOneSevenBee.Model.UI
                 Y = 50,
             };
 
-            toolTipView = new ToolTipView("Dette er en progressbar")
+            toolTipView = new ToolTipView("Denne bar viser hvor langt du er nået.")
             {
-                FontSize = 11,
+                FontSize = 20,
+                Visible = game.IsFirstLevel,
+                FontColor = "#ffffff",
                 X = progressbar.X,
-                Y = progressbar.Y + progressbar.Height,
-                Width = 150,
+                Y = progressbar.Y + progressbar.Height + 10,
+                Width = 400,
                 Height = 75,
-                BackgroundColor = "#bbbbbb",
+                BackgroundColor = "#297782",
                 Position = position.upperLeft
             };
 

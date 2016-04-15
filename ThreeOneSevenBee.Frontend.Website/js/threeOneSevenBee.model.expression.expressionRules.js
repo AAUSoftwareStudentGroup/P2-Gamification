@@ -134,13 +134,12 @@
                         return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
                     }
                     console.log(Bridge.Linq.Enumerable.from(selection).concat(selectedParents).select($_.ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules.f4).toArray());
-                    var indexes = Bridge.Linq.Enumerable.from(selection).union(selectedParents).select(function (s) {
+                    var indexes = Bridge.Linq.Enumerable.from(selection).concat(selectedParents).select(function (s) {
                         return variadicExpression.indexOfReference(s);
                     }).where($_.ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules.f1).toList(Bridge.Int);
                     console.log(indexes.toArray());
                     indexes.sort();
-                    var result = Bridge.as(variadicExpression.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
-                    result = Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).insertSuggestion(indexes, result, suggestion);
+                    var result = Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).insertSuggestion(indexes, Bridge.as(variadicExpression.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression), suggestion);
                     return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, result);
                 }
                 return null;

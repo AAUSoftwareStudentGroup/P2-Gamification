@@ -43,8 +43,8 @@ namespace ThreeOneSevenBee.Frontend
 
             gameAPI.GetCurrentPlayer((u) =>
             {
-                u.AddCategory(testCategory);
                 u.AddCategory(tutorialCategory);
+                u.AddCategory(testCategory);
                 gameAPI.GetPlayers((p) =>
                 {
                     gameModel = new GameModel(u, p)

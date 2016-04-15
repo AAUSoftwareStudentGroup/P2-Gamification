@@ -24,7 +24,7 @@
             this.setBackgroundColor("transparent");
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$7(this, offsetX, offsetY);
+            context.draw$8(this, offsetX, offsetY);
         },
         click: function (x, y) {
             if (this.containsPoint(x, y) && Bridge.hasValue(this.onClick)) {
@@ -69,6 +69,16 @@
         statics: {
             left: 0,
             right: 1
+        },
+        $enum: true
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.UI.position', {
+        statics: {
+            upperLeft: 0,
+            upperRight: 1,
+            lowerLeft: 2,
+            lowerRight: 3
         },
         $enum: true
     });
@@ -136,7 +146,7 @@
         },
         drawWithContext: function (context, offsetX, offsetY) {
             var $t;
-            context.draw$7(this, offsetX, offsetY);
+            context.draw$8(this, offsetX, offsetY);
             $t = Bridge.getEnumerator(this.children);
             while ($t.moveNext()) {
                 var child = $t.getCurrent();
@@ -242,7 +252,7 @@
             }
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.draw$7(this, offsetX, offsetY);
+            context.draw$8(this, offsetX, offsetY);
             this.getContent$1().drawWithContext(context, offsetX + this.getInnerX(), offsetY + this.getInnerY());
         },
         align: function (view) {
@@ -647,17 +657,16 @@
     
             this.titleView = new ThreeOneSevenBee.Model.UI.TitleView(game.getUser(), game.getPlayers());
     
-            this.levelView = new ThreeOneSevenBee.Model.UI.LevelView(game, context.getWidth(), context.getHeight());
-    
-            this.levelView.setOnExit(Bridge.fn.bind(this, function () {
-                game.saveLevel();
-                this.setContent(this.titleView);
-            }));
-    
-            this.levelView.setOnNextLevel(function () {
-                game.saveLevel();
-                game.nextLevel();
-            });
+            this.levelView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LevelView(game, context.getWidth(), context.getHeight()), {
+                setOnExit: Bridge.fn.bind(this, function () {
+                    game.saveLevel();
+                    this.setContent(this.titleView);
+                }),
+                setOnNextLevel: function () {
+                    game.saveLevel();
+                    game.nextLevel();
+                }
+            } );
     
             this.levelSelectView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LevelSelectView(game.getUser()), {
                 onChanged: Bridge.fn.bind(this, function () {
@@ -775,12 +784,12 @@
         },
         build: function (user) {
             this.setMenuButton(Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("Menu", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.LevelSelectView.f1)), {
-                setWidth: 100,
-                setHeight: 50,
+                setWidth: 75,
+                setHeight: 30,
                 setBackgroundColor: "#C1392B",
                 setFontColor: "#FFFFFF",
                 setFont: "Segoe UI",
-                setFontSize: 25
+                setFontSize: 18
             } ));
     
             this.setCategoryName(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(user.categories.getItem(this.getCategory()).name), {
@@ -916,12 +925,16 @@
                 setY: 50
             } );
     
-            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Dette er en progressbar"), {
+            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Denne bar viser hvor langt du er nået."), {
+                setFontSize: 20,
+                setVisible: game.getIsFirstLevel(),
+                setFontColor: "#ffffff",
                 setX: this.progressbar.getX(),
-                setY: this.progressbar.getY(),
-                setWidth: 100,
-                setHeight: 20,
-                setVisible: game.getIsFirstLevel()
+                setY: this.progressbar.getY() + this.progressbar.getHeight() + 10,
+                setWidth: 400,
+                setHeight: 75,
+                setBackgroundColor: "#297782",
+                setPosition: ThreeOneSevenBee.Model.UI.position.upperLeft
             } );
     
             this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
@@ -1006,7 +1019,7 @@
             this.build(progressbar);
         },
         build: function (progressbar) {
-            this.progress = Bridge.merge(new ThreeOneSevenBee.Model.UI.View(0, 0, this.getWidth() * progressbar.getPercentage(), this.getHeight()), {
+            this.progress = Bridge.merge(new ThreeOneSevenBee.Model.UI.View(0, 0, Math.max(0, this.getWidth() * progressbar.getPercentage()), this.getHeight()), {
                 setBackgroundColor: "#27AE61"
             } );
             this.stars = new Bridge.List$1(ThreeOneSevenBee.Model.UI.ImageView)();
@@ -1081,15 +1094,15 @@
         inherits: [ThreeOneSevenBee.Model.UI.LabelView],
         config: {
             properties: {
-                PointX: 0,
-                PointY: 0
+                Position: null
             }
         },
         constructor: function (text) {
             ThreeOneSevenBee.Model.UI.LabelView.prototype.$constructor.call(this, text);
     
-            this.setPointX(0);
-            this.setPointY(0);
+        },
+        drawWithContext: function (context, offsetX, offsetY) {
+            context.draw$7(this, offsetX, offsetY);
         }
     });
     

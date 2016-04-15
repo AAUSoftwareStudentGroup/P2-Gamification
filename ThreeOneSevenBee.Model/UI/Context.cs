@@ -34,6 +34,7 @@ namespace ThreeOneSevenBee.Model.UI
         }
 
         public abstract void Draw(ToolTipView view, double offsetX, double offsety);
+
         public abstract void Draw(View view, double offsetX, double offsetY);
 
         public abstract void Draw(ImageView view, double offsetX, double offsetY);
