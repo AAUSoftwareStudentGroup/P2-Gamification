@@ -11,8 +11,9 @@ $db = new DB();
 $IN = null;
 if(isset($_GET['action']))
     $IN = $_GET;
-elseif(isset($_POST['action']))
+elseif(isset($_POST['action'])) {
     $IN = $_POST;
+}
 
 if(isset($IN['debug']) && $IN['debug'] == 1) {
     session_start();
@@ -65,24 +66,64 @@ class API {
         API::respond();
     }
 
+    static function save_user_level_progress($IN, $db) {
+        session_start();
+        if(!isset($_SESSION['authorized']))
+            API::respond(false, null, "User not logged in");
+        
+        $user_id  = (int)$_SESSION['authorized'];
+        $level_id = (isset($IN['level_id'])           ? (int)$IN['level_id']           : null);        
+        $state    = (isset($IN['current_expression']) ?      $IN['current_expression'] : null);        
+
+        if($level_id != null && $state != null) {
+            $db->query("DELETE FROM gamedb.user_level_progress
+                        WHERE level_id=? AND user_id=?",
+                        $level_id,
+                        $user_id
+            );
+            $db->query("INSERT INTO gamedb.user_level_progress (user_id,level_id,progress)
+                        VALUES (?,?,?);",
+                        $user_id,
+                        $level_id,
+                        $state
+            );
+            API::respond(true, "Level: ".$level_id.", State: ".$state);
+        }
+        else {
+            API::respond(false, null, "Invalid parameters");
+        }
+    }
+
     static function get_levels($IN, $db) {
+        session_start();
+        if(!isset($_SESSION['authorized']))
+            API::respond(false, null, "User not logged in");
+
         $db->query("SELECT 
                         level.id AS level_id,
                         category.name AS category_name,
                         level.initial_expression AS initial_expression, 
-                        level.star_expressions AS star_expressions
+                        level.star_expressions AS star_expressions,
+                        level_progress.progress
                     FROM 
                         gamedb.level AS level
                     LEFT JOIN 
                         gamedb.level_category AS category ON level.level_category_id=category.id
-                    ORDER BY level.level_category_id ASC, level.id ASC;"
-                   );
+                    LEFT JOIN 
+                        user_level_progress AS level_progress ON level_progress.level_id = level.id
+                    WHERE 
+                        level_progress.user_id=? OR level_progress.user_id IS NULL
+                    ORDER BY level.level_category_id ASC, level.id ASC;",
+                    $_SESSION['authorized']
+        );
+
         $categories = array();
         while($row = $db->fetch()) {
             $level = array(
                 'id' => $row['level_id'],
                 'initial_expression' => $row['initial_expression'],
-                'star_expressions' => explode('|', $row['star_expressions'])
+                'star_expressions' => explode('|', $row['star_expressions']),
+                'current_expression' => $row['progress']
             );
 
             $cat_name = $row['category_name'];
