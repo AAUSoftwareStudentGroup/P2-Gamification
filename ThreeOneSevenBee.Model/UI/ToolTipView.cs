@@ -7,10 +7,10 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class ToolTipView : LabelView
     {
-        public ToolTipView(string text, int pointX, int pointY) : base(text)
+        public ToolTipView(string text) : base(text)
         {
-            this.PointX = pointX;
-            this.PointY = pointY;
+            PointX = 0;
+            PointY = 0;
         }
 
         public int PointX { get; set; }

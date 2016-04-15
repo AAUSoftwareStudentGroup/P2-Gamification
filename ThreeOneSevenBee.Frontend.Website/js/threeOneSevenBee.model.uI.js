@@ -660,6 +660,7 @@
     Bridge.define('ThreeOneSevenBee.Model.UI.GameView', {
         inherits: [ThreeOneSevenBee.Model.UI.FrameView],
         titleView: null,
+        tutorialLevelView: null,
         levelView: null,
         levelSelectView: null,
         context: null,
@@ -681,6 +682,10 @@
                 }
             } );
     
+            this.tutorialLevelView = new ThreeOneSevenBee.Model.UI.TutorialLevelView(game, context.getWidth(), context.getHeight());
+    
+    
+    
             this.levelSelectView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LevelSelectView(game.getUser()), {
                 onChanged: Bridge.fn.bind(this, function () {
                     this.setContent(this.levelSelectView);
@@ -701,10 +706,11 @@
     
             game.onChanged = Bridge.fn.bind(this, this.update);
     
-            this.setContent(this.titleView);
+            this.setContent(this.tutorialLevelView);
         },
         update: function (game) {
             this.levelView.update(game);
+            this.tutorialLevelView.update(game);
             this.levelSelectView.update(game.getUser());
             this.context.draw();
         },
@@ -1096,15 +1102,33 @@
                 PointY: 0
             }
         },
-        constructor: function (text, pointX, pointY) {
+        constructor: function (text) {
             ThreeOneSevenBee.Model.UI.LabelView.prototype.$constructor.call(this, text);
     
-            this.setPointX(pointX);
-            this.setPointY(pointY);
+            this.setPointX(0);
+            this.setPointY(0);
         }
     });
     
+    Bridge.define('ThreeOneSevenBee.Model.UI.TutorialLevelView', {
+        inherits: [ThreeOneSevenBee.Model.UI.LevelView],
+        toolTipView: null,
+        constructor: function (game, width, height) {
+            ThreeOneSevenBee.Model.UI.LevelView.prototype.$constructor.call(this, game, width, height);
     
+            this.build(game);
+        },
+        build: function (game) {
+            ThreeOneSevenBee.Model.UI.LevelView.prototype.build.call(this, game);
+            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Dette er en progressbar"), {
+                setX: this.progressbar.getX(),
+                setY: this.progressbar.getY(),
+                setWidth: 100,
+                setHeight: 20
+            } );
+            this.children.add(this.toolTipView);
+        }
+    });
     
     Bridge.init();
 })(this);

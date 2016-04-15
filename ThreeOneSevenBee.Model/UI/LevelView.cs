@@ -9,18 +9,18 @@ using Bridge.Html5;
 
 namespace ThreeOneSevenBee.Model.UI
 {
-    class LevelView : CompositeView
+    public class LevelView : CompositeView
     {
         public Action OnExit { get; set; }
         public Action OnNextLevel { get; set; }
 
-        ButtonView menuButton;
-        ButtonView nextButton;
-        ProgressbarStarView progressbar;
-        IdentityMenuView identityMenu;
-        ExpressionView expression;
+        protected ButtonView menuButton;
+        protected ButtonView nextButton;
+        protected ProgressbarStarView progressbar;
+        protected IdentityMenuView identityMenu;
+        protected ExpressionView expression;
 
-        public void Build(GameModel game)
+        public virtual void Build(GameModel game)
         {
             menuButton = new ButtonView("Menu", () => OnExit())
             {
@@ -75,7 +75,7 @@ namespace ThreeOneSevenBee.Model.UI
             }
         }
 
-        public void Update(GameModel game)
+        public virtual void Update(GameModel game)
         {
             progressbar.Update(game.ProgressBar);
             identityMenu.Update(game.ExprModel.Identities, game.ExprModel);
