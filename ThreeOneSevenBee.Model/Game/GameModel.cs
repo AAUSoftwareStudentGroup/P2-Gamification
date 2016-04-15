@@ -75,6 +75,7 @@ namespace ThreeOneSevenBee.Model.Game
         private void onExpressionChanged(ExpressionModel model)
         {
             ProgressBar.CurrentValue = model.Expression.Size;
+            User.CurrentLevel.CurrentExpression = model.Expression.ToString();
             if (OnChanged != null)
             {
                 OnChanged(this);
