@@ -63,11 +63,13 @@ namespace ThreeOneSevenBee.Model.UI
 
             toolTipView = new ToolTipView("Dette er en progressbar")
             {
+                FontSize = 11,
                 X = progressbar.X,
-                Y = progressbar.Y,
-                Width = 100,
-                Height = 20,
-                Visible = game.IsFirstLevel
+                Y = progressbar.Y + progressbar.Height,
+                Width = 150,
+                Height = 75,
+                BackgroundColor = "#bbbbbb",
+                Position = position.upperLeft
             };
 
             Children = new List<View>()
