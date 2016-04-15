@@ -103,18 +103,22 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void Draw(ParenthesisView view, double offsetX, double offsetY)
         {
+            context.StrokeStyle = view.LineColor;
+            context.LineWidth = view.LineWidth;
             if (view.Type == ParenthesisType.Left)
             {
                 context.BeginPath();
-                context.Ellipse(view.X + view.Width + offsetX, view.Y + view.Height / 2 + offsetY, view.Width, 1.1 * view.Height / 2, 0, -1.141096661 + Math.PI, 1.141096661 + Math.PI);
+                context.Ellipse(view.X + view.Width + offsetX + view.LineWidth / 2, view.Y + view.Height / 2 + offsetY, view.Width, 1.1 * view.Height / 2, 0, -1.141096661 + Math.PI, 1.141096661 + Math.PI);
                 context.Stroke();
             }
             else
             {
                 context.BeginPath();
-                context.Ellipse(view.X + offsetX, view.Y + view.Height / 2 + offsetY, view.Width, 1.1 * view.Height / 2, 0, -1.141096661, 1.141096661);
+                context.Ellipse(view.X + offsetX - view.LineWidth / 2, view.Y + view.Height / 2 + offsetY, view.Width, 1.1 * view.Height / 2, 0, -1.141096661, 1.141096661);
                 context.Stroke();
             }
+            context.LineWidth = 2;
+            context.StrokeStyle = "black";
         }
 
         public override void Draw(SqrtView view, double offsetX, double offsetY)

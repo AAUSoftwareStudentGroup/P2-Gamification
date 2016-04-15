@@ -76,7 +76,6 @@ namespace ThreeOneSevenBee.Model.UI
                 X = 5,
                 Y = Levels.Y + Levels.Height / 2 - 75/2,
                 OnClick = previousCategory
-
             };
 
             ArrowRight = new ImageView("arrow_right.png", 50, (Category == user.Categories.Count - 1 ? 0 : 75))
@@ -85,8 +84,6 @@ namespace ThreeOneSevenBee.Model.UI
                 Y = Levels.Y + Levels.Height / 2 - 75/2,
                 OnClick = nextCategory
             };
-
-
 
             Children.Add(MenuButton);
             Children.Add(CategoryName);

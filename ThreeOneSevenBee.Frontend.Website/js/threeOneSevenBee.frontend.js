@@ -143,16 +143,20 @@
             }
         },
         draw$4: function (view, offsetX, offsetY) {
+            this.context.strokeStyle = view.getLineColor();
+            this.context.lineWidth = view.getLineWidth();
             if (view.getType() === ThreeOneSevenBee.Model.UI.ParenthesisType.left) {
                 this.context.beginPath();
-                this.context.ellipse(view.getX() + view.getWidth() + offsetX, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), 1.1 * view.getHeight() / 2, 0, -1.141096661 + Math.PI, 1.141096661 + Math.PI);
+                this.context.ellipse(view.getX() + view.getWidth() + offsetX + view.getLineWidth() / 2, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), 1.1 * view.getHeight() / 2, 0, -1.141096661 + Math.PI, 1.141096661 + Math.PI);
                 this.context.stroke();
             }
             else  {
                 this.context.beginPath();
-                this.context.ellipse(view.getX() + offsetX, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), 1.1 * view.getHeight() / 2, 0, -1.141096661, 1.141096661);
+                this.context.ellipse(view.getX() + offsetX - view.getLineWidth() / 2, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), 1.1 * view.getHeight() / 2, 0, -1.141096661, 1.141096661);
                 this.context.stroke();
             }
+            this.context.lineWidth = 2;
+            this.context.strokeStyle = "black";
         },
         draw$6: function (view, offsetX, offsetY) {
             this.context.beginPath();

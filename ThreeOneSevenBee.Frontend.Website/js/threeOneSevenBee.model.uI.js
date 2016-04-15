@@ -308,7 +308,9 @@
         inherits: [ThreeOneSevenBee.Model.UI.View],
         config: {
             properties: {
-                Type: null
+                Type: null,
+                LineColor: null,
+                LineWidth: 0
             }
         },
         constructor: function (type) {
@@ -318,6 +320,10 @@
         },
         drawWithContext: function (context, offsetX, offsetY) {
             context.draw$4(this, offsetX, offsetY);
+        },
+        scale: function (factor) {
+            this.setLineWidth(this.getLineWidth()*factor);
+            return ThreeOneSevenBee.Model.UI.View.prototype.scale.call(this, factor);
         }
     });
     
@@ -582,25 +588,31 @@
                 var view2 = this.buildView(delimiterExpression.getExpression(), model);
                 view2.setX(view2.getHeight() / 4);
                 view2.setY(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 8);
+                var left1 = Bridge.merge(new ThreeOneSevenBee.Model.UI.ParenthesisView(ThreeOneSevenBee.Model.UI.ParenthesisType.left), {
+                    onClick: function () {
+                        model.select(expression);
+                    },
+                    setWidth: view2.getHeight() / 4,
+                    setHeight: view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4
+                } );
+                var right1 = Bridge.merge(new ThreeOneSevenBee.Model.UI.ParenthesisView(ThreeOneSevenBee.Model.UI.ParenthesisType.right), {
+                    onClick: function () {
+                        model.select(expression);
+                    },
+                    setX: view2.getWidth() + view2.getHeight() / 4,
+                    setWidth: view2.getHeight() / 4,
+                    setHeight: view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4
+                } );
+    
                 var compositeView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(view2.getWidth() + view2.getHeight() / 2, view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4), [
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ParenthesisView(ThreeOneSevenBee.Model.UI.ParenthesisType.left), {
-                        onClick: function () {
-                            model.select(expression);
-                        },
-                        setWidth: view2.getHeight() / 4,
-                        setHeight: view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4
-                    } )],
+                    [left1],
                     [view2],
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ParenthesisView(ThreeOneSevenBee.Model.UI.ParenthesisType.right), {
-                        onClick: function () {
-                            model.select(expression);
-                        },
-                        setX: view2.getWidth() + view2.getHeight() / 4,
-                        setWidth: view2.getHeight() / 4,
-                        setHeight: view2.getHeight() + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 4
-                    } )]
+                    [right1]
                 ] );
-                compositeView.setBackgroundColor(model.selectionIndex(expression) !== -1 ? "#cccccc" : "transparent");
+                left1.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 10);
+                right1.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 10);
+                left1.setLineColor(model.selectionIndex(expression) !== -1 ? "#27AE61" : "black");
+                right1.setLineColor(model.selectionIndex(expression) !== -1 ? "#27AE61" : "black");
                 compositeView.setBaseline(view2.getY() + view2.getBaseline());
                 return compositeView;
             }
@@ -628,7 +640,7 @@
                 setHeight: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
                 setBaseline: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2,
                 setFontSize: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
-                setBackgroundColor: model.selectionIndex(expression) !== -1 ? "#27AE61" : "transparent"
+                setFontColor: model.selectionIndex(expression) !== -1 ? "#27AE61" : "black"
             } );
         },
         build: function (model) {
@@ -816,8 +828,6 @@
                 setY: this.getLevels().getY() + this.getLevels().getHeight() / 2 - 37,
                 onClick: Bridge.fn.bind(this, this.nextCategory)
             } ));
-    
-    
     
             this.children.add(this.getMenuButton());
             this.children.add(this.getCategoryName());

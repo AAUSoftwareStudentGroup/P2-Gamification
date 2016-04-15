@@ -145,13 +145,19 @@ namespace ThreeOneSevenBee.Model.UI
                 View view = BuildView(delimiterExpression.Expression, model);
                 view.X = view.Height / 4;
                 view.Y = NUMVAR_SIZE / 8;
+                ParenthesisView left = new ParenthesisView(ParenthesisType.Left) { OnClick = () => model.Select(expression), Width = view.Height / 4, Height = view.Height + NUMVAR_SIZE / 4 };
+                ParenthesisView right = new ParenthesisView(ParenthesisType.Right) { OnClick = () => model.Select(expression), X = view.Width + view.Height / 4, Width = view.Height / 4, Height = view.Height + NUMVAR_SIZE / 4 };
+
                 View compositeView = new CompositeView(view.Width + view.Height / 2, view.Height + NUMVAR_SIZE / 4)
                 {
-                    new ParenthesisView(ParenthesisType.Left) { OnClick = () => model.Select(expression), Width = view.Height /4, Height = view.Height + NUMVAR_SIZE / 4},
+                    left,
                     view,
-                    new ParenthesisView(ParenthesisType.Right) { OnClick = () => model.Select(expression), X = view.Width + view.Height / 4, Width = view.Height / 4, Height = view.Height +  NUMVAR_SIZE / 4},
+                    right
                 };
-                compositeView.BackgroundColor = model.SelectionIndex(expression) != -1 ? "#cccccc" : "transparent";
+                left.LineWidth = NUMVAR_SIZE / 10;
+                right.LineWidth = NUMVAR_SIZE / 10;
+                left.LineColor = model.SelectionIndex(expression) != -1 ? "#27AE61" : "black";
+                right.LineColor = model.SelectionIndex(expression) != -1 ? "#27AE61" : "black";
                 compositeView.Baseline = view.Y + view.Baseline;
                 return compositeView;
             }
@@ -180,7 +186,7 @@ namespace ThreeOneSevenBee.Model.UI
                 Height = NUMVAR_SIZE,
                 Baseline = NUMVAR_SIZE / 2,
                 FontSize = NUMVAR_SIZE,
-                BackgroundColor = model.SelectionIndex(expression) != -1 ? "#27AE61" : "transparent"
+                FontColor = model.SelectionIndex(expression) != -1 ? "#27AE61" : "black"
             };
         }
 
