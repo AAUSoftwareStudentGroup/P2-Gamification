@@ -12,7 +12,6 @@ namespace ThreeOneSevenBee.Model.UI
     public class GameView : FrameView
     {
         TitleView titleView;
-        TutorialLevelView tutorialLevelView;
         LevelView levelView;
         LevelSelectView levelSelectView;
         Context context;
@@ -20,7 +19,6 @@ namespace ThreeOneSevenBee.Model.UI
         public void Update(GameModel game)
         {
             levelView.Update(game);
-            tutorialLevelView.Update(game);
             levelSelectView.Update(game.User);
             context.Draw();
         }
@@ -31,23 +29,19 @@ namespace ThreeOneSevenBee.Model.UI
 
             titleView = new TitleView(game.User, game.Players);
 
-            levelView = new LevelView(game, context.Width, context.Height)
+            levelView = new LevelView(game, context.Width, context.Height);
+
+            levelView.OnExit = () =>
             {
-                OnExit = () =>
-                {
-                    game.SaveLevel();
-                    setContent(titleView);
-                },
-                OnNextLevel = () =>
-                {
-                    game.SaveLevel();
-                    game.NextLevel();
-                }
+                game.SaveLevel();
+                setContent(titleView);
             };
 
-            tutorialLevelView = new TutorialLevelView(game, context.Width, context.Height);
-
-            
+            levelView.OnNextLevel = () =>
+            {
+                game.SaveLevel();
+                game.NextLevel();
+            };
 
             levelSelectView = new LevelSelectView(game.User)
             {
@@ -63,7 +57,7 @@ namespace ThreeOneSevenBee.Model.UI
                     game.SetLevel(level.LevelIndex, level.CategoryIndex);
                 },
                 OnExit = () => setContent(titleView)
-        };
+            };
 
             titleView.PlayButton.OnClick = () => setContent(levelView);
 
@@ -71,7 +65,7 @@ namespace ThreeOneSevenBee.Model.UI
 
             game.OnChanged = Update;
 
-            setContent(tutorialLevelView);
+            setContent(levelView);
         }
 
         public override void setContent(View content)

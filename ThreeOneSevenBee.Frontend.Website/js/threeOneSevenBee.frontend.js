@@ -91,16 +91,16 @@
         click: function (x, y) {
             this.contentView.click(x, y);
         },
-        draw$3: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+        draw$2: function (view, offsetX, offsetY) {
+            this.draw$7(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             this.context.font = view.getFontSize() + "px " + view.getFont();
             this.context.textAlign = view.getAlign() === "center" ? "center" : "left";
             this.context.fillStyle = view.getFontColor();
             this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + (view.getAlign() === "center" ? view.getWidth() / 2 : 5))), Bridge.Int.trunc((view.getY() + offsetY + view.getHeight() / 2)));
             this.context.fillStyle = "#000000";
         },
-        draw$4: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+        draw$3: function (view, offsetX, offsetY) {
+            this.draw$7(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                 this.context.beginPath();
                 this.context.moveTo(view.getX() + offsetX, view.getY() + offsetY + view.getHeight() / 2);
@@ -142,7 +142,7 @@
                 }
             }
         },
-        draw$5: function (view, offsetX, offsetY) {
+        draw$4: function (view, offsetX, offsetY) {
             if (view.getType() === ThreeOneSevenBee.Model.UI.ParenthesisType.left) {
                 this.context.beginPath();
                 this.context.ellipse(view.getX() + view.getWidth() + offsetX, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), 1.1 * view.getHeight() / 2, 0, -1.141096661 + Math.PI, 1.141096661 + Math.PI);
@@ -154,7 +154,7 @@
                 this.context.stroke();
             }
         },
-        draw$8: function (view, offsetX, offsetY) {
+        draw$6: function (view, offsetX, offsetY) {
             this.context.beginPath();
             this.context.moveTo(view.getX() + offsetX + view.getSignWidth() / 8, view.getY() + offsetY + view.getHeight() - view.getSignWidth() / 2);
             this.context.lineTo(view.getX() + offsetX + view.getSignWidth() / 4, view.getY() + offsetY + view.getHeight() - view.getSignWidth() / 2);
@@ -163,13 +163,13 @@
             this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsetY + view.getTopHeight() / 2);
             this.context.stroke();
         },
-        draw$9: function (view, offsetX, offsetY) {
+        draw$7: function (view, offsetX, offsetY) {
             this.context.fillStyle = view.getBackgroundColor();
             this.context.fillRect(Bridge.Int.trunc((view.getX() + offsetX)), Bridge.Int.trunc((view.getY() + offsetY)), Bridge.Int.trunc(view.getWidth()), Bridge.Int.trunc(view.getHeight()));
             this.context.fillStyle = "#000000";
         },
-        draw$2: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+        draw$1: function (view, offsetX, offsetY) {
+            this.draw$7(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
     
             if (this.imageCache.containsKey(view.getImage())) {
                 this.context.fillStyle = "transparent";
@@ -186,7 +186,7 @@
                 });
             }
         },
-        draw$6: function (view, offsetX, offsetY) {
+        draw$5: function (view, offsetX, offsetY) {
             this.context.fillStyle = view.fillStyle;
             if (view.getcornerPositions().getCount() < 3) {
                 throw new Bridge.Exception("Polygon does not contain enough corners");

@@ -14,11 +14,12 @@ namespace ThreeOneSevenBee.Model.UI
         public Action OnExit { get; set; }
         public Action OnNextLevel { get; set; }
 
-        protected ButtonView menuButton;
-        protected ButtonView nextButton;
-        protected ProgressbarStarView progressbar;
-        protected IdentityMenuView identityMenu;
-        protected ExpressionView expression;
+        ButtonView menuButton;
+        ButtonView nextButton;
+        ProgressbarStarView progressbar;
+        IdentityMenuView identityMenu;
+        ExpressionView expression;
+        ToolTipView toolTipView;
 
         public virtual void Build(GameModel game)
         {
@@ -37,7 +38,7 @@ namespace ThreeOneSevenBee.Model.UI
                 X = Width - 100,
                 Width = 100,
                 Height = 50,
-                BackgroundColor = game.LevelCompleted ? "#16A086" : "#BEC3C7",
+                BackgroundColor = game.IsLevelCompleted ? "#16A086" : "#BEC3C7",
                 FontColor = "#FFFFFF",
                 Font = "Segoe UI",
                 FontSize = 25
@@ -60,13 +61,23 @@ namespace ThreeOneSevenBee.Model.UI
                 Y = 50,
             };
 
+            toolTipView = new ToolTipView("Dette er en progressbar")
+            {
+                X = progressbar.X,
+                Y = progressbar.Y,
+                Width = 100,
+                Height = 20,
+                Visible = game.IsFirstLevel
+            };
+
             Children = new List<View>()
             {
                 menuButton,
                 nextButton,
                 progressbar,
                 identityMenu,
-                expression
+                expression,
+                toolTipView
             };
 
             if(OnChanged != null)
@@ -80,7 +91,8 @@ namespace ThreeOneSevenBee.Model.UI
             progressbar.Update(game.ProgressBar);
             identityMenu.Update(game.ExprModel.Identities, game.ExprModel);
             expression.Update(game.ExprModel);
-            nextButton.BackgroundColor = game.LevelCompleted ? "#16A086" : "#BEC3C7";
+            nextButton.BackgroundColor = game.IsLevelCompleted ? "#16A086" : "#BEC3C7";
+            toolTipView.Visible = game.IsFirstLevel;
 
             if (OnChanged != null)
             {

@@ -22,7 +22,15 @@ namespace ThreeOneSevenBee.Model.Game
         public Action<Level> OnSaveLevel;
         public ProgressbarStar ProgressBar;
 
-        public bool LevelCompleted
+        public bool IsFirstLevel
+        {
+            get
+            {
+                return User.CurrentCategoryIndex == 0 && User.CurrentLevelIndex == 0;
+            }
+        }
+
+        public bool IsLevelCompleted
         {
             get
             {
@@ -30,19 +38,19 @@ namespace ThreeOneSevenBee.Model.Game
             }
         }
 
-        public bool CategoryCompleted
+        public bool IsCategoryCompleted
         {
             get
             {
-                return LevelCompleted && User.CurrentLevelIndex == User.Categories[User.CurrentCategoryIndex].Count - 1;
+                return IsLevelCompleted && User.CurrentLevelIndex == User.Categories[User.CurrentCategoryIndex].Count - 1;
             }
         }
 
-        public bool GameCompleted
+        public bool IsGameCompleted
         {
             get
             {
-                return CategoryCompleted && User.CurrentCategoryIndex == User.Categories.Count - 1;
+                return IsCategoryCompleted && User.CurrentCategoryIndex == User.Categories.Count - 1;
             }
         }
 
@@ -84,17 +92,17 @@ namespace ThreeOneSevenBee.Model.Game
 
         public void NextLevel()
         {
-            if (GameCompleted)
+            if (IsGameCompleted)
             {
                 
             }
-            else if (CategoryCompleted)
+            else if (IsCategoryCompleted)
             {
                 User.CurrentCategoryIndex++;
                 User.CurrentLevelIndex = 0;
 
             }
-            else if (LevelCompleted)
+            else if (IsLevelCompleted)
             {
                 User.CurrentLevelIndex++;
             }

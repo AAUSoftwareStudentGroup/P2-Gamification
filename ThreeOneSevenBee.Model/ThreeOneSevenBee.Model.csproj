@@ -75,7 +75,6 @@
     <Compile Include="Game\LevelCategory.cs" />
     <Compile Include="Game\Player.cs" />
     <Compile Include="Game\ProgressbarStar.cs" />
-    <Compile Include="Game\StubGameAPI.cs" />
     <Compile Include="Polygon\PolygonCorner.cs" />
     <Compile Include="Polygon\PolygonModel.cs" />
     <Compile Include="Polygon\PolygonRelation.cs" />
@@ -102,7 +101,6 @@
     <Compile Include="UI\SqrtView.cs" />
     <Compile Include="UI\TitleView.cs" />
     <Compile Include="UI\ToolTipView.cs" />
-    <Compile Include="UI\TutorialLevelView.cs" />
     <Compile Include="UI\View.cs" />
   </ItemGroup>
   <ItemGroup />

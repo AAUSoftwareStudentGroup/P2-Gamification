@@ -13,6 +13,8 @@ namespace ThreeOneSevenBee.Model.UI
 
         public string BackgroundColor { get; set; }
 
+        public bool Visible { get; set; }
+
         public View(double x, double y, double width, double height)
         {
             X = x;

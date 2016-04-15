@@ -35,44 +35,16 @@ namespace ThreeOneSevenBee.Model.UI
 
         public abstract void Draw(View view, double offsetX, double offsetY);
 
-        public virtual void Draw(ImageView view, double offsetX, double offsetY)
-        {
-            Draw(view as View, offsetX, offsetY);
-        }
+        public abstract void Draw(ImageView view, double offsetX, double offsetY);
 
-        public virtual void Draw(LabelView view, double offsetX, double offsetY)
-        {
-            Draw(view as View, offsetX, offsetY);
-        }
+        public abstract void Draw(LabelView view, double offsetX, double offsetY);
+        
+        public abstract void Draw(OperatorView view, double offsetX, double offsetY);
 
-        public virtual void Draw(ButtonView view, double offsetX, double offsetY)
-        {
-            Draw(view as LabelView, offsetX, offsetY);
-        }
+        public abstract void Draw(ParenthesisView view, double offsetX, double offsetY);
 
-        public virtual void Draw(ProgressbarStarView view, double offsetX, double offsetY)
-        {
-            Draw(view as View, offsetX, offsetY);
-        }
+        public abstract void Draw(SqrtView view, double offsetX, double offsetY);
 
-        public virtual void Draw(OperatorView view, double offsetX, double offsetY)
-        {
-            Draw(view as View, offsetX, offsetY);
-        }
-
-        public virtual void Draw(ParenthesisView view, double offsetX, double offsetY)
-        {
-            Draw(view as View, offsetX, offsetY);
-        }
-
-        public virtual void Draw(SqrtView view, double offsetX, double offsetY)
-        {
-            Draw(view as View, offsetX, offsetY);
-        }
-
-        public virtual void Draw(PolygonView view, double offsetX, double offsetY)
-        {
-            Draw(view as View, offsetX, offsetY);
-        }
+        public abstract void Draw(PolygonView view, double offsetX, double offsetY);
     }
 }
