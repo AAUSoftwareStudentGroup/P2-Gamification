@@ -261,13 +261,10 @@ namespace ThreeOneSevenBee.ModelTests
             Assert.IsNotNull(identity);
 
             // TODO: Nedenstående er: a/x + -c/x + -d/x + f/x + 3, denne virker
-            // Den nedenunder er: a/x - c/x - d/x + f/x + 3, den virker ikke, det skal ændres i reglen og sikkert også
-            // for AddingFractionsWithSameNumerators (REGEL OG UNITTEST!)
+            // Den nedenunder er: a/x - c/x - d/x + f/x + 3, den virker ikke, det skal ændres i reglen
             //Husk at Bruge issue nummeret ved commit!
 
-
             Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("x")), Make.Divide(Make.Minus(Make.New("c")), Make.New("x")), Make.Divide(Make.Minus(Make.New("d")), Make.New("x")), Make.Divide(Make.New("f"), Make.New("x")), Make.New(3)), identity.Result);
-
 
             /*Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("x")), Make.Minus(Make.Divide(Make.New("c"), Make.New("x"))), Make.Minus(Make.Divide(Make.New("d"), Make.New("x"))), Make.Divide(Make.New("f"), Make.New("x")), Make.New(3)), identity.Result);*/
         }
