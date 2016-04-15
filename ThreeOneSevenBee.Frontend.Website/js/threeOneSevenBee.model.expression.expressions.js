@@ -736,7 +736,8 @@
             $t = Bridge.getEnumerator(this);
             while ($t.moveNext()) {
                 var expression = $t.getCurrent();
-                result += expression.getSize();
+                // Count-1 gets the total number of * signs in the variadic expression
+                result += expression.getSize() + (this.getCount() - 1);
             }
             return result;
         },
