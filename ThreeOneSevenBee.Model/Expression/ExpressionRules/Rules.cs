@@ -94,6 +94,50 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
+        public static Identity FractionToProductRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            BinaryExpression fraction = expression as BinaryExpression;
+            if(selection.Count == 1 
+                && ReferenceEquals(selection[0], expression)
+                && fraction != null 
+                && fraction.Type == OperatorType.Divide)
+            {
+                ExpressionBase exponent = new BinaryOperatorExpression(
+                    new DelimiterExpression(fraction.Right.Clone()), 
+                    new UnaryMinusExpression(new NumericExpression(1)), 
+                    OperatorType.Power
+                );
+                ExpressionBase suggestion = new VariadicOperatorExpression(
+                    OperatorType.Multiply, 
+                    fraction.Left.Clone(), 
+                    exponent
+                );
+                return new Identity(suggestion, suggestion);
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        public static Identity RemoveParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            DelimiterExpression parenthesis = expression as DelimiterExpression;
+            if(selection.Count == 1 
+                && ReferenceEquals(parenthesis, expression))
+            {
+                if(parenthesis.Expression is VariableExpression
+                    || parenthesis.Expression is NumericExpression
+                    || parenthesis.Expression is DelimiterExpression)
+                {
+                    ExpressionBase suggestion = parenthesis.Expression.Clone();
+                    return new Identity(suggestion, suggestion);
+                }
+            }
+            return null;
+        }
+
         //2+2+2 = 6, 2*2*2 = 8
         public static Identity NumericVariadicRule(ExpressionBase expression, List<ExpressionBase> selection)
         {

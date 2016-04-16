@@ -22,15 +22,14 @@ namespace ThreeOneSevenBee.Frontend
         private void getCategories(Action<List<LevelCategory>> callback)
         {
             jQuery.Get(
-                "/api/?action=get_levels",
+                "/api/?action=get_levels&debug=1",
                 new object(),
                 (data, textStatus, request) =>
                 {
                     var jdata = JSON.Parse((string)data);
-                    Console.WriteLine(jdata);
                     List<LevelCategory> categories = new List<LevelCategory>();
                     var categoriesData = jdata["data"] as object[];
-                    
+                    Console.WriteLine(jdata);
                     foreach (var categoryData in categoriesData)
                     {
                         
@@ -60,17 +59,16 @@ namespace ThreeOneSevenBee.Frontend
                 new object(),
                 (data, textStatus, request) =>
                 {
-                    //var jdata = JSON.Parse((string)data);
-                    //CurrentPlayer currentPlayer = new CurrentPlayer((string)jdata["data"]["name"]);
-                    //getCategories((categories) =>
-                    //{
-                    //    foreach (LevelCategory category in categories)
-                    //    {
-                    //        currentPlayer.AddCategory(category);
-                    //    }
-                    //    callback(currentPlayer);
-                    //});
-                    CurrentPlayer currentPlayer = new CurrentPlayer("AntonNoob");
+                    var jdata = JSON.Parse((string)data);
+                    CurrentPlayer currentPlayer = new CurrentPlayer((string)jdata["data"]["name"]);
+                    getCategories((categories) =>
+                    {
+                        foreach (LevelCategory category in categories)
+                        {
+                            currentPlayer.AddCategory(category);
+                        }
+                        callback(currentPlayer);
+                    });
                     callback(currentPlayer);
                 }
             );
@@ -102,7 +100,6 @@ namespace ThreeOneSevenBee.Frontend
                 },
                 (data, textStatus, request) =>
                 {
-                    Console.WriteLine(data);
                     var jdata = JSON.Parse((string)data);
                     callback((string)jdata["success"] == "true");
                 }
