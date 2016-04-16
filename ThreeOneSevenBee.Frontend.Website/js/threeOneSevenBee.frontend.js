@@ -76,7 +76,7 @@
             this.contentView.click(x, y);
         },
         draw$2: function (view, offsetX, offsetY) {
-            this.draw$8(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             this.context.font = view.getFontSize() + "px " + view.getFont();
             this.context.textAlign = view.getAlign() === "center" ? "center" : "left";
             this.context.fillStyle = view.getFontColor();
@@ -84,7 +84,7 @@
             this.context.fillStyle = "#000000";
         },
         draw$3: function (view, offsetX, offsetY) {
-            this.draw$8(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
             this.context.lineWidth = view.getLineWidth();
             this.context.strokeStyle = view.getLineColor();
             if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
@@ -155,13 +155,13 @@
             this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsetY + view.getTopHeight() / 2);
             this.context.stroke();
         },
-        draw$8: function (view, offsetX, offsetY) {
+        draw$9: function (view, offsetX, offsetY) {
             this.context.fillStyle = view.getBackgroundColor();
             this.context.fillRect(Bridge.Int.trunc((view.getX() + offsetX)), Bridge.Int.trunc((view.getY() + offsetY)), Bridge.Int.trunc(view.getWidth()), Bridge.Int.trunc(view.getHeight()));
             this.context.fillStyle = "#000000";
         },
         draw$1: function (view, offsetX, offsetY) {
-            this.draw$8(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
     
             if (this.imageCache.containsKey(view.getImage())) {
                 this.context.fillStyle = "transparent";
@@ -211,6 +211,20 @@
                 this.context.fillStyle = view.getFontColor();
                 this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + (view.getAlign() === "center" ? view.getWidth() / 2 : 5))), Bridge.Int.trunc((view.getY() + offsety + view.getHeight() / 2)));
             }
+        },
+        draw$8: function (view, offsetX, offsety) {
+            if (view.getPath().getCount() < 3) {
+                return;
+            }
+    
+            this.context.fillStyle = view.getBackgroundColor();
+            this.context.beginPath();
+            this.context.moveTo(offsetX + view.getPath().getItem(0).x, offsety + view.getPath().getItem(0).y);
+            for (var i = 1; i < view.getPath().getCount(); i++) {
+                this.context.lineTo(offsetX + view.getPath().getItem(i).x, offsety + view.getPath().getItem(i).y);
+            }
+            this.context.closePath();
+            this.context.fill();
         }
     });
     

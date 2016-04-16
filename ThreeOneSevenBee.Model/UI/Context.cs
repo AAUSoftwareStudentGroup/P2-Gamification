@@ -48,5 +48,7 @@ namespace ThreeOneSevenBee.Model.UI
         public abstract void Draw(SqrtView view, double offsetX, double offsetY);
 
         public abstract void Draw(PolygonView view, double offsetX, double offsetY);
+
+        public abstract void Draw(VectorImageView view, double offsetX, double offsetY);
     }
 }

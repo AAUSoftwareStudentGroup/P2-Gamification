@@ -8,8 +8,8 @@ namespace ThreeOneSevenBee.Model.UI
     public class TitleView : CompositeView
     {
         public LabelView WelcomeText;
-        public ImageView PlayButton;
-        public ImageView LevelButton;
+        public CompositeView LevelButton;
+        public CompositeView PlayButton;
         public PlayerListView PlayerList;
         public TitleView(CurrentPlayer user, IEnumerable<Player> players) : base(600, 300)
         {
@@ -23,18 +23,69 @@ namespace ThreeOneSevenBee.Model.UI
                 Height = 50,
                 Width = 220
             };
-            PlayButton = new ImageView("playbutton.png", 100, 100)
+
+            VectorImageView playIcon = new VectorImageView(100, 100, 100, 100)
             {
-                X = 100,
-                Y = 100,
-                BackgroundColor = "#27AE61"
+                { 25,25 },
+                { 75,50 },
+                { 25,75 }
             };
-            LevelButton = new ImageView("levelbutton.png", 100, 100)
+            playIcon.BackgroundColor = "white";
+            PlayButton = new CompositeView(100, 100)
             {
-                X = 220,
-                Y = 100,
-                BackgroundColor = "#2A80B9"
+                playIcon,
             };
+            PlayButton.BackgroundColor = "#27AE61";
+            PlayButton.X = 100;
+            PlayButton.Y = 100;
+
+            VectorImageView levelIcon1 = new VectorImageView(100, 100, 100, 100)
+            {
+                { 20,20 },
+                { 45,20 },
+                { 45,45 },
+                { 20,45 },
+                { 20,20 },
+            };
+            VectorImageView levelIcon2 = new VectorImageView(100, 100, 100, 100)
+            {
+                { 80,20 },
+                { 80,45 },
+                { 55,45 },
+                { 55,20 },
+                { 80,20 },
+            };
+            VectorImageView levelIcon3 = new VectorImageView(100, 100, 100, 100)
+            {
+                { 80,80 },
+                { 55,80 },
+                { 55,55 },
+                { 80,55 },
+                { 80,80 },
+            };
+            VectorImageView levelIcon4 = new VectorImageView(100, 100, 100, 100)
+            {
+                { 20,80 },
+                { 20,55 },
+                { 45,55 },
+                { 45,80 },
+                { 20,80 },
+            };
+            levelIcon1.BackgroundColor = "white";
+            levelIcon2.BackgroundColor = "white";
+            levelIcon3.BackgroundColor = "white";
+            levelIcon4.BackgroundColor = "white";
+            LevelButton = new CompositeView(100, 100)
+            {
+                levelIcon1,
+                levelIcon2,
+                levelIcon3,
+                levelIcon4,
+            };
+            LevelButton.BackgroundColor = "#2A80B9";
+            LevelButton.X = 220;
+            LevelButton.Y = 100;
+
             PlayerList = new PlayerListView(players, 160, 200)
             {
                 X = 340,
@@ -42,9 +93,9 @@ namespace ThreeOneSevenBee.Model.UI
             };
             Children = new List<View>(){
                 WelcomeText,
-                PlayButton,
                 LevelButton,
-                PlayerList
+                PlayerList,
+                PlayButton
             };
         }
     }

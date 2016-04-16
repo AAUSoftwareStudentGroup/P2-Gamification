@@ -205,5 +205,21 @@ namespace ThreeOneSevenBee.Frontend
                     (int)(view.Y + offsety + view.Height / 2));
             }
         }
+
+        public override void Draw(VectorImageView view, double offsetX, double offsety)
+        {
+            if (view.Path.Count < 3)
+                return;
+
+            context.FillStyle = view.BackgroundColor;
+            context.BeginPath();
+            context.MoveTo(offsetX + view.Path[0].X, offsety + view.Path[0].Y);
+            for (int i = 1; i < view.Path.Count; i++)
+            {
+                context.LineTo(offsetX + view.Path[i].X, offsety + view.Path[i].Y);
+            }
+            context.ClosePath();
+            context.Fill();
+        }
     }
 }

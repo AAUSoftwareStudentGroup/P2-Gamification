@@ -95,6 +95,7 @@
     <Compile Include="UI\SqrtView.cs" />
     <Compile Include="UI\TitleView.cs" />
     <Compile Include="UI\ToolTipView.cs" />
+    <Compile Include="UI\VectorImageView.cs" />
     <Compile Include="UI\View.cs" />
   </ItemGroup>
   <ItemGroup>
