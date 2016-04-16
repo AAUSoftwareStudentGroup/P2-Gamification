@@ -10,6 +10,9 @@ namespace ThreeOneSevenBee.Model.UI
     {
         public OperatorType type { get; set; }
 
+        public double LineWidth { get; set; }
+        public string LineColor { get; set; }
+
         public OperatorView(OperatorType type) : base(0, 0, 10, 10)
         {
             this.type = type;
@@ -18,6 +21,12 @@ namespace ThreeOneSevenBee.Model.UI
         public override void DrawWithContext(Context context, double offsetX, double offsetY)
         {
             context.Draw(this, offsetX, offsetY);
+        }
+
+        public override View Scale(double factor)
+        {
+            LineWidth *= factor;
+            return base.Scale(factor);
         }
     }
 }

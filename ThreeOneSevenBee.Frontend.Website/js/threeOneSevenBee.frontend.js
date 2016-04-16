@@ -85,6 +85,8 @@
         },
         draw$3: function (view, offsetX, offsetY) {
             this.draw$8(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            this.context.lineWidth = view.getLineWidth();
+            this.context.strokeStyle = view.getLineColor();
             if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                 this.context.beginPath();
                 this.context.moveTo(view.getX() + offsetX, view.getY() + offsetY + view.getHeight() / 2);
@@ -125,6 +127,8 @@
                     }
                 }
             }
+            this.context.lineWidth = 2;
+            this.context.strokeStyle = "black";
         },
         draw$4: function (view, offsetX, offsetY) {
             this.context.strokeStyle = view.getLineColor();

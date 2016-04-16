@@ -291,7 +291,9 @@
         inherits: [ThreeOneSevenBee.Model.UI.View],
         config: {
             properties: {
-                type: null
+                type: null,
+                LineWidth: 0,
+                LineColor: null
             }
         },
         constructor: function (type) {
@@ -301,6 +303,10 @@
         },
         drawWithContext: function (context, offsetX, offsetY) {
             context.draw$3(this, offsetX, offsetY);
+        },
+        scale: function (factor) {
+            this.setLineWidth(this.getLineWidth()*factor);
+            return ThreeOneSevenBee.Model.UI.View.prototype.scale.call(this, factor);
         }
     });
     
@@ -464,13 +470,14 @@
             if (Bridge.hasValue(minusExpression)) {
                 var view = this.buildView(minusExpression.getExpression(), model);
                 var operatorView = new ThreeOneSevenBee.Model.UI.OperatorView(minusExpression.getType());
-                operatorView.setWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
+                operatorView.setWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
                 operatorView.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                 operatorView.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
                 operatorView.onClick = function () {
                     model.select(expression);
                 };
-                operatorView.setBackgroundColor(model.selectionIndex(expression) !== -1 ? "#cccccc" : "transparent");
+                operatorView.setLineColor(model.selectionIndex(expression) !== -1 ? "#27AE61" : "black");
+                operatorView.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 15);
                 view.setX(operatorView.getWidth());
                 operatorView.setY(view.getBaseline() - operatorView.getBaseline());
                 var minusView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(operatorView.getWidth() + view.getWidth(), view.getHeight()), [
@@ -489,13 +496,14 @@
                     case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide: 
                         var width = Math.max(left.getWidth(), right.getWidth()) + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE;
                         operatorView1.setWidth(width);
-                        operatorView1.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
+                        operatorView1.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 1.5);
                         operatorView1.setY(left.getHeight());
                         operatorView1.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
                         operatorView1.onClick = function () {
                             model.select(expression);
                         };
-                        operatorView1.setBackgroundColor(model.selectionIndex(expression) !== -1 ? "#cccccc" : "transparent");
+                        operatorView1.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 15);
+                        operatorView1.setLineColor(model.selectionIndex(expression) !== -1 ? "#27AE61" : "black");
                         right.setY(left.getHeight() + operatorView1.getHeight());
                         left.setX((width - left.getWidth()) / 2);
                         right.setX((width - right.getWidth()) / 2);
@@ -515,31 +523,13 @@
                         ] );
                         exponent.setBaseline(left.getY() + left.getBaseline());
                         return exponent;
-                    case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract: 
-                        var baseline = Math.max(operatorView1.getBaseline(), Math.max(left.getBaseline(), right.getBaseline()));
-                        operatorView1.setX(left.getWidth());
-                        operatorView1.setWidth(2 * Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
-                        operatorView1.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
-                        operatorView1.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
-                        right.setX(left.getWidth() + operatorView1.getWidth());
-                        left.setY(baseline - left.getBaseline());
-                        operatorView1.setY(baseline - operatorView1.getBaseline());
-                        right.setY(baseline - right.getBaseline());
-                        var height = Math.max(left.getY() + left.getHeight(), Math.max(operatorView1.getY() + operatorView1.getHeight(), right.getY() + right.getHeight()));
-                        var subtraction = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(right.getX() + right.getWidth(), height), [
-                            [left],
-                            [operatorView1],
-                            [right]
-                        ] );
-                        subtraction.setBaseline(baseline);
-                        return subtraction;
                 }
             }
             var variadicExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
             if (Bridge.hasValue(variadicExpression)) {
                 var views = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
                 var offsetX = 0;
-                var height1 = 0;
+                var height = 0;
                 var maxBaseline = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2;
                 $t = Bridge.getEnumerator(variadicExpression);
                 while ($t.moveNext()) {
@@ -560,6 +550,7 @@
                         operatorView2.setWidth((variadicExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply ? 0.5 : 1.5) * Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                         operatorView2.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                         operatorView2.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
+                        operatorView2.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / (variadicExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply ? 25 : 15));
                         views.add(operatorView2);
                         offsetX += operatorView2.getWidth();
                     }
@@ -576,9 +567,9 @@
                 while ($t1.moveNext()) {
                     var view1 = $t1.getCurrent();
                     view1.setY(maxBaseline - view1.getBaseline());
-                    height1 = Math.max(height1, view1.getY() + view1.getHeight());
+                    height = Math.max(height, view1.getY() + view1.getHeight());
                 }
-                return Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(offsetX, height1), {
+                return Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(offsetX, height), {
                     children: views,
                     setBaseline: maxBaseline
                 } );
@@ -609,8 +600,8 @@
                     [view2],
                     [right1]
                 ] );
-                left1.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 10);
-                right1.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 10);
+                left1.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 15);
+                right1.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 15);
                 left1.setLineColor(model.selectionIndex(expression) !== -1 ? "#27AE61" : "black");
                 right1.setLineColor(model.selectionIndex(expression) !== -1 ? "#27AE61" : "black");
                 compositeView.setBaseline(view2.getY() + view2.getBaseline());

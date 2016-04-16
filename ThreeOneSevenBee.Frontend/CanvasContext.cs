@@ -62,6 +62,8 @@ namespace ThreeOneSevenBee.Frontend
         public override void Draw(OperatorView view, double offsetX, double offsetY)
         {
             Draw(view as View, offsetX, offsetY);
+            context.LineWidth = view.LineWidth;
+            context.StrokeStyle = view.LineColor;
             if (view.type == OperatorType.Divide)
             {
                 context.BeginPath();
@@ -99,6 +101,8 @@ namespace ThreeOneSevenBee.Frontend
                 context.LineTo(view.X + offsetX + view.Width, view.Y + offsetY + view.Height / 2);
                 context.Stroke();
             }
+            context.LineWidth = 2;
+            context.StrokeStyle = "black";
         }
 
         public override void Draw(ParenthesisView view, double offsetX, double offsetY)

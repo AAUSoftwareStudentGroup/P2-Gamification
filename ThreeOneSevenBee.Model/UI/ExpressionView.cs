@@ -20,12 +20,13 @@ namespace ThreeOneSevenBee.Model.UI
             if(minusExpression != null)
             {
                 View view = BuildView(minusExpression.Expression, model);
-                View operatorView = new OperatorView(minusExpression.Type);
-                operatorView.Width = NUMVAR_SIZE;
+                OperatorView operatorView = new OperatorView(minusExpression.Type);
+                operatorView.Width = NUMVAR_SIZE / 2;
                 operatorView.Height = NUMVAR_SIZE;
                 operatorView.Baseline = NUMVAR_SIZE / 2;
                 operatorView.OnClick = () => model.Select(expression);
-                operatorView.BackgroundColor = model.SelectionIndex(expression) != -1 ? "#cccccc" : "transparent";
+                operatorView.LineColor = model.SelectionIndex(expression) != -1 ? "#27AE61" : "black";
+                operatorView.LineWidth = NUMVAR_SIZE / 15;
                 view.X = operatorView.Width;
                 operatorView.Y = view.Baseline - operatorView.Baseline;
                 View minusView = new CompositeView(operatorView.Width + view.Width, view.Height) { operatorView, view };
@@ -37,17 +38,18 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 View left = BuildView(operatorExpression.Left, model);
                 View right = BuildView(operatorExpression.Right, model);
-                View operatorView = new OperatorView(operatorExpression.Type);
+                OperatorView operatorView = new OperatorView(operatorExpression.Type);
                 switch (operatorExpression.Type)
                 {
                     case OperatorType.Divide:
                         double width = System.Math.Max(left.Width, right.Width) + NUMVAR_SIZE;
                         operatorView.Width = width;
-                        operatorView.Height = NUMVAR_SIZE;
+                        operatorView.Height = NUMVAR_SIZE / 1.5;
                         operatorView.Y = left.Height;
                         operatorView.Baseline = NUMVAR_SIZE / 2;
                         operatorView.OnClick = () => model.Select(expression);
-                        operatorView.BackgroundColor = model.SelectionIndex(expression) != -1 ? "#cccccc" : "transparent";
+                        operatorView.LineWidth = NUMVAR_SIZE / 15;
+                        operatorView.LineColor = model.SelectionIndex(expression) != -1 ? "#27AE61" : "black";
                         right.Y = left.Height + operatorView.Height;
                         left.X = (width - left.Width) / 2;
                         right.X = (width - right.Width) / 2;
@@ -69,26 +71,6 @@ namespace ThreeOneSevenBee.Model.UI
                         };
                         exponent.Baseline = left.Y + left.Baseline;
                         return exponent;
-                    case OperatorType.Subtract:
-                        double baseline = System.Math.Max(operatorView.Baseline, System.Math.Max(left.Baseline, right.Baseline));
-                        operatorView.X = left.Width;
-                        operatorView.Width = 2 * NUMVAR_SIZE;
-                        operatorView.Height = NUMVAR_SIZE;
-                        operatorView.Baseline = NUMVAR_SIZE / 2;
-                        right.X = left.Width + operatorView.Width;
-                        left.Y = baseline - left.Baseline;
-                        operatorView.Y = baseline - operatorView.Baseline;
-                        right.Y = baseline - right.Baseline;
-                        double height = System.Math.Max(left.Y + left.Height,
-                            System.Math.Max(operatorView.Y + operatorView.Height, right.Y + right.Height));
-                        CompositeView subtraction = new CompositeView(right.X + right.Width, height)
-                        {
-                            left,
-                            operatorView,
-                            right
-                        };
-                        subtraction.Baseline = baseline;
-                        return subtraction;
                 }
             }
             VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
@@ -104,7 +86,7 @@ namespace ThreeOneSevenBee.Model.UI
                     if (views.Count != 0)
                     {
                         UnaryMinusExpression minus = expr as UnaryMinusExpression;
-                        View operatorView;
+                        OperatorView operatorView;
                         if (variadicExpression.Type == OperatorType.Add && minus != null)
                         {
                             operatorView = new OperatorView(OperatorType.Subtract);
@@ -119,6 +101,7 @@ namespace ThreeOneSevenBee.Model.UI
                         operatorView.Width = (variadicExpression.Type == OperatorType.Multiply ? 0.5 : 1.5)  * NUMVAR_SIZE;
                         operatorView.Height = NUMVAR_SIZE;
                         operatorView.Baseline = NUMVAR_SIZE / 2;
+                        operatorView.LineWidth = NUMVAR_SIZE / (variadicExpression.Type == OperatorType.Multiply ? 25 : 15);
                         views.Add(operatorView);
                         offsetX += operatorView.Width;
                     }
@@ -154,8 +137,8 @@ namespace ThreeOneSevenBee.Model.UI
                     view,
                     right
                 };
-                left.LineWidth = NUMVAR_SIZE / 10;
-                right.LineWidth = NUMVAR_SIZE / 10;
+                left.LineWidth = NUMVAR_SIZE / 15;
+                right.LineWidth = NUMVAR_SIZE / 15;
                 left.LineColor = model.SelectionIndex(expression) != -1 ? "#27AE61" : "black";
                 right.LineColor = model.SelectionIndex(expression) != -1 ? "#27AE61" : "black";
                 compositeView.Baseline = view.Y + view.Baseline;
