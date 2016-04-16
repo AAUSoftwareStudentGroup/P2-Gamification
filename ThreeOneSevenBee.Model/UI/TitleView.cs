@@ -24,7 +24,7 @@ namespace ThreeOneSevenBee.Model.UI
                 Width = 220
             };
 
-            VectorImageView playIcon = new VectorImageView(100, 100, 100, 100)
+            VectorImageView playIcon = new VectorImageView(0, 0, 100, 100)
             {
                 { 25,25 },
                 { 75,50 },
@@ -39,7 +39,7 @@ namespace ThreeOneSevenBee.Model.UI
             PlayButton.X = 100;
             PlayButton.Y = 100;
 
-            VectorImageView levelIcon1 = new VectorImageView(100, 100, 100, 100)
+            VectorImageView levelIcon1 = new VectorImageView(0, 0, 100, 100)
             {
                 { 20,20 },
                 { 45,20 },
@@ -47,7 +47,7 @@ namespace ThreeOneSevenBee.Model.UI
                 { 20,45 },
                 { 20,20 },
             };
-            VectorImageView levelIcon2 = new VectorImageView(100, 100, 100, 100)
+            VectorImageView levelIcon2 = new VectorImageView(0, 0, 100, 100)
             {
                 { 80,20 },
                 { 80,45 },
@@ -55,7 +55,7 @@ namespace ThreeOneSevenBee.Model.UI
                 { 55,20 },
                 { 80,20 },
             };
-            VectorImageView levelIcon3 = new VectorImageView(100, 100, 100, 100)
+            VectorImageView levelIcon3 = new VectorImageView(0, 0, 100, 100)
             {
                 { 80,80 },
                 { 55,80 },
@@ -63,7 +63,7 @@ namespace ThreeOneSevenBee.Model.UI
                 { 80,55 },
                 { 80,80 },
             };
-            VectorImageView levelIcon4 = new VectorImageView(100, 100, 100, 100)
+            VectorImageView levelIcon4 = new VectorImageView(0,0, 100, 100)
             {
                 { 20,80 },
                 { 20,55 },

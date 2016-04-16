@@ -161,21 +161,23 @@
             this.context.fillStyle = "#000000";
         },
         draw$1: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+            if (view.getVisible() === true) {
+                this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
     
-            if (this.imageCache.containsKey(view.getImage())) {
-                this.context.fillStyle = "transparent";
-                this.context.drawImage(this.imageCache.get(view.getImage()), view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
-                this.context.fillStyle = "#000000";
-            }
-            else  {
-                this.imageCache.set(view.getImage(), new Image());
-                this.imageCache.get(view.getImage()).src = "img/" + view.getImage();
-                this.imageCache.get(view.getImage()).onload = Bridge.fn.bind(this, function (e) {
+                if (this.imageCache.containsKey(view.getImage())) {
                     this.context.fillStyle = "transparent";
                     this.context.drawImage(this.imageCache.get(view.getImage()), view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
                     this.context.fillStyle = "#000000";
-                });
+                }
+                else  {
+                    this.imageCache.set(view.getImage(), new Image());
+                    this.imageCache.get(view.getImage()).src = "img/" + view.getImage();
+                    this.imageCache.get(view.getImage()).onload = Bridge.fn.bind(this, function (e) {
+                        this.context.fillStyle = "transparent";
+                        this.context.drawImage(this.imageCache.get(view.getImage()), view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
+                        this.context.fillStyle = "#000000";
+                    });
+                }
             }
         },
         draw$5: function (view, offsetX, offsetY) {
@@ -213,15 +215,15 @@
             }
         },
         draw$8: function (view, offsetX, offsety) {
-            if (view.getPath().getCount() < 3) {
+            if (view.getVisible() === false || view.getPath().getCount() < 3) {
                 return;
             }
     
             this.context.fillStyle = view.getBackgroundColor();
             this.context.beginPath();
-            this.context.moveTo(offsetX + view.getPath().getItem(0).x, offsety + view.getPath().getItem(0).y);
+            this.context.moveTo(offsetX + view.getX() + view.getPath().getItem(0).x, offsety + view.getY() + view.getPath().getItem(0).y);
             for (var i = 1; i < view.getPath().getCount(); i++) {
-                this.context.lineTo(offsetX + view.getPath().getItem(i).x, offsety + view.getPath().getItem(i).y);
+                this.context.lineTo(offsetX + view.getX() + view.getPath().getItem(i).x, offsety + view.getY() + view.getPath().getItem(i).y);
             }
             this.context.closePath();
             this.context.fill();

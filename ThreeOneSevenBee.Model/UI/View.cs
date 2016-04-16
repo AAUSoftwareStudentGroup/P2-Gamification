@@ -23,6 +23,7 @@ namespace ThreeOneSevenBee.Model.UI
             Height = height;
             Baseline = height / 2;
             BackgroundColor = "transparent";
+            Visible = true;
         }
 
         public virtual void DrawWithContext(Context context, double offsetX, double offsetY)

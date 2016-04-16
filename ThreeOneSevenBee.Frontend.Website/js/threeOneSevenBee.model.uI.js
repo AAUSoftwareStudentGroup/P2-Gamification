@@ -22,6 +22,7 @@
             this.setHeight(height);
             this.setBaseline(height / 2);
             this.setBackgroundColor("transparent");
+            this.setVisible(true);
         },
         drawWithContext: function (context, offsetX, offsetY) {
             context.draw$9(this, offsetX, offsetY);
@@ -840,17 +841,22 @@
                 setY: this.getCategoryName().getY() + this.getCategoryName().getHeight()
             } ));
     
-            this.setArrowLeft(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("arrow_left.png", 50, (this.getCategory() === 0 ? 0 : 75)), {
-                setX: 5,
-                setY: this.getLevels().getY() + this.getLevels().getHeight() / 2 - 37,
-                onClick: Bridge.fn.bind(this, this.previousCategory)
-            } ));
+            this.setArrowRight(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(345, this.getLevels().getY() + this.getLevels().getHeight() / 2 - 37, 50, 75), [
+                [0, 0],
+                [25, 37],
+                [0, 75]
+            ] ));
+            this.getArrowRight().setBackgroundColor("#297782");
+            this.getArrowRight().onClick = Bridge.fn.bind(this, this.nextCategory);
     
-            this.setArrowRight(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("arrow_right.png", 50, (this.getCategory() === user.categories.getCount() - 1 ? 0 : 75)), {
-                setX: 345,
-                setY: this.getLevels().getY() + this.getLevels().getHeight() / 2 - 37,
-                onClick: Bridge.fn.bind(this, this.nextCategory)
-            } ));
+            this.setArrowLeft(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(5, this.getLevels().getY() + this.getLevels().getHeight() / 2 - 37, 50, 75), [
+                [50, 0],
+                [25, 37],
+                [50, 75]
+            ] ));
+            this.getArrowLeft().setBackgroundColor("#297782");
+            this.getArrowLeft().onClick = Bridge.fn.bind(this, this.previousCategory);
+            this.getArrowLeft().setVisible(this.getCategory() > 0);
     
             this.children.add(this.getMenuButton());
             this.children.add(this.getCategoryName());
@@ -863,8 +869,8 @@
         update: function (user) {
             var $t;
             this.getCategoryName().setText(user.categories.getItem(this.getCategory()).name);
-            this.getArrowLeft().setHeight((this.getCategory() === 0 ? 0 : this.getArrowLeft().getWidth() * 1.5));
-            this.getArrowRight().setHeight((this.getCategory() === user.categories.getCount() - 1 ? 0 : this.getArrowRight().getWidth() * 1.5));
+            this.getArrowLeft().setVisible(this.getCategory() > 0);
+            this.getArrowRight().setVisible(this.getCategory() < user.categories.getCount() - 1);
     
             var levelButtons = new ThreeOneSevenBee.Model.UI.CompositeView(400, 400);
     
@@ -1101,7 +1107,7 @@
                 setWidth: 220
             } );
     
-            var playIcon = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(100, 100, 100, 100), [
+            var playIcon = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 100, 100), [
                 [25, 25],
                 [75, 50],
                 [25, 75]
@@ -1114,28 +1120,28 @@
             this.playButton.setX(100);
             this.playButton.setY(100);
     
-            var levelIcon1 = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(100, 100, 100, 100), [
+            var levelIcon1 = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 100, 100), [
                 [20, 20],
                 [45, 20],
                 [45, 45],
                 [20, 45],
                 [20, 20]
             ] );
-            var levelIcon2 = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(100, 100, 100, 100), [
+            var levelIcon2 = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 100, 100), [
                 [80, 20],
                 [80, 45],
                 [55, 45],
                 [55, 20],
                 [80, 20]
             ] );
-            var levelIcon3 = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(100, 100, 100, 100), [
+            var levelIcon3 = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 100, 100), [
                 [80, 80],
                 [55, 80],
                 [55, 55],
                 [80, 55],
                 [80, 80]
             ] );
-            var levelIcon4 = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(100, 100, 100, 100), [
+            var levelIcon4 = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 100, 100), [
                 [20, 80],
                 [20, 55],
                 [45, 55],

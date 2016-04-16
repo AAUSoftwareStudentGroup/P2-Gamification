@@ -145,24 +145,27 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void Draw(ImageView view, double offsetX, double offsetY)
         {
-            Draw(view as View, offsetX, offsetY);
+            if(view.Visible == true)
+            {
+                Draw(view as View, offsetX, offsetY);
 
-            if (imageCache.ContainsKey(view.Image))
-            {
-                context.FillStyle = "transparent";
-                context.DrawImage(imageCache[view.Image], view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
-                context.FillStyle = "#000000";
-            }
-            else
-            {
-                imageCache[view.Image] = new ImageElement();
-                imageCache[view.Image].Src = "img/" + view.Image;
-                imageCache[view.Image].OnLoad = (e) =>
+                if (imageCache.ContainsKey(view.Image))
                 {
                     context.FillStyle = "transparent";
                     context.DrawImage(imageCache[view.Image], view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
                     context.FillStyle = "#000000";
-                };
+                }
+                else
+                {
+                    imageCache[view.Image] = new ImageElement();
+                    imageCache[view.Image].Src = "img/" + view.Image;
+                    imageCache[view.Image].OnLoad = (e) =>
+                    {
+                        context.FillStyle = "transparent";
+                        context.DrawImage(imageCache[view.Image], view.X + offsetX, view.Y + offsetY, view.Width, view.Height);
+                        context.FillStyle = "#000000";
+                    };
+                }
             }
         }
 
@@ -208,15 +211,15 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void Draw(VectorImageView view, double offsetX, double offsety)
         {
-            if (view.Path.Count < 3)
+            if (view.Visible == false || view.Path.Count < 3)
                 return;
 
             context.FillStyle = view.BackgroundColor;
             context.BeginPath();
-            context.MoveTo(offsetX + view.Path[0].X, offsety + view.Path[0].Y);
+            context.MoveTo(offsetX + view.X + view.Path[0].X, offsety + view.Y + view.Path[0].Y);
             for (int i = 1; i < view.Path.Count; i++)
             {
-                context.LineTo(offsetX + view.Path[i].X, offsety + view.Path[i].Y);
+                context.LineTo(offsetX + view.X + view.Path[i].X, offsety + view.Y + view.Path[i].Y);
             }
             context.ClosePath();
             context.Fill();
