@@ -20,10 +20,7 @@ namespace ThreeOneSevenBee.Model.UI
                     Y = offsetY,
                     Width = Width - 10,
                     Height = 20,
-                    FontSize = 15,
-                    Font = "Segoe UI",
-                    BackgroundColor = "#EFEFEF",
-                    Align = "left"
+                    BackgroundColor = new Color(239, 239, 239),
                 });
                 offsetY += 25;
             }
@@ -37,7 +34,7 @@ namespace ThreeOneSevenBee.Model.UI
         public PlayerListView(IEnumerable<Player> players, double width, double height) : base(width, height)
         {
             Build(players);
-            BackgroundColor = "#D1D5D8";
+            BackgroundColor = new Color(209, 209, 209);
         }
     }
 }

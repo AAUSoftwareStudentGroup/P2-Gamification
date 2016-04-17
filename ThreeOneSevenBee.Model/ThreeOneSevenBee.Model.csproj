@@ -69,7 +69,7 @@
     <Compile Include="Expression\Operator.cs" />
     <Compile Include="Expression\Token.cs" />
     <Compile Include="Game\CurrentPlayer.cs" />
-    <Compile Include="Game\GameAPI.cs" />
+    <Compile Include="Game\IGameAPI.cs" />
     <Compile Include="Game\GameModel.cs" />
     <Compile Include="Game\Level.cs" />
     <Compile Include="Game\LevelCategory.cs" />
@@ -82,11 +82,13 @@
     <Compile Include="Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\ButtonView.cs" />
+    <Compile Include="UI\Color.cs" />
     <Compile Include="UI\CompositeView.cs" />
     <Compile Include="UI\Context.cs" />
     <Compile Include="UI\ExpressionView.cs" />
     <Compile Include="UI\FrameView.cs" />
     <Compile Include="UI\GameView.cs" />
+    <Compile Include="UI\IContext.cs" />
     <Compile Include="UI\IdentityMenuView.cs" />
     <Compile Include="UI\ImageView.cs" />
     <Compile Include="UI\LabelView.cs" />

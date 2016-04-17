@@ -9,16 +9,8 @@ using Bridge.Html5;
 
 namespace ThreeOneSevenBee.Frontend
 {
-    class JQueryGameAPI : GameAPI
+    class JQueryGameAPI : IGameAPI
     {
-        public override bool Ready
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         private void getCategories(Action<List<LevelCategory>> callback)
         {
             jQuery.Get(
@@ -52,7 +44,7 @@ namespace ThreeOneSevenBee.Frontend
             );
         }
 
-        public override void GetCurrentPlayer(Action<CurrentPlayer> callback)
+        public void GetCurrentPlayer(Action<CurrentPlayer> callback)
         {
             jQuery.Get(
                 "/api/?action=get_current_user&debug=1",
@@ -74,7 +66,7 @@ namespace ThreeOneSevenBee.Frontend
             );
         }
 
-        public override void GetPlayers(Action<List<Player>> callback)
+        public void GetPlayers(Action<List<Player>> callback)
         {
             jQuery.Get(
                 "/api/?action=get_users",
@@ -88,7 +80,7 @@ namespace ThreeOneSevenBee.Frontend
             );
         }
 
-        public override void SaveUserLevelProgress(int levelID, string currentExpression, Action<bool> callback)
+        public void SaveUserLevelProgress(int levelID, string currentExpression, Action<bool> callback)
         {
             jQuery.Post(
                 "/api/", 

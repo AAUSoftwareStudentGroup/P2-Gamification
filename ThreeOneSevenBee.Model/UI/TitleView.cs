@@ -13,13 +13,11 @@ namespace ThreeOneSevenBee.Model.UI
         public PlayerListView PlayerList;
         public TitleView(CurrentPlayer user, IEnumerable<Player> players) : base(600, 300)
         {
+            BackgroundColor = new Color(255, 255, 255);
             WelcomeText = new LabelView("Velkommen " + user.PlayerName)
             {
                 X = 100,
                 Y = 50,
-                Align = "left",
-                FontSize = 20,
-                Font = "Segoe UI",
                 Height = 50,
                 Width = 220
             };
@@ -27,13 +25,13 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 X = 100,
                 Y = 100,
-                BackgroundColor = "#27AE61"
+                BackgroundColor = new Color(39, 174, 97)
             };
             LevelButton = new ImageView("levelbutton.png", 100, 100)
             {
                 X = 220,
                 Y = 100,
-                BackgroundColor = "#2A80B9"
+                BackgroundColor = new Color(42, 128, 185)
             };
             PlayerList = new PlayerListView(players, 160, 200)
             {

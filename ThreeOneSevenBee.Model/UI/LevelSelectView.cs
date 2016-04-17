@@ -50,10 +50,8 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 Width = 75,
                 Height = 30,
-                BackgroundColor = "#C1392B",
-                FontColor = "#FFFFFF",
-                Font = "Segoe UI",
-                FontSize = 18
+                BackgroundColor = new Color(193, 57, 43),
+                TextColor = new Color(0, 0, 0),
             };
 
             CategoryName = new LabelView(user.Categories[Category].Name)
@@ -62,7 +60,6 @@ namespace ThreeOneSevenBee.Model.UI
                 Y = 20,
                 Width = 200,
                 Height = 40,
-                FontSize = 25
             };
 
             Levels = new FrameView(Width - 100, Height - (CategoryName.Y + CategoryName.Height))
@@ -113,9 +110,8 @@ namespace ThreeOneSevenBee.Model.UI
                         Height = 50 - 10,
                         X = levelNumber % (int)Math.Sqrt(numberOfLevels) * 50 + 5,
                         Y = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50 + 5,
-                        BackgroundColor = "#297782",
-                        FontColor = "#ffffff",
-                        FontSize = 25
+                        BackgroundColor = new Color(40, 130, 120),
+                        TextColor = new Color(255, 255, 255),
                     });
                 levelNumber += 1;
 
@@ -127,6 +123,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public LevelSelectView(CurrentPlayer user) : base(400, 300)
         {
+            BackgroundColor = new Color(255, 255, 255);
             Category = user.CurrentCategoryIndex;
             Build(user);
         }
