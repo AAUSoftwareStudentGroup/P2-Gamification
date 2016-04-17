@@ -29,6 +29,7 @@ namespace ThreeOneSevenBee.Model.UI
                 {
                     new Vector2(X + offsetX + SignWidth / 8, Y + offsetY + Height - SignWidth / 2),
                     new Vector2(X + offsetX + SignWidth / 4, Y + offsetY + Height - SignWidth / 2),
+                    new Vector2(X + offsetX + SignWidth / 2 - LineWidth / 2, Y + offsetY + Height),
                     new Vector2(X + offsetX + SignWidth / 2, Y + offsetY + Height),
                     new Vector2(X + offsetX + SignWidth, Y + offsetY + TopHeight / 2),
                     new Vector2(X + offsetX + Width, Y + offsetY + TopHeight / 2)

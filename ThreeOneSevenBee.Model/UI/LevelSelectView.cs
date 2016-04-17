@@ -19,30 +19,14 @@ namespace ThreeOneSevenBee.Model.UI
 
         public ButtonView MenuButton { get; private set; }
 
-        public ImageView ArrowLeft { get; private set; }
+        public VectorImageView ArrowLeft { get; private set; }
 
-        public ImageView ArrowRight { get; private set; }
+        public VectorImageView ArrowRight { get; private set; }
 
         public FrameView Levels { get; private set; }
 
         public LabelView CategoryName { get; private set; }
 
-        private void nextCategory()
-        {
-            Category++;
-            if (OnChanged != null)
-            {
-                OnChanged();
-            }
-        }
-        private void previousCategory()
-        {
-            Category--;
-            if (OnChanged != null)
-            {
-                OnChanged();
-            }
-        }
 
         public void Build(CurrentPlayer user)
         {
@@ -68,19 +52,41 @@ namespace ThreeOneSevenBee.Model.UI
                 Y = CategoryName.Y + CategoryName.Height,
             };
 
-            ArrowLeft = new ImageView("arrow_left.png", 50, (Category == 0 ? 0 : 75))
+            ArrowRight = new VectorImageView(345, Levels.Y + Levels.Height / 2 - 75 / 2, 50, 75)
             {
-                X = 5,
-                Y = Levels.Y + Levels.Height / 2 - 75/2,
-                OnClick = previousCategory
+                { 0,0    },
+                { 25,75/2 },
+                { 0,75   },
             };
 
-            ArrowRight = new ImageView("arrow_right.png", 50, (Category == user.Categories.Count - 1 ? 0 : 75))
+            ArrowRight.Visible = Category < user.Categories.Count - 1;
+            ArrowRight.BackgroundColor = new Color(44, 119, 130);
+            ArrowRight.OnClick = () =>
             {
-                X = 345,
-                Y = Levels.Y + Levels.Height / 2 - 75/2,
-                OnClick = nextCategory
+                if (Category < user.Categories.Count - 1)
+                {
+                    Category++;
+                    OnChanged();
+                }
             };
+
+            ArrowLeft = new VectorImageView(5, Levels.Y + Levels.Height / 2 - 75 / 2, 50, 75)
+            {
+                { 50,0    },
+                { 25,75/2 },
+                { 50,75   },
+            };
+
+            ArrowLeft.BackgroundColor = new Color(44, 119, 130);
+            ArrowLeft.OnClick = () =>
+            {
+                if (Category > 0)
+                {
+                    Category--;
+                    OnChanged();
+                }
+            };
+            ArrowLeft.Visible = Category > 0;
 
             Children.Add(MenuButton);
             Children.Add(CategoryName);
@@ -94,8 +100,8 @@ namespace ThreeOneSevenBee.Model.UI
         public void Update(CurrentPlayer user)
         {
             CategoryName.Text = user.Categories[Category].Name;
-            ArrowLeft.Height = (Category == 0 ? 0 : ArrowLeft.Width * 1.5);
-            ArrowRight.Height = (Category == user.Categories.Count - 1 ? 0 : ArrowRight.Width * 1.5);
+            ArrowLeft.Visible = Category > 0;
+            ArrowRight.Visible = Category < user.Categories.Count - 1;
 
             CompositeView levelButtons = new CompositeView(400, 400);
 

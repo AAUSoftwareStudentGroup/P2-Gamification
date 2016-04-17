@@ -23,11 +23,11 @@ namespace ThreeOneSevenBee.Model.UI
             Height = height;
             Baseline = height / 2;
             BackgroundColor = new Color();
+            Visible = true;
         }
 
         public virtual void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
-            Console.WriteLine(this.GetType());
             context.DrawRectangle(X + offsetX, Y + offsetY, Width, Height, BackgroundColor);
         }
 

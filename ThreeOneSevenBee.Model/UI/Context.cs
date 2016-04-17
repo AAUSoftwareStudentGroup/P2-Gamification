@@ -36,7 +36,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public virtual void DrawRectangle(double x, double y, double width, double height, Color fillColor)
         {
-            DrawRectangle(x, y, width, height, fillColor, fillColor, 0);
+            DrawRectangle(x, y, width, height, fillColor, new Color(), 0);
         }
 
         public virtual void DrawLine(Vector2 first, Vector2 second, Color lineColor, double lineWidth)
@@ -71,7 +71,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public virtual void DrawPolygon(Vector2[] path, Color fillColor)
         {
-            DrawPolygon(path, fillColor, fillColor, 0);
+            DrawPolygon(path, fillColor, new Color(), 1);
         }
 
         public abstract void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth);
