@@ -187,22 +187,58 @@ namespace ThreeOneSevenBee.Frontend
             if (view.Visible == true)
             {
                 context.FillStyle = view.BackgroundColor;
-
-                context.BeginPath();
-                context.MoveTo(view.X + offsetX, view.Y + offsety + 10);
-                context.LineTo(view.X + offsetX + 10, view.Y + offsety);
-                context.LineTo(view.X + offsetX + 20, view.Y + offsety + 10);
-                context.LineTo(view.X + offsetX + view.Width, view.Y + offsety + 10);
-                context.LineTo(view.X + offsety + view.Width, view.Y + offsety + view.Height);
-                context.LineTo(view.X + offsetX, view.Y + offsetX + view.Height);
-                context.ClosePath();
-
-                context.Fill();
-
-                context.Font = view.FontSize + "px " + view.Font;
-                context.FillStyle = view.FontColor;
-                context.FillText(view.Text, (int)(view.X + offsetX + (view.Align == "center" ? view.Width / 2 : 5)),
-                    (int)(view.Y + offsety + view.Height / 2));
+                if (view.Position == position.upperLeft)
+                {
+                    context.BeginPath();
+                    context.MoveTo(view.X + offsetX, view.Y + offsety + 10);
+                    context.LineTo(view.X + offsetX + 10, view.Y + offsety);
+                    context.LineTo(view.X + offsetX + 20, view.Y + offsety + 10);
+                    context.LineTo(view.X + offsetX + view.Width, view.Y + offsety + 10);
+                    context.LineTo(view.X + offsety + view.Width, view.Y + offsety + view.Height);
+                    context.LineTo(view.X + offsetX, view.Y + offsetX + view.Height);
+                    context.ClosePath();
+                    context.Fill();
+                    context.Font = view.FontSize + "px " + view.Font;
+                    context.FillStyle = view.FontColor;
+                    context.FillText(view.Text, (int)(view.X + offsetX + (view.Align == "center" ? view.Width / 2 : 5)),
+                        (int)(view.Y + offsety + view.Height / 2));
+                }
+                if (view.Position == position.upperRight)
+                {
+                    context.BeginPath();
+                    context.MoveTo(view.X + offsetX, view.Y + offsety + 10);
+                    context.LineTo(view.X + offsetX + 10, view.Y + offsety);
+                    context.LineTo(view.X + offsetX + 20, view.Y + offsety + 10);
+                    context.LineTo(view.X + offsetX + 20, view.Y + offsety + view.Height);
+                    context.LineTo(view.X + offsetX - view.Width, view.Y + offsety + view.Height);
+                    context.LineTo(view.X + offsetX - view.Width, view.Y + offsety + 10);
+                    context.ClosePath();
+                    context.Fill();
+                    context.Font = view.FontSize + "px " + view.Font;
+                    context.FillStyle = view.FontColor;
+                    context.FillText(view.Text, (int)(view.X + offsetX - (view.Align == "center" ? view.Width / 2 : 5)),
+                        (int)(view.Y + offsety + view.Height / 2));
+                }
+                if (view.Position == position.bottomMiddle)
+                {
+                    context.BeginPath();
+                    context.MoveTo(view.X + offsetX, view.Y + offsety + 10);
+                    context.LineTo(view.X + offsetX + view.Width / 2 - 10, view.Y + offsety + 10);
+                    context.LineTo(view.X + offsetX + view.Width / 2, view.Y + offsety);
+                    context.LineTo(view.X + offsetX + view.Width / 2 + 10, view.Y + offsety + 10);
+                    context.LineTo(view.X + offsetX + view.Width, view.Y + offsety + 10);
+                    context.LineTo(view.X + offsetX + view.Width, view.Y + offsety);
+                    context.LineTo(view.X + offsetX + view.Width, view.Y + offsety + view.Height);
+                    context.LineTo(view.X + offsetX, view.Y + offsety + view.Height);
+                    context.ClosePath();
+                    context.Fill();
+                    context.Font = view.FontSize + "px " + view.Font;
+                    context.FillStyle = view.FontColor;
+                    context.FillText(view.Text, (int)(view.X + offsetX + (view.Align == "center" ? view.Width / 2 : 5)),
+                        (int)(view.Y + offsety + view.Height / 4 + 10));
+                    context.FillText(view.Description, (int)(view.X + offsetX + (view.Align == "center" ? view.Width / 2 : 5)),
+                        (int)(view.Y + offsety + view.Height / 2 + 20));
+                }
             }
         }
     }
