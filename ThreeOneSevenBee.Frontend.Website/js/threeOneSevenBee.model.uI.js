@@ -79,8 +79,7 @@
         statics: {
             upperLeft: 0,
             upperRight: 1,
-            lowerLeft: 2,
-            lowerRight: 3
+            bottomMiddle: 2
         },
         $enum: true
     });
@@ -983,6 +982,8 @@
         identityMenu: null,
         expression: null,
         toolTipView: null,
+        toolTipView2: null,
+        toolTipView3: null,
         config: {
             properties: {
                 OnExit: null,
@@ -1030,19 +1031,43 @@
                 setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255),
                 setX: this.progressbar.getX(),
                 setY: this.progressbar.getY() + this.progressbar.getHeight() + 10,
-                setWidth: 400,
+                setWidth: 300,
                 setHeight: 75,
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130),
                 setPosition: ThreeOneSevenBee.Model.UI.position.upperLeft
             } );
     
+            this.toolTipView2 = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Når knappen bliver grøn kan du gå videre til næste bane"), {
+                setVisible: game.getIsFirstLevel(),
+                setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255),
+                setX: this.nextButton.getX(),
+                setY: this.nextButton.getY() + this.nextButton.getHeight() + 10,
+                setWidth: 400,
+                setHeight: 75,
+                setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130),
+                setPosition: ThreeOneSevenBee.Model.UI.position.upperRight
+            } );
+    
+            this.toolTipView3 = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Dit mål er at reducere ovenstående udtryk. Dette gøres ved at markere de dele i udtrykket som skal reduceres."), {
+                setDescription: "Markér [a] og [a]. Klik derefter på den ønskede omskrivning nedenfor for at reducere udtrykket",
+                setVisible: game.getIsFirstLevel(),
+                setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255),
+                setX: this.getWidth() / 2 - 400,
+                setY: this.getHeight() / 2 + 30,
+                setWidth: 800,
+                setHeight: 90,
+                setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130),
+                setPosition: ThreeOneSevenBee.Model.UI.position.bottomMiddle
+            } );
             this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
                 [this.menuButton],
                 [this.nextButton],
                 [this.progressbar],
                 [this.identityMenu],
                 [this.expression],
-                [this.toolTipView]
+                [this.toolTipView],
+                [this.toolTipView2],
+                [this.toolTipView3]
             ] );
     
             if (Bridge.hasValue(this.onChanged)) {
@@ -1055,6 +1080,8 @@
             this.expression.update(game.getExprModel());
             this.nextButton.setBackgroundColor(game.getIsLevelCompleted() ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 190, 190, 190));
             this.toolTipView.setVisible(game.getIsFirstLevel());
+            this.toolTipView2.setVisible(game.getIsFirstLevel());
+            this.toolTipView3.setVisible(game.getIsFirstLevel());
     
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged();
@@ -1235,7 +1262,8 @@
         config: {
             properties: {
                 BoxColor: null,
-                Position: null
+                Position: null,
+                Description: null
             }
         },
         constructor: function (text) {
@@ -1245,8 +1273,20 @@
         },
         drawWithContext: function (context, offsetX, offsetY) {
             if (this.getVisible() === true) {
-                context.drawPolygon([new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + 10, this.getY() + offsetY), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + 20, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth(), this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetY + this.getWidth(), this.getY() + offsetY + this.getHeight()), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetX + this.getHeight())], this.getBoxColor());
-                context.drawText(this.getX() + offsetX, this.getY() + offsetY + 10, this.getWidth(), this.getHeight() - 10, this.getText(), this.getTextColor());
+                if (this.getPosition() === ThreeOneSevenBee.Model.UI.position.upperLeft) {
+    
+                    context.drawPolygon([new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + 10, this.getY() + offsetY), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + 20, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth(), this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetY + this.getWidth(), this.getY() + offsetY + this.getHeight()), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetX + this.getHeight())], this.getBoxColor());
+                    context.drawText(this.getX() + offsetX, this.getY() + offsetY + 10, this.getWidth(), this.getHeight() - 10, this.getText(), this.getTextColor());
+                }
+                if (this.getPosition() === ThreeOneSevenBee.Model.UI.position.upperRight) {
+                    context.drawPolygon([new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + 10, this.getY() + offsetY), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + 20, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + 20, this.getY() + offsetY + this.getHeight()), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetY - this.getWidth(), this.getY() + offsetY + this.getHeight()), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX - this.getWidth(), this.getY() + offsetY + 10)], this.getBoxColor());
+                    context.drawText(this.getX() + offsetX - this.getWidth(), this.getY() + offsetY + 10, this.getWidth(), this.getHeight() - 10, this.getText(), this.getTextColor());
+                }
+                if (this.getPosition() === ThreeOneSevenBee.Model.UI.position.bottomMiddle) {
+                    context.drawPolygon([new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth() / 2 - 10, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth() / 2, this.getY() + offsetY), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth() / 2 + 10, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetY + this.getWidth(), this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth(), this.getY() + offsetY), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth(), this.getY() + offsetY + this.getHeight()), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetY + this.getHeight())], this.getBoxColor());
+                    context.drawText(this.getX() + offsetX, this.getY() + offsetY - this.getHeight() / 4 + 10, this.getWidth(), this.getHeight() - 10, this.getText(), this.getTextColor());
+                    context.drawText(this.getX() + offsetX, this.getY() + offsetY - this.getHeight() / 4 + 40, this.getWidth(), this.getHeight() - 10, this.getDescription(), this.getTextColor());
+                }
             }
         }
     });
