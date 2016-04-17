@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using ThreeOneSevenBee.Model.Euclidean;
 using ThreeOneSevenBee.Model.Game;
 
+
 namespace ThreeOneSevenBee.Frontend
 {
     public class App
@@ -20,7 +21,7 @@ namespace ThreeOneSevenBee.Frontend
             canvas.Width = Document.DocumentElement.ClientWidth;
             canvas.Height = Document.DocumentElement.ClientHeight;
 
-            CanvasContext context = new CanvasContext(canvas);
+            IContext context = new CanvasContext(canvas);
 
             JQueryGameAPI gameAPI = new JQueryGameAPI();
 

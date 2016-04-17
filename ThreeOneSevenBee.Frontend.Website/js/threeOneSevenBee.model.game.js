@@ -16,8 +16,6 @@
         }
     });
     
-    Bridge.define('ThreeOneSevenBee.Model.Game.GameAPI');
-    
     Bridge.define('ThreeOneSevenBee.Model.Game.GameModel', {
         onChanged: null,
         onSaveLevel: null,
@@ -116,6 +114,8 @@
             this.onExpressionChanged(m);
         }
     });
+    
+    Bridge.define('ThreeOneSevenBee.Model.Game.IGameAPI');
     
     Bridge.define('ThreeOneSevenBee.Model.Game.Level', {
         startExpression: null,

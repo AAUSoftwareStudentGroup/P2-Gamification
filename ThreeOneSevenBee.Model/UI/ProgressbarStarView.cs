@@ -14,7 +14,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public void Build(ProgressbarStar progressbar)
         {
-            progress = new View(0, 0, Math.Max(0, Width * progressbar.Percentage), Height) { BackgroundColor = "#27AE61" };
+            progress = new View(0, 0, Math.Max(0, Width * progressbar.Percentage), Height) { BackgroundColor = new Color(40, 175, 100) };
             stars = new List<ImageView>();
             stars.AddRange(progressbar.ActivatedStarPercentages().Select(
                 (starPercentage) =>
@@ -47,7 +47,7 @@ namespace ThreeOneSevenBee.Model.UI
         public ProgressbarStarView(ProgressbarStar progressbar, double width, double height) : base(width, height)
         {
             PropagateClick = false;
-            BackgroundColor = "#E2E2E2";
+            BackgroundColor = new Color(225, 225, 225);
             Build(progressbar);
         }
     }

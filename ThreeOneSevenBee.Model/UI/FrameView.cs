@@ -63,9 +63,9 @@ namespace ThreeOneSevenBee.Model.UI
             }
         }
 
-        public override void DrawWithContext(Context context, double offsetX, double offsetY)
+        public override void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
-            context.Draw(this, offsetX, offsetY);
+            base.DrawWithContext(context, offsetX, offsetY);
             Content.DrawWithContext(context, offsetX + InnerX, offsetY + InnerY);
         }
 

@@ -62,8 +62,8 @@
     <Compile Include="Expression\ILeaf.cs" />
     <Compile Include="Expression\Operator.cs" />
     <Compile Include="Expression\Token.cs" />
-    <Compile Include="Game\GameAPI.cs" />
     <Compile Include="Game\GameModel.cs" />
+    <Compile Include="Game\IGameAPI.cs" />
     <Compile Include="Game\Level.cs" />
     <Compile Include="Game\CurrentPlayer.cs" />
     <Compile Include="Game\LevelCategory.cs" />
@@ -75,11 +75,13 @@
     <Compile Include="Polygon\PolygonRelation.cs" />
     <Compile Include="Polygon\PolygonSide.cs" />
     <Compile Include="UI\ButtonView.cs" />
+    <Compile Include="UI\Color.cs" />
     <Compile Include="UI\CompositeView.cs" />
     <Compile Include="UI\Context.cs" />
     <Compile Include="UI\ExpressionView.cs" />
     <Compile Include="UI\FrameView.cs" />
     <Compile Include="UI\GameView.cs" />
+    <Compile Include="UI\IContext.cs" />
     <Compile Include="UI\IdentityMenuView.cs" />
     <Compile Include="UI\ImageView.cs" />
     <Compile Include="UI\LabelView.cs" />
@@ -95,6 +97,7 @@
     <Compile Include="UI\SqrtView.cs" />
     <Compile Include="UI\TitleView.cs" />
     <Compile Include="UI\ToolTipView.cs" />
+    <Compile Include="UI\VectorImageView.cs" />
     <Compile Include="UI\View.cs" />
   </ItemGroup>
   <ItemGroup>

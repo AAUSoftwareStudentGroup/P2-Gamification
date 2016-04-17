@@ -18,9 +18,9 @@ namespace ThreeOneSevenBee.Model.UI
 
         public bool PropagateClick { set; get; }
 
-        public override void DrawWithContext(Context context, double offsetX, double offsetY)
+        public override void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
-            context.Draw(this, offsetX, offsetY);
+            base.DrawWithContext(context, offsetX, offsetY);
             foreach (var child in Children)
             {
                 child.DrawWithContext(context, offsetX + X, offsetY + Y);

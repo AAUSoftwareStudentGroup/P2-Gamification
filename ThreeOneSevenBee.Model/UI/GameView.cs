@@ -14,7 +14,7 @@ namespace ThreeOneSevenBee.Model.UI
         TitleView titleView;
         LevelView levelView;
         LevelSelectView levelSelectView;
-        Context context;
+        IContext context;
 
         public void Update(GameModel game)
         {
@@ -23,9 +23,11 @@ namespace ThreeOneSevenBee.Model.UI
             context.Draw();
         }
 
-        public GameView(GameModel game, Context context) : base(context.Width, context.Height)
+        public GameView(GameModel game, IContext context) : base(context.Width, context.Height)
         {
             this.context = context;
+
+            BackgroundColor = new Color(255, 255, 255);
 
             titleView = new TitleView(game.User, game.Players);
 
@@ -65,13 +67,15 @@ namespace ThreeOneSevenBee.Model.UI
 
             game.OnChanged = Update;
 
-            setContent(levelView);
+            setContent(titleView);
+
+            context.SetContentView(this);
         }
 
         public override void setContent(View content)
         {
             base.setContent(content);
-            context.SetContentView(Content);
+            context.Draw();
         }
     }
 }
