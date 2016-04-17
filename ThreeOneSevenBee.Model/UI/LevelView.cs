@@ -20,8 +20,6 @@ namespace ThreeOneSevenBee.Model.UI
         IdentityMenuView identityMenu;
         ExpressionView expression;
         ToolTipView toolTipView;
-        ToolTipView toolTipView2;
-        ToolTipView toolTipView3;
 
         public virtual void Build(GameModel game)
         {
@@ -65,43 +63,15 @@ namespace ThreeOneSevenBee.Model.UI
 
             toolTipView = new ToolTipView("Denne bar viser hvor langt du er nået.")
             {
-                FontSize = 15,
+                FontSize = 20,
                 Visible = game.IsFirstLevel,
                 FontColor = "#ffffff",
                 X = progressbar.X,
                 Y = progressbar.Y + progressbar.Height + 10,
-                Width = 300,
-                Height = 75,
-                BackgroundColor = "#297782",
-                Position = position.upperLeft
-            };
-
-            toolTipView2 = new ToolTipView("Når knappen bliver grøn kan du gå videre til næste bane")
-            {
-                FontSize = 15,
-                Visible = game.IsFirstLevel,
-                FontColor = "#ffffff",
-                X = nextButton.X,
-                Y = nextButton.Y + nextButton.Height + 10,
                 Width = 400,
                 Height = 75,
                 BackgroundColor = "#297782",
-                Position = position.upperRight
-            };
-
-            toolTipView3 = new ToolTipView("Dit mål er at reducere ovenstående udtryk. Dette gøres ved at markere de dele i udtrykket som skal reduceres.")
-            {
-                Description = "Markér [a] og [a]. Klik derefter på den ønskede omskrivning nedenfor for at reducere udtrykket",
-                FontSize = 15,
-                Visible = game.IsFirstLevel,
-                FontColor = "#ffffff",
-                X = Width / 2 - 400,
-                Y = Height / 2 + 30,
-                Width = 800,
-                Height = 90,
-                BackgroundColor = "#297782",
-                Position = position.bottomMiddle
-                
+                Position = position.upperLeft
             };
 
             Children = new List<View>()
@@ -111,10 +81,8 @@ namespace ThreeOneSevenBee.Model.UI
                 progressbar,
                 identityMenu,
                 expression,
-                toolTipView,
-                toolTipView2,
-                toolTipView3
-        };
+                toolTipView
+            };
 
             if(OnChanged != null)
             {
@@ -129,7 +97,6 @@ namespace ThreeOneSevenBee.Model.UI
             expression.Update(game.ExprModel);
             nextButton.BackgroundColor = game.IsLevelCompleted ? "#16A086" : "#BEC3C7";
             toolTipView.Visible = game.IsFirstLevel;
-            toolTipView2.Visible = game.IsFirstLevel;
 
             if (OnChanged != null)
             {

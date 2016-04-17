@@ -195,51 +195,21 @@
         draw$7: function (view, offsetX, offsety) {
             if (view.getVisible() === true) {
                 this.context.fillStyle = view.getBackgroundColor();
-                if (view.getPosition() === ThreeOneSevenBee.Model.UI.position.upperLeft) {
-                    this.context.beginPath();
-                    this.context.moveTo(view.getX() + offsetX, view.getY() + offsety + 10);
-                    this.context.lineTo(view.getX() + offsetX + 10, view.getY() + offsety);
-                    this.context.lineTo(view.getX() + offsetX + 20, view.getY() + offsety + 10);
-                    this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsety + 10);
-                    this.context.lineTo(view.getX() + offsety + view.getWidth(), view.getY() + offsety + view.getHeight());
-                    this.context.lineTo(view.getX() + offsetX, view.getY() + offsetX + view.getHeight());
-                    this.context.closePath();
-                    this.context.fill();
-                    this.context.font = view.getFontSize() + "px " + view.getFont();
-                    this.context.fillStyle = view.getFontColor();
-                    this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + (view.getAlign() === "center" ? view.getWidth() / 2 : 5))), Bridge.Int.trunc((view.getY() + offsety + view.getHeight() / 2)));
-                }
-                if (view.getPosition() === ThreeOneSevenBee.Model.UI.position.upperRight) {
-                    this.context.beginPath();
-                    this.context.moveTo(view.getX() + offsetX, view.getY() + offsety + 10);
-                    this.context.lineTo(view.getX() + offsetX + 10, view.getY() + offsety);
-                    this.context.lineTo(view.getX() + offsetX + 20, view.getY() + offsety + 10);
-                    this.context.lineTo(view.getX() + offsetX + 20, view.getY() + offsety + view.getHeight());
-                    this.context.lineTo(view.getX() + offsetX - view.getWidth(), view.getY() + offsety + view.getHeight());
-                    this.context.lineTo(view.getX() + offsetX - view.getWidth(), view.getY() + offsety + 10);
-                    this.context.closePath();
-                    this.context.fill();
-                    this.context.font = view.getFontSize() + "px " + view.getFont();
-                    this.context.fillStyle = view.getFontColor();
-                    this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX - (view.getAlign() === "center" ? view.getWidth() / 2 : 5))), Bridge.Int.trunc((view.getY() + offsety + view.getHeight() / 2)));
-                }
-                if (view.getPosition() === ThreeOneSevenBee.Model.UI.position.bottomMiddle) {
-                    this.context.beginPath();
-                    this.context.moveTo(view.getX() + offsetX, view.getY() + offsety + 10);
-                    this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2 - 10, view.getY() + offsety + 10);
-                    this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsety);
-                    this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2 + 10, view.getY() + offsety + 10);
-                    this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsety + 10);
-                    this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsety);
-                    this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsety + view.getHeight());
-                    this.context.lineTo(view.getX() + offsetX, view.getY() + offsety + view.getHeight());
-                    this.context.closePath();
-                    this.context.fill();
-                    this.context.font = view.getFontSize() + "px " + view.getFont();
-                    this.context.fillStyle = view.getFontColor();
-                    this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + (view.getAlign() === "center" ? view.getWidth() / 2 : 5))), Bridge.Int.trunc((view.getY() + offsety + view.getHeight() / 4 + 10)));
-                    this.context.fillText(view.getDescription(), Bridge.Int.trunc((view.getX() + offsetX + (view.getAlign() === "center" ? view.getWidth() / 2 : 5))), Bridge.Int.trunc((view.getY() + offsety + view.getHeight() / 2 + 20)));
-                }
+    
+                this.context.beginPath();
+                this.context.moveTo(view.getX() + offsetX, view.getY() + offsety + 10);
+                this.context.lineTo(view.getX() + offsetX + 10, view.getY() + offsety);
+                this.context.lineTo(view.getX() + offsetX + 20, view.getY() + offsety + 10);
+                this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsety + 10);
+                this.context.lineTo(view.getX() + offsety + view.getWidth(), view.getY() + offsety + view.getHeight());
+                this.context.lineTo(view.getX() + offsetX, view.getY() + offsetX + view.getHeight());
+                this.context.closePath();
+    
+                this.context.fill();
+    
+                this.context.font = view.getFontSize() + "px " + view.getFont();
+                this.context.fillStyle = view.getFontColor();
+                this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + (view.getAlign() === "center" ? view.getWidth() / 2 : 5))), Bridge.Int.trunc((view.getY() + offsety + view.getHeight() / 2)));
             }
         }
     });

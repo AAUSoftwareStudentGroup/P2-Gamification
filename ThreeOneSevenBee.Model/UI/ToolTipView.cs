@@ -17,8 +17,7 @@ namespace ThreeOneSevenBee.Model.UI
         }
 
         public position Position { get; set; }
-        public string Description { get; set; }
 
     }
-    public enum position { upperLeft, upperRight, bottomMiddle }
+    public enum position { upperLeft, upperRight, lowerLeft, lowerRight }
 }
