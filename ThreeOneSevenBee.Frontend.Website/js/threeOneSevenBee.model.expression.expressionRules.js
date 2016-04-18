@@ -756,7 +756,7 @@
     
                 var numerators = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, fraction.getLeft(), constant);
     
-                var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(fraction.getRight(), numerators, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
+                var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(numerators, fraction.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
     
                 return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
             },

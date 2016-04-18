@@ -856,7 +856,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 return null;
             }
 
-            var sqrtExp = selection[0] as FunctionExpression; 
+            var sqrtExp = selection[0] as FunctionExpression;
 
             if (sqrtExp == null)
             {
@@ -910,7 +910,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             VariadicOperatorExpression numerators = new VariadicOperatorExpression(OperatorType.Multiply, fraction.Left, constant);
 
-            BinaryOperatorExpression suggestion = new BinaryOperatorExpression(fraction.Right, numerators, OperatorType.Divide);
+            BinaryOperatorExpression suggestion = new BinaryOperatorExpression(numerators, fraction.Right, OperatorType.Divide);
 
             return new Identity(suggestion, suggestion);
         }
@@ -943,7 +943,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
         public static Identity FactorizeUnaryMinus(ExpressionBase expression, List<ExpressionBase> selection)
         {
-            if (selection.Count !=2)
+            if (selection.Count != 2)
             {
                 return null;
             }
