@@ -926,7 +926,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
         public static Identity DivisionEqualsOneRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
-            if (selection.Count != 2)
+            if (selection.Count != 1)
             {
                 return null;
             }
@@ -936,10 +936,13 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 if (expression is BinaryOperatorExpression)
                 {
                     var expression1 = expression as BinaryOperatorExpression;
-                    if (expression1.Type == OperatorType.Divide && selection[0] == selection[1])
+                    if (expression1.Type == OperatorType.Divide)
                     {
-                        NumericExpression suggestion = new NumericExpression(1);
-                        return new Identity(suggestion, suggestion);
+                        if (expression1.Left == expression1.Right)
+                        {
+                            NumericExpression suggestion = new NumericExpression(1);
+                            return new Identity(suggestion, suggestion);
+                        }
                     }
                 }
             }

@@ -287,14 +287,14 @@ namespace ThreeOneSevenBee.ModelTests
         [TestMethod]
         public void Rules_DivisionEqualsOneRule()
         {
-            ExpressionBase selection1, selection2;
+            ExpressionBase selection1;
             ExpressionBase parent;
             Identity identity;
 
 
-            parent = Make.Divide(selection1 = Make.New(15), selection2 = Make.New(15));
+            parent = selection1 = Make.Divide(Make.New(15), Make.New(15));
 
-            identity = Rules.DivisionEqualsOneRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            identity = Rules.DivisionEqualsOneRule(parent, new List<ExpressionBase>() { selection1 });
             Assert.IsNotNull(identity);
 
             NumericExpression a = new NumericExpression(1);
