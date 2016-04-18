@@ -955,6 +955,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
             return null;
         }
+
         public static Identity ProductOfOneAndSomethingRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count != 2)
@@ -987,5 +988,14 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
             return null;
         }
+
+        public static Identity ProductOfTwoFractions(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+
+
+
+            return null;
+        }
+
     }
 }
