@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ThreeOneSevenBee.Model.Expression;
 using ThreeOneSevenBee.Model.Expression.ExpressionRules;
 using System.Collections.Generic;
+using ThreeOneSevenBee.Model.Expression.Expressions;
 
 namespace ThreeOneSevenBee.ModelTests
 {
@@ -282,5 +283,29 @@ namespace ThreeOneSevenBee.ModelTests
             
             //Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("x")), Make.Minus(Make.Divide(Make.New("c"), Make.New("x"))), Make.Minus(Make.Divide(Make.New("d"), Make.New("x"))), Make.Divide(Make.New("f"), Make.New("x")), Make.New(3)), identity.Result);
         }
+
+        [TestMethod]
+        public void Rules_DivisionEqualsOneRule()
+        {
+            ExpressionBase selection1, selection2;
+            ExpressionBase parent;
+            Identity identity;
+
+
+            parent = Make.Divide(selection1 = Make.New(15), selection2 = Make.New(15));
+
+            identity = Rules.DivisionEqualsOneRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(identity);
+
+            NumericExpression a = new NumericExpression(1);
+            NumericExpression b = new NumericExpression(2);
+
+            Assert.IsTrue(identity.Suggestion == a);
+            Assert.IsFalse(identity.Suggestion == b);
+
+        }
+
+
+
     }
 }
