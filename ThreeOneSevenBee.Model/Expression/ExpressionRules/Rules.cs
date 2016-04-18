@@ -909,16 +909,46 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         }
 
         // 4 * (a/b) = 4a/b
+        //Select constant and vinculum
         public static Identity ProductOfConstantAndFraction(ExpressionBase expression, List<ExpressionBase> selection)
         {
+            if(selection.Count != 2)
+            {
+                return null;
+            }
+
+            var variadicExpression = expression as VariadicOperatorExpression;
+
+            if(variadicExpression == null || variadicExpression.Type != OperatorType.Multiply)
+            {
+                return null;
+            }
+
+            BinaryOperatorExpression fraction;
+            ExpressionBase constant;
+
+            if (selection[0] is BinaryOperatorExpression)
+            {
+                fraction = selection[0].Clone() as BinaryOperatorExpression;
+                constant = selection[1].Clone();
+            }
+            else
+            {
+                fraction = selection[1].Clone() as BinaryOperatorExpression;
+                constant = selection[0].Clone();
+            }
+
+            if(fraction == null || constant == null)
+            {
+                return null;
+            }
+
+            VariadicOperatorExpression numerators = new VariadicOperatorExpression(OperatorType.Multiply, fraction.Left, constant);
 
 
+            BinaryOperatorExpression suggestion = new BinaryOperatorExpression(numerators, fraction.Right, OperatorType.Divide);
 
-
-
-
-
-            return null;
+            return new Identity(suggestion, suggestion);
         }
 
         //Missing ProductOfTwoFractions

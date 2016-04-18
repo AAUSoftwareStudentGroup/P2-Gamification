@@ -732,14 +732,38 @@
                 return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
             },
             productOfConstantAndFraction: function (expression, selection) {
+                if (selection.getCount() !== 2) {
+                    return null;
+                }
+    
+                var variadicExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+    
+                if (!Bridge.hasValue(variadicExpression) || variadicExpression.getType() !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
+                    return null;
+                }
+    
+                var fraction;
+                var constant;
+    
+                if (Bridge.is(selection.getItem(0), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression)) {
+                    fraction = Bridge.as(selection.getItem(0).clone(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                    constant = selection.getItem(1).clone();
+                }
+                else  {
+                    fraction = Bridge.as(selection.getItem(1).clone(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                    constant = selection.getItem(0).clone();
+                }
+    
+                if (!Bridge.hasValue(fraction) || !Bridge.hasValue(constant)) {
+                    return null;
+                }
+    
+                var numerators = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, fraction.getLeft(), constant);
     
     
+                var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(numerators, fraction.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
     
-    
-    
-    
-    
-                return null;
+                return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
             }
         }
     });
