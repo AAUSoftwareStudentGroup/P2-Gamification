@@ -219,7 +219,7 @@ namespace ThreeOneSevenBee.ModelTests
 
             identity = Rules.FactorizationRule(parent, new List<ExpressionBase>() { selection1 });
             Assert.IsNotNull(identity);
-
+            throw new NotImplementedException();
         }
 
         [TestMethod]
@@ -305,7 +305,25 @@ namespace ThreeOneSevenBee.ModelTests
 
         }
 
+        [TestMethod]
+        public void Rules_ProductParenthesis()
+        {
+            ExpressionBase selection1;
+            ExpressionBase selection2;
+            ExpressionBase parent;
 
+            // [a]*b+[a]*c => a*(b+c)
+            parent = Make.Add(
+                Make.Multiply(
+                    selection1 = Make.New("a"),
+                    Make.New("b")),
+                Make.Multiply(
+                    selection2 = Make.New("a"),
+                    Make.New("c")));
 
+            var identity = Rules.ProductParenthesis(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(identity);
+            Assert.AreEqual(Make.Multiply(Make.New("a"), Make.Delimiter(Make.Add(Make.New("b"), Make.New("c")))), identity.Suggestion);
+        }
     }
 }

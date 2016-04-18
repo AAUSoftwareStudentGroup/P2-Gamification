@@ -900,15 +900,15 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 return null;
             }
 
-            BinaryOperatorExpression fraction;
-            ExpressionBase constant;
+            BinaryOperatorExpression fraction = null;
+            ExpressionBase constant = null;
 
             if (selection[0] is BinaryOperatorExpression)
             {
                 fraction = selection[0].Clone() as BinaryOperatorExpression;
                 constant = selection[1].Clone();
             }
-            else
+            else if(selection[1] is BinaryOperatorExpression)
             {
                 fraction = selection[1].Clone() as BinaryOperatorExpression;
                 constant = selection[0].Clone();
@@ -916,6 +916,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             if (fraction == null || constant == null)
             {
+                Console.WriteLine("er den her?");
                 return null;
             }
 
@@ -980,21 +981,25 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             if (variadicExpression != null || variadicExpression.Type == OperatorType.Multiply)
             {
-
                 if (selection[0] is NumericExpression)
                 {
                     one = selection[0].Clone() as NumericExpression;
                     something = selection[1].Clone();
+                    if (one.Number == 1)
+                    {
+                        return new Identity(something, something);
+                    }
                 }
-                else
+                else if (selection[1] is NumericExpression)
                 {
                     one = selection[1].Clone() as NumericExpression;
                     something = selection[0].Clone();
+                    if (one.Number == 1)
+                    {
+                        return new Identity(something, something);
+                    }
                 }
-                if (one.Number == 1)
-                {
-                    return new Identity(something, something);
-                }
+
                 // Der er en bug med power
             }
             return null;
