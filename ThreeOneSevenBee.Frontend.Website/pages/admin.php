@@ -16,6 +16,20 @@ if(isset($_POST) && !empty($_POST)) {
                             );
             }
             break;
+        case 'create_level_category':
+            $db->query("INSERT INTO gamedb.level_category (level_category.name) VALUES (?)",
+                        $_POST['cat_name']
+                    );
+            break;
+        case 'create_level':
+            $db->query("INSERT INTO gamedb.level 
+                            (level.level_category_id, level.initial_expression, level.star_expressions)
+                        VALUES (?, ?, ?)",
+                        $_POST['category_id'],
+                        $_POST['level_expression'],
+                        $_POST['star_expressions']
+                    );
+            break;
     }
 }
 
@@ -27,6 +41,8 @@ $users = array();
 $supervisors = array();
 $classes = array();
 $schools = array();
+$categories = array();
+$levels = array();
 
 $db->query("SELECT 
                 user.id AS id,
@@ -89,6 +105,28 @@ while($row = $db->fetch())
     $schools[] = $row;
 
 
+///// CATEGORIES
+$db->query( "SELECT 
+                c.id,
+                c.name
+            FROM gamedb.level_category AS c"
+            );
+while($row = $db->fetch())
+    $categories[] = $row;
+
+///// LEVELS
+$db->query("SELECT 
+                l.id AS level_id, 
+                c.id AS category_id, 
+                c.name AS category_name, 
+                l.initial_expression, 
+                l.star_expressions 
+            FROM gamedb.level AS l
+            LEFT JOIN gamedb.level_category AS c
+            ON l.level_category_id = c.id;"
+        );
+while($row = $db->fetch())
+    $levels[] = $row;
 
 
 ?>
@@ -216,6 +254,75 @@ while($row = $db->fetch())
         <input type="submit" value="Create" />
     </form>
 </div>
+<div class="row">
+    <br>
+    <hr />
+    <br>
+    <div class="r2_4">
+        <h2>Classes</h2>
+        <table class="r1_1 category_table">
+            <tr>
+                <th colspan="1">Cat_id</th>
+                <th colspan="5">Category</th>
+                <th colspan="1">del</th>
+            </tr>
+            <? foreach ($categories as $cat): ?>
+            <tr>
+                <td colspan="1"><?= $cat['id'] ?></td>
+                <td colspan="5"><?= $cat['name'] ?></td>
+                <td colspan="1" class="delete" data-id="<?= $cat['id'] ?>">x</td>
+            </tr>
+            <? endforeach; ?>
+        </table>
+    </div>
+    <div class="r1_4">
+        <form method="POST" action="">
+            <h2>Create Level category</h2>
+            <input type="hidden" name="action" value="create_level_category" />
+            <input type="text" name="cat_name" placeholder="Level Category name" />
+            <input type="submit" value="Create" />
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="r2_4">
+        <h2>Classes</h2>
+        <table class="r1_1 level_table">
+            <tr>
+                <th colspan="1">Cat_id</th>
+                <th colspan="1">lvl_id</th>
+                <th colspan="2">Category</th>
+                <th colspan="3">initial_expression</th>
+                <th colspan="4">Star_expressions</th>
+                <th colspan="1">del</th>
+            </tr>
+            <? foreach ($levels as $lvl): ?>
+            <tr>
+                <td colspan="1"><?= $lvl['category_id'] ?></td>
+                <td colspan="1"><?= $lvl['level_id'] ?></td>
+                <td colspan="2"><?= $lvl['category_name'] ?></td>
+                <td colspan="3"><?= $lvl['initial_expression'] ?></td>
+                <td colspan="4"><?= $lvl['star_expressions'] ?></td>
+                <td colspan="1" class="delete" data-id="<?= $lvl['level_id'] ?>">x</td>
+            </tr>
+            <? endforeach; ?>
+        </table>
+    </div>
+    <div class="r1_4">
+        <form method="POST" action="" class="level_table">
+            <h2>Create Level</h2>
+            <input type="hidden" name="action" value="create_level" />
+            <select name="category_id">
+                <? foreach ($categories as $cat): ?>
+                <option value="<?= $cat['id'] ?>"><?= $cat['name'] ?></option>
+                <? endforeach; ?>
+            </select>
+            <input type="text" name="level_expression" placeholder="Level expression" />
+            <input type="text" name="star_expressions" placeholder="Level starExpressions '|' seperated" />
+            <input type="submit" value="Create" />
+        </form>
+    </div>
+</div>
 
 <script>
     $('.class_table').on('click', '.delete', function() {
@@ -226,6 +333,16 @@ while($row = $db->fetch())
     $('.school_table').on('click', '.delete', function() {
         var id = $(this).data('id');
         $.get( "/api", { action: "delete_school_by_id", school_id: id });
+        $(this).parent().remove();
+    });
+    $('.category_table').on('click', '.delete', function() {
+        var id = $(this).data('id');
+        $.get( "/api", { action: "delete_category_by_id", category_id: id });
+        window.location = window.location;
+    });
+    $('.level_table').on('click', '.delete', function() {
+        var id = $(this).data('id');
+        $.get( "/api", { action: "delete_level_by_id", level_id: id });
         $(this).parent().remove();
     });
 </script>
