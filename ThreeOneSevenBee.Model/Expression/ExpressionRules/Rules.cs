@@ -924,5 +924,28 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         //Missing ProductOfTwoFractions
         // a/b * c/d = a*c/b*d
 
+        public static Identity DivisionEqualsOneRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count != 2)
+            {
+                return null;
+            }
+
+            if (expression != null)
+            {
+                if (expression is BinaryOperatorExpression)
+                {
+                    var expression1 = expression as BinaryOperatorExpression;
+                    if (expression1.Type == OperatorType.Divide && selection[0] == selection[1])
+                    {
+                        NumericExpression suggestion = new NumericExpression(1);
+                        return new Identity(suggestion, suggestion);
+                    }
+                }
+            }
+
+            return null;
+        }
+
     }
 }
