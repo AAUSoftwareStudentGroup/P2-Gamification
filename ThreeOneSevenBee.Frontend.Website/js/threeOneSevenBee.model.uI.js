@@ -565,9 +565,9 @@
                 operatorView.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                 operatorView.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
                 operatorView.onClick = function () {
-                    model.select(minusExpression.getExpression());
+                    model.select(minusExpression);
                 };
-                operatorView.setLineColor(model.selectionIndex(minusExpression.getExpression()) !== -1 ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 39, 174, 97) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0));
+                operatorView.setLineColor(model.selectionIndex(minusExpression) !== -1 ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 39, 174, 97) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0));
                 operatorView.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 15);
                 view.setX(operatorView.getWidth());
                 operatorView.setY(view.getBaseline() - operatorView.getBaseline());
