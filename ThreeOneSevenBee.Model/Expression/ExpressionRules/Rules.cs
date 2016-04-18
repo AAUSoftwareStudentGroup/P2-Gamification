@@ -929,7 +929,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     var expression1 = expression as BinaryOperatorExpression;
                     if (expression1.Type == OperatorType.Divide)
                     {
-                        if (expression1.Left.Calculate() == expression1.Right.Calculate())
+                        if (expression1.Left == expression1.Right)
                         {
                             NumericExpression suggestion = new NumericExpression(1);
                             return new Identity(suggestion, suggestion);
@@ -937,7 +937,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     }
                 }
             }
-
             return null;
         }
 
@@ -957,20 +956,42 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
+        public static Identity ProductOfOneAndSomethingRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count != 2)
+            {
+                return null;
+            }
+
+            var variadicExpression = expression as VariadicOperatorExpression;
+            ExpressionBase something;
+            NumericExpression one;
+
+            if (variadicExpression != null || variadicExpression.Type == OperatorType.Multiply)
+            {
+
+                if (selection[0] is NumericExpression)
+                {
+                    one = selection[0].Clone() as NumericExpression;
+                    something = selection[1].Clone();
+                }
+                else
+                {
+                    one = selection[1].Clone() as NumericExpression;
+                    something = selection[0].Clone();
+                }
+                return new Identity(something, something);
+            }
+            return null;
+        }
+
         public static Identity ProductOfTwoFractions(ExpressionBase expression, List<ExpressionBase> selection)
         {
 
 
 
-
-
-
-
-
             return null;
         }
-
-
 
     }
 }
