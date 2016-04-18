@@ -528,12 +528,23 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 if (selectedParent != null && selectedParent.Type == OperatorType.Multiply)
                 {
                     selectedParent.Remove(selected);
-                    list.Add(selectedParent);
+                    if (selectedParent.Count < 2)
+                    {
+                        list.Add(selectedParent[0]);
+                    }
+                    else
+                    {
+                        list.Add(selectedParent);
+                    }
                 }
                 else
                 {
                     return null;
                 }
+            }
+            if (list.Count < 2)
+            {
+                return null;
             }
             VariadicOperatorExpression withinDelimiter = new VariadicOperatorExpression(OperatorType.Add, list[0],
                 list[1]);
