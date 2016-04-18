@@ -874,20 +874,46 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         }
 
         // 4 * (a/b) = 4a/b
+        //Select constant and vinculum
         public static Identity ProductOfConstantAndFraction(ExpressionBase expression, List<ExpressionBase> selection)
         {
+            if (selection.Count != 2)
+            {
+                return null;
+            }
 
+            var variadicExpression = expression as VariadicOperatorExpression;
 
+            if (variadicExpression == null || variadicExpression.Type != OperatorType.Multiply)
+            {
+                return null;
+            }
 
+            BinaryOperatorExpression fraction;
+            ExpressionBase constant;
 
+            if (selection[0] is BinaryOperatorExpression)
+            {
+                fraction = selection[0].Clone() as BinaryOperatorExpression;
+                constant = selection[1].Clone();
+            }
+            else
+            {
+                fraction = selection[1].Clone() as BinaryOperatorExpression;
+                constant = selection[0].Clone();
+            }
 
+            if (fraction == null || constant == null)
+            {
+                return null;
+            }
 
+            VariadicOperatorExpression numerators = new VariadicOperatorExpression(OperatorType.Multiply, fraction.Left, constant);
 
-            return null;
+            BinaryOperatorExpression suggestion = new BinaryOperatorExpression(numerators, fraction.Right, OperatorType.Divide);
+
+            return new Identity(suggestion, suggestion);
         }
-
-        //Missing ProductOfTwoFractions
-        // a/b * c/d = a*c/b*d
 
         public static Identity DivisionEqualsOneRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
@@ -910,6 +936,22 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         }
                     }
                 }
+            }
+            return null;
+        }
+
+        public static Identity FactorizeUnaryMinus(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count != 2)
+            {
+                return null;
+            }
+            var unaryMinusExpression = expression as UnaryMinusExpression;
+            if (unaryMinusExpression != null)
+            {
+                var numericExpression = new NumericExpression(1);
+                var suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new UnaryMinusExpression(numericExpression), unaryMinusExpression.Expression);
+                return new Identity(suggestion, suggestion);
             }
             return null;
         }
