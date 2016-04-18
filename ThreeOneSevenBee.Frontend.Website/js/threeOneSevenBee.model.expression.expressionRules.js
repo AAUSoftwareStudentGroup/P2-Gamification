@@ -423,11 +423,19 @@
                     var selectedParent = Bridge.as(selected.getParent().clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
                     if (Bridge.hasValue(selectedParent) && selectedParent.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
                         selectedParent.remove(selected);
-                        list.add(selectedParent);
+                        if (selectedParent.getCount() < 2) {
+                            list.add(selectedParent.getItem(0));
+                        }
+                        else  {
+                            list.add(selectedParent);
+                        }
                     }
                     else  {
                         return null;
                     }
+                }
+                if (list.getCount() < 2) {
+                    return null;
                 }
                 var withinDelimiter = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, list.getItem(0), list.getItem(1));
                 if (list.getCount() > 2) {
@@ -738,19 +746,22 @@
                     return null;
                 }
     
-                var fraction;
-                var constant;
+                var fraction = null;
+                var constant = null;
     
                 if (Bridge.is(selection.getItem(0), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression)) {
                     fraction = Bridge.as(selection.getItem(0).clone(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
                     constant = selection.getItem(1).clone();
                 }
                 else  {
-                    fraction = Bridge.as(selection.getItem(1).clone(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
-                    constant = selection.getItem(0).clone();
+                    if (Bridge.is(selection.getItem(1), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression)) {
+                        fraction = Bridge.as(selection.getItem(1).clone(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                        constant = selection.getItem(0).clone();
+                    }
                 }
     
                 if (!Bridge.hasValue(fraction) || !Bridge.hasValue(constant)) {
+                    console.log("er den her?");
                     return null;
                 }
     
@@ -808,8 +819,10 @@
                         one = Bridge.as(selection.getItem(1).clone(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
                         something = selection.getItem(0).clone();
                     }
-                    console.log("den her?");
-                    return new ThreeOneSevenBee.Model.Expression.Identity(something, something);
+                    if (one.number === 1) {
+                        return new ThreeOneSevenBee.Model.Expression.Identity(something, something);
+                    }
+                    // Der er en bug med power
                 }
                 return null;
             },
