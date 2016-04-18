@@ -42,6 +42,19 @@ class API {
         API::respond();
     }
 
+    static function user_login($IN, $db) {
+        session_start();
+        $db->query("SELECT password_hash, id FROM user WHERE BINARY name = ?",
+                    $IN['username']);
+
+        if($row = $db->fetch()) {
+            if(password_verify($IN['password'], $row['password_hash']))
+                $_SESSION['authorized'] = $row['id'];
+            API::respond();
+        }
+        API::respond(false, "Username or password was incorrect");
+    }
+
     static function get_users($IN, $db) {
         $result = array();
         $db->query("SELECT user.name FROM gamedb.user AS user");
