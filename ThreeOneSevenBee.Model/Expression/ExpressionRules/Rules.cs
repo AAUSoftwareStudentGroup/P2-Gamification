@@ -926,6 +926,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return new Identity(suggestion, suggestion);
         }
 
+        // 15/15 = 1 , a/a = 1
         public static Identity DivisionEqualsOneRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count != 1)
@@ -961,12 +962,14 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             if (unaryMinusExpression != null)
             {
                 var numericExpression = new NumericExpression(1);
-                var suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new UnaryMinusExpression(numericExpression), unaryMinusExpression.Expression);
+                var suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new UnaryMinusExpression(numericExpression), unaryMinusExpression.Expression.Clone());
                 return new Identity(suggestion, suggestion);
             }
             return null;
         }
 
+
+        // 1 * a = a
         public static Identity ProductOfOneAndSomethingRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count != 2)
@@ -997,6 +1000,10 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     {
                         return new Identity(something, something);
                     }
+                }
+                else
+                {
+                    return null;
                 }
 
                 // Der er en bug med power
