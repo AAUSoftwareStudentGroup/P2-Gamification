@@ -22,7 +22,15 @@ namespace ThreeOneSevenBee.Model.Game
         public Action<Level> OnSaveLevel;
         public ProgressbarStar ProgressBar;
 
-        public bool LevelCompleted
+        public bool IsFirstLevel
+        {
+            get
+            {
+                return User.CurrentCategoryIndex == 0 && User.CurrentLevelIndex == 0;
+            }
+        }
+
+        public bool IsLevelCompleted
         {
             get
             {
@@ -30,19 +38,19 @@ namespace ThreeOneSevenBee.Model.Game
             }
         }
 
-        public bool CategoryCompleted
+        public bool IsCategoryCompleted
         {
             get
             {
-                return LevelCompleted && User.CurrentLevelIndex == User.Categories[User.CurrentCategoryIndex].Count - 1;
+                return IsLevelCompleted && User.CurrentLevelIndex == User.Categories[User.CurrentCategoryIndex].Count - 1;
             }
         }
 
-        public bool GameCompleted
+        public bool IsGameCompleted
         {
             get
             {
-                return CategoryCompleted && User.CurrentCategoryIndex == User.Categories.Count - 1;
+                return IsCategoryCompleted && User.CurrentCategoryIndex == User.Categories.Count - 1;
             }
         }
 
@@ -51,7 +59,6 @@ namespace ThreeOneSevenBee.Model.Game
             User.CurrentLevelIndex = level;
             User.CurrentCategoryIndex = category;
             ExpressionSerializer serializer = new ExpressionSerializer();
-            Console.WriteLine(User.Categories[category][level].StarExpressions);
             int endValue = serializer.Deserialize(User.Categories[category][level].StarExpressions.Last()).Size;
             int currentValue = serializer.Deserialize(User.Categories[category][level].StartExpression).Size;
             ProgressBar = new ProgressbarStar(currentValue, endValue, currentValue);
@@ -67,8 +74,10 @@ namespace ThreeOneSevenBee.Model.Game
             ExprModel = new ExpressionModel(User.Categories[category][level].CurrentExpression, (m) => onExpressionChanged(m), 
                 Rules.ExponentToProductRule, Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators, 
                 Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.ExponentProduct,
-                Rules.NumericBinaryRule, Rules.NumericVariadicRule, Rules.CommonPowerParenthesisRule, Rules.ReverseCommonPowerParenthesisRule, Rules.SplittingFractions, Rules.ProductParenthesis, Rules.ReverseProductParenthesis);
-
+                Rules.NumericBinaryRule, Rules.NumericVariadicRule, Rules.CommonPowerParenthesisRule, 
+                Rules.ReverseCommonPowerParenthesisRule, Rules.SplittingFractions, Rules.ProductParenthesis, 
+                Rules.ReverseProductParenthesis, Rules.ParenthesisPowerRule, Rules.FactorizationRule, Rules.FractionToProductRule,
+                Rules.RemoveParenthesisRule);
             onExpressionChanged(ExprModel);
         }
 
@@ -84,17 +93,17 @@ namespace ThreeOneSevenBee.Model.Game
 
         public void NextLevel()
         {
-            if (GameCompleted)
+            if (IsGameCompleted)
             {
                 
             }
-            else if (CategoryCompleted)
+            else if (IsCategoryCompleted)
             {
                 User.CurrentCategoryIndex++;
                 User.CurrentLevelIndex = 0;
 
             }
-            else if (LevelCompleted)
+            else if (IsLevelCompleted)
             {
                 User.CurrentLevelIndex++;
             }
@@ -108,7 +117,7 @@ namespace ThreeOneSevenBee.Model.Game
         public void SaveLevel()
         {
             if(OnSaveLevel != null)
-            {
+        {
                 OnSaveLevel(User.CurrentLevel);
             }
         }

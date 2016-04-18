@@ -14,11 +14,14 @@ namespace ThreeOneSevenBee.Model.UI
         public Action OnExit { get; set; }
         public Action OnNextLevel { get; set; }
 
-        protected ButtonView menuButton;
-        protected ButtonView nextButton;
-        protected ProgressbarStarView progressbar;
-        protected IdentityMenuView identityMenu;
-        protected ExpressionView expression;
+        ButtonView menuButton;
+        ButtonView nextButton;
+        ProgressbarStarView progressbar;
+        IdentityMenuView identityMenu;
+        ExpressionView expression;
+        ToolTipView toolTipView;
+        ToolTipView toolTipView2;
+        ToolTipView toolTipView3;
 
         public virtual void Build(GameModel game)
         {
@@ -26,10 +29,8 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 Width = 100,
                 Height = 50,
-                BackgroundColor = "#C1392B",
-                FontColor = "#FFFFFF",
-                Font = "Segoe UI",
-                FontSize = 25
+                BackgroundColor = new Color(192, 57, 43),
+                TextColor = new Color(255, 255, 255),
             };
 
             nextButton = new ButtonView("Næste", () => OnNextLevel())
@@ -37,10 +38,8 @@ namespace ThreeOneSevenBee.Model.UI
                 X = Width - 100,
                 Width = 100,
                 Height = 50,
-                BackgroundColor = game.LevelCompleted ? "#16A086" : "#BEC3C7",
-                FontColor = "#FFFFFF",
-                Font = "Segoe UI",
-                FontSize = 25
+                BackgroundColor = game.IsLevelCompleted ? new Color(22, 160, 134) : new Color(190, 190, 190),
+                TextColor = new Color(255, 255, 255),
             };
 
             progressbar = new ProgressbarStarView(game.ProgressBar, Width - 220, 30)
@@ -51,22 +50,63 @@ namespace ThreeOneSevenBee.Model.UI
 
             identityMenu = new IdentityMenuView(game.ExprModel, Width, 100)
             {
-                Y = Height - 100
+                Y = Height - 125
             };
 
-            expression = new ExpressionView(game.ExprModel, Width, Height - 150, 4)
+            expression = new ExpressionView(game.ExprModel, Width, Height - 175, 8)
             {
                 X = 0,
                 Y = 50,
             };
 
+            toolTipView = new ToolTipView("Denne bar viser hvor langt du er nået.")
+            {
+                Visible = game.IsFirstLevel,
+                TextColor = new Color(255, 255, 255),
+                X = progressbar.X,
+                Y = progressbar.Y + progressbar.Height + 10,
+                Width = 300,
+                Height = 75,
+                BackgroundColor = new Color(40, 120, 130),
+                Position = position.upperLeft
+            };
+
+            toolTipView2 = new ToolTipView("Når knappen bliver grøn kan du gå videre til næste bane")
+            {
+                //FontSize = 15,
+                Visible = game.IsFirstLevel,
+                TextColor = new Color(255, 255, 255),
+                X = nextButton.X,
+                Y = nextButton.Y + nextButton.Height + 10,
+                Width = 400,
+                Height = 75,
+                BackgroundColor = new Color(40, 120, 130),
+                Position = position.upperRight
+            };
+
+            toolTipView3 = new ToolTipView("Dit mål er at reducere ovenstående udtryk. Dette gøres ved at markere de dele i udtrykket som skal reduceres.")
+            {
+                Description = "Markér [a] og [a]. Klik derefter på den ønskede omskrivning nedenfor for at reducere udtrykket",
+                Visible = game.IsFirstLevel,
+                                TextColor = new Color(255, 255, 255),
+                X = Width / 2 - 400,
+                Y = Height / 2 + 30,
+                Width = 800,
+                Height = 90,
+                BackgroundColor = new Color(40, 120, 130),
+                Position = position.bottomMiddle
+
+            };
             Children = new List<View>()
             {
                 menuButton,
                 nextButton,
                 progressbar,
                 identityMenu,
-                expression
+                expression,
+                toolTipView,
+                toolTipView2,
+                toolTipView3
             };
 
             if(OnChanged != null)
@@ -80,7 +120,10 @@ namespace ThreeOneSevenBee.Model.UI
             progressbar.Update(game.ProgressBar);
             identityMenu.Update(game.ExprModel.Identities, game.ExprModel);
             expression.Update(game.ExprModel);
-            nextButton.BackgroundColor = game.LevelCompleted ? "#16A086" : "#BEC3C7";
+            nextButton.BackgroundColor = game.IsLevelCompleted ? new Color(40, 120, 130) : new Color(190, 190, 190);
+            toolTipView.Visible = game.IsFirstLevel;
+            toolTipView2.Visible = game.IsFirstLevel;
+            toolTipView3.Visible = game.IsFirstLevel;
 
             if (OnChanged != null)
             {
@@ -90,6 +133,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public LevelView(GameModel game, double width, double height) : base(width, height)
         {
+            BackgroundColor = new Color(255, 255, 255);
             Build(game);
         }
     }

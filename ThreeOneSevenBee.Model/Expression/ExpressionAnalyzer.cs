@@ -82,12 +82,12 @@ namespace ThreeOneSevenBee.Model.Expression
 
             foreach (ExpressionRule rule in rules)
             {
-                ExpressionBase commonParent = GetCommonParent(selection);
-                Identity identity = rule(commonParent, selection);
-                if(identity != null)
-                {
-                    identities.Add(identity);
-                }
+                    ExpressionBase commonParent = GetCommonParent(selection);
+                    Identity identity = rule(commonParent, selection);
+                    if (identity != null)
+                    {
+                        identities.Add(identity);
+                    }
             }
 
             return identities;

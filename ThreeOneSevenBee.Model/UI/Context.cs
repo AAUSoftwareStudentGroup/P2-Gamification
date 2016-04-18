@@ -3,10 +3,11 @@ using Bridge.Html5;
 #else
 using System;
 #endif
+using ThreeOneSevenBee.Model.Euclidean;
 
 namespace ThreeOneSevenBee.Model.UI
 {
-    public abstract class Context
+    public abstract class Context : IContext
     {
         public Context(double width, double height)
         {
@@ -15,8 +16,8 @@ namespace ThreeOneSevenBee.Model.UI
             Height = height;
         }
 
-        public virtual double Width { get; protected set; }
-        public virtual double Height { get; protected set; }
+        public virtual double Width { get; set; }
+        public virtual double Height { get; set; }
 
         protected View contentView;
 
@@ -33,46 +34,48 @@ namespace ThreeOneSevenBee.Model.UI
             contentView.DrawWithContext(this, 0, 0);
         }
 
-        public abstract void Draw(View view, double offsetX, double offsetY);
-
-        public virtual void Draw(ImageView view, double offsetX, double offsetY)
+        public virtual void DrawRectangle(double x, double y, double width, double height, Color fillColor)
         {
-            Draw(view as View, offsetX, offsetY);
+            DrawRectangle(x, y, width, height, fillColor, new Color(), 0);
         }
 
-        public virtual void Draw(LabelView view, double offsetX, double offsetY)
+        public virtual void DrawLine(Vector2 first, Vector2 second, Color lineColor, double lineWidth)
         {
-            Draw(view as View, offsetX, offsetY);
+            DrawPolygon(
+                new Vector2[]
+                {
+                    first,
+                    second
+                },
+                new Color(),
+                lineColor,
+                lineWidth
+            );
         }
 
-        public virtual void Draw(ButtonView view, double offsetX, double offsetY)
+        public virtual void DrawRectangle(double x, double y, double width, double height, Color fillColor, Color lineColor, double lineWidth)
         {
-            Draw(view as LabelView, offsetX, offsetY);
+            DrawPolygon(
+                new Vector2[]
+                {
+                    new Vector2(x, y),
+                    new Vector2(x + width, y),
+                    new Vector2(x + width, y + height),
+                    new Vector2(x, y + height)
+                },
+                fillColor,
+                lineColor,
+                lineWidth
+            );
         }
 
-        public virtual void Draw(ProgressbarStarView view, double offsetX, double offsetY)
+        public virtual void DrawPolygon(Vector2[] path, Color fillColor)
         {
-            Draw(view as View, offsetX, offsetY);
+            DrawPolygon(path, fillColor, new Color(), 1);
         }
 
-        public virtual void Draw(OperatorView view, double offsetX, double offsetY)
-        {
-            Draw(view as View, offsetX, offsetY);
-        }
+        public abstract void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth);
 
-        public virtual void Draw(ParenthesisView view, double offsetX, double offsetY)
-        {
-            Draw(view as View, offsetX, offsetY);
-        }
-
-        public virtual void Draw(SqrtView view, double offsetX, double offsetY)
-        {
-            Draw(view as View, offsetX, offsetY);
-        }
-
-        public virtual void Draw(PolygonView view, double offsetX, double offsetY)
-        {
-            Draw(view as View, offsetX, offsetY);
-        }
+        public abstract void DrawText(double x, double y, double width, double height, string text, Color textColor);
     }
 }

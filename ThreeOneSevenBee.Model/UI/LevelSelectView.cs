@@ -19,41 +19,23 @@ namespace ThreeOneSevenBee.Model.UI
 
         public ButtonView MenuButton { get; private set; }
 
-        public ImageView ArrowLeft { get; private set; }
+        public VectorImageView ArrowLeft { get; private set; }
 
-        public ImageView ArrowRight { get; private set; }
+        public VectorImageView ArrowRight { get; private set; }
 
         public FrameView Levels { get; private set; }
 
         public LabelView CategoryName { get; private set; }
 
-        private void nextCategory()
-        {
-            Category++;
-            if (OnChanged != null)
-            {
-                OnChanged();
-            }
-        }
-        private void previousCategory()
-        {
-            Category--;
-            if (OnChanged != null)
-            {
-                OnChanged();
-            }
-        }
 
         public void Build(CurrentPlayer user)
         {
             MenuButton = new ButtonView("Menu", () => { if (OnExit != null) { OnExit(); } })
             {
-                Width = 100,
-                Height = 50,
-                BackgroundColor = "#C1392B",
-                FontColor = "#FFFFFF",
-                Font = "Segoe UI",
-                FontSize = 25
+                Width = 75,
+                Height = 30,
+                BackgroundColor = new Color(193, 57, 43),
+                TextColor = new Color(0, 0, 0),
             };
 
             CategoryName = new LabelView(user.Categories[Category].Name)
@@ -62,7 +44,6 @@ namespace ThreeOneSevenBee.Model.UI
                 Y = 20,
                 Width = 200,
                 Height = 40,
-                FontSize = 25
             };
 
             Levels = new FrameView(Width - 100, Height - (CategoryName.Y + CategoryName.Height))
@@ -71,22 +52,41 @@ namespace ThreeOneSevenBee.Model.UI
                 Y = CategoryName.Y + CategoryName.Height,
             };
 
-            ArrowLeft = new ImageView("arrow_left.png", 50, (Category == 0 ? 0 : 75))
+            ArrowRight = new VectorImageView(345, Levels.Y + Levels.Height / 2 - 75 / 2, 50, 75)
             {
-                X = 5,
-                Y = Levels.Y + Levels.Height / 2 - 75/2,
-                OnClick = previousCategory
-
+                { 0,0    },
+                { 25,75/2 },
+                { 0,75   },
             };
 
-            ArrowRight = new ImageView("arrow_right.png", 50, (Category == user.Categories.Count - 1 ? 0 : 75))
+            ArrowRight.Visible = Category < user.Categories.Count - 1;
+            ArrowRight.BackgroundColor = new Color(44, 119, 130);
+            ArrowRight.OnClick = () =>
             {
-                X = 345,
-                Y = Levels.Y + Levels.Height / 2 - 75/2,
-                OnClick = nextCategory
+                if (Category < user.Categories.Count - 1)
+                {
+                    Category++;
+                    OnChanged();
+                }
             };
 
+            ArrowLeft = new VectorImageView(5, Levels.Y + Levels.Height / 2 - 75 / 2, 50, 75)
+            {
+                { 50,0    },
+                { 25,75/2 },
+                { 50,75   },
+            };
 
+            ArrowLeft.BackgroundColor = new Color(44, 119, 130);
+            ArrowLeft.OnClick = () =>
+            {
+                if (Category > 0)
+                {
+                    Category--;
+                    OnChanged();
+                }
+            };
+            ArrowLeft.Visible = Category > 0;
 
             Children.Add(MenuButton);
             Children.Add(CategoryName);
@@ -100,8 +100,8 @@ namespace ThreeOneSevenBee.Model.UI
         public void Update(CurrentPlayer user)
         {
             CategoryName.Text = user.Categories[Category].Name;
-            ArrowLeft.Height = (Category == 0 ? 0 : ArrowLeft.Width * 1.5);
-            ArrowRight.Height = (Category == user.Categories.Count - 1 ? 0 : ArrowRight.Width * 1.5);
+            ArrowLeft.Visible = Category > 0;
+            ArrowRight.Visible = Category < user.Categories.Count - 1;
 
             CompositeView levelButtons = new CompositeView(400, 400);
 
@@ -116,9 +116,8 @@ namespace ThreeOneSevenBee.Model.UI
                         Height = 50 - 10,
                         X = levelNumber % (int)Math.Sqrt(numberOfLevels) * 50 + 5,
                         Y = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50 + 5,
-                        BackgroundColor = "#297782",
-                        FontColor = "#ffffff",
-                        FontSize = 25
+                        BackgroundColor = new Color(40, 130, 120),
+                        TextColor = new Color(255, 255, 255),
                     });
                 levelNumber += 1;
 
@@ -130,6 +129,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public LevelSelectView(CurrentPlayer user) : base(400, 300)
         {
+            BackgroundColor = new Color(255, 255, 255);
             Category = user.CurrentCategoryIndex;
             Build(user);
         }

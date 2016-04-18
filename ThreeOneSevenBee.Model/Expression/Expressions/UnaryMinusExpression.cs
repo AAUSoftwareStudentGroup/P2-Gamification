@@ -77,7 +77,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
 		public override string TreePrint(string indent, bool isLast)
 		{
-			Console.WriteLine (indent + "|-" + "-");
+            Console.WriteLine(indent + "|-" + "-");
             indent += (isLast ? "  " : "| ");
             Expression.TreePrint (indent, true);
 			return indent;

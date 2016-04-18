@@ -9,28 +9,19 @@ using Bridge.Html5;
 
 namespace ThreeOneSevenBee.Frontend
 {
-    class JQueryGameAPI : GameAPI
+    class JQueryGameAPI : IGameAPI
     {
-        public override bool Ready
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         private void getCategories(Action<List<LevelCategory>> callback)
         {
             jQuery.Get(
-                "/api/?action=get_levels",
+                "/api/?action=get_levels&debug=1",
                 new object(),
                 (data, textStatus, request) =>
                 {
                     var jdata = JSON.Parse((string)data);
-                    Console.WriteLine(jdata);
                     List<LevelCategory> categories = new List<LevelCategory>();
                     var categoriesData = jdata["data"] as object[];
-                    
+                    Console.WriteLine(jdata);
                     foreach (var categoryData in categoriesData)
                     {
                         
@@ -53,30 +44,29 @@ namespace ThreeOneSevenBee.Frontend
             );
         }
 
-        public override void GetCurrentPlayer(Action<CurrentPlayer> callback)
+        public void GetCurrentPlayer(Action<CurrentPlayer> callback)
         {
             jQuery.Get(
                 "/api/?action=get_current_user&debug=1",
                 new object(),
                 (data, textStatus, request) =>
                 {
-                    //var jdata = JSON.Parse((string)data);
-                    //CurrentPlayer currentPlayer = new CurrentPlayer((string)jdata["data"]["name"]);
-                    //getCategories((categories) =>
-                    //{
-                    //    foreach (LevelCategory category in categories)
-                    //    {
-                    //        currentPlayer.AddCategory(category);
-                    //    }
-                    //    callback(currentPlayer);
-                    //});
-                    CurrentPlayer currentPlayer = new CurrentPlayer("AntonNoob");
+                    var jdata = JSON.Parse((string)data);
+                    CurrentPlayer currentPlayer = new CurrentPlayer((string)jdata["data"]["name"]);
+                    getCategories((categories) =>
+                    {
+                        foreach (LevelCategory category in categories)
+                        {
+                            currentPlayer.AddCategory(category);
+                        }
+                        callback(currentPlayer);
+                    });
                     callback(currentPlayer);
                 }
             );
         }
 
-        public override void GetPlayers(Action<List<Player>> callback)
+        public void GetPlayers(Action<List<Player>> callback)
         {
             jQuery.Get(
                 "/api/?action=get_users",
@@ -90,7 +80,7 @@ namespace ThreeOneSevenBee.Frontend
             );
         }
 
-        public override void SaveUserLevelProgress(int levelID, string currentExpression, Action<bool> callback)
+        public void SaveUserLevelProgress(int levelID, string currentExpression, Action<bool> callback)
         {
             jQuery.Post(
                 "/api/", 
@@ -102,7 +92,6 @@ namespace ThreeOneSevenBee.Frontend
                 },
                 (data, textStatus, request) =>
                 {
-                    Console.WriteLine(data);
                     var jdata = JSON.Parse((string)data);
                     callback((string)jdata["success"] == "true");
                 }
