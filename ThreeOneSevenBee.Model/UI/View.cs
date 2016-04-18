@@ -11,7 +11,9 @@ namespace ThreeOneSevenBee.Model.UI
 
         public double Baseline { get; set; }
 
-        public string BackgroundColor { get; set; }
+        public Color BackgroundColor { get; set; }
+
+        public bool Visible { get; set; }
 
         public View(double x, double y, double width, double height)
         {
@@ -20,12 +22,13 @@ namespace ThreeOneSevenBee.Model.UI
             Width = width;
             Height = height;
             Baseline = height / 2;
-            BackgroundColor = "transparent";
+            BackgroundColor = new Color();
+            Visible = true;
         }
 
-        public virtual void DrawWithContext(Context context, double offsetX, double offsetY)
+        public virtual void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
-            context.Draw(this, offsetX, offsetY);
+            context.DrawRectangle(X + offsetX, Y + offsetY, Width, Height, BackgroundColor);
         }
 
         public virtual void Click(double x, double y)

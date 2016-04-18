@@ -20,7 +20,7 @@ namespace ThreeOneSevenBee.Model.UI
                 int indexCopy = index;
                 ExpressionView expressionView = new ExpressionView();
                 View view = expressionView.BuildView(identities[index].Suggestion, model);
-                FrameView frameView = new FrameView(Width / identities.Count, Height, view, 2)
+                FrameView frameView = new FrameView(Width / identities.Count, Height, view, 4)
                 {
                     PropagateClick = false
                 };

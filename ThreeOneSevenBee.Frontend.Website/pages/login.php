@@ -3,6 +3,7 @@
         $db->query("SELECT password_hash, id FROM user WHERE BINARY name = ?",
                     $_POST['username']);
 
+        echo $db->last_query;
         if($row = $db->fetch()) {
             if(password_verify($_POST['password'], $row['password_hash'])) {
                 

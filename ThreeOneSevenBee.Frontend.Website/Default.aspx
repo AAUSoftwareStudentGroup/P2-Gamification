@@ -7,7 +7,8 @@
     <title>317B</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="js/bridge.js"></script>
-
+    
+    <script src="js/threeOneSevenBee.model.euclidean.js"></script>
     <script src="js/threeOneSevenBee.model.uI.js"></script>
     <script src="js/threeOneSevenBee.model.game.js"></script>
     <script src="js/threeOneSevenBee.model.expression.js"></script>
@@ -16,7 +17,6 @@
     <script src="js/threeOneSevenBee.model.expression.expressions.js"></script>
     <script src="js/threeOneSevenBee.model.js"></script>
     <script src="js/threeOneSevenBee.frontend.js"></script>
-    <script src="js/threeOneSevenBee.model.euclidean.js"></script>
     <script src="js/threeOneSevenBee.model.geometry.js"></script>
     <script src="js/threeOneSevenBee.model.polygon.js"></script>
 </head>

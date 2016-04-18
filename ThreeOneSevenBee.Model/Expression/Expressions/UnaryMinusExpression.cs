@@ -14,7 +14,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override string Value
         {
-            get { return "-" + Expression.ToString(); }
+            get { return "-" + Expression; }
         }
 
         public override int Size
@@ -75,9 +75,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 yield return node;
         }
 
-		public override string TreePrint(string indent, bool isLast)
+        public override string ToString()
+        {
+            return "-{" + Expression + "}";
+        }
+
+        public override string TreePrint(string indent, bool isLast)
 		{
-			Console.WriteLine (indent + "|-" + "-");
+            Console.WriteLine(indent + "|-" + "-");
             indent += (isLast ? "  " : "| ");
             Expression.TreePrint (indent, true);
 			return indent;

@@ -68,7 +68,12 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             yield break;
         }
 
-		public override string TreePrint(string indent, bool isLast)
+        public override string ToString()
+        {
+            return Value;
+        }
+
+        public override string TreePrint(string indent, bool isLast)
 		{
 			Console.WriteLine (indent + "|-" + Value, true);
 			return indent + (isLast ? "  " : "| ");

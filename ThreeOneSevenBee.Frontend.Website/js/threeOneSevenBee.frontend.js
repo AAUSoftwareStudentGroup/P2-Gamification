@@ -17,26 +17,10 @@
     
                 var gameAPI = new ThreeOneSevenBee.Frontend.JQueryGameAPI();
     
-                var testCategory = new ThreeOneSevenBee.Model.Game.LevelCategory("test");
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "-4-40+5-9", "-4-40+5-9", ["44"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-                testCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4+44", "4+44", ["48"]));
-    
-                var tutorialCategory = new ThreeOneSevenBee.Model.Game.LevelCategory("Tutorial");
-                tutorialCategory.add(new ThreeOneSevenBee.Model.Game.Level("constructor$2", "a*a", "a*a", ["a^2"]));
-    
                 var gameModel;
                 var gameView;
     
                 gameAPI.getCurrentPlayer(function (u) {
-                    u.addCategory(testCategory);
-                    u.addCategory(tutorialCategory);
                     gameAPI.getPlayers(function (p) {
                         gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
                             onSaveLevel: function (level) {
@@ -81,6 +65,9 @@
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             }));
         },
+        colorToString: function (color) {
+            return Bridge.String.format("rgba({0},{1},{2},{3})", Bridge.Int.format(color.red, 'G'), Bridge.Int.format(color.green, 'G'), Bridge.Int.format(color.blue, 'G'), Bridge.Int.format(color.alpha, 'G'));
+        },
         setContentView: function (view) {
             ThreeOneSevenBee.Model.UI.Context.prototype.setContentView.call(this, view);
             this.draw();
@@ -91,130 +78,45 @@
         click: function (x, y) {
             this.contentView.click(x, y);
         },
-        draw$3: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
-            this.context.font = view.getFontSize() + "px " + view.getFont();
-            this.context.textAlign = view.getAlign() === "center" ? "center" : "left";
-            this.context.fillStyle = view.getFontColor();
-            this.context.fillText(view.getText(), Bridge.Int.trunc((view.getX() + offsetX + (view.getAlign() === "center" ? view.getWidth() / 2 : 5))), Bridge.Int.trunc((view.getY() + offsetY + view.getHeight() / 2)));
-            this.context.fillStyle = "#000000";
-        },
-        draw$4: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
-            if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
-                this.context.beginPath();
-                this.context.moveTo(view.getX() + offsetX, view.getY() + offsetY + view.getHeight() / 2);
-                this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsetY + view.getHeight() / 2);
-                this.context.stroke();
-            }
-            else  {
-                if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
-                    this.context.beginPath();
-                    this.context.arc(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 2, view.getHeight() / 10, 0, 2 * Math.PI);
-                    this.context.fill();
-                    this.context.stroke();
-                }
-                else  {
-                    if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
-                        this.context.beginPath();
-                        this.context.moveTo(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY - view.getHeight() / 3 + view.getHeight() / 2);
-                        this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2, view.getY() + offsetY + view.getHeight() / 3 + view.getHeight() / 2);
-                        this.context.moveTo(view.getX() + offsetX + view.getWidth() / 2 - view.getHeight() / 3, view.getY() + offsetY + view.getHeight() / 2);
-                        this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2 + view.getHeight() / 3, view.getY() + offsetY + view.getHeight() / 2);
-                        this.context.stroke();
-                    }
-                    else  {
-                        if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract) {
-                            this.context.beginPath();
-                            this.context.moveTo(view.getX() + offsetX + view.getWidth() / 2 - view.getHeight() / 3, view.getY() + offsetY + view.getHeight() / 2);
-                            this.context.lineTo(view.getX() + offsetX + view.getWidth() / 2 + view.getHeight() / 3, view.getY() + offsetY + view.getHeight() / 2);
-                            this.context.stroke();
-                        }
-                        else  {
-                            if (view.gettype() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus) {
-                                this.context.beginPath();
-                                this.context.moveTo(view.getX() + offsetX + view.getWidth() / 3, view.getY() + offsetY + view.getHeight() / 2);
-                                this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsetY + view.getHeight() / 2);
-                                this.context.stroke();
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        draw$5: function (view, offsetX, offsetY) {
-            if (view.getType() === ThreeOneSevenBee.Model.UI.ParenthesisType.left) {
-                this.context.beginPath();
-                this.context.ellipse(view.getX() + view.getWidth() + offsetX, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), 1.1 * view.getHeight() / 2, 0, -1.141096661 + Math.PI, 1.141096661 + Math.PI);
-                this.context.stroke();
-            }
-            else  {
-                this.context.beginPath();
-                this.context.ellipse(view.getX() + offsetX, view.getY() + view.getHeight() / 2 + offsetY, view.getWidth(), 1.1 * view.getHeight() / 2, 0, -1.141096661, 1.141096661);
-                this.context.stroke();
-            }
-        },
-        draw$8: function (view, offsetX, offsetY) {
-            this.context.beginPath();
-            this.context.moveTo(view.getX() + offsetX + view.getSignWidth() / 8, view.getY() + offsetY + view.getHeight() - view.getSignWidth() / 2);
-            this.context.lineTo(view.getX() + offsetX + view.getSignWidth() / 4, view.getY() + offsetY + view.getHeight() - view.getSignWidth() / 2);
-            this.context.lineTo(view.getX() + offsetX + view.getSignWidth() / 2, view.getY() + offsetY + view.getHeight());
-            this.context.lineTo(view.getX() + offsetX + view.getSignWidth(), view.getY() + offsetY + view.getTopHeight() / 2);
-            this.context.lineTo(view.getX() + offsetX + view.getWidth(), view.getY() + offsetY + view.getTopHeight() / 2);
-            this.context.stroke();
-        },
-        draw$9: function (view, offsetX, offsetY) {
-            this.context.fillStyle = view.getBackgroundColor();
-            this.context.fillRect(Bridge.Int.trunc((view.getX() + offsetX)), Bridge.Int.trunc((view.getY() + offsetY)), Bridge.Int.trunc(view.getWidth()), Bridge.Int.trunc(view.getHeight()));
-            this.context.fillStyle = "#000000";
-        },
-        draw$2: function (view, offsetX, offsetY) {
-            this.draw$9(Bridge.as(view, ThreeOneSevenBee.Model.UI.View), offsetX, offsetY);
+        drawPolygon$1: function (path, fillColor, lineColor, lineWidth) {
+            var $t;
+            this.context.fillStyle = this.colorToString(fillColor);
+            this.context.strokeStyle = this.colorToString(lineColor);
+            this.context.lineWidth = lineWidth;
     
-            if (this.imageCache.containsKey(view.getImage())) {
-                this.context.fillStyle = "transparent";
-                this.context.drawImage(this.imageCache.get(view.getImage()), view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
-                this.context.fillStyle = "#000000";
-            }
-            else  {
-                this.imageCache.set(view.getImage(), new Image());
-                this.imageCache.get(view.getImage()).src = "img/" + view.getImage();
-                this.imageCache.get(view.getImage()).onload = Bridge.fn.bind(this, function (e) {
-                    this.context.fillStyle = "transparent";
-                    this.context.drawImage(this.imageCache.get(view.getImage()), view.getX() + offsetX, view.getY() + offsetY, view.getWidth(), view.getHeight());
-                    this.context.fillStyle = "#000000";
-                });
-            }
-        },
-        draw$6: function (view, offsetX, offsetY) {
-            this.context.fillStyle = view.fillStyle;
-            if (view.getcornerPositions().getCount() < 3) {
-                throw new Bridge.Exception("Polygon does not contain enough corners");
-            }
             this.context.beginPath();
-            this.context.moveTo(view.getcornerPositions().getItem(0).x + offsetX, view.getcornerPositions().getItem(0).y + offsetY);
-            for (var i = 1; i < view.getcornerPositions().getCount(); i++) {
-                this.context.lineTo(view.getcornerPositions().getItem(i).x + offsetX, view.getcornerPositions().getItem(i).y + offsetY);
+            this.context.moveTo(path[0].x, path[0].y);
+    
+            $t = Bridge.getEnumerator(path);
+            while ($t.moveNext()) {
+                var point = $t.getCurrent();
+                this.context.lineTo(point.x, point.y);
             }
-            this.context.closePath();
-            this.context.stroke();
             this.context.fill();
+            this.context.stroke();
+        },
+        drawText: function (x, y, width, height, text, textColor) {
+            this.context.font = height + "px Segoe UI";
+            this.context.textAlign = "center";
+            if (this.context.measureText(text).width > width) {
+                console.log(this.context.measureText(text).width);
+                this.context.font = width / this.context.measureText(text).width * height + "px Segoe UI";
+            }
+            this.context.textBaseline = "middle";
+            this.context.fillStyle = this.colorToString(textColor);
+            this.context.fillText(text, Bridge.Int.trunc((x + width / 2)), Bridge.Int.trunc((y + height / 2)));
         }
     });
     
     Bridge.define('ThreeOneSevenBee.Frontend.JQueryGameAPI', {
-        inherits: [ThreeOneSevenBee.Model.Game.GameAPI],
-        getReady: function () {
-            throw new Bridge.NotImplementedException();
-        },
+        inherits: [ThreeOneSevenBee.Model.Game.IGameAPI],
         getCategories: function (callback) {
-            $.get("/api/?action=get_levels", { }, function (data, textStatus, request) {
+            $.get("/api/?action=get_levels&debug=1", { }, function (data, textStatus, request) {
                 var $t, $t1;
                 var jdata = JSON.parse(Bridge.cast(data, String));
-                console.log(jdata);
                 var categories = new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)();
                 var categoriesData = Bridge.as(jdata.data, Array);
-    
+                console.log(jdata);
                 $t = Bridge.getEnumerator(categoriesData);
                 while ($t.moveNext()) {
                     var categoryData = $t.getCurrent();
@@ -234,20 +136,20 @@
             });
         },
         getCurrentPlayer: function (callback) {
-            $.get("/api/?action=get_current_user&debug=1", { }, function (data, textStatus, request) {
-                //var jdata = JSON.Parse((string)data);
-                //CurrentPlayer currentPlayer = new CurrentPlayer((string)jdata["data"]["name"]);
-                //getCategories((categories) =>
-                //{
-                //    foreach (LevelCategory category in categories)
-                //    {
-                //        currentPlayer.AddCategory(category);
-                //    }
-                //    callback(currentPlayer);
-                //});
-                var currentPlayer = new ThreeOneSevenBee.Model.Game.CurrentPlayer("AntonNoob");
+            $.get("/api/?action=get_current_user&debug=1", { }, Bridge.fn.bind(this, function (data, textStatus, request) {
+                var jdata = JSON.parse(Bridge.cast(data, String));
+                var currentPlayer = new ThreeOneSevenBee.Model.Game.CurrentPlayer(Bridge.cast(jdata.data.name, String));
+                this.getCategories(function (categories) {
+                    var $t;
+                    $t = Bridge.getEnumerator(categories);
+                    while ($t.moveNext()) {
+                        var category = $t.getCurrent();
+                        currentPlayer.addCategory(category);
+                    }
+                    callback(currentPlayer);
+                });
                 callback(currentPlayer);
-            });
+            }));
         },
         getPlayers: function (callback) {
             $.get("/api/?action=get_users", { }, function (data, textStatus, request) {
@@ -258,7 +160,6 @@
         },
         saveUserLevelProgress: function (levelID, currentExpression, callback) {
             $.post("/api/", { action: "save_user_level_progress", debug: 1, level_id: levelID, current_expression: currentExpression }, function (data, textStatus, request) {
-                console.log(data);
                 var jdata = JSON.parse(Bridge.cast(data, String));
                 callback(Bridge.cast(jdata.success, String) === "true");
             });

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using ThreeOneSevenBee.Model.Euclidean;
 using ThreeOneSevenBee.Model.Game;
 
+
 namespace ThreeOneSevenBee.Frontend
 {
     public class App
@@ -20,31 +21,15 @@ namespace ThreeOneSevenBee.Frontend
             canvas.Width = Document.DocumentElement.ClientWidth;
             canvas.Height = Document.DocumentElement.ClientHeight;
 
-            CanvasContext context = new CanvasContext(canvas);
+            IContext context = new CanvasContext(canvas);
 
             JQueryGameAPI gameAPI = new JQueryGameAPI();
-
-            LevelCategory testCategory = new LevelCategory("test");
-            testCategory.Add(new Level("-4-40+5-9", "-4-40+5-9", new string[] { "44" }));
-            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
-            testCategory.Add(new Level("4+44", "4+44", new string[] { "48" }));
-
-            LevelCategory tutorialCategory = new LevelCategory("Tutorial");
-            tutorialCategory.Add(new Level("a*a", "a*a", new string[] { "a^2" }));
 
             GameModel gameModel;
             GameView gameView;
 
             gameAPI.GetCurrentPlayer((u) =>
             {
-                u.AddCategory(testCategory);
-                u.AddCategory(tutorialCategory);
                 gameAPI.GetPlayers((p) =>
                 {
                     gameModel = new GameModel(u, p)

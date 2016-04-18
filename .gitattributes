@@ -2,4 +2,5 @@
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
 * text=auto
-*.js -diff
+*.js -diff -merge -text
+ThreeOneSevenBee.Frontend.Website/js/* linguist-vendored

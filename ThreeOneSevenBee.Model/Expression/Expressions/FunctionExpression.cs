@@ -91,6 +91,11 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 yield return node;
         }
 
+        public override string ToString()
+        {
+            return Function + "{" + Expression + "}";
+        }
+
         public override string TreePrint(string indent, bool isLast)
         {
             Console.WriteLine(indent + "|-" + Function);
