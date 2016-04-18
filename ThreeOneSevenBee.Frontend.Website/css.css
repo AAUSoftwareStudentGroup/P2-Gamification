@@ -1,7 +1,7 @@
 body {
     font-family: Helvetica, Arial, sans-serif;
     margin: 0;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 .fl {
@@ -13,6 +13,7 @@ body {
 
 .row {
     clear: both;
+    padding: 0 20px;
 }
 
 .r1_1 {
@@ -20,6 +21,13 @@ body {
     width: 100%;
 }
 
+
+.r1_4 {
+    float: left;
+    width: 24%;
+    margin-right: 1%;
+}
+.r1_4:last-child {margin-right: 0;}
 .r2_4 {
     float: left;
     width: 49%;
@@ -39,6 +47,10 @@ body {
 
 .textcenter {
     text-align: center;
+}
+
+.textLeft {
+    text-align: left;
 }
 
 input {
