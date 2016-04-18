@@ -44,7 +44,7 @@ class API {
 
     static function user_login($IN, $db) {
         session_start();
-        $db->query("SELECT password_hash, id FROM user WHERE BINARY name = ?",
+        $db->query("SELECT password_hash, id FROM user WHERE BINARY name = ? AND deleted_at IS NULL",
                     $IN['username']);
 
         if($row = $db->fetch()) {
@@ -57,10 +57,18 @@ class API {
 
     static function get_users($IN, $db) {
         $result = array();
-        $db->query("SELECT user.name FROM gamedb.user AS user");
+        $db->query("SELECT user.name FROM gamedb.user AS user WHERE user.deleted_at IS NULL");
         while($row = $db->fetch())
             $result[] = $row;
         API::respond(true, $result);
+    }
+
+    static function delete_user_by_id($IN, $db) {
+        $db->query("UPDATE gamedb.user
+                      SET deleted_at=UNIX_TIMESTAMP()
+                      WHERE id=?;", $IN['user_id']
+                    );
+        API::respond();
     }
 
     static function delete_class_by_id($IN, $db) {

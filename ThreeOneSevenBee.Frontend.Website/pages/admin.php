@@ -55,7 +55,8 @@ $db->query("SELECT
             LEFT JOIN
                 gamedb.class AS class ON user.class_id = class.id
             LEFT JOIN
-                gamedb.school AS school ON user.school_id = school.id;"
+                gamedb.school AS school ON user.school_id = school.id
+            WHERE user.deleted_at IS NULL;"
         );
 while($row = $db->fetch())
     $users[] = $row;
@@ -341,6 +342,12 @@ while($row = $db->fetch())
 </div>
 
 <script>
+
+    $('.user_table').on('click', '.delete', function() {
+        var id = $(this).data('id');
+        $.get( "/api", { action: "delete_user_by_id", user_id: id });
+        $(this).parent().remove();
+    });
     $('.class_table').on('click', '.delete', function() {
         var id = $(this).data('id');
         $.get( "/api", { action: "delete_class_by_id", class_id: id });
