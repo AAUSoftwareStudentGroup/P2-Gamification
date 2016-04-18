@@ -35,7 +35,7 @@ namespace ThreeOneSevenBee.Model.UI
                 Width = 75,
                 Height = 30,
                 BackgroundColor = new Color(193, 57, 43),
-                TextColor = new Color(0, 0, 0),
+                TextColor = new Color(255, 255, 255),
             };
 
             CategoryName = new LabelView(user.Categories[Category].Name)

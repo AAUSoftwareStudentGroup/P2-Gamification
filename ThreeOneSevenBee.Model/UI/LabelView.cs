@@ -7,7 +7,7 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class LabelView : View
     {
-        public Color TextColor { get; set; }
+        public virtual Color TextColor { get; set; }
 
         public LabelView(string text) : base(0, 0, 10, 10)
         {
@@ -15,7 +15,7 @@ namespace ThreeOneSevenBee.Model.UI
             TextColor = new Color(0, 0, 0);
         }
 
-        public string Text { get; set; }
+        public virtual string Text { get; set; }
 
         public override void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
