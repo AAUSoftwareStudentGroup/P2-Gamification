@@ -108,17 +108,14 @@ while($row = $db->fetch())
 ///// CATEGORIES
 $db->query( "SELECT 
                 c.id,
-                c.name,
-                c.order
-            FROM gamedb.level_category AS c
-            ORDER BY c.order"
+                c.name
+            FROM gamedb.level_category AS c"
             );
 while($row = $db->fetch())
     $categories[] = $row;
 
 ///// LEVELS
 $db->query("SELECT 
-                l.order,
                 l.id AS level_id, 
                 c.id AS category_id, 
                 c.name AS category_name, 
@@ -126,8 +123,7 @@ $db->query("SELECT
                 l.star_expressions 
             FROM gamedb.level AS l
             LEFT JOIN gamedb.level_category AS c
-            ON l.level_category_id = c.id
-            ORDER BY c.order ASC, l.order ASC;"
+            ON l.level_category_id = c.id;"
         );
 while($row = $db->fetch())
     $levels[] = $row;
@@ -265,24 +261,18 @@ while($row = $db->fetch())
     <div class="r2_4">
         <h2>Classes</h2>
         <table class="r1_1 category_table">
-            <thead>
-                <tr>
-                    <th colspan="1">Order</th>
-                    <th colspan="1">Cat_id</th>
-                    <th colspan="5">Category</th>
-                    <th colspan="1">del</th>
-                </tr>
-            </thead>
-            <tbody>
-                <? foreach ($categories as $cat): ?>
-                <tr>
-                    <td colspan="1"><?= $cat['order'] ?></td>
-                    <td colspan="1"><?= $cat['id'] ?></td>
-                    <td colspan="5"><?= $cat['name'] ?></td>
-                    <td colspan="1" class="delete" data-id="<?= $cat['id'] ?>">x</td>
-                </tr>
-                <? endforeach; ?>
-            </tbody>
+            <tr>
+                <th colspan="1">Cat_id</th>
+                <th colspan="5">Category</th>
+                <th colspan="1">del</th>
+            </tr>
+            <? foreach ($categories as $cat): ?>
+            <tr>
+                <td colspan="1"><?= $cat['id'] ?></td>
+                <td colspan="5"><?= $cat['name'] ?></td>
+                <td colspan="1" class="delete" data-id="<?= $cat['id'] ?>">x</td>
+            </tr>
+            <? endforeach; ?>
         </table>
     </div>
     <div class="r1_4">
@@ -298,30 +288,24 @@ while($row = $db->fetch())
     <div class="r2_4">
         <h2>Classes</h2>
         <table class="r1_1 level_table">
-            <thead>
-                <tr>
-                    <th colspan="1">Order</th>
-                    <th colspan="1">Cat_id</th>
-                    <th colspan="1">lvl_id</th>
-                    <th colspan="2">Category</th>
-                    <th colspan="3">initial_expression</th>
-                    <th colspan="4">Star_expressions</th>
-                    <th colspan="1">del</th>
-                </tr>
-            </thead>
-            <tbody>
-                <? foreach ($levels as $lvl): ?>
-                <tr>
-                    <td colspan="1"><?= $lvl['order'] ?></td>
-                    <td colspan="1"><?= $lvl['category_id'] ?></td>
-                    <td colspan="1"><?= $lvl['level_id'] ?></td>
-                    <td colspan="2"><?= $lvl['category_name'] ?></td>
-                    <td colspan="3"><?= $lvl['initial_expression'] ?></td>
-                    <td colspan="4"><?= $lvl['star_expressions'] ?></td>
-                    <td colspan="1" class="delete" data-id="<?= $lvl['level_id'] ?>">x</td>
-                </tr>
-                <? endforeach; ?>
-            </tbody>
+            <tr>
+                <th colspan="1">Cat_id</th>
+                <th colspan="1">lvl_id</th>
+                <th colspan="2">Category</th>
+                <th colspan="3">initial_expression</th>
+                <th colspan="4">Star_expressions</th>
+                <th colspan="1">del</th>
+            </tr>
+            <? foreach ($levels as $lvl): ?>
+            <tr>
+                <td colspan="1"><?= $lvl['category_id'] ?></td>
+                <td colspan="1"><?= $lvl['level_id'] ?></td>
+                <td colspan="2"><?= $lvl['category_name'] ?></td>
+                <td colspan="3"><?= $lvl['initial_expression'] ?></td>
+                <td colspan="4"><?= $lvl['star_expressions'] ?></td>
+                <td colspan="1" class="delete" data-id="<?= $lvl['level_id'] ?>">x</td>
+            </tr>
+            <? endforeach; ?>
         </table>
     </div>
     <div class="r1_4">
@@ -361,74 +345,6 @@ while($row = $db->fetch())
         $.get( "/api", { action: "delete_level_by_id", level_id: id });
         $(this).parent().remove();
     });
-
-
-    $('.category_table tbody').sortable({ 
-        update: function(e, ui) {
-            submit_category_order();
-        },
-        helper: function(e, tr) {
-            var $originals = tr.children();
-            var $helper = tr.clone();
-            $helper.children().each(function(index) {
-                // Set helper cell sizes to match the original sizes
-                $(this).width($originals.eq(index).width());
-            });
-            return $helper;
-        }
-    });
-    $('.category_table tbody').disableSelection();
-    $('.level_table tbody').sortable({ 
-        update: function(e, ui) {
-            var item = ui.item;
-            var cat_id = parseInt(item.find('td').eq(1).text());
-            
-            console.log(cat_id);
-
-            var other = item.prev();
-            while(other.length > 0 && parseInt( other.find('td').eq(1).text() ) != cat_id ) {
-                other = other.prev();
-            }
-            if(other.length > 0)
-                item.insertAfter(other);
-
-            other = item.next();
-            while(other.length > 0 && parseInt( other.find('td').eq(1).text() ) != cat_id ) {
-                other = other.next();
-            }
-            if(other.length > 0)
-                item.insertBefore(other);
-
-            submit_level_order();
-        },
-        helper: function(e, tr) {
-            var $originals = tr.children();
-            var $helper = tr.clone();
-            $helper.children().each(function(index) {
-                // Set helper cell sizes to match the original sizes
-                $(this).width($originals.eq(index).width());
-            });
-            return $helper;
-        }
-    });
-    $('.level_table tbody').disableSelection();
-    
-    function submit_category_order() {
-        var t  = $('.category_table tr');
-        var cat_ids = [];
-        for(var i = 1; i < t.length; i++)
-            cat_ids.push(t.eq(i).find('td').eq(1).text());
-        console.log(cat_ids);
-        $.post( "/api/", { action: "order_level_categories", id_by_order: cat_ids });
-    }
-    function submit_level_order() {
-        var t  = $('.level_table tr');
-        var lvl_ids = [];
-        for(var i = 1; i < t.length; i++)
-            lvl_ids.push(t.eq(i).find('td').eq(2).text());
-        console.log(lvl_ids);
-        $.post( "/api/", { action: "order_levels", id_by_order: lvl_ids });
-    }
 </script>
 
 <? require('footer.php'); ?>

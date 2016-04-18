@@ -24,11 +24,8 @@ namespace ThreeOneSevenBee.Model.UI
                 operatorView.Width = NUMVAR_SIZE / 2;
                 operatorView.Height = NUMVAR_SIZE;
                 operatorView.Baseline = NUMVAR_SIZE / 2;
-                operatorView.OnClick = () =>
-                {
-                    model.Select(minusExpression);
-                };
-                operatorView.LineColor = model.SelectionIndex(minusExpression) != -1 ? new Color(39, 174, 97) : new Color(0, 0, 0);
+                operatorView.OnClick = () => model.Select(minusExpression.Expression);
+                operatorView.LineColor = model.SelectionIndex(minusExpression.Expression) != -1 ? new Color(39, 174, 97) : new Color(0, 0, 0);
                 operatorView.LineWidth = NUMVAR_SIZE / 15;
                 view.X = operatorView.Width;
                 operatorView.Y = view.Baseline - operatorView.Baseline;
