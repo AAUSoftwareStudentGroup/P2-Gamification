@@ -907,5 +907,22 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             return new Identity(suggestion, suggestion);
         }
+
+        // 4 * (a/b) = 4a/b
+        public static Identity ProductOfConstantAndFraction(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+
+
+
+
+
+
+
+            return null;
+        }
+
+        //Missing ProductOfTwoFractions
+        // a/b * c/d = a*c/b*d
+
     }
 }

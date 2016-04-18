@@ -110,6 +110,9 @@
     
             return this.getType() === other.getType();
         },
+        toString: function () {
+            return this.getValue();
+        },
         treePrint: function (indent, isLast) {
             console.log(indent + "|-" + this.getValue());
             return indent + (isLast ? "  " : "| ");
@@ -171,6 +174,9 @@
                 $yield.push(node);
             }
             return Bridge.Array.toEnumerable($yield);
+        },
+        toString: function () {
+            return this.getExpression().toString();
         },
         treePrint: function (indent, isLast) {
             console.log(indent + "|-" + "()");
@@ -257,6 +263,9 @@
             }
             return Bridge.Array.toEnumerable($yield);
         },
+        toString: function () {
+            return this.getFunction() + "{" + this.getExpression() + "}";
+        },
         treePrint: function (indent, isLast) {
             console.log(indent + "|-" + this.getFunction());
             indent += (isLast ? "  " : "| ");
@@ -304,6 +313,9 @@
             }
     
             return (Math.abs(this.number - other.number) < 4.94065645841247E-324);
+        },
+        toString: function () {
+            return this.getValue();
         },
         treePrint: function (indent, isLast) {
             console.log(indent + "|-" + this.getValue());
@@ -353,6 +365,9 @@
             var $yield = [];
             return Bridge.Array.toEnumerable($yield);
             return Bridge.Array.toEnumerable($yield);
+        },
+        toString: function () {
+            return this.getValue();
         },
         treePrint: function (indent, isLast) {
             console.log(Bridge.String.format(indent + "|-" + this.getValue(), true));
@@ -643,6 +658,9 @@
         replace: function (old, replacement) {
             throw new Bridge.NotImplementedException();
         },
+        toString: function () {
+            return "{" + this.getLeft() + "}" + this.getSymbol() + "{" + this.getRight() + "}";
+        },
         treePrint: function (indent, isLast) {
     
             console.log(indent + "|-" + this.getSymbol());
@@ -660,7 +678,7 @@
     
         },
         getValue: function () {
-            return "-" + this.getExpression().toString();
+            return "-" + this.getExpression();
         },
         getSize: function () {
             if (Bridge.is(this.getExpression(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression)) {
@@ -706,6 +724,9 @@
                 $yield.push(node);
             }
             return Bridge.Array.toEnumerable($yield);
+        },
+        toString: function () {
+            return "-{" + this.getExpression() + "}";
         },
         treePrint: function (indent, isLast) {
             console.log(indent + "|-" + "-");
@@ -838,6 +859,9 @@
         replace: function (old, replacement) {
             throw new Bridge.NotImplementedException();
         },
+        toString: function () {
+            return Bridge.Linq.Enumerable.from(this).skip(1).aggregate("{" + Bridge.Linq.Enumerable.from(this).first() + "}", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression.f2));
+        },
         treePrint: function (indent, isLast) {
             console.log(indent + "|-" + this.getSymbol());
             indent += (isLast ? "  " : "| ");
@@ -856,6 +880,9 @@
     Bridge.apply($_.ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression, {
         f1: function (s, e) {
             return s + this.getSymbol() + e.getValue();
+        },
+        f2: function (s, e) {
+            return s + this.getSymbol() + "{" + e + "}";
         }
     });
     
