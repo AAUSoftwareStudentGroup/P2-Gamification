@@ -95,31 +95,31 @@ namespace ThreeOneSevenBee.ModelTests
                 new NumericExpression(1),
                 new NumericExpression(1),
                 OperatorType.Add);
-            Assert.AreEqual("1+1", parser.Serialize(exp), "1+1");
+            Assert.AreEqual("{1}+{1}", parser.Serialize(exp), "{1}+{1}");
 
             exp = new BinaryOperatorExpression(
                 new NumericExpression(1),
                 new NumericExpression(1),
                 OperatorType.Divide);
-            Assert.AreEqual("1/1", parser.Serialize(exp), "1/1");
+            Assert.AreEqual("{1}/{1}", parser.Serialize(exp), "{1}/{1}");
 
             exp = new BinaryOperatorExpression(
                 new NumericExpression(1),
                 new NumericExpression(1),
                 OperatorType.Multiply);
-            Assert.AreEqual("1*1", parser.Serialize(exp), "1*1");
+            Assert.AreEqual("{1}*{1}", parser.Serialize(exp), "{1}*{1}");
 
             exp = new BinaryOperatorExpression(
                 new NumericExpression(1),
                 new NumericExpression(1),
                 OperatorType.Power);
-            Assert.AreEqual("1^1", parser.Serialize(exp), "1^1");
+            Assert.AreEqual("{1}^{1}", parser.Serialize(exp), "{1}^{1}");
 
             exp = new BinaryOperatorExpression(
                 new NumericExpression(1),
                 new NumericExpression(1),
                 OperatorType.Subtract);
-            Assert.AreEqual("1-1", parser.Serialize(exp), "1-1");
+            Assert.AreEqual("{1}-{1}", parser.Serialize(exp), "{1}-{1}");
         }
 
         [TestMethod]
@@ -164,7 +164,7 @@ namespace ThreeOneSevenBee.ModelTests
             var parser = new ExpressionSerializer();
             var exp = parser.Deserialize("1   +  1");
 
-            Assert.AreEqual("1+1", parser.Serialize(exp), "'1   +  1' = '1+1'");
+            Assert.AreEqual("{1}+{1}", parser.Serialize(exp), "'1   +  1' = '{1}+{1}'");
         }
 
         [TestMethod]
