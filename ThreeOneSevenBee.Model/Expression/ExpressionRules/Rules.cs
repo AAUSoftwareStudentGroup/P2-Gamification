@@ -776,6 +776,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
 
             VariadicOperatorExpression suggestion;
+            DelimiterExpression parenthesis;
 
             if (expression is NumericExpression && expression != null)
             {
@@ -789,14 +790,14 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         NumericExpression b = new NumericExpression(n / count);
 
                         suggestion = new VariadicOperatorExpression(OperatorType.Multiply, a, b);
+                        parenthesis = new DelimiterExpression(suggestion);
 
-                        return new Identity(suggestion, suggestion);
+                        return new Identity(parenthesis, parenthesis);
                     }
                 }
             }
             return null;
         }
-
 
         public static Identity ReverseCommonPowerParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
@@ -877,9 +878,33 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
         }
 
-        /*public static Identity ReverseParenthesisPowerRule(ExpressionBase expression, List<ExpressionBase> selection)
+        public static Identity DivisionEqualsOneRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
+            if (selection.Count != 2)
+            {
+                return null;
+            }
 
-        }*/
+            if (expression != null)
+            {
+                if (expression is BinaryOperatorExpression)
+                {
+                    var expression1 = expression as BinaryOperatorExpression;
+                    if (expression1.Type == OperatorType.Divide && selection[0] == selection[1])
+                    {
+                        NumericExpression suggestion = new NumericExpression(1);
+                        return new Identity(suggestion, suggestion);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
+        /*public static Identity ReverseParenthesisPowerRule(ExpressionBase expression, List<ExpressionBase> selection)
+{
+
+}*/
     }
 }
