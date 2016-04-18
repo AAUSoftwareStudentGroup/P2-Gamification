@@ -489,6 +489,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
         // a * b + a * c = a * (b + c)
         // a * b - a * c = a * (b - c)
+        // a * b + a*c + 3
         public static Identity ProductParenthesis(ExpressionBase expression, List<ExpressionBase> selection)
         {
             var variadicExpression = expression as VariadicOperatorExpression;
@@ -520,6 +521,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 return null;
             }
             List<ExpressionBase> list = new List<ExpressionBase>();
+
             foreach (var selected in selection)
             {
                 var selectedParent = selected.Parent.Clone() as VariadicOperatorExpression;
@@ -554,13 +556,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 ExpressionBase temp = null;
                 foreach (var selected in selection)
                 {
-                    if (selected.Parent is UnaryMinusExpression)
+                    if (selected.Parent is VariadicOperatorExpression)
                     {
-                        temp = selected.Parent as UnaryMinusExpression;
-                    }
-                    else if (selected.Parent is VariadicOperatorExpression)
-                    {
-                        temp = selected as VariadicOperatorExpression;
+                        temp = selected.Parent as VariadicOperatorExpression;
                     }
 
                     if (temp != null)
@@ -635,39 +633,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return new Identity(suggestion, suggestion);
         }
 
-        //    variadicExpression = (VariadicOperatorExpression)variadicExpression.Clone();
-        //    var rest = new List<ExpressionBase>();
-        //    foreach (var op in selection.Cast<VariadicOperatorExpression>())
-        //    {
-        //        foreach (var subOp in op)
-        //        {
-        //            if (subOp == common.First())
-        //                continue;
-        //            rest.Add(subOp);
-        //            if (variadicExpression != null)
-        //                variadicExpression.Remove(op);
-        //}
-        //    }
-
-        //    var suggestion = new VariadicOperatorExpression(
-        //        OperatorType.Multiply,
-        //        common.First(),
-        //        new DelimiterExpression(
-        //            new VariadicOperatorExpression(
-        //                OperatorType.Add,
-        //                rest[0], rest[1], rest.Skip(2).ToArray())));
-
-        //    var result = new VariadicOperatorExpression(
-        //        OperatorType.Add,
-        //        variadicExpression,
-        //        suggestion);
-
-        //    return new Identity(suggestion, result);
-        //}
-
-        //(a+b)/c = a/c + b/c
-        //Selection is the vinculum, it is split into all possible fractions
-        //Ved minus siger den a + -b i stedet for a - b, dette skal fikses!
         public static Identity SplittingFractions(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count != 1)
@@ -886,19 +851,19 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // sqrt(c^4) = (c^4)^1/2
         public static Identity SquareRootRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
-            if(selection.Count != 1)
+            if (selection.Count != 1)
             {
                 return null;
             }
 
             var sqrtExp = selection[0] as FunctionExpression; 
 
-            if(sqrtExp == null)
+            if (sqrtExp == null)
             {
                 return null;
             }
 
-            if(sqrtExp.Function != "sqrt")
+            if (sqrtExp.Function != "sqrt")
             {
                 return null;
             }
@@ -912,14 +877,14 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         //Select constant and vinculum
         public static Identity ProductOfConstantAndFraction(ExpressionBase expression, List<ExpressionBase> selection)
         {
-            if(selection.Count != 2)
+            if (selection.Count != 2)
             {
                 return null;
             }
 
             var variadicExpression = expression as VariadicOperatorExpression;
 
-            if(variadicExpression == null || variadicExpression.Type != OperatorType.Multiply)
+            if (variadicExpression == null || variadicExpression.Type != OperatorType.Multiply)
             {
                 return null;
             }
@@ -938,21 +903,59 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 constant = selection[0].Clone();
             }
 
-            if(fraction == null || constant == null)
+            if (fraction == null || constant == null)
             {
                 return null;
             }
 
             VariadicOperatorExpression numerators = new VariadicOperatorExpression(OperatorType.Multiply, fraction.Left, constant);
 
-
-            BinaryOperatorExpression suggestion = new BinaryOperatorExpression(numerators, fraction.Right, OperatorType.Divide);
+            BinaryOperatorExpression suggestion = new BinaryOperatorExpression(fraction.Right, numerators, OperatorType.Divide);
 
             return new Identity(suggestion, suggestion);
         }
 
-        //Missing ProductOfTwoFractions
-        // a/b * c/d = a*c/b*d
+        public static Identity DivisionEqualsOneRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count != 1)
+            {
+                return null;
+            }
+
+            if (expression != null)
+            {
+                if (expression is BinaryOperatorExpression)
+                {
+                    var expression1 = expression as BinaryOperatorExpression;
+                    if (expression1.Type == OperatorType.Divide)
+                    {
+                        if (expression1.Left.Calculate() == expression1.Right.Calculate())
+                        {
+                            NumericExpression suggestion = new NumericExpression(1);
+                            return new Identity(suggestion, suggestion);
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static Identity FactorizeUnaryMinus(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count !=2)
+            {
+                return null;
+            }
+            var unaryMinusExpression = expression as UnaryMinusExpression;
+            if (unaryMinusExpression != null)
+            {
+                var numericExpression = new NumericExpression(1);
+                var suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new UnaryMinusExpression(numericExpression), unaryMinusExpression.Expression);
+                return new Identity(suggestion, suggestion);
+            }
+            return null;
+        }
 
     }
 }
