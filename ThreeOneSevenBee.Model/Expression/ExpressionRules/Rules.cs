@@ -916,7 +916,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             if (fraction == null || constant == null)
             {
-                Console.WriteLine("er den her?");
                 return null;
             }
 
