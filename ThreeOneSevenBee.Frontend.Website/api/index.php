@@ -83,6 +83,34 @@ class API {
         API::respond();
     }
 
+    static function order_level_categories($IN, $db) {
+        $ids = $IN['id_by_order'];
+        $n = count($ids);
+        for($i = 0; $i < $n; $i++) {
+            $db->query("UPDATE gamedb.level_category
+                        SET level_category.order = ?
+                        WHERE id=?;",
+                        $i, 
+                        (int)$ids[$i]
+                    );
+        }
+        API::respond(true);
+    }
+
+    static function order_levels($IN, $db) {
+        $ids = $IN['id_by_order'];
+        $n = count($ids);
+        for($i = 0; $i < $n; $i++) {
+            $db->query("UPDATE gamedb.level
+                        SET level.order = ?
+                        WHERE id=?;",
+                        $i, 
+                        (int)$ids[$i]
+                    );
+        }
+        API::respond(true);
+    }
+
     static function save_user_level_progress($IN, $db) {
         session_start();
         if(!isset($_SESSION['authorized']))
