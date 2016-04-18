@@ -251,6 +251,7 @@ namespace ThreeOneSevenBee.ModelTests
          Assert.AreEqual(Make.Add(Make.Divide(Make.Add(Make.New("a"), Make.Minus(Make.New("y")), Make.New("b")), Make.New("x")), Make.New(3)), identity.Result);
         }
 
+        [TestMethod]
         public void Rules_SplittingFractions()
         {
             ExpressionBase parent;
@@ -268,8 +269,8 @@ namespace ThreeOneSevenBee.ModelTests
             
                         // {a-c-d+f}/x + 3 = a/x - c/x - d/x + f/x + 3
             parent = Make.Add(
-                selection1 = Make.Divide(Make.Add(Make.New("a"), Make.Minus(Make.New("c")), Make.Minus(Make.New("d")), Make.New("f")), Make.New("x")),
-                Make.New(3));
+                selection1 = Make.Divide(Make.Add(Make.New("a"), Make.Minus(Make.New("c")), 
+                Make.Minus(Make.New("d")), Make.New("f")), Make.New("x")), Make.New(3));
 
             identity = Rules.SplittingFractions(parent, new List<ExpressionBase>() { selection1 });
             
@@ -279,7 +280,7 @@ namespace ThreeOneSevenBee.ModelTests
             
             Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("x")), Make.Divide(Make.Minus(Make.New("c")), Make.New("x")), Make.Divide(Make.Minus(Make.New("d")), Make.New("x")), Make.Divide(Make.New("f"), Make.New("x")), Make.New(3)), identity.Result);
             
-            //Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("x")), Make.Minus(Make.Divide(Make.New("c"), Make.New("x"))), Make.Minus(Make.Divide(Make.New("d"), Make.New("x"))), Make.Divide(Make.New("f"), Make.New("x")), Make.New(3)), identity.Result);*/
+            //Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("x")), Make.Minus(Make.Divide(Make.New("c"), Make.New("x"))), Make.Minus(Make.Divide(Make.New("d"), Make.New("x"))), Make.Divide(Make.New("f"), Make.New("x")), Make.New(3)), identity.Result);
         }
     }
 }
