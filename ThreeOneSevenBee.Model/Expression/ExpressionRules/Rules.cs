@@ -979,7 +979,11 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     one = selection[1].Clone() as NumericExpression;
                     something = selection[0].Clone();
                 }
-                return new Identity(something, something);
+                if (one.Number == 1)
+                {
+                    return new Identity(something, something);
+                }
+                // Der er en bug med power
             }
             return null;
         }
