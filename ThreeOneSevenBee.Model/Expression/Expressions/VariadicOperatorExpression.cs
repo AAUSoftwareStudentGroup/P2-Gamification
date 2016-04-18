@@ -30,7 +30,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 foreach (ExpressionBase expression in this)
                 {
                     // Count-1 gets the total number of * signs in the variadic expression
-                    result += expression.Size + (Count-1);
+                    result += expression.Size + (Count - 1);
                 }
                 return result;
             }
@@ -136,16 +136,22 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             throw new NotImplementedException();
         }
 
-		public override string TreePrint(string indent, bool isLast)
-		{
-			Console.WriteLine(indent + "|-" + Symbol);
-			indent += (isLast ? "  " : "| ");
-			for (int i = 0; i < this.Count-1; i++) {
-				this [i].TreePrint(indent, false);
-			}
-			this[this.Count-1].TreePrint(indent, true);
-			return indent;
-		}
+        public override string ToString()
+        {
+            return this.Skip(1).Aggregate("{" + this.First() + "}", (s, e) => s + Symbol + "{" + e + "}");
+        }
+
+        public override string TreePrint(string indent, bool isLast)
+        {
+            Console.WriteLine(indent + "|-" + Symbol);
+            indent += (isLast ? "  " : "| ");
+            for (int i = 0; i < this.Count - 1; i++)
+            {
+                this[i].TreePrint(indent, false);
+            }
+            this[this.Count - 1].TreePrint(indent, true);
+            return indent;
+        }
 
     }
 }

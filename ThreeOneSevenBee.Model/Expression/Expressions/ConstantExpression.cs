@@ -76,6 +76,11 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return this.Type == other.Type;
         }
 
+        public override string ToString()
+        {
+            return Value;
+        }
+
         public override string TreePrint(string indent, bool isLast) 
 		{
 			Console.WriteLine (indent + "|-" + Value);

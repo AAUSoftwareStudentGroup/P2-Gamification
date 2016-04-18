@@ -63,6 +63,11 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return (Math.Abs(this.Number - other.Number) < double.Epsilon);
         }
 
+        public override string ToString()
+        {
+            return Value;
+        }
+
         public override string TreePrint(string indent, bool isLast)
 		{
 			Console.WriteLine (indent + "|-" + Value);
