@@ -985,16 +985,21 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 {
                     one = selection[0].Clone() as NumericExpression;
                     something = selection[1].Clone();
+                    if (one.Number == 1)
+                    {
+                        return new Identity(something, something);
+                    }
                 }
-                else
+                else if (selection[1] is NumericExpression)
                 {
                     one = selection[1].Clone() as NumericExpression;
                     something = selection[0].Clone();
+                    if (one.Number == 1)
+                    {
+                        return new Identity(something, something);
+                    }
                 }
-                if (one.Number == 1)
-                {
-                    return new Identity(something, something);
-                }
+
                 // Der er en bug med power
             }
             return null;
