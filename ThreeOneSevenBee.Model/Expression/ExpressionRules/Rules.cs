@@ -98,6 +98,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
+
         public static Identity FractionToProductRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             BinaryExpression fraction = expression as BinaryExpression;
@@ -125,6 +126,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
         }
 
+        // (15) = 15
         public static Identity RemoveParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             DelimiterExpression parenthesis = expression as DelimiterExpression;
@@ -698,7 +700,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
-
         public static Identity CommonPowerParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count < 2)
@@ -797,7 +798,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
-
         public static Identity ReverseCommonPowerParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count != 2)
@@ -841,6 +841,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
             return null;
         }
+
         public static Identity ParenthesisPowerRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count < 2)
@@ -881,5 +882,30 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         {
 
         }*/
+
+        // sqrt(c^4) = (c^4)^1/2
+        public static Identity SquareRootRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if(selection.Count != 1)
+            {
+                return null;
+            }
+
+            var sqrtExp = selection[0] as FunctionExpression; 
+
+            if(sqrtExp == null)
+            {
+                return null;
+            }
+
+            if(sqrtExp.Function != "sqrt")
+            {
+                return null;
+            }
+
+            BinaryOperatorExpression suggestion = new BinaryOperatorExpression(new DelimiterExpression(sqrtExp.Expression.Clone()), new BinaryOperatorExpression(new NumericExpression(1), new NumericExpression(2), OperatorType.Divide), OperatorType.Power);
+
+            return new Identity(suggestion, suggestion);
+        }
     }
 }
