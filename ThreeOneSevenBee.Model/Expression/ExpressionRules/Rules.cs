@@ -969,7 +969,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             if (variadicExpression != null || variadicExpression.Type == OperatorType.Multiply)
             {
-
                 if (selection[0] is NumericExpression)
                 {
                     one = selection[0].Clone() as NumericExpression;
