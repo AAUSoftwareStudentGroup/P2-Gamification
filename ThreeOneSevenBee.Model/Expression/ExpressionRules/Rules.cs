@@ -900,15 +900,15 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 return null;
             }
 
-            BinaryOperatorExpression fraction;
-            ExpressionBase constant;
+            BinaryOperatorExpression fraction = null;
+            ExpressionBase constant = null;
 
             if (selection[0] is BinaryOperatorExpression)
             {
                 fraction = selection[0].Clone() as BinaryOperatorExpression;
                 constant = selection[1].Clone();
             }
-            else
+            else if(selection[1] is BinaryOperatorExpression)
             {
                 fraction = selection[1].Clone() as BinaryOperatorExpression;
                 constant = selection[0].Clone();
@@ -916,6 +916,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             if (fraction == null || constant == null)
             {
+                Console.WriteLine("er den her?");
                 return null;
             }
 
@@ -962,7 +963,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             if (unaryMinusExpression != null)
             {
                 var numericExpression = new NumericExpression(1);
-                var suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new UnaryMinusExpression(numericExpression), unaryMinusExpression.Expression);
+                var suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new UnaryMinusExpression(numericExpression), unaryMinusExpression.Expression.Clone());
                 return new Identity(suggestion, suggestion);
             }
             return null;
