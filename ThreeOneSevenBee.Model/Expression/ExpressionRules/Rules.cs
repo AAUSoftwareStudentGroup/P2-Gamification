@@ -876,13 +876,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         // 4 * (a/b) = 4a/b
         public static Identity ProductOfConstantAndFraction(ExpressionBase expression, List<ExpressionBase> selection)
         {
-
-
-
-
-
-
-
             return null;
         }
 
@@ -912,6 +905,22 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 }
             }
 
+            return null;
+        }
+
+        public static Identity FactorizeUnaryMinus(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if (selection.Count !=2)
+            {
+                return null;
+            }
+            var unaryMinusExpression = expression as UnaryMinusExpression;
+            if (unaryMinusExpression != null)
+            {
+                var numericExpression = new NumericExpression(1);
+                var suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new UnaryMinusExpression(numericExpression), unaryMinusExpression.Expression);
+                return new Identity(suggestion, suggestion);
+            }
             return null;
         }
 
