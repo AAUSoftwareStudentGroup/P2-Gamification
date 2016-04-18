@@ -98,6 +98,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
+
         public static Identity FractionToProductRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             BinaryExpression fraction = expression as BinaryExpression;
@@ -125,6 +126,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
         }
 
+        // (15) = 15
         public static Identity RemoveParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             DelimiterExpression parenthesis = expression as DelimiterExpression;
@@ -698,7 +700,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
-
         public static Identity CommonPowerParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count < 2)
@@ -776,7 +777,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
 
             VariadicOperatorExpression suggestion;
-            DelimiterExpression parenthesis;
 
             if (expression is NumericExpression && expression != null)
             {
@@ -790,9 +790,8 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         NumericExpression b = new NumericExpression(n / count);
 
                         suggestion = new VariadicOperatorExpression(OperatorType.Multiply, a, b);
-                        parenthesis = new DelimiterExpression(suggestion);
 
-                        return new Identity(parenthesis, parenthesis);
+                        return new Identity(suggestion, suggestion);
                     }
                 }
             }
@@ -842,6 +841,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
             return null;
         }
+
         public static Identity ParenthesisPowerRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count < 2)
@@ -878,33 +878,51 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
         }
 
-        public static Identity DivisionEqualsOneRule(ExpressionBase expression, List<ExpressionBase> selection)
+        /*public static Identity ReverseParenthesisPowerRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
-            if (selection.Count != 2)
+
+        }*/
+
+        // sqrt(c^4) = (c^4)^1/2
+        public static Identity SquareRootRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if(selection.Count != 1)
             {
                 return null;
             }
 
-            if (expression != null)
+            var sqrtExp = selection[0] as FunctionExpression; 
+
+            if(sqrtExp == null)
             {
-                if (expression is BinaryOperatorExpression)
-                {
-                    var expression1 = expression as BinaryOperatorExpression;
-                    if (expression1.Type == OperatorType.Divide && selection[0] == selection[1])
-                    {
-                        NumericExpression suggestion = new NumericExpression(1);
-                        return new Identity(suggestion, suggestion);
-                    }
-                }
+                return null;
             }
+
+            if(sqrtExp.Function != "sqrt")
+            {
+                return null;
+            }
+
+            BinaryOperatorExpression suggestion = new BinaryOperatorExpression(new DelimiterExpression(sqrtExp.Expression.Clone()), new BinaryOperatorExpression(new NumericExpression(1), new NumericExpression(2), OperatorType.Divide), OperatorType.Power);
+
+            return new Identity(suggestion, suggestion);
+        }
+
+        // 4 * (a/b) = 4a/b
+        public static Identity ProductOfConstantAndFraction(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+
+
+
+
+
+
 
             return null;
         }
 
+        //Missing ProductOfTwoFractions
+        // a/b * c/d = a*c/b*d
 
-        /*public static Identity ReverseParenthesisPowerRule(ExpressionBase expression, List<ExpressionBase> selection)
-{
-
-}*/
     }
 }

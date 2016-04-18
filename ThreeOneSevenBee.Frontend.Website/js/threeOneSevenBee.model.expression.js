@@ -113,7 +113,7 @@
             return Bridge.getHashCode(this.getValue());
         },
         toString: function () {
-            return this.getValue();
+            return "{" + this.getValue() + "}";
         },
         prettyPrint: function () {
             this.treePrint("", true);
@@ -412,7 +412,7 @@
                 return false;
             }
     
-            var validLetters = "abcdefghijklmnopqrstuvwz";
+            var validLetters = "abcdefghijklmnopqrstuvwxyz";
     
             $t = Bridge.getEnumerator(validLetters);
             while ($t.moveNext()) {
