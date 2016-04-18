@@ -903,7 +903,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     var expression1 = expression as BinaryOperatorExpression;
                     if (expression1.Type == OperatorType.Divide)
                     {
-                        if (expression1.Left == expression1.Right)
+                        if (expression1.Left.Calculate() == expression1.Right.Calculate())
                         {
                             NumericExpression suggestion = new NumericExpression(1);
                             return new Identity(suggestion, suggestion);
