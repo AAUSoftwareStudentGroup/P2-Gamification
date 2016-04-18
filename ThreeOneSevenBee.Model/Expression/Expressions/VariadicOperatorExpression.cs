@@ -111,6 +111,8 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override ExpressionBase Clone()
         {
+            if (Count < 2)
+                throw new InvalidOperationException("Tried to clone invalid VariadicExpression.");
             var expression = new VariadicOperatorExpression(Type, this[0].Clone(), this[1].Clone());
             foreach (var expr in this.Skip(2))
             {
