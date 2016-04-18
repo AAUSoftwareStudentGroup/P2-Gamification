@@ -961,7 +961,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             if (unaryMinusExpression != null)
             {
                 var numericExpression = new NumericExpression(1);
-                var suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new UnaryMinusExpression(numericExpression), unaryMinusExpression.Expression);
+                var suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new UnaryMinusExpression(numericExpression), unaryMinusExpression.Expression.Clone());
                 return new Identity(suggestion, suggestion);
             }
             return null;
