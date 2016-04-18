@@ -730,6 +730,33 @@
                 var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(new ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression(sqrtExp.getExpression().clone()), new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(2), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
     
                 return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
+            },
+            productOfConstantAndFraction: function (expression, selection) {
+    
+    
+    
+    
+    
+    
+    
+                return null;
+            },
+            divisionEqualsOneRule: function (expression, selection) {
+                if (selection.getCount() !== 2) {
+                    return null;
+                }
+    
+                if (Bridge.hasValue(expression)) {
+                    if (Bridge.is(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression)) {
+                        var expression1 = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                        if (expression1.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(selection.getItem(0), selection.getItem(1))) {
+                            var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1);
+                            return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
+                        }
+                    }
+                }
+    
+                return null;
             }
         }
     });
