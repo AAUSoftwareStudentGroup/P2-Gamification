@@ -20,19 +20,17 @@
                 var gameModel;
                 var gameView;
     
-                var test = Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("test"), [
-                    [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "a*(b+c)", "a*(b+c)", ["0"])]
-                ] );
-    
                 gameAPI.getCurrentPlayer(function (u) {
-                    u.addCategory(test);
+                    u.addCategory(Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("wat"), [
+                        [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "a*(a+a)", "a*(a+a)", ["2*a^2"])]
+                    ] ));
                     gameAPI.getPlayers(function (p) {
                         gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
                             onSaveLevel: function (level) {
                                 gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, $_.ThreeOneSevenBee.Frontend.App.f1);
                             }
                         } );
-    
+                        gameModel.getCurrentExpression().prettyPrint();
                         gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
                     });
                 });

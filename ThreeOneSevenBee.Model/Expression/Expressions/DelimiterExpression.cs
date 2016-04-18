@@ -77,7 +77,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override string ToString()
         {
-            return Expression.ToString();
+            return "(" + Expression.ToString() + ")";
         }
 
         public override string TreePrint(string indent, bool isLast)
