@@ -982,7 +982,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             ExpressionBase something;
             NumericExpression one;
 
-            if (variadicExpression != null || variadicExpression.Type == OperatorType.Multiply)
+            if (variadicExpression != null && variadicExpression.Type == OperatorType.Multiply)
             {
                 if (selection[0] is NumericExpression)
                 {
