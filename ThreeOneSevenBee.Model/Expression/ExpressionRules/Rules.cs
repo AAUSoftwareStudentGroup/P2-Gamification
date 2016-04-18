@@ -957,5 +957,20 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
+        public static Identity ProductOfTwoFractions(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+
+
+
+
+
+
+
+
+            return null;
+        }
+
+
+
     }
 }
