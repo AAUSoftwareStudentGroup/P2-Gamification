@@ -66,6 +66,23 @@ class API {
         API::respond();
     }
 
+    static function delete_category_by_id($IN, $db) {
+        $db->query("DELETE FROM gamedb.level_category
+                      WHERE id=?;", $IN['category_id']
+                    );
+        $db->query("DELETE FROM gamedb.level
+                      WHERE level_category_id=?;", $IN['category_id']
+                    );
+        API::respond();
+    }
+
+    static function delete_level_by_id($IN, $db) {
+        $db->query("DELETE FROM gamedb.level
+                      WHERE id=?;", $IN['level_id']
+                    );
+        API::respond();
+    }
+
     static function save_user_level_progress($IN, $db) {
         session_start();
         if(!isset($_SESSION['authorized']))

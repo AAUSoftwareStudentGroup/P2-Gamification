@@ -72,16 +72,28 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void DrawText(double x, double y, double width, double height, string text, Color textColor)
         {
-            context.Font = height + "px Segoe UI";
-            context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
-            if (context.MeasureText(text).Width > width)
-            {
-                Console.WriteLine(context.MeasureText(text).Width);
-                context.Font = width / context.MeasureText(text).Width * height + "px Segoe UI";
-            }
+            string[] lines = text.Split('\n');
+
             context.TextBaseline = CanvasTypes.CanvasTextBaselineAlign.Middle;
             context.FillStyle = ColorToString(textColor);
-            context.FillText(text, (int)(x + width / 2), (int)(y + height / 2));
+            double minFontSize = height;
+
+            foreach (string line in lines)
+            {
+                context.Font = height / lines.Length + "px Segoe UI";
+                context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
+                if (context.MeasureText(line).Width > width)
+                {
+                    minFontSize = Math.Min(minFontSize, width / context.MeasureText(line).Width * (height / lines.Length));
+                }
+            }
+
+            for (int index = 0; index < lines.Length; index++)
+            {
+                context.Font = minFontSize + "px Segoe UI";
+                context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
+                context.FillText(lines[index], (int)(x + width / 2), (int)(y + (index + 0.5) * (height / lines.Length)));
+            }
         }
     }
 }

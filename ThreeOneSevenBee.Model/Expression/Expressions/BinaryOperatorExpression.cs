@@ -26,10 +26,10 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 {
                     result = 1 + Left.Size + Right.Size;
                 }
-                else if (Type == OperatorType.Add || 
-                    Type == OperatorType.Subtract || 
-                    Type == OperatorType.Divide || 
-                    Type == OperatorType.Minus || 
+                else if (Type == OperatorType.Add ||
+                    Type == OperatorType.Subtract ||
+                    Type == OperatorType.Divide ||
+                    Type == OperatorType.Minus ||
                     Type == OperatorType.Multiply)
                 {
                     result = 3 + Left.Size + Right.Size;
@@ -118,9 +118,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             throw new NotImplementedException();
         }
 
+        public override string ToString()
+        {
+            return "{" + Left + "}" + Symbol + "{" + Right + "}";
+        }
+
         public override string TreePrint(string indent, bool isLast)
         {
-            
+
             Console.WriteLine(indent + "|-" + Symbol);
             indent += (isLast ? "  " : "| ");
             Left.TreePrint(indent, false);

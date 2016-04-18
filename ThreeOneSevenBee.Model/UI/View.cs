@@ -4,10 +4,10 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class View
     {
-        public double Width { get; set; }
-        public double Height { get; set; }
-        public double X { get; set; }
-        public double Y { get; set; }
+        public virtual double Width { get; set; }
+        public virtual double Height { get; set; }
+        public virtual double X { get; set; }
+        public virtual double Y { get; set; }
 
         public double Baseline { get; set; }
 

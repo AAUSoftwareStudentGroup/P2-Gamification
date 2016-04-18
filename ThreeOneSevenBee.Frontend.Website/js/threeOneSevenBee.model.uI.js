@@ -67,19 +67,20 @@
     
     Bridge.define('ThreeOneSevenBee.Model.UI.IContext');
     
-    Bridge.define('ThreeOneSevenBee.Model.UI.ParenthesisType', {
+    Bridge.define('ThreeOneSevenBee.Model.UI.Direction', {
         statics: {
-            left: 0,
-            right: 1
+            top: 0,
+            right: 1,
+            left: 2,
+            bottom: 3
         },
         $enum: true
     });
     
-    Bridge.define('ThreeOneSevenBee.Model.UI.position', {
+    Bridge.define('ThreeOneSevenBee.Model.UI.ParenthesisType', {
         statics: {
-            upperLeft: 0,
-            upperRight: 1,
-            bottomMiddle: 2
+            left: 0,
+            right: 1
         },
         $enum: true
     });
@@ -138,11 +139,13 @@
         },
         drawWithContext: function (context, offsetX, offsetY) {
             var $t;
-            ThreeOneSevenBee.Model.UI.View.prototype.drawWithContext.call(this, context, offsetX, offsetY);
-            $t = Bridge.getEnumerator(this.children);
-            while ($t.moveNext()) {
-                var child = $t.getCurrent();
-                child.drawWithContext(context, offsetX + this.getX(), offsetY + this.getY());
+            if (this.getVisible() === true) {
+                ThreeOneSevenBee.Model.UI.View.prototype.drawWithContext.call(this, context, offsetX, offsetY);
+                $t = Bridge.getEnumerator(this.children);
+                while ($t.moveNext()) {
+                    var child = $t.getCurrent();
+                    child.drawWithContext(context, offsetX + this.getX(), offsetY + this.getY());
+                }
             }
         },
         click: function (x, y) {
@@ -562,9 +565,9 @@
                 operatorView.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                 operatorView.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
                 operatorView.onClick = function () {
-                    model.select(expression);
+                    model.select(minusExpression.getExpression());
                 };
-                operatorView.setLineColor(model.selectionIndex(expression) !== -1 ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 39, 174, 97) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0));
+                operatorView.setLineColor(model.selectionIndex(minusExpression.getExpression()) !== -1 ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 39, 174, 97) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0));
                 operatorView.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 15);
                 view.setX(operatorView.getWidth());
                 operatorView.setY(view.getBaseline() - operatorView.getBaseline());
@@ -876,7 +879,7 @@
                 setWidth: 75,
                 setHeight: 30,
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 193, 57, 43),
-                setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0)
+                setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255)
             } ));
     
             this.setCategoryName(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(user.categories.getItem(this.getCategory()).name), {
@@ -1026,39 +1029,26 @@
                 setY: 50
             } );
     
-            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Denne bar viser hvor langt du er nået."), {
+            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Denne bar viser hvor langt du er nået.", 300, 75), {
                 setVisible: game.getIsFirstLevel(),
-                setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255),
                 setX: this.progressbar.getX(),
-                setY: this.progressbar.getY() + this.progressbar.getHeight() + 10,
-                setWidth: 300,
-                setHeight: 75,
-                setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130),
-                setPosition: ThreeOneSevenBee.Model.UI.position.upperLeft
+                setY: this.progressbar.getY() + this.progressbar.getHeight() + 10
             } );
     
-            this.toolTipView2 = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Når knappen bliver grøn kan du gå videre til næste bane"), {
+            this.toolTipView2 = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Når knappen bliver grøn kan du gå videre til næste bane", 400, 75), {
                 setVisible: game.getIsFirstLevel(),
-                setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255),
-                setX: this.nextButton.getX(),
+                setX: this.nextButton.getX() - 380,
                 setY: this.nextButton.getY() + this.nextButton.getHeight() + 10,
-                setWidth: 400,
-                setHeight: 75,
-                setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130),
-                setPosition: ThreeOneSevenBee.Model.UI.position.upperRight
+                setArrowPosition: 380
             } );
     
-            this.toolTipView3 = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Dit mål er at reducere ovenstående udtryk. Dette gøres ved at markere de dele i udtrykket som skal reduceres."), {
-                setDescription: "Markér [a] og [a]. Klik derefter på den ønskede omskrivning nedenfor for at reducere udtrykket",
+            this.toolTipView3 = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Dit mål er at reducere ovenstående udtryk. Dette gøres ved at markere de dele i udtrykket som skal reduceres.\nMarkér [a] og [a]. Klik derefter på den ønskede omskrivning nedenfor for at reducere udtrykket", 800, 90), {
                 setVisible: game.getIsFirstLevel(),
-                setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255),
                 setX: this.getWidth() / 2 - 400,
                 setY: this.getHeight() / 2 + 30,
-                setWidth: 800,
-                setHeight: 90,
-                setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130),
-                setPosition: ThreeOneSevenBee.Model.UI.position.bottomMiddle
+                setArrowPosition: 390
             } );
+    
             this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
                 [this.menuButton],
                 [this.nextButton],
@@ -1082,7 +1072,6 @@
             this.toolTipView.setVisible(game.getIsFirstLevel());
             this.toolTipView2.setVisible(game.getIsFirstLevel());
             this.toolTipView3.setVisible(game.getIsFirstLevel());
-    
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged();
             }
@@ -1258,36 +1247,126 @@
     });
     
     Bridge.define('ThreeOneSevenBee.Model.UI.ToolTipView', {
-        inherits: [ThreeOneSevenBee.Model.UI.LabelView],
+        inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
+        arrowPosition: 0,
+        arrowDirection: null,
         config: {
             properties: {
-                BoxColor: null,
-                Position: null,
-                Description: null
+                labelView: null,
+                arrow: null
             }
         },
-        constructor: function (text) {
-            ThreeOneSevenBee.Model.UI.LabelView.prototype.$constructor.call(this, " " + text + " ");
+        constructor: function (text, width, height) {
+            ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
     
+            this.setarrow(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 20, 11), [
+                [0, 11],
+                [10, 0],
+                [20, 11]
+            ] ));
+            this.setlabelView(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(text), {
+                setY: 10,
+                setHeight: height - 10,
+                setWidth: width
+            } ));
+            this.setText(text);
             this.setBoxColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 130, 120));
+            this.setTextColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
+            this.setArrowDirection(ThreeOneSevenBee.Model.UI.Direction.top);
+            this.setArrowPosition(0);
+            this.children.add(this.getarrow());
+            this.children.add(this.getlabelView());
         },
-        drawWithContext: function (context, offsetX, offsetY) {
-            if (this.getVisible() === true) {
-                if (this.getPosition() === ThreeOneSevenBee.Model.UI.position.upperLeft) {
-    
-                    context.drawPolygon([new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + 10, this.getY() + offsetY), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + 20, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth(), this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetY + this.getWidth(), this.getY() + offsetY + this.getHeight()), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetX + this.getHeight())], this.getBoxColor());
-                    context.drawText(this.getX() + offsetX, this.getY() + offsetY + 10, this.getWidth(), this.getHeight() - 10, this.getText(), this.getTextColor());
-                }
-                if (this.getPosition() === ThreeOneSevenBee.Model.UI.position.upperRight) {
-                    context.drawPolygon([new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + 10, this.getY() + offsetY), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + 20, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + 20, this.getY() + offsetY + this.getHeight()), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetY - this.getWidth(), this.getY() + offsetY + this.getHeight()), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX - this.getWidth(), this.getY() + offsetY + 10)], this.getBoxColor());
-                    context.drawText(this.getX() + offsetX - this.getWidth(), this.getY() + offsetY + 10, this.getWidth(), this.getHeight() - 10, this.getText(), this.getTextColor());
-                }
-                if (this.getPosition() === ThreeOneSevenBee.Model.UI.position.bottomMiddle) {
-                    context.drawPolygon([new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth() / 2 - 10, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth() / 2, this.getY() + offsetY), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth() / 2 + 10, this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetY + this.getWidth(), this.getY() + offsetY + 10), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth(), this.getY() + offsetY), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth(), this.getY() + offsetY + this.getHeight()), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetY + this.getHeight())], this.getBoxColor());
-                    context.drawText(this.getX() + offsetX, this.getY() + offsetY - this.getHeight() / 4 + 10, this.getWidth(), this.getHeight() - 10, this.getText(), this.getTextColor());
-                    context.drawText(this.getX() + offsetX, this.getY() + offsetY - this.getHeight() / 4 + 40, this.getWidth(), this.getHeight() - 10, this.getDescription(), this.getTextColor());
-                }
+        getBoxColor: function () {
+            return this.getlabelView().getBackgroundColor();
+        },
+        setBoxColor: function (value) {
+            this.getlabelView().setBackgroundColor(value);
+            this.getarrow().setBackgroundColor(value);
+        },
+        getTextColor: function () {
+            return this.getlabelView().getTextColor();
+        },
+        setTextColor: function (value) {
+            this.getlabelView().setTextColor(value);
+        },
+        getText: function () {
+            return this.getlabelView().getText();
+        },
+        setText: function (value) {
+            this.getlabelView().setText(value);
+        },
+        getArrowPosition: function () {
+            return this.arrowPosition;
+        },
+        setArrowPosition: function (value) {
+            this.arrowPosition = value;
+            switch (this.getArrowDirection()) {
+                case ThreeOneSevenBee.Model.UI.Direction.top: 
+                    this.getarrow().setX(this.arrowPosition);
+                    break;
+                case ThreeOneSevenBee.Model.UI.Direction.right: 
+                    this.getarrow().setY(this.arrowPosition);
+                    break;
+                case ThreeOneSevenBee.Model.UI.Direction.left: 
+                    this.getarrow().setY(this.arrowPosition);
+                    break;
+                case ThreeOneSevenBee.Model.UI.Direction.bottom: 
+                    this.getarrow().setX(this.arrowPosition);
+                    break;
+                default: 
+                    break;
             }
+        },
+        getArrowDirection: function () {
+            return this.arrowDirection;
+        },
+        setArrowDirection: function (value) {
+            this.arrowDirection = value;
+            this.arrowPosition = 0;
+            this.getlabelView().setX(0);
+            this.getlabelView().setY(0);
+            this.getlabelView().setHeight(this.getHeight());
+            this.getlabelView().setWidth(this.getWidth());
+            switch (this.arrowDirection) {
+                case ThreeOneSevenBee.Model.UI.Direction.top: 
+                    this.setarrow(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 20, 10), [
+                        [0, 10],
+                        [10, 0],
+                        [20, 10]
+                    ] ));
+                    this.getlabelView().setY(10);
+                    this.getlabelView().setHeight(this.getHeight() - 10);
+                    break;
+                case ThreeOneSevenBee.Model.UI.Direction.right: 
+                    this.setarrow(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(this.getWidth() - 10, 0, 10, 20), [
+                        [0, 0],
+                        [10, 10],
+                        [0, 20]
+                    ] ));
+                    this.getlabelView().setWidth(this.getWidth() - 10);
+                    break;
+                case ThreeOneSevenBee.Model.UI.Direction.left: 
+                    this.setarrow(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 10, 20), [
+                        [10, 0],
+                        [0, 10],
+                        [10, 20]
+                    ] ));
+                    this.getlabelView().setX(10);
+                    this.getlabelView().setWidth(this.getWidth() - 10);
+                    break;
+                case ThreeOneSevenBee.Model.UI.Direction.bottom: 
+                    this.setarrow(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, this.getHeight() - 10, 20, 10), [
+                        [0, 0],
+                        [20, 0],
+                        [10, 10]
+                    ] ));
+                    this.getlabelView().setHeight(this.getHeight() - 10);
+                    break;
+                default: 
+                    break;
+            }
+            this.getarrow().setBackgroundColor(this.getBoxColor());
         }
     });
     

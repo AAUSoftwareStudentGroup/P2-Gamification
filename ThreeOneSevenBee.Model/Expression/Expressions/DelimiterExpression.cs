@@ -73,9 +73,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
             foreach (var node in Expression.GetNodesRecursive())
                 yield return node;
-		}
+        }
 
-		public override string TreePrint(string indent, bool isLast)
+        public override string ToString()
+        {
+            return Expression.ToString();
+        }
+
+        public override string TreePrint(string indent, bool isLast)
 		{
 			Console.WriteLine (indent + "|-" + "()");
             indent += (isLast ? "  " : "| ");

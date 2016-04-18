@@ -20,10 +20,13 @@ namespace ThreeOneSevenBee.Model.UI
 
         public override void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
-            base.DrawWithContext(context, offsetX, offsetY);
-            foreach (var child in Children)
+            if (Visible == true)
             {
-                child.DrawWithContext(context, offsetX + X, offsetY + Y);
+                base.DrawWithContext(context, offsetX, offsetY);
+                foreach (var child in Children)
+                {
+                    child.DrawWithContext(context, offsetX + X, offsetY + Y);
+                }
             }
         }
 
