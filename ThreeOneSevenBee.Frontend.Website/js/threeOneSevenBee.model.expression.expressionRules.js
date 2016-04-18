@@ -730,16 +730,6 @@
                 var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(new ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression(sqrtExp.getExpression().clone()), new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(2), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
     
                 return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
-            },
-            productOfConstantAndFraction: function (expression, selection) {
-    
-    
-    
-    
-    
-    
-    
-                return null;
             }
         }
     });
