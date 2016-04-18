@@ -42,12 +42,33 @@ class API {
         API::respond();
     }
 
+    static function user_login($IN, $db) {
+        session_start();
+        $db->query("SELECT password_hash, id FROM user WHERE BINARY name = ? AND deleted_at IS NULL",
+                    $IN['username']);
+
+        if($row = $db->fetch()) {
+            if(password_verify($IN['password'], $row['password_hash']))
+                $_SESSION['authorized'] = $row['id'];
+            API::respond();
+        }
+        API::respond(false, "Username or password was incorrect");
+    }
+
     static function get_users($IN, $db) {
         $result = array();
-        $db->query("SELECT user.name FROM gamedb.user AS user");
+        $db->query("SELECT user.name FROM gamedb.user AS user WHERE user.deleted_at IS NULL");
         while($row = $db->fetch())
             $result[] = $row;
         API::respond(true, $result);
+    }
+
+    static function delete_user_by_id($IN, $db) {
+        $db->query("UPDATE gamedb.user
+                      SET deleted_at=UNIX_TIMESTAMP()
+                      WHERE id=?;", $IN['user_id']
+                    );
+        API::respond();
     }
 
     static function delete_class_by_id($IN, $db) {
@@ -81,6 +102,34 @@ class API {
                       WHERE id=?;", $IN['level_id']
                     );
         API::respond();
+    }
+
+    static function order_level_categories($IN, $db) {
+        $ids = $IN['id_by_order'];
+        $n = count($ids);
+        for($i = 0; $i < $n; $i++) {
+            $db->query("UPDATE gamedb.level_category
+                        SET level_category.order = ?
+                        WHERE id=?;",
+                        $i, 
+                        (int)$ids[$i]
+                    );
+        }
+        API::respond(true);
+    }
+
+    static function order_levels($IN, $db) {
+        $ids = $IN['id_by_order'];
+        $n = count($ids);
+        for($i = 0; $i < $n; $i++) {
+            $db->query("UPDATE gamedb.level
+                        SET level.order = ?
+                        WHERE id=?;",
+                        $i, 
+                        (int)$ids[$i]
+                    );
+        }
+        API::respond(true);
     }
 
     static function save_user_level_progress($IN, $db) {
