@@ -96,15 +96,28 @@
             this.context.stroke();
         },
         drawText: function (x, y, width, height, text, textColor) {
-            this.context.font = height + "px Segoe UI";
-            this.context.textAlign = "center";
-            if (this.context.measureText(text).width > width) {
-                console.log(this.context.measureText(text).width);
-                this.context.font = width / this.context.measureText(text).width * height + "px Segoe UI";
-            }
+            var $t;
+            var lines = text.split(String.fromCharCode(10));
+    
             this.context.textBaseline = "middle";
             this.context.fillStyle = this.colorToString(textColor);
-            this.context.fillText(text, Bridge.Int.trunc((x + width / 2)), Bridge.Int.trunc((y + height / 2)));
+            var minFontSize = height;
+    
+            $t = Bridge.getEnumerator(lines);
+            while ($t.moveNext()) {
+                var line = $t.getCurrent();
+                this.context.font = height / lines.length + "px Segoe UI";
+                this.context.textAlign = "center";
+                if (this.context.measureText(line).width > width) {
+                    minFontSize = Math.min(minFontSize, width / this.context.measureText(line).width * (height / lines.length));
+                }
+            }
+    
+            for (var index = 0; index < lines.length; index++) {
+                this.context.font = minFontSize + "px Segoe UI";
+                this.context.textAlign = "center";
+                this.context.fillText(lines[index], Bridge.Int.trunc((x + width / 2)), Bridge.Int.trunc((y + (index + 0.5) * (height / lines.length))));
+            }
         }
     });
     

@@ -6,74 +6,167 @@ using ThreeOneSevenBee.Model.Euclidean;
 
 namespace ThreeOneSevenBee.Model.UI
 {
-    public class ToolTipView : LabelView
+    public class ToolTipView : CompositeView
     {
-        public Color BoxColor { get; set; }
-
-        public ToolTipView(string text) : base(" " + text + " ")
+        public Color BoxColor
         {
-            BoxColor = new Color(40, 130, 120);
+            get
+            {
+                return labelView.BackgroundColor;
+            }
+
+            set
+            {
+                labelView.BackgroundColor = value;
+                arrow.BackgroundColor = value;
+            }
+        }
+        public Color TextColor
+        {
+            get
+            {
+                return labelView.TextColor;
+            }
+
+            set
+            {
+                labelView.TextColor = value;
+            }
         }
 
-        public override void DrawWithContext(IContext context, double offsetX, double offsetY)
+        public string Text
         {
-            if (Visible == true)
+            get
             {
-                if (Position == position.upperLeft)
-                {
+                return labelView.Text;
+            }
+            set
+            {
+                labelView.Text = value;
+            }
+        }
 
-                    context.DrawPolygon(
-                        new Vector2[]{
-                    new Vector2(X + offsetX, Y + offsetY + 10),
-                    new Vector2(X + offsetX + 10, Y + offsetY),
-                    new Vector2(X + offsetX + 20, Y + offsetY + 10),
-                    new Vector2(X + offsetX + Width, Y + offsetY + 10),
-                    new Vector2(X + offsetY + Width, Y + offsetY + Height),
-                    new Vector2(X + offsetX, Y + offsetX + Height)
-                        },
-                        BoxColor
-                    );
-                    context.DrawText(X + offsetX, Y + offsetY + 10, Width, Height - 10, Text, TextColor);
-                }
-                if (Position == position.upperRight)
+        double arrowPosition;
+        public double ArrowPosition
+        {
+            get
+            {
+                return arrowPosition;
+            }
+
+            set
+            {
+                arrowPosition = value;
+                switch (ArrowDirection)
                 {
-                    context.DrawPolygon(
-                    new Vector2[]{
-                    new Vector2(X + offsetX, Y+ offsetY + 10),
-                    new Vector2(X + offsetX + 10, Y + offsetY),
-                    new Vector2(X + offsetX + 20, Y + offsetY + 10),
-                    new Vector2(X + offsetX + 20, Y + offsetY + Height),
-                    new Vector2(X + offsetY - Width, Y + offsetY + Height),
-                    new Vector2(X + offsetX - Width, Y + offsetY + 10)
-                        },
-                        BoxColor
-                    );
-                    context.DrawText(X + offsetX - Width, Y + offsetY + 10, Width, Height - 10, Text, TextColor);
-                }
-                if (Position == position.bottomMiddle)
-                {
-                    context.DrawPolygon(
-                    new Vector2[]{
-                    new Vector2(X + offsetX, Y+ offsetY + 10),
-                    new Vector2(X + offsetX + Width / 2 - 10, Y + offsetY + 10),
-                    new Vector2(X + offsetX + Width / 2, Y + offsetY),
-                    new Vector2(X + offsetX + Width / 2 + 10, Y + offsetY + 10),
-                    new Vector2(X + offsetY + Width, Y + offsetY + 10),
-                    new Vector2(X + offsetX + Width, Y + offsetY),
-                    new Vector2(X + offsetX + Width, Y + offsetY + Height),
-                    new Vector2(X + offsetX, Y + offsetY + Height)
-                        },
-                        BoxColor
-                    );
-                    context.DrawText(X + offsetX, Y + offsetY - Height / 4 + 10, Width, Height - 10, Text, TextColor);
-                    context.DrawText(X + offsetX, Y + offsetY - Height / 4 + 40, Width, Height - 10, Description, TextColor);
+                    case Direction.Top:
+                        arrow.X = arrowPosition;
+                        break;
+                    case Direction.right:
+                        arrow.Y = arrowPosition;
+                        break;
+                    case Direction.Left:
+                        arrow.Y = arrowPosition;
+                        break;
+                    case Direction.Bottom:
+                        arrow.X = arrowPosition;
+                        break;
+                    default:
+                        break;
                 }
             }
         }
 
-        public position Position { get; set; }
-        public string Description { get; set; }
+        LabelView labelView { get; set; }
+        VectorImageView arrow { get; set; }
+
+
+        public ToolTipView(string text, double width, double height) : base(width, height)
+        {
+            arrow = new VectorImageView(0, 0, 20, 11)
+            {
+                { 0, 11 },
+                { 10, 0 },
+                { 20, 11 }
+            };
+            labelView = new LabelView(text)
+            {
+                Y = 10,
+                Height = height - 10,
+                Width = width
+            };
+            Text = text;
+            BoxColor = new Color(40, 130, 120);
+            TextColor = new Color(255, 255, 255);
+            ArrowDirection = Direction.Top;
+            ArrowPosition = 0;
+            Children.Add(arrow);
+            Children.Add(labelView);
+        }
+
+        Direction arrowDirection;
+        public Direction ArrowDirection
+        {
+            get
+            {
+                return arrowDirection;
+            }
+            set
+            {
+                arrowDirection = value;
+                arrowPosition = 0;
+                labelView.X = 0;
+                labelView.Y = 0;
+                labelView.Height = Height;
+                labelView.Width = Width;
+                switch (arrowDirection)
+                {
+                    case Direction.Top:
+                        arrow = new VectorImageView(0, 0, 20, 10)
+                        {
+                            { 0, 10 },
+                            { 10, 0 },
+                            { 20, 10 }
+                        };
+                        
+                        labelView.Y = 10;
+                        labelView.Height = Height - 10;
+                        break;
+                    case Direction.right:
+                        arrow = new VectorImageView(Width - 10, 0, 10, 20)
+                        {
+                            { 0, 0 },
+                            { 10, 10 },
+                            { 0, 20 }
+                        };
+                        labelView.Width = Width - 10;
+                        break;
+                    case Direction.Left:
+                        arrow = new VectorImageView(0, 0, 10, 20)
+                        {
+                            { 10, 0 },
+                            { 0, 10  },
+                            { 10, 20 }
+                        };
+                        labelView.X = 10;
+                        labelView.Width = Width - 10;
+                        break;
+                    case Direction.Bottom:
+                        arrow = new VectorImageView(0, Height - 10, 20, 10)
+                        {
+                            { 0, 0 },
+                            { 20, 0 },
+                            { 10, 10 }
+                        };
+                        labelView.Height = Height - 10;
+                        break;
+                    default:
+                        break;
+                }
+                arrow.BackgroundColor = BoxColor;
+            }
+        }
 
     }
-    public enum position { upperLeft, upperRight, bottomMiddle }
+    public enum Direction { Top, right, Left, Bottom }
 }
