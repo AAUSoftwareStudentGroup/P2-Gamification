@@ -21,9 +21,10 @@
                 var gameView;
     
                 var test = Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("test"), [
-                    [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "a*(b+c)", "a*(b+c)", ["a*(b*c)+c"])]
+                    [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "a*(b+c)", "a*(b+c)", ["0"])]
                 ] );
-    
+                var s = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
+                s.deserialize(test.getItem(0).startExpression).prettyPrint();
                 gameAPI.getCurrentPlayer(function (u) {
                     u.addCategory(test);
                     gameAPI.getPlayers(function (p) {
