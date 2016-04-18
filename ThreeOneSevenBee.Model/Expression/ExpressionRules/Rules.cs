@@ -900,15 +900,15 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 return null;
             }
 
-            BinaryOperatorExpression fraction;
-            ExpressionBase constant;
+            BinaryOperatorExpression fraction = null;
+            ExpressionBase constant = null;
 
             if (selection[0] is BinaryOperatorExpression)
             {
                 fraction = selection[0].Clone() as BinaryOperatorExpression;
                 constant = selection[1].Clone();
             }
-            else
+            else if(selection[1] is BinaryOperatorExpression)
             {
                 fraction = selection[1].Clone() as BinaryOperatorExpression;
                 constant = selection[0].Clone();
@@ -926,6 +926,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return new Identity(suggestion, suggestion);
         }
 
+        // 15/15 = 1 , a/a = 1
         public static Identity DivisionEqualsOneRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count != 1)
@@ -961,12 +962,14 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             if (unaryMinusExpression != null)
             {
                 var numericExpression = new NumericExpression(1);
-                var suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new UnaryMinusExpression(numericExpression), unaryMinusExpression.Expression);
+                var suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new UnaryMinusExpression(numericExpression), unaryMinusExpression.Expression.Clone());
                 return new Identity(suggestion, suggestion);
             }
             return null;
         }
 
+
+        // 1 * a = a
         public static Identity ProductOfOneAndSomethingRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             if (selection.Count != 2)
@@ -978,22 +981,31 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             ExpressionBase something;
             NumericExpression one;
 
-            if (variadicExpression != null || variadicExpression.Type == OperatorType.Multiply)
+            if (variadicExpression != null && variadicExpression.Type == OperatorType.Multiply)
             {
                 if (selection[0] is NumericExpression)
                 {
                     one = selection[0].Clone() as NumericExpression;
                     something = selection[1].Clone();
+                    if (one.Number == 1)
+                    {
+                        return new Identity(something, something);
+                    }
                 }
-                else
+                else if (selection[1] is NumericExpression)
                 {
                     one = selection[1].Clone() as NumericExpression;
                     something = selection[0].Clone();
+                    if (one.Number == 1)
+                    {
+                        return new Identity(something, something);
+                    }
                 }
-                if (one.Number == 1)
+                else
                 {
-                    return new Identity(something, something);
+                    return null;
                 }
+
                 // Der er en bug med power
             }
             return null;
