@@ -19,7 +19,7 @@ elseif(isset($_POST['action'])) {
 session_start();
 
 if(isset($IN['debug']) && $IN['debug'] != "NULL") {
-    if($IN['debug'] == "1")
+    if(strcmp($IN['debug'], "1") == 0)
         $_SESSION['authorized'] = 5; // Tanner helland
     else {
         $db->query("SELECT user.id 
@@ -235,12 +235,15 @@ class API {
     }
 
     static function get_current_user($IN, $db) {
+        if(!isset($_SESSION['authorized']))
+            API::respond(false, null, "user not authorized");
+        
         $db->query("SELECT user.name AS name, user.session_token AS token FROM gamedb.user AS user
                     WHERE user.id = ?",
                     (isset($_SESSION['authorized']) ? $_SESSION['authorized'] : 0));
         if($result = $db->fetch())
             API::respond(true, $result);
-        API::respond(false, null, "user not authorized");
+        API::respond(false, null, "Unkown error");
     }
 
     static function set_current_user($IN, $db) {
