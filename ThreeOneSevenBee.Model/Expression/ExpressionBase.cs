@@ -35,6 +35,15 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public abstract bool Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively);
 
+        public bool Replace(ExpressionBase replacement)
+        {
+            if (Parent != null)
+            {
+                Parent.Replace(this, replacement, false);
+            }
+            return false;
+        }
+
         public abstract IEnumerable<ExpressionBase> GetNodesRecursive();
 
         public IEnumerable<ExpressionBase> GetParentPath()
