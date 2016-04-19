@@ -30,7 +30,6 @@
                                 gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, $_.ThreeOneSevenBee.Frontend.App.f1);
                             }
                         } );
-                        gameModel.getCurrentExpression().prettyPrint();
                         gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
                     });
                 });

@@ -41,6 +41,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
                     if (product.Count == selection.Count)
                     {
+                        Console.WriteLine("a*a=a^2");
                         return new Identity(suggestion, suggestion);
                     }
                     else
@@ -49,6 +50,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         indexes.Sort();
                         VariadicOperatorExpression result = product.Clone() as VariadicOperatorExpression;
                         result = InsertSuggestion(indexes, result, suggestion);
+                        Console.WriteLine("a*a=a^2");
                         return new Identity(suggestion, result);
                     }
                 }
@@ -114,7 +116,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 );
                 ExpressionBase suggestion = new VariadicOperatorExpression(
                     OperatorType.Multiply,
-                    fraction.Left.Clone(),
+                    new DelimiterExpression(fraction.Left.Clone()),
                     exponent
                 );
                 return new Identity(suggestion, suggestion);
@@ -135,7 +137,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 if (parenthesis.Expression is VariableExpression
                     || parenthesis.Expression is NumericExpression
-                    || parenthesis.Expression is DelimiterExpression)
+                    || parenthesis.Expression is DelimiterExpression
+                    || (parenthesis.Expression is VariadicOperatorExpression && parenthesis.Parent is VariadicOperatorExpression
+                       && (parenthesis.Expression as VariadicOperatorExpression).Type == (parenthesis.Parent as VariadicOperatorExpression).Type))
                 {
                     ExpressionBase suggestion = parenthesis.Expression.Clone();
                     return new Identity(suggestion, suggestion);
@@ -396,7 +400,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 var baseSelection = selection[0].Clone();
                 var variableIsPowerToOne = new List<NumericExpression>();
 
-                if (selection.All((s) => s.Parent is BinaryOperatorExpression && ReferenceEquals((s.Parent as BinaryOperatorExpression).Left, s) || s.Parent is VariadicOperatorExpression))
+                if (selection.All((s) => (s.Parent is BinaryOperatorExpression && ReferenceEquals((s.Parent as BinaryOperatorExpression).Left, s) && ReferenceEquals(s.Parent.Parent, expression)) || ReferenceEquals(s.Parent, expression)))
                 {
                     if (selection.Any((s) =>
                         s.Parent != null &&
@@ -903,18 +907,14 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             BinaryOperatorExpression fraction = null;
             ExpressionBase constant = null;
 
-            if (selection[0] is BinaryOperatorExpression)
+            if ((fraction = selection[0] as BinaryOperatorExpression) != null && fraction.Type == OperatorType.Divide && ReferenceEquals(selection[0].Parent, expression))
             {
-                fraction = selection[0].Clone() as BinaryOperatorExpression;
-                constant = selection[1].Clone();
+                constant = selection[1].GetParentPath().First((e) => ReferenceEquals(e.Parent, expression)).Clone();
             }
-            else if(selection[1] is BinaryOperatorExpression)
+            else if((fraction = selection[1] as BinaryOperatorExpression) != null && fraction.Type == OperatorType.Divide && ReferenceEquals(selection[1].Parent, expression))
             {
-                fraction = selection[1].Clone() as BinaryOperatorExpression;
-                constant = selection[0].Clone();
-            }
-
-            if (fraction == null || constant == null)
+                constant = selection[0].GetParentPath().First((e) => ReferenceEquals(e.Parent, expression)).Clone();
+            }else
             {
                 return null;
             }
@@ -985,20 +985,24 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 if (selection[0] is NumericExpression)
                 {
-                    one = selection[0].Clone() as NumericExpression;
-                    something = selection[1].Clone();
+                    one = selection[0] as NumericExpression;
                     if (one.Number == 1)
                     {
-                        return new Identity(something, something);
+                        ExpressionBase suggestion = selection[1].GetParentPath().First((e) => ReferenceEquals(e.Parent, expression));
+                        var result = variadicExpression.Clone() as VariadicOperatorExpression;
+                        result = InsertSuggestion(new List<int>() { variadicExpression.IndexOfReference(selection[0]), variadicExpression.IndexOfReference(suggestion) }, result, suggestion.Clone());
+                        return new Identity(suggestion.Clone(), result);
                     }
                 }
                 else if (selection[1] is NumericExpression)
                 {
-                    one = selection[1].Clone() as NumericExpression;
-                    something = selection[0].Clone();
+                    one = selection[1] as NumericExpression;
                     if (one.Number == 1)
                     {
-                        return new Identity(something, something);
+                        ExpressionBase suggestion = selection[0].GetParentPath().First((e) => ReferenceEquals(e.Parent, expression)).Clone();
+                        var result = variadicExpression.Clone() as VariadicOperatorExpression;
+                        result = InsertSuggestion(new List<int>() { variadicExpression.IndexOfReference(selection[1]), variadicExpression.IndexOfReference(suggestion) }, result, suggestion.Clone());
+                        return new Identity(suggestion.Clone(), result);
                     }
                 }
                 else
@@ -1010,14 +1014,5 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
             return null;
         }
-
-        public static Identity ProductOfTwoFractions(ExpressionBase expression, List<ExpressionBase> selection)
-        {
-
-
-
-            return null;
-        }
-
     }
 }
