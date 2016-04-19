@@ -109,7 +109,7 @@
             $t = Bridge.getEnumerator(lines);
             while ($t.moveNext()) {
                 var line = $t.getCurrent();
-                this.context.font = height / lines.length + "px Segoe UI";
+                this.context.font = height / lines.length + "px Georgia";
                 this.context.textAlign = "center";
                 if (this.context.measureText(line).width > width) {
                     minFontSize = Math.min(minFontSize, width / this.context.measureText(line).width * (height / lines.length));
@@ -117,7 +117,7 @@
             }
     
             for (var index = 0; index < lines.length; index++) {
-                this.context.font = minFontSize + "px Segoe UI";
+                this.context.font = minFontSize + "px Georgia";
                 this.context.textAlign = "center";
                 this.context.fillText(lines[index], Bridge.Int.trunc((x + width / 2)), Bridge.Int.trunc((y + (index + 0.5) * (height / lines.length))));
             }
