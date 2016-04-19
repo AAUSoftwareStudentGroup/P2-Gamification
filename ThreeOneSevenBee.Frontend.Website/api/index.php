@@ -179,7 +179,7 @@ class API {
                         gamedb.user_level_progress AS level_progress ON level_progress.level_id = level.id
                     WHERE 
                         level_progress.user_id=5 OR level_progress.user_id IS NULL
-                    ORDER BY level.level_category_id ASC, level.id ASC;",
+                    ORDER BY level.order ASC;",
                     $_SESSION['authorized']
         );
 
