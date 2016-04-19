@@ -60,7 +60,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override bool Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()

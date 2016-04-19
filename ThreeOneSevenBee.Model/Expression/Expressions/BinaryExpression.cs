@@ -22,5 +22,32 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         public ExpressionBase Left { get; set; }
 
         public ExpressionBase Right { get; set; }
+
+        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)
+        {
+            var hasReplaced = false;
+
+            if (Object.ReferenceEquals(Left, old))
+            {
+                Left = replacement.Clone();
+                hasReplaced |= true;
+            }
+            else if (doRecursively)
+            {
+                hasReplaced |= Left.Replace(old, replacement, true);
+            }
+
+            if (Object.ReferenceEquals(Right, old))
+            {
+                Right = replacement.Clone();
+                hasReplaced |= true;
+            }
+            else if (doRecursively)
+            {
+                hasReplaced |= Right.Replace(old, replacement, true);
+            }
+
+            return hasReplaced;
+        }
     }
 }
