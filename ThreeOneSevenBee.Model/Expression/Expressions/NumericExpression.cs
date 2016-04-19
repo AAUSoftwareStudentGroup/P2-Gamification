@@ -33,9 +33,9 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new NumericExpression(Number);
         }
 
-        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
+        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)
         {
-            return false;
+            throw new NotImplementedException();
         }
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()

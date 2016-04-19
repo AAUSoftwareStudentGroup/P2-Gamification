@@ -113,7 +113,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 yield return node;
         }
 
-        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
+        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)
         {
             throw new NotImplementedException();
         }

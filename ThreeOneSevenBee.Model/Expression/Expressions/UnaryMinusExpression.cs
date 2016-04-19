@@ -21,7 +21,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             get
             {
-                if(Expression is NumericExpression)
+                if (Expression is NumericExpression)
                 {
                     return Expression.Size;
                 }
@@ -57,14 +57,9 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new UnaryMinusExpression(Expression.Clone());
         }
 
-        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
+        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)
         {
-            if (Expression == old)
-            {
-                Expression = replacement;
-                return true;
-            }
-            return Expression.Replace(old, replacement);
+            throw new NotImplementedException();
         }
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
@@ -81,11 +76,11 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         }
 
         public override string TreePrint(string indent, bool isLast)
-		{
+        {
             Console.WriteLine(indent + "|-" + "-");
             indent += (isLast ? "  " : "| ");
-            Expression.TreePrint (indent, true);
-			return indent;
-		}
+            Expression.TreePrint(indent, true);
+            return indent;
+        }
     }
 }
