@@ -94,9 +94,55 @@
         },
         config: {
             properties: {
+                /**
+                 * The parent of this node. If this is null, this node is the root of the tree.
+                 *
+                 * @instance
+                 * @public
+                 * @this ThreeOneSevenBee.Model.Expression.ExpressionBase
+                 * @memberof ThreeOneSevenBee.Model.Expression.ExpressionBase
+                 * @function getParent
+                 * @return  {ThreeOneSevenBee.Model.Expression.ExpressionBase}
+                 */
+                /**
+                 * The parent of this node. If this is null, this node is the root of the tree.
+                 *
+                 * @instance
+                 * @public
+                 * @this ThreeOneSevenBee.Model.Expression.ExpressionBase
+                 * @memberof ThreeOneSevenBee.Model.Expression.ExpressionBase
+                 * @function setParent
+                 * @param   {ThreeOneSevenBee.Model.Expression.ExpressionBase}    value
+                 * @return  {void}
+                 */
                 Parent: null
             }
         },
+        /**
+         * Replaces this expression with the replacement expression if possible.
+         *
+         * @instance
+         * @public
+         * @this ThreeOneSevenBee.Model.Expression.ExpressionBase
+         * @memberof ThreeOneSevenBee.Model.Expression.ExpressionBase
+         * @param   {ThreeOneSevenBee.Model.Expression.ExpressionBase}    replacement
+         * @return  {boolean}                                                            True if a replacement took place.
+         */
+        replace: function (replacement) {
+            if (Bridge.hasValue(this.getParent())) {
+                this.getParent().replace$1(this, replacement, false);
+            }
+            return false;
+        },
+        /**
+         * Returns the path of nodes to get to the root of the tree.
+         *
+         * @instance
+         * @public
+         * @this ThreeOneSevenBee.Model.Expression.ExpressionBase
+         * @memberof ThreeOneSevenBee.Model.Expression.ExpressionBase
+         * @return  {Bridge.IEnumerable$1}
+         */
         getParentPath: function () {
             var $yield = [];
             var currentParent = this;
@@ -106,6 +152,17 @@
             }
             return Bridge.Array.toEnumerable($yield);
         },
+        /**
+         * Determines if the other expression has the same value, but not reference.
+         *
+         * @instance
+         * @public
+         * @override
+         * @this ThreeOneSevenBee.Model.Expression.ExpressionBase
+         * @memberof ThreeOneSevenBee.Model.Expression.ExpressionBase
+         * @param   {Object}     other
+         * @return  {boolean}
+         */
         equals: function (other) {
             return (Bridge.is(other, ThreeOneSevenBee.Model.Expression.ExpressionBase)) && this.equalsT(Bridge.cast(other, ThreeOneSevenBee.Model.Expression.ExpressionBase));
         },
@@ -115,6 +172,15 @@
         toString: function () {
             return "{" + this.getValue() + "}";
         },
+        /**
+         * Prints the tree to the standard output stream.
+         *
+         * @instance
+         * @public
+         * @this ThreeOneSevenBee.Model.Expression.ExpressionBase
+         * @memberof ThreeOneSevenBee.Model.Expression.ExpressionBase
+         * @return  {void}
+         */
         prettyPrint: function () {
             this.treePrint("", true);
         }
