@@ -12,11 +12,14 @@ namespace threeonesevenbee.Frontend.Website
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			if (Request.QueryString.Count == 0) {
-				Response.Write ("no action");
-				return;
+			string queryString;
+			if (Request.Form.Count > 0) {
+				queryString = Request.Form.ToString ();
+			} else {
+				queryString = Request.QueryString;
 			}
-			HttpWebRequest req = (HttpWebRequest)WebRequest.Create ("http://webmat.cs.aau.dk/api?"+Request.QueryString);
+
+			HttpWebRequest req = (HttpWebRequest)WebRequest.Create ("http://webmat.cs.aau.dk/api?"+queryString);
 			req.KeepAlive = false;
 			req.ProtocolVersion = HttpVersion.Version10;
 			req.Method = "GET";
