@@ -235,7 +235,7 @@ class API {
     }
 
     static function get_current_user($IN, $db) {
-        $db->query("SELECT user.name AS token FROM gamedb.user AS user
+        $db->query("SELECT user.name AS name, user.session_token AS token FROM gamedb.user AS user
                     WHERE user.id = ?",
                     (isset($_SESSION['authorized']) ? $_SESSION['authorized'] : 0));
         if($result = $db->fetch())
