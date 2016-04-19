@@ -176,7 +176,7 @@
             return Bridge.Array.toEnumerable($yield);
         },
         toString: function () {
-            return this.getExpression().toString();
+            return "(" + this.getExpression().toString() + ")";
         },
         treePrint: function (indent, isLast) {
             console.log(indent + "|-" + "()");
@@ -833,6 +833,9 @@
         },
         clone: function () {
             var $t;
+            if (this.getCount() < 2) {
+                throw new Bridge.InvalidOperationException("Tried to clone invalid VariadicExpression.");
+            }
             var expression = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", this.getType(), this.getItem(0).clone(), this.getItem(1).clone());
             $t = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(this).skip(2));
             while ($t.moveNext()) {
