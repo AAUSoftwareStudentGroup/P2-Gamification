@@ -19,13 +19,17 @@ elseif(isset($_POST['action'])) {
 session_start();
 
 if(isset($IN['debug']) && $IN['debug'] != "NULL") {
-    $db->query("SELECT user.id 
-                FROM user 
-                WHERE session_token=?",
-                $IN['debug']    
-            );
-    if($row = $db->fetch()) {
-        $_SESSION['authorized'] = $row['id']; // Tanner helland
+    if($IN['debug'] == "1")
+        $_SESSION['authorized'] = 5; // Tanner helland
+    else {
+        $db->query("SELECT user.id 
+                    FROM user 
+                    WHERE session_token=?",
+                    $IN['debug']    
+                );
+        if($row = $db->fetch()) {
+            $_SESSION['authorized'] = $row['id'];
+        }
     }
 }
 
@@ -198,7 +202,7 @@ class API {
                         gamedb.user_level_progress AS level_progress ON level_progress.level_id = level.id
                     WHERE 
                         level_progress.user_id=5 OR level_progress.user_id IS NULL
-                    ORDER BY level.order ASC;",
+                    ORDER BY category.order ASC, level.order ASC;",
                     $_SESSION['authorized']
         );
 
