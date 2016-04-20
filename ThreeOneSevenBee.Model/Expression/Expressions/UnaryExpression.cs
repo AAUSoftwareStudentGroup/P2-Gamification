@@ -26,6 +26,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             if (Object.ReferenceEquals(Expression, old))
             {
                 Expression = replacement.Clone();
+                Expression.Parent = this;
                 hasReplaced |= true;
             }
             else if (doRecursively)

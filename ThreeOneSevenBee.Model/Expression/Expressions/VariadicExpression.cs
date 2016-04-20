@@ -55,6 +55,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 if (Object.ReferenceEquals(expressionArray[i], old))
                 {
                     expressionArray[i] = replacement.Clone();
+                    expressionArray[i].Parent = this;
                     hasReplaced |= true;
                 }
                 else if (doRecursively)
@@ -83,6 +84,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             set
             {
                 expressions[index] = value;
+            }
+        }
+
+        public void Add(List<ExpressionBase> items)
+        {
+            foreach (ExpressionBase item in items)
+            {
+                Add(item);
             }
         }
 

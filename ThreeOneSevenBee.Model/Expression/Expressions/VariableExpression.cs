@@ -55,7 +55,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override ExpressionBase Clone()
         {
-            return new VariableExpression(Value);
+            return new VariableExpression(Value) { Selected = Selected };
         }
 
         public override bool Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)

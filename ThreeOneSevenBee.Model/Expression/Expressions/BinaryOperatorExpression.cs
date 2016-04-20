@@ -100,7 +100,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override ExpressionBase Clone()
         {
-            return new BinaryOperatorExpression(Left.Clone(), Right.Clone(), Type);
+            return new BinaryOperatorExpression(Left.Clone(), Right.Clone(), Type) { Selected = Selected };
         }
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()

@@ -30,6 +30,7 @@
                                 gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, $_.ThreeOneSevenBee.Frontend.App.f1);
                             }
                         } );
+                        gameModel.getCurrentExpression().prettyPrint();
                         gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
                     });
                 });
@@ -131,7 +132,6 @@
                 var jdata = JSON.parse(Bridge.cast(data, String));
                 var categories = new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)();
                 var categoriesData = Bridge.as(jdata.data, Array);
-                console.log(jdata);
                 $t = Bridge.getEnumerator(categoriesData);
                 while ($t.moveNext()) {
                     var categoryData = $t.getCurrent();

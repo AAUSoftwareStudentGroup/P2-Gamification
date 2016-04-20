@@ -70,7 +70,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override ExpressionBase Clone()
         {
-            return new FunctionExpression(Expression.Clone(), Function);
+            return new FunctionExpression(Expression.Clone(), Function) { Selected = Selected };
         }
 
         public override bool Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)
@@ -80,6 +80,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             if (Object.ReferenceEquals(Expression, old))
             {
                 Expression = replacement.Clone();
+                Expression.Parent = this;
                 hasReplaced |= true;
             }
             else if (doRecursively)

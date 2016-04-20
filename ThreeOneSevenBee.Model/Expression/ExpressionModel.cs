@@ -4,6 +4,7 @@ using System;
 using Bridge.Html5;
 #endif
 using ThreeOneSevenBee.Model.Expression.Expressions;
+using System.Linq;
 
 namespace ThreeOneSevenBee.Model.Expression
 {
@@ -64,116 +65,62 @@ namespace ThreeOneSevenBee.Model.Expression
             }
         }
 
-        public int SelectionIndex(ExpressionBase expression)
-        {
-            for (int i = 0; i < selection.Count; i++)
-            {
-                if (ReferenceEquals(selection[i], expression))
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
         public void Select(ExpressionBase expression)
         {
-            int index = SelectionIndex(expression);
-            if (index == -1)
+            expression.Selected = expression.Selected == false;
+
+            UpdateSelection();
+
+            UpdateIdentities();
+        }
+
+        public void UpdateSelection()
+        {
+            selection = Expression.GetNodesRecursive().Where((e) => e.Selected).ToList();
+
+            if (Expression.Selected == true)
             {
-                selection.Add(expression);
+                selection.Insert(0, Expression);
             }
-            else
-            {
-                selection.RemoveAt(index);
-            }
-            
+        }
+
+        public void UpdateIdentities()
+        {
+            UpdateSelection();
             selectionParent = analyzer.GetCommonParent(selection);
-         
-            identities = analyzer.GetIdentities(expression, selection);
-            if(OnChanged != null)
+            identities = analyzer.GetIdentities(selection);
+
+            if (OnChanged != null)
                 OnChanged(this);
         }
 
         public void UnSelectAll()
         {
+            for (int index = 0; index < selection.Count; index++)
+            {
+                selection[index].Selected = false;
+            }
             selection.Clear();
             identities.Clear();
             selectionParent = null;
             callOnChanged();
         }
 
-
-
         public void ApplyIdentity(ExpressionBase identity)
         {
-            if (Selected.Parent == null)
+            ExpressionBase parent = Selected.Parent;
+            if (parent == null)
             {
                 expression = identity;
-
             }
             else
             {
-                var binaryParent = Selected.Parent as BinaryOperatorExpression;
-                if (binaryParent != null)
-                {
-                    if (ReferenceEquals(binaryParent.Left, Selected))
-                    {
-                        binaryParent.Left = identity;
-                    }
-                    else
-                    {
-                        binaryParent.Right = identity;
-                    }
-                    identity.Parent = binaryParent;
-                }
-                var variadicParent = Selected.Parent as VariadicOperatorExpression;
-                if (variadicParent != null)
-                {
-                    var temp = identity as VariadicOperatorExpression;
-                    int selectedIndex = -1;
-                    for (int index = 0; index < variadicParent.Count; index++)
-                    {
-                        if (ReferenceEquals(variadicParent[index], Selected))
-                        {
-                            selectedIndex = index;
-                        }
-                    }
-                    if (temp != null && temp.Type == variadicParent.Type)
-                    {
-                        variadicParent.RemoveAt(selectedIndex);
-                        foreach (var operand in temp)
-                        {
-                            variadicParent.Insert(selectedIndex, operand);
-                        }
-                    }
-                    else
-                    {
-                        variadicParent[selectedIndex] = identity;
-                        identity.Parent = variadicParent;
-                    }
-                }
-                var minusParent = Selected.Parent as UnaryMinusExpression;
-                if (minusParent != null)
-                {
-                    minusParent.Expression = identity;
-                    identity.Parent = minusParent;
-                }
-                var delimiterParent = Selected.Parent as DelimiterExpression;
-                if (delimiterParent != null)
-                {
-                    delimiterParent.Expression = identity;
-                    identity.Parent = delimiterParent;
-                }
-                var functionExpression = Selected.Parent as FunctionExpression;
-                if (functionExpression != null)
-                {
-                    functionExpression.Expression = identity;
-                    identity.Parent = functionExpression;
-                }
+                Selected.Replace(analyzer.WrapInDelimiterIfNeccessary(identity, parent));
             }
+            Selected.Parent = parent;
+            UpdateSelection();
             UnSelectAll();
+            UpdateIdentities();
         }
-
     }
 }

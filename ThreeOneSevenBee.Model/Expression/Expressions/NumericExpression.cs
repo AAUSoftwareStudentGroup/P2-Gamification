@@ -30,7 +30,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override ExpressionBase Clone()
         {
-            return new NumericExpression(Number);
+            return new NumericExpression(Number) { Selected = Selected };
         }
 
         public override Boolean Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)

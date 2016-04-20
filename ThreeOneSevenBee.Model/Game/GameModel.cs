@@ -70,13 +70,13 @@ namespace ThreeOneSevenBee.Model.Game
                 StarExpressions.Add(starExpressionBase);
                 ProgressBar.Add(starExpressionBase.Size);
             }
-            ExprModel = new ExpressionModel(User.Categories[category][level].CurrentExpression, (m) => onExpressionChanged(m), 
-                Rules.ExponentToProductRule, Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators, 
+            ExprModel = new ExpressionModel(User.Categories[category][level].CurrentExpression, (m) => onExpressionChanged(m),
+                Rules.ExponentToProductRule, Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators,
                 Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.ExponentProduct,
-                Rules.NumericBinaryRule, Rules.NumericVariadicRule, Rules.CommonPowerParenthesisRule, 
-                Rules.ReverseCommonPowerParenthesisRule, Rules.SplittingFractions, Rules.ProductParenthesis, 
-                Rules.ReverseProductParenthesis, Rules.ParenthesisPowerRule, Rules.FactorizationRule, Rules.FractionToProductRule,
-                Rules.RemoveParenthesisRule, Rules.SquareRootRule, Rules.DivisionEqualsOneRule, Rules.FactorizeUnaryMinus, Rules.ProductOfConstantAndFraction, Rules.ProductOfOneAndSomethingRule);
+                Rules.NumericBinaryRule, Rules.NumericVariadicRule, Rules.CommonPowerParenthesisRule,
+                Rules.ReverseCommonPowerParenthesisRule, Rules.SplittingFractions, Rules.ProductParenthesis,
+                Rules.ReverseProductParenthesis, Rules.ParenthesisPowerRule, Rules.FractionToProductRule, Rules.SquareRootRule,
+                Rules.RemoveParenthesisRule);
             onExpressionChanged(ExprModel);
         }
 

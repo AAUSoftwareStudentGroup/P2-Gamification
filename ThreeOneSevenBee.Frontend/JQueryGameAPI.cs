@@ -21,7 +21,6 @@ namespace ThreeOneSevenBee.Frontend
                     var jdata = JSON.Parse((string)data);
                     List<LevelCategory> categories = new List<LevelCategory>();
                     var categoriesData = jdata["data"] as object[];
-                    Console.WriteLine(jdata);
                     foreach (var categoryData in categoriesData)
                     {
                         

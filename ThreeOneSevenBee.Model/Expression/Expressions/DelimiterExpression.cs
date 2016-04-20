@@ -31,6 +31,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             if (Object.ReferenceEquals(Expression, old))
             {
                 Expression = replacement.Clone();
+                Expression.Parent = this;
                 hasReplaced |= true;
             }
             else if (doRecursively)
@@ -71,7 +72,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override ExpressionBase Clone()
         {
-            return new DelimiterExpression(Expression.Clone());
+            return new DelimiterExpression(Expression.Clone()) { Selected = Selected };
         }
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()

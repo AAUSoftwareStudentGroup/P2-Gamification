@@ -54,7 +54,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override ExpressionBase Clone()
         {
-            return new UnaryMinusExpression(Expression.Clone());
+            return new UnaryMinusExpression(Expression.Clone()) { Selected = Selected };
         }
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()

@@ -31,7 +31,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override ExpressionBase Clone()
         {
-            return new ConstantExpression(Type);
+            return new ConstantExpression(Type) { Selected = Selected };
         }
 
         public override bool Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)

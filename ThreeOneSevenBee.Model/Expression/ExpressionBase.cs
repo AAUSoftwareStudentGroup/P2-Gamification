@@ -31,6 +31,8 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public abstract string Value { get; }
 
+        public virtual bool Selected { get; set; } = false;
+
         public abstract ExpressionBase Clone();
 
         public abstract bool Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively);

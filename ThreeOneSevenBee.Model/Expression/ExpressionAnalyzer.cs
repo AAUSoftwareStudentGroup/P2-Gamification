@@ -33,6 +33,11 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public ExpressionBase GetCommonParent(List<ExpressionBase> selection)
         {
+            int c = 0;
+            foreach (var select in selection)
+            {
+                Console.WriteLine(c++ + ": " + string.Join(",", (object[])select.GetParentPath().ToArray()));
+            }
             if (selection.Count == 0)
             {
                 return null;
@@ -71,7 +76,24 @@ namespace ThreeOneSevenBee.Model.Expression
                 ReferenceEquals(expr, second[secondIndex++])).ToList();
         }
 
-        public List<Identity> GetIdentities(ExpressionBase expression, List<ExpressionBase> selection)
+        public ExpressionBase WrapInDelimiterIfNeccessary(ExpressionBase expression, ExpressionBase parent)
+        {
+            bool isNeccessary = true;
+            // ...
+            // kode der afgør om der skal sættes parentes omkring.
+            // f.eks. skal der hvis expression = 4+4 (variadic plus) og parent = 4*4 (Variadic gange)
+            // ...
+            if(isNeccessary)
+            {
+                return new DelimiterExpression(expression);
+            }
+            else
+            {
+                return expression;
+            }
+        }
+
+        public List<Identity> GetIdentities(List<ExpressionBase> selection)
         {
             var identities = new List<Identity>();
 
@@ -79,15 +101,78 @@ namespace ThreeOneSevenBee.Model.Expression
             {
                 return identities;
             }
-
-            foreach (ExpressionRule rule in rules)
+            ExpressionBase commonParent = GetCommonParent(selection);
+            if (commonParent is VariadicOperatorExpression)
             {
-                    ExpressionBase commonParent = GetCommonParent(selection);
-                    Identity identity = rule(commonParent, selection);
-                    if (identity != null)
+                VariadicOperatorExpression clone = commonParent.Clone() as VariadicOperatorExpression;
+
+                List<ExpressionBase> operandsLeftOfSelection = new List<ExpressionBase>();
+                List<ExpressionBase> operandsRightOfSelection = new List<ExpressionBase>();
+                List<ExpressionBase> selectedOperands = new List<ExpressionBase>();
+
+                foreach (ExpressionBase operand in clone)
+                {
+                    if(operand.Selected == false && operand.GetNodesRecursive().Any((n) => n.Selected == true) == false)
                     {
-                        identities.Add(identity);
+                        if (selectedOperands.Count == 0)
+                        {
+                            operandsLeftOfSelection.Add(operand);
+                        }
+                        else
+                        {
+                            operandsRightOfSelection.Add(operand);
+                        }
                     }
+                    else
+                    {
+                        selectedOperands.Add(operand);
+                    }
+                }
+
+                VariadicOperatorExpression toBeReplaced = new VariadicOperatorExpression(clone.Type, selectedOperands[0].Clone(), selectedOperands[1].Clone());
+                List<ExpressionBase> toBeReplacedSelection = new List<ExpressionBase>();
+                foreach (ExpressionBase operand in selectedOperands.Skip(2))
+                {
+                    toBeReplaced.Add(operand.Clone());
+                }
+
+                toBeReplacedSelection = toBeReplaced.GetNodesRecursive().Where((n) => n.Selected == true).ToList();
+
+                foreach (ExpressionRule rule in rules)
+                {
+                    ExpressionBase suggestion = rule(toBeReplaced, toBeReplacedSelection);
+                    
+                    if (suggestion != null)
+                    {
+                        ExpressionBase result;
+                        if(clone.Count == selectedOperands.Count)
+                        {
+                            result = suggestion;
+                        }
+                        else
+                        {
+                            VariadicOperatorExpression variadicResult = new VariadicOperatorExpression(clone.Type, new NumericExpression(-1), new NumericExpression(-1));
+                            variadicResult.Add(operandsLeftOfSelection.Select((o) => o.Clone()).ToList());
+                            variadicResult.Add(WrapInDelimiterIfNeccessary(suggestion.Clone(), variadicResult));
+                            variadicResult.Add(operandsRightOfSelection.Select((o) => o.Clone()).ToList());
+                            variadicResult.RemoveAt(0);
+                            variadicResult.RemoveAt(0);
+                            result = variadicResult;
+                        }
+                        identities.Add(new Identity(suggestion, result));
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExpressionRule rule in rules)
+                {
+                    ExpressionBase suggestion = rule(commonParent, selection);
+                    if (suggestion != null)
+                    {
+                        identities.Add(new Identity(suggestion, suggestion));
+                    }
+                }
             }
 
             return identities;

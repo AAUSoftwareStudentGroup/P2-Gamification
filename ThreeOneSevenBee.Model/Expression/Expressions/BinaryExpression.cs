@@ -30,6 +30,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             if (Object.ReferenceEquals(Left, old))
             {
                 Left = replacement.Clone();
+                Left.Parent = this;
                 hasReplaced |= true;
             }
             else if (doRecursively)
@@ -40,6 +41,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             if (Object.ReferenceEquals(Right, old))
             {
                 Right = replacement.Clone();
+                Right.Parent = this;
                 hasReplaced |= true;
             }
             else if (doRecursively)
