@@ -22,7 +22,7 @@ namespace ThreeOneSevenBee.Model.UI
         ToolTipView toolTipView;
         ToolTipView toolTipView2;
         ToolTipView toolTipView3;
-
+        
         public virtual void Build(GameModel game)
         {
             menuButton = new ButtonView("Menu", () => OnExit())

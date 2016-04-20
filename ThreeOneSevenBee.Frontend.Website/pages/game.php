@@ -15,5 +15,5 @@ $_scripts[] = "js/threeOneSevenBee.model.geometry.js";
 $_scripts[] = "js/threeOneSevenBee.model.polygon.js";
 ?>
 <? require('header.php'); ?>
-    <canvas id="canvas" width="600" height="400"></canvas>
+    <canvas id="canvas" tabindex='1' width="600" height="400"></canvas>
 <? require('footer.php'); ?>

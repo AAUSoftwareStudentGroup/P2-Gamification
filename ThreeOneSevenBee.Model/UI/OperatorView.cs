@@ -44,7 +44,7 @@ namespace ThreeOneSevenBee.Model.UI
                     );
                     break;
                 case OperatorType.Multiply:
-                    context.DrawText(X + offsetX, Y + offsetY, Width, Height, "*", LineColor);
+                    context.DrawText(X + offsetX, Y + offsetY, Width, Height, "·", LineColor);
                     break;
                 case OperatorType.Power:
                     break;

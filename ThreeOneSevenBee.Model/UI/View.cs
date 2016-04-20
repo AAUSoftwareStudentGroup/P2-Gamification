@@ -1,4 +1,5 @@
 ﻿using System;
+using ThreeOneSevenBee.Model.Euclidean;
 
 namespace ThreeOneSevenBee.Model.UI
 {
@@ -33,13 +34,19 @@ namespace ThreeOneSevenBee.Model.UI
 
         public virtual void Click(double x, double y)
         {
-            if(ContainsPoint(x, y) && OnClick != null)
+            if (ContainsPoint(x, y) && OnClick != null)
             {
                 OnClick();
             }
         }
+        public virtual void KeyPressed(int key, Vector2 lastClick)
+        {
+            if(OnKeyPressed != null)
+                OnKeyPressed(key, lastClick);
+        }
 
         public Action OnClick;
+        public Action<int, Vector2> OnKeyPressed;
         public Action OnChanged;
         
         public virtual View Scale(double factor)

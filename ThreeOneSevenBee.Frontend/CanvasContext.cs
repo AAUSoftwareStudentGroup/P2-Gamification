@@ -12,6 +12,7 @@ namespace ThreeOneSevenBee.Frontend
         private Dictionary<string, ImageElement> imageCache;
 
         CanvasRenderingContext2D context;
+        public Vector2 lastClick { get; private set; }
 
         public CanvasContext(CanvasElement canvas) : base(canvas.Width, canvas.Height)
         {
@@ -30,6 +31,9 @@ namespace ThreeOneSevenBee.Frontend
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
                         e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
                 });
+
+            context.Canvas.OnKeyDown += KeyPressed;
+            lastClick = new Vector2(-1, -1);
         }
 
         public string ColorToString(Color color)
@@ -51,6 +55,15 @@ namespace ThreeOneSevenBee.Frontend
         private void click(double x, double y)
         {
             contentView.Click(x, y);
+            Vector2 last = lastClick;
+            last.X = x;
+            last.Y = y;
+            lastClick = last;
+        }
+
+        private void KeyPressed(KeyboardEvent<CanvasElement> e)
+        {
+            contentView.KeyPressed(e.As<KeyboardEvent>().KeyCode, lastClick);
         }
 
         public override void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth)
@@ -80,7 +93,7 @@ namespace ThreeOneSevenBee.Frontend
 
             foreach (string line in lines)
             {
-                context.Font = height / lines.Length + "px Segoe UI";
+                context.Font = height / lines.Length + "px Georgia";
                 context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
                 if (context.MeasureText(line).Width > width)
                 {
@@ -90,7 +103,7 @@ namespace ThreeOneSevenBee.Frontend
 
             for (int index = 0; index < lines.Length; index++)
             {
-                context.Font = minFontSize + "px Segoe UI";
+                context.Font = minFontSize + "px Georgia";
                 context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
                 context.FillText(lines[index], (int)(x + width / 2), (int)(y + (index + 0.5) * (height / lines.Length)));
             }

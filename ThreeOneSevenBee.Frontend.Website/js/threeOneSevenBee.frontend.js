@@ -52,6 +52,11 @@
         inherits: [ThreeOneSevenBee.Model.UI.Context],
         imageCache: null,
         context: null,
+        config: {
+            init: function () {
+                Bridge.property(this, "lastClick", new ThreeOneSevenBee.Model.Euclidean.Vector2() || new ThreeOneSevenBee.Model.Euclidean.Vector2());
+            }
+        },
         constructor: function (canvas) {
             ThreeOneSevenBee.Model.UI.Context.prototype.$constructor.call(this, canvas.width, canvas.height);
     
@@ -67,6 +72,9 @@
             this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             }));
+    
+            this.context.canvas.onkeydown = Bridge.fn.combine(this.context.canvas.onkeydown, Bridge.fn.bind(this, this.keyPressed));
+            this.setlastClick(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", -1, -1));
         },
         colorToString: function (color) {
             return Bridge.String.format("rgba({0},{1},{2},{3})", Bridge.Int.format(color.red, 'G'), Bridge.Int.format(color.green, 'G'), Bridge.Int.format(color.blue, 'G'), Bridge.Int.format(color.alpha, 'G'));
@@ -80,6 +88,13 @@
         },
         click: function (x, y) {
             this.contentView.click(x, y);
+            var last = this.getlastClick().$clone();
+            last.x = x;
+            last.y = y;
+            this.setlastClick(last.$clone());
+        },
+        keyPressed: function (e) {
+            this.contentView.keyPressed(e.keyCode, this.getlastClick().$clone());
         },
         drawPolygon$1: function (path, fillColor, lineColor, lineWidth) {
             var $t;
@@ -109,7 +124,7 @@
             $t = Bridge.getEnumerator(lines);
             while ($t.moveNext()) {
                 var line = $t.getCurrent();
-                this.context.font = height / lines.length + "px Segoe UI";
+                this.context.font = height / lines.length + "px Georgia";
                 this.context.textAlign = "center";
                 if (this.context.measureText(line).width > width) {
                     minFontSize = Math.min(minFontSize, width / this.context.measureText(line).width * (height / lines.length));
@@ -117,7 +132,7 @@
             }
     
             for (var index = 0; index < lines.length; index++) {
-                this.context.font = minFontSize + "px Segoe UI";
+                this.context.font = minFontSize + "px Georgia";
                 this.context.textAlign = "center";
                 this.context.fillText(lines[index], Bridge.Int.trunc((x + width / 2)), Bridge.Int.trunc((y + (index + 0.5) * (height / lines.length))));
             }
