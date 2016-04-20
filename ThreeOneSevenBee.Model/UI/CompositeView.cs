@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using ThreeOneSevenBee.Model.Euclidean;
 #if BRIDGE
 using Bridge.Html5;
 #endif
@@ -12,11 +13,13 @@ namespace ThreeOneSevenBee.Model.UI
         {
             Children = new List<View>();
             PropagateClick = true;
+            PropagateKeypress = true;
         }
 
         public List<View> Children;
 
         public bool PropagateClick { set; get; }
+        public bool PropagateKeypress { set; get; }
 
         public override void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
@@ -45,6 +48,17 @@ namespace ThreeOneSevenBee.Model.UI
                 if(OnClick != null)
                 {
                     OnClick();
+                }
+            }
+        }
+
+        public override void KeyPressed(int key, Vector2 lastClick)
+        {
+            if (PropagateKeypress)
+            {
+                foreach (View child in Children)
+                {
+                    child.KeyPressed(key, lastClick);
                 }
             }
         }

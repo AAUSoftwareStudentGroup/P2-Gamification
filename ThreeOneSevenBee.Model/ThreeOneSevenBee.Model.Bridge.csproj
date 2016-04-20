@@ -84,6 +84,7 @@
     <Compile Include="UI\IContext.cs" />
     <Compile Include="UI\IdentityMenuView.cs" />
     <Compile Include="UI\ImageView.cs" />
+    <Compile Include="UI\Inputbox.cs" />
     <Compile Include="UI\LabelView.cs" />
     <Compile Include="UI\LevelSelectView.cs" />
     <Compile Include="UI\LevelView.cs" />

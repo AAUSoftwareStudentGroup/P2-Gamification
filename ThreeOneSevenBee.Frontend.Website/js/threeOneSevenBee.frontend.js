@@ -20,13 +20,7 @@
                 var gameModel;
                 var gameView;
     
-                var test = Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("test"), [
-                    [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "a*(b+c)", "a*(b+c)", ["0"])]
-                ] );
-                var s = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
-                s.deserialize(test.getItem(0).startExpression).prettyPrint();
                 gameAPI.getCurrentPlayer(function (u) {
-                    u.addCategory(test);
                     gameAPI.getPlayers(function (p) {
                         gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
                             onSaveLevel: function (level) {
@@ -55,6 +49,11 @@
         inherits: [ThreeOneSevenBee.Model.UI.Context],
         imageCache: null,
         context: null,
+        config: {
+            init: function () {
+                Bridge.property(this, "lastClick", new ThreeOneSevenBee.Model.Euclidean.Vector2() || new ThreeOneSevenBee.Model.Euclidean.Vector2());
+            }
+        },
         constructor: function (canvas) {
             ThreeOneSevenBee.Model.UI.Context.prototype.$constructor.call(this, canvas.width, canvas.height);
     
@@ -70,6 +69,9 @@
             this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             }));
+    
+            this.context.canvas.onkeydown = Bridge.fn.combine(this.context.canvas.onkeydown, Bridge.fn.bind(this, this.keyPressed));
+            this.setlastClick(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", -1, -1));
         },
         colorToString: function (color) {
             return Bridge.String.format("rgba({0},{1},{2},{3})", Bridge.Int.format(color.red, 'G'), Bridge.Int.format(color.green, 'G'), Bridge.Int.format(color.blue, 'G'), Bridge.Int.format(color.alpha, 'G'));
@@ -83,6 +85,13 @@
         },
         click: function (x, y) {
             this.contentView.click(x, y);
+            var last = this.getlastClick().$clone();
+            last.x = x;
+            last.y = y;
+            this.setlastClick(last.$clone());
+        },
+        keyPressed: function (e) {
+            this.contentView.keyPressed(e.keyCode, this.getlastClick().$clone());
         },
         drawPolygon$1: function (path, fillColor, lineColor, lineWidth) {
             var $t;

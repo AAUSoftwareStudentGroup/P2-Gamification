@@ -3,6 +3,7 @@
 
     Bridge.define('ThreeOneSevenBee.Model.UI.View', {
         onClick: null,
+        onKeyPressed: null,
         onChanged: null,
         config: {
             properties: {
@@ -30,6 +31,11 @@
         click: function (x, y) {
             if (this.containsPoint(x, y) && Bridge.hasValue(this.onClick)) {
                 this.onClick();
+            }
+        },
+        keyPressed: function (key, lastClick) {
+            if (Bridge.hasValue(this.onKeyPressed)) {
+                this.onKeyPressed(key, lastClick.$clone());
             }
         },
         scale: function (factor) {
@@ -128,7 +134,8 @@
         children: null,
         config: {
             properties: {
-                PropagateClick: false
+                PropagateClick: false,
+                PropagateKeypress: false
             }
         },
         constructor: function (width, height) {
@@ -136,6 +143,7 @@
     
             this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
             this.setPropagateClick(true);
+            this.setPropagateKeypress(true);
         },
         drawWithContext: function (context, offsetX, offsetY) {
             var $t;
@@ -161,6 +169,16 @@
     
                 if (Bridge.hasValue(this.onClick)) {
                     this.onClick();
+                }
+            }
+        },
+        keyPressed: function (key, lastClick) {
+            var $t;
+            if (this.getPropagateKeypress()) {
+                $t = Bridge.getEnumerator(this.children);
+                while ($t.moveNext()) {
+                    var child = $t.getCurrent();
+                    child.keyPressed(key, lastClick.$clone());
                 }
             }
         },
@@ -229,7 +247,8 @@
         config: {
             properties: {
                 Content$1: null,
-                PropagateClick: false
+                PropagateClick: false,
+                PropagateKeypress: false
             }
         },
         constructor: function (width, height) {
@@ -250,6 +269,7 @@
             this.setWidth(width);
             this.setHeight(height);
             this.setPropagateClick(propagateClick);
+            this.setPropagateKeypress(true);
             this.maxScale = maxScale;
             this.padding = 0;
             this.setContent$1(this.align(this.fit(content)));
@@ -279,6 +299,11 @@
                 if (Bridge.hasValue(this.onClick)) {
                     this.onClick();
                 }
+            }
+        },
+        keyPressed: function (key, lastClick) {
+            if (this.getPropagateKeypress()) {
+                this.getContent$1().keyPressed(key, lastClick.$clone());
             }
         },
         drawWithContext: function (context, offsetX, offsetY) {
@@ -565,9 +590,9 @@
                 operatorView.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                 operatorView.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
                 operatorView.onClick = function () {
-                    model.select(minusExpression);
+                    model.select(minusExpression.getExpression());
                 };
-                operatorView.setLineColor(model.selectionIndex(minusExpression) !== -1 ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 39, 174, 97) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0));
+                operatorView.setLineColor(model.selectionIndex(minusExpression.getExpression()) !== -1 ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 39, 174, 97) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0));
                 operatorView.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 15);
                 view.setX(operatorView.getWidth());
                 operatorView.setY(view.getBaseline() - operatorView.getBaseline());
@@ -850,6 +875,19 @@
         },
         click: function (x, y) {
             ThreeOneSevenBee.Model.UI.CompositeView.prototype.click.call(this, x, y);
+        }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.UI.Inputbox', {
+        inherits: [ThreeOneSevenBee.Model.UI.LabelView],
+        emptyString: null,
+        constructor: function (emptyString) {
+            ThreeOneSevenBee.Model.UI.LabelView.prototype.$constructor.call(this, emptyString);
+    
+            this.emptyString = emptyString;
+        },
+        keyPressed: function (key, lastClick) {
+            console.log("Key: " + key);
         }
     });
     

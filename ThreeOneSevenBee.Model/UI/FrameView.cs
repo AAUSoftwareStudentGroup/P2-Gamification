@@ -5,6 +5,7 @@ using Bridge.Html5;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ThreeOneSevenBee.Model.Euclidean;
 
 namespace ThreeOneSevenBee.Model.UI
 {
@@ -26,6 +27,7 @@ namespace ThreeOneSevenBee.Model.UI
             Width = width;
             Height = height;
             PropagateClick = propagateClick;
+            PropagateKeypress = true;
             MaxScale = maxScale;
             Padding = 0;
             Content = Align(Fit(content));
@@ -33,6 +35,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public View Content { protected set; get; }
         public bool PropagateClick { set; get; }
+        public bool PropagateKeypress { set; get; }
         public double Padding;
         public double InnerX { get { return X - Padding; } }
         public double InnerY { get { return Y - Padding; } }
@@ -60,6 +63,13 @@ namespace ThreeOneSevenBee.Model.UI
                 {
                     OnClick();
                 }
+            }
+        }
+        public override void KeyPressed(int key, Vector2 lastClick)
+        {
+            if (PropagateKeypress)
+            {
+                Content.KeyPressed(key, lastClick);
             }
         }
 

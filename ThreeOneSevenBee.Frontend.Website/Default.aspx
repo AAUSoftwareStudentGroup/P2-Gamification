@@ -21,7 +21,7 @@
     <script src="js/threeOneSevenBee.model.polygon.js"></script>
 </head>
 <body style="margin: 0;overflow:hidden">
-    <canvas id="canvas" width="600" height="400"></canvas>
+    <canvas id="canvas" tabindex='1' width="600" height="400"></canvas>
     <form id="form1" runat="server">
         <div>
 
