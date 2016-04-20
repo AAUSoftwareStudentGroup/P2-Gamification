@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
     public class DelimiterExpression : ExpressionBase
-	{
+    {
         public DelimiterExpression(ExpressionBase expression)
         {
             Expression = expression;
@@ -22,6 +22,23 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             {
                 return "(" + Expression.ToString() + ")";
             }
+        }
+
+        public override bool Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)
+        {
+            var hasReplaced = false;
+
+            if (Object.ReferenceEquals(Expression, old))
+            {
+                Expression = replacement.Clone();
+                hasReplaced |= true;
+            }
+            else if (doRecursively)
+            {
+                hasReplaced |= Expression.Replace(old, replacement, true);
+            }
+
+            return hasReplaced;
         }
 
         public override int Size
@@ -57,16 +74,6 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new DelimiterExpression(Expression.Clone());
         }
 
-        public override bool Replace(ExpressionBase old, ExpressionBase replacement)
-        {
-            if (Expression == old)
-            {
-                Expression = replacement;
-                return true;
-            }
-            return Expression.Replace(old, replacement);
-        }
-
         public override IEnumerable<ExpressionBase> GetNodesRecursive()
         {
             yield return Expression;
@@ -77,15 +84,15 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override string ToString()
         {
-            return Expression.ToString();
+            return "(" + Expression.ToString() + ")";
         }
 
         public override string TreePrint(string indent, bool isLast)
-		{
-			Console.WriteLine (indent + "|-" + "()");
+        {
+            Console.WriteLine(indent + "|-" + "()");
             indent += (isLast ? "  " : "| ");
-            this.Expression.TreePrint (indent, true);
-			return indent;
-		}
+            this.Expression.TreePrint(indent, true);
+            return indent;
+        }
     }
 }

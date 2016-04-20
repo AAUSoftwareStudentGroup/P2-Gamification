@@ -133,11 +133,6 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             }
         }
 
-        public override Boolean Replace(ExpressionBase old, ExpressionBase replacement)
-        {
-            throw new NotImplementedException();
-        }
-
         public override string ToString()
         {
             return this.Skip(1).Aggregate("{" + this.First() + "}", (s, e) => s + Symbol + "{" + e + "}");

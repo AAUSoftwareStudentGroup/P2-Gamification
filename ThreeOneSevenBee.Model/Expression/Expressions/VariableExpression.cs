@@ -58,7 +58,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new VariableExpression(Value);
         }
 
-        public override bool Replace(ExpressionBase old, ExpressionBase replacement)
+        public override bool Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)
         {
             return false;
         }

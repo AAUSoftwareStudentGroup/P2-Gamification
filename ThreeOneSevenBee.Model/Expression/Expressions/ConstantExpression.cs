@@ -34,7 +34,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new ConstantExpression(Type);
         }
 
-        public override bool Replace(ExpressionBase old, ExpressionBase replacement)
+        public override bool Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)
         {
             return false;
         }
@@ -81,11 +81,11 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return Value;
         }
 
-        public override string TreePrint(string indent, bool isLast) 
-		{
-			Console.WriteLine (indent + "|-" + Value);
+        public override string TreePrint(string indent, bool isLast)
+        {
+            Console.WriteLine(indent + "|-" + Value);
             return indent + (isLast ? "  " : "| ");
-		}
+        }
     }
 
     public enum ConstantType

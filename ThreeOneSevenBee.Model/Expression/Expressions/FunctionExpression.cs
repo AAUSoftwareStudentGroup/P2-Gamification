@@ -73,14 +73,21 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             return new FunctionExpression(Expression.Clone(), Function);
         }
 
-        public override bool Replace(ExpressionBase old, ExpressionBase replacement)
+        public override bool Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)
         {
-            if (Expression == old)
+            var hasReplaced = false;
+
+            if (Object.ReferenceEquals(Expression, old))
             {
-                Expression = replacement;
-                return true;
+                Expression = replacement.Clone();
+                hasReplaced |= true;
             }
-            return Expression.Replace(old, replacement);
+            else if (doRecursively)
+            {
+                hasReplaced |= Expression.Replace(old, replacement, true);
+            }
+
+            return hasReplaced;
         }
 
         public override IEnumerable<ExpressionBase> GetNodesRecursive()

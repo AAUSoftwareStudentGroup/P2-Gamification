@@ -93,7 +93,7 @@ namespace ThreeOneSevenBee.Frontend
 
             foreach (string line in lines)
             {
-                context.Font = height / lines.Length + "px Segoe UI";
+                context.Font = height / lines.Length + "px Georgia";
                 context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
                 if (context.MeasureText(line).Width > width)
                 {
@@ -103,7 +103,7 @@ namespace ThreeOneSevenBee.Frontend
 
             for (int index = 0; index < lines.Length; index++)
             {
-                context.Font = minFontSize + "px Segoe UI";
+                context.Font = minFontSize + "px Georgia";
                 context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
                 context.FillText(lines[index], (int)(x + width / 2), (int)(y + (index + 0.5) * (height / lines.Length)));
             }

@@ -77,7 +77,7 @@
         clone: function () {
             return new ThreeOneSevenBee.Model.Expression.Expressions.ConstantExpression(this.getType());
         },
-        replace: function (old, replacement) {
+        replace$1: function (old, replacement, doRecursively) {
             return false;
         },
         getNodesRecursive: function () {
@@ -138,6 +138,21 @@
         getSize: function () {
             return 3 + this.getExpression().getSize();
         },
+        replace$1: function (old, replacement, doRecursively) {
+            var hasReplaced = false;
+    
+            if (this.getExpression() === old) {
+                this.setExpression(replacement.clone());
+                hasReplaced = hasReplaced || true;
+            }
+            else  {
+                if (doRecursively) {
+                    hasReplaced = hasReplaced || this.getExpression().replace$1(old, replacement, true);
+                }
+            }
+    
+            return hasReplaced;
+        },
         canCalculate: function () {
             return this.getExpression().canCalculate();
         },
@@ -156,13 +171,6 @@
         clone: function () {
             return new ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression(this.getExpression().clone());
         },
-        replace: function (old, replacement) {
-            if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getExpression(), old)) {
-                this.setExpression(replacement);
-                return true;
-            }
-            return this.getExpression().replace(old, replacement);
-        },
         getNodesRecursive: function () {
             var $t;
             var $yield = [];
@@ -176,7 +184,7 @@
             return Bridge.Array.toEnumerable($yield);
         },
         toString: function () {
-            return this.getExpression().toString();
+            return "(" + this.getExpression().toString() + ")";
         },
         treePrint: function (indent, isLast) {
             console.log(indent + "|-" + "()");
@@ -244,12 +252,20 @@
         clone: function () {
             return new ThreeOneSevenBee.Model.Expression.Expressions.FunctionExpression(this.getExpression().clone(), this.getFunction());
         },
-        replace: function (old, replacement) {
-            if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getExpression(), old)) {
-                this.setExpression(replacement);
-                return true;
+        replace$1: function (old, replacement, doRecursively) {
+            var hasReplaced = false;
+    
+            if (this.getExpression() === old) {
+                this.setExpression(replacement.clone());
+                hasReplaced = hasReplaced || true;
             }
-            return this.getExpression().replace(old, replacement);
+            else  {
+                if (doRecursively) {
+                    hasReplaced = hasReplaced || this.getExpression().replace$1(old, replacement, true);
+                }
+            }
+    
+            return hasReplaced;
         },
         getNodesRecursive: function () {
             var $t;
@@ -291,7 +307,7 @@
         clone: function () {
             return new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(this.number);
         },
-        replace: function (old, replacement) {
+        replace$1: function (old, replacement, doRecursively) {
             return false;
         },
         getNodesRecursive: function () {
@@ -358,7 +374,7 @@
         clone: function () {
             return new ThreeOneSevenBee.Model.Expression.Expressions.VariableExpression(this.getValue());
         },
-        replace: function (old, replacement) {
+        replace$1: function (old, replacement, doRecursively) {
             return false;
         },
         getNodesRecursive: function () {
@@ -397,6 +413,31 @@
             this.getLeft().setParent(this);
             this.setRight(right);
             this.getRight().setParent(this);
+        },
+        replace$1: function (old, replacement, doRecursively) {
+            var hasReplaced = false;
+    
+            if (this.getLeft() === old) {
+                this.setLeft(replacement.clone());
+                hasReplaced = hasReplaced || true;
+            }
+            else  {
+                if (doRecursively) {
+                    hasReplaced = hasReplaced || this.getLeft().replace$1(old, replacement, true);
+                }
+            }
+    
+            if (this.getRight() === old) {
+                this.setRight(replacement.clone());
+                hasReplaced = hasReplaced || true;
+            }
+            else  {
+                if (doRecursively) {
+                    hasReplaced = hasReplaced || this.getRight().replace$1(old, replacement, true);
+                }
+            }
+    
+            return hasReplaced;
         }
     });
     
@@ -419,6 +460,21 @@
     
             this.setExpression(expression);
             this.getExpression().setParent(this);
+        },
+        replace$1: function (old, replacement, doRecursively) {
+            var hasReplaced = false;
+    
+            if (this.getExpression() === old) {
+                this.setExpression(replacement.clone());
+                hasReplaced = hasReplaced || true;
+            }
+            else  {
+                if (doRecursively) {
+                    hasReplaced = hasReplaced || this.getExpression().replace$1(old, replacement, true);
+                }
+            }
+    
+            return hasReplaced;
         }
     });
     
@@ -483,6 +539,29 @@
     },
     setItem: function (index, value) {
         this.expressions.setItem(index, value);
+    },
+    replace$1: function (old, replacement, doRecursively) {
+        var hasReplaced = false;
+    
+        var expressionArray = this.expressions.toArray();
+    
+        for (var i = 0; i < expressionArray.length; i++) {
+            if (expressionArray[i] === old) {
+                expressionArray[i] = replacement.clone();
+                hasReplaced = hasReplaced || true;
+            }
+            else  {
+                if (doRecursively) {
+                    hasReplaced = hasReplaced || expressionArray[i].replace$1(old, replacement, true);
+                }
+            }
+        }
+    
+        if (hasReplaced) {
+            this.expressions = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)(expressionArray);
+        }
+    
+        return hasReplaced;
     },
     add$2: function (item) {
         var $t;
@@ -655,9 +734,6 @@
             }
             return Bridge.Array.toEnumerable($yield);
         },
-        replace: function (old, replacement) {
-            throw new Bridge.NotImplementedException();
-        },
         toString: function () {
             return "{" + this.getLeft() + "}" + this.getSymbol() + "{" + this.getRight() + "}";
         },
@@ -705,13 +781,6 @@
         },
         clone: function () {
             return new ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression(this.getExpression().clone());
-        },
-        replace: function (old, replacement) {
-            if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(this.getExpression(), old)) {
-                this.setExpression(replacement);
-                return true;
-            }
-            return this.getExpression().replace(old, replacement);
         },
         getNodesRecursive: function () {
             var $t;
@@ -858,9 +927,6 @@
                 }
             }
             return Bridge.Array.toEnumerable($yield);
-        },
-        replace: function (old, replacement) {
-            throw new Bridge.NotImplementedException();
         },
         toString: function () {
             return Bridge.Linq.Enumerable.from(this).skip(1).aggregate("{" + Bridge.Linq.Enumerable.from(this).first() + "}", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression.f2));

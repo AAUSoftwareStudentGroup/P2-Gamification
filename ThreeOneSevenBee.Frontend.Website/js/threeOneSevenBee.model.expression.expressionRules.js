@@ -761,7 +761,6 @@
                 }
     
                 if (!Bridge.hasValue(fraction) || !Bridge.hasValue(constant)) {
-                    console.log("er den her?");
                     return null;
                 }
     
@@ -796,7 +795,7 @@
                 var unaryMinusExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
                 if (Bridge.hasValue(unaryMinusExpression)) {
                     var numericExpression = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1);
-                    var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, new ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression(numericExpression), unaryMinusExpression.getExpression());
+                    var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, new ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression(numericExpression), unaryMinusExpression.getExpression().clone());
                     return new ThreeOneSevenBee.Model.Expression.Identity(suggestion, suggestion);
                 }
                 return null;
@@ -810,7 +809,7 @@
                 var something;
                 var one;
     
-                if (Bridge.hasValue(variadicExpression) || variadicExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
+                if (Bridge.hasValue(variadicExpression) && variadicExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
                     if (Bridge.is(selection.getItem(0), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression)) {
                         one = Bridge.as(selection.getItem(0).clone(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
                         something = selection.getItem(1).clone();
@@ -825,6 +824,9 @@
                             if (one.number === 1) {
                                 return new ThreeOneSevenBee.Model.Expression.Identity(something, something);
                             }
+                        }
+                        else  {
+                            return null;
                         }
                     }
     

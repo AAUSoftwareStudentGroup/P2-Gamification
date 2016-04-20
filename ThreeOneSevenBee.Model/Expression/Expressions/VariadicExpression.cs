@@ -44,6 +44,31 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 this.Add(expression);
         }
 
+        public override bool Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)
+        {
+            var hasReplaced = false;
+
+            var expressionArray = expressions.ToArray();
+
+            for (int i = 0; i < expressionArray.Length; i++)
+            {
+                if (Object.ReferenceEquals(expressionArray[i], old))
+                {
+                    expressionArray[i] = replacement.Clone();
+                    hasReplaced |= true;
+                }
+                else if (doRecursively)
+                {
+                    hasReplaced |= expressionArray[i].Replace(old, replacement, true);
+                }
+            }
+
+            if (hasReplaced)
+                expressions = new List<ExpressionBase>(expressionArray);
+
+            return hasReplaced;
+        }
+
         public Int32 Count { get { return expressions.Count; } }
 
         public Boolean IsReadOnly { get { return false; } }

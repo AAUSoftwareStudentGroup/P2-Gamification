@@ -371,7 +371,7 @@
                     context.drawLine(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetY + this.getHeight() / 2), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth(), this.getY() + offsetY + this.getHeight() / 2), this.getLineColor(), this.getLineWidth());
                     break;
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply: 
-                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "*", this.getLineColor());
+                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "·", this.getLineColor());
                     break;
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power: 
                     break;

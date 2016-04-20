@@ -5,6 +5,7 @@ if($_SERVER['HTTP_HOST'] == "webmat.cs.aau.dk" || $_DEBUG == false) {
     error_reporting(0);
 }
 
+require('../helpers.php');
 require('../db.php');
 $db = new DB();
 
@@ -15,9 +16,21 @@ elseif(isset($_POST['action'])) {
     $IN = $_POST;
 }
 
-if(isset($IN['debug']) && $IN['debug'] == 1) {
-    session_start();
-    $_SESSION['authorized'] = 5; // Tanner helland
+session_start();
+
+if(isset($IN['debug']) && $IN['debug'] != "NULL") {
+    if(strcmp($IN['debug'], "1") == 0)
+        $_SESSION['authorized'] = 5; // Tanner helland
+    else {
+        $db->query("SELECT user.id 
+                    FROM user 
+                    WHERE session_token=?",
+                    $IN['debug']    
+                );
+        if($row = $db->fetch()) {
+            $_SESSION['authorized'] = $row['id'];
+        }
+    }
 }
 
 if($IN != null)
@@ -36,18 +49,51 @@ class API {
     }
 
     static function user_logout($IN, $db) {
-        session_start();
-        if(isset($_SESSION['authorized']))
+        if(isset($_SESSION['authorized'])) {
             unset($_SESSION['authorized']);
+            $db->query("UPDATE user
+                            SET session_token=NULL
+                            WHERE id=?;",
+                            $row['id']
+                        );
+        }
         API::respond();
+    }
+
+    static function user_login($IN, $db) {
+        $db->query("SELECT password_hash, id FROM user WHERE BINARY name = ? AND deleted_at IS NULL",
+                    $IN['username']);
+
+        if($row = $db->fetch()) {
+            if(password_verify($IN['password'], $row['password_hash'])) {
+                $_SESSION['authorized'] = $row['id'];
+                $session_token = getRandomString(16);
+                $db->query("UPDATE user
+                            SET session_token=?
+                            WHERE id=?;",
+                            $session_token,
+                            $row['id']
+                        );
+                API::respond(true, $session_token);
+            }
+        }
+        API::respond(false, "Username or password was incorrect");
     }
 
     static function get_users($IN, $db) {
         $result = array();
-        $db->query("SELECT user.name FROM gamedb.user AS user");
+        $db->query("SELECT user.name FROM gamedb.user AS user WHERE user.deleted_at IS NULL");
         while($row = $db->fetch())
             $result[] = $row;
         API::respond(true, $result);
+    }
+
+    static function delete_user_by_id($IN, $db) {
+        $db->query("UPDATE gamedb.user
+                      SET deleted_at=UNIX_TIMESTAMP()
+                      WHERE id=?;", $IN['user_id']
+                    );
+        API::respond();
     }
 
     static function delete_class_by_id($IN, $db) {
@@ -83,8 +129,35 @@ class API {
         API::respond();
     }
 
+    static function order_level_categories($IN, $db) {
+        $ids = $IN['id_by_order'];
+        $n = count($ids);
+        for($i = 0; $i < $n; $i++) {
+            $db->query("UPDATE gamedb.level_category
+                        SET level_category.order = ?
+                        WHERE id=?;",
+                        $i, 
+                        (int)$ids[$i]
+                    );
+        }
+        API::respond(true);
+    }
+
+    static function order_levels($IN, $db) {
+        $ids = $IN['id_by_order'];
+        $n = count($ids);
+        for($i = 0; $i < $n; $i++) {
+            $db->query("UPDATE gamedb.level
+                        SET level.order = ?
+                        WHERE id=?;",
+                        $i, 
+                        (int)$ids[$i]
+                    );
+        }
+        API::respond(true);
+    }
+
     static function save_user_level_progress($IN, $db) {
-        session_start();
         if(!isset($_SESSION['authorized']))
             API::respond(false, null, "User not logged in");
         
@@ -112,7 +185,6 @@ class API {
     }
 
     static function get_levels($IN, $db) {
-        session_start();
         if(!isset($_SESSION['authorized']))
             API::respond(false, null, "User not logged in");
 
@@ -130,7 +202,7 @@ class API {
                         gamedb.user_level_progress AS level_progress ON level_progress.level_id = level.id
                     WHERE 
                         level_progress.user_id=5 OR level_progress.user_id IS NULL
-                    ORDER BY level.level_category_id ASC, level.id ASC;",
+                    ORDER BY category.order ASC, level.order ASC;",
                     $_SESSION['authorized']
         );
 
@@ -163,17 +235,18 @@ class API {
     }
 
     static function get_current_user($IN, $db) {
-        session_start();
-        $db->query("SELECT user.name FROM gamedb.user AS user
+        if(!isset($_SESSION['authorized']))
+            API::respond(false, null, "user not authorized");
+        
+        $db->query("SELECT user.name AS name, user.session_token AS token FROM gamedb.user AS user
                     WHERE user.id = ?",
                     (isset($_SESSION['authorized']) ? $_SESSION['authorized'] : 0));
         if($result = $db->fetch())
             API::respond(true, $result);
-        API::respond(false, null, "user not authorized");
+        API::respond(false, null, "Unkown error");
     }
 
     static function set_current_user($IN, $db) {
-        session_start();
         if(isset($IN['id']) && is_int((integer)$IN['id'])) {
             $_SESSION['authorized'] = $IN['id'];
             API::respond();
