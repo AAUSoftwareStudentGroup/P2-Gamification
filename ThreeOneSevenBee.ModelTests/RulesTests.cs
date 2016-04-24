@@ -22,9 +22,9 @@ namespace ThreeOneSevenBee.ModelTests
                 selection1 = Make.New("a"),
                 selection2 = Make.New("a"));
 
-            var identity = Rules.ProductToExponentRule(parent, new List<ExpressionBase>() { selection1, selection2 });
-            Assert.IsNotNull(identity);
-            Assert.AreEqual(Make.Power(Make.New("a"), Make.New(2)), identity.Suggestion);
+            var suggestion = Rules.ProductToExponentRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(suggestion);
+            Assert.AreEqual(Make.Power(Make.New("a"), Make.New(2)), suggestion);
         }
 
         [TestMethod]
@@ -39,9 +39,9 @@ namespace ThreeOneSevenBee.ModelTests
                 selection1 = Make.New("a"),
                 selection2 = Make.New(2));
 
-            var identity = Rules.ExponentToProductRule(parent, new List<ExpressionBase>() { selection1, selection2 });
-            Assert.IsNotNull(identity);
-            Assert.AreEqual(Make.Multiply(Make.New("a"), Make.New("a")), identity.Suggestion);
+            var suggestion = Rules.ExponentToProductRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(suggestion);
+            Assert.AreEqual(Make.Multiply(Make.New("a"), Make.New("a")), suggestion);
         }
 
         [TestMethod]
@@ -50,25 +50,25 @@ namespace ThreeOneSevenBee.ModelTests
             ExpressionBase selection1;
             ExpressionBase selection2;
             ExpressionBase parent;
-            Identity identity;
+            ExpressionBase suggestion;
 
             // 2+2 => 4
             parent = Make.Add(
                 selection1 = Make.New(2),
                 selection2 = Make.New(2));
 
-            identity = Rules.NumericVariadicRule(parent, new List<ExpressionBase>() { selection1, selection2 });
-            Assert.IsNotNull(identity);
-            Assert.AreEqual(Make.New(4), identity.Suggestion);
+            suggestion = Rules.NumericVariadicRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(suggestion);
+            Assert.AreEqual(Make.New(4), suggestion);
 
             // 3*3 => 9
             parent = Make.Multiply(
                 selection1 = Make.New(3),
                 selection2 = Make.New(3));
 
-            identity = Rules.NumericVariadicRule(parent, new List<ExpressionBase>() { selection1, selection2 });
-            Assert.IsNotNull(identity);
-            Assert.AreEqual(Make.New(9), identity.Suggestion);
+            suggestion = Rules.NumericVariadicRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(suggestion);
+            Assert.AreEqual(Make.New(9), suggestion);
         }
 
         [TestMethod]
@@ -77,16 +77,15 @@ namespace ThreeOneSevenBee.ModelTests
             ExpressionBase selection1;
             ExpressionBase selection2;
             ExpressionBase parent;
-            Identity identity;
 
             // 2-2 => 0
             parent = Make.Subtract(
                 selection1 = Make.New(2),
                 selection2 = Make.New(2));
 
-            identity = Rules.NumericBinaryRule(parent, new List<ExpressionBase>() { selection1, selection2 });
-            Assert.IsNotNull(identity);
-            Assert.AreEqual(Make.New(0), identity.Suggestion);
+            var suggestion = Rules.NumericBinaryRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(suggestion);
+            Assert.AreEqual(Make.New(0), suggestion);
 
             // 3/3 => 1
             /*parent = ExpressionTests.Divide(
@@ -102,9 +101,9 @@ namespace ThreeOneSevenBee.ModelTests
                 selection1 = Make.New(3),
                 selection2 = Make.New(3));
 
-            identity = Rules.NumericBinaryRule(parent, new List<ExpressionBase>() { selection1, selection2 });
-            Assert.IsNotNull(identity);
-            Assert.AreEqual(Make.New(27), identity.Suggestion);
+            suggestion = Rules.NumericBinaryRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(suggestion);
+            Assert.AreEqual(Make.New(27), suggestion);
         }
 
         [TestMethod]
@@ -113,7 +112,6 @@ namespace ThreeOneSevenBee.ModelTests
             ExpressionBase selection1;
             ExpressionBase selection2;
             ExpressionBase parent;
-            Identity identity;
 
             // 3^5*2^5 => (3*2)^5
             parent = Make.Multiply(
@@ -124,9 +122,9 @@ namespace ThreeOneSevenBee.ModelTests
                     Make.New(2),
                     selection2 = Make.New(5)));
 
-            identity = Rules.CommonPowerParenthesisRule(parent, new List<ExpressionBase>() { selection1, selection2 });
-            Assert.IsNotNull(identity);
-            Assert.AreEqual(Make.Power(Make.Delimiter(Make.Multiply(Make.New(3), Make.New(2))), Make.New(5)), identity.Suggestion);
+            var suggestion = Rules.CommonPowerParenthesisRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(suggestion);
+            Assert.AreEqual(Make.Power(Make.Delimiter(Make.Multiply(Make.New(3), Make.New(2))), Make.New(5)), suggestion);
 
             // 3^5+2^5 => NULL
             parent = Make.Add(
@@ -137,8 +135,8 @@ namespace ThreeOneSevenBee.ModelTests
                     Make.New(2),
                     selection2 = Make.New(5)));
 
-            identity = Rules.CommonPowerParenthesisRule(parent, new List<ExpressionBase>() { selection1, selection2 });
-            Assert.IsNull(identity);
+            suggestion = Rules.CommonPowerParenthesisRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNull(suggestion);
         }
 
         [TestMethod]
@@ -147,7 +145,6 @@ namespace ThreeOneSevenBee.ModelTests
             ExpressionBase selection1;
             ExpressionBase selection2;
             ExpressionBase parent;
-            Identity identity;
 
             // (3*2)^5 => 3^5*2^5
             parent = Make.Power(
@@ -157,15 +154,15 @@ namespace ThreeOneSevenBee.ModelTests
                         Make.New(2))),
                 selection2 = Make.New(5));
 
-            identity = Rules.ReverseCommonPowerParenthesisRule(parent, new List<ExpressionBase>() { selection1, selection2 });
-            Assert.IsNotNull(identity);
+            var suggestion = Rules.ReverseCommonPowerParenthesisRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(suggestion);
             Assert.AreEqual(Make.Multiply(
                 Make.Power(
                     Make.New(3),
                     Make.New(5)),
                 Make.Power(
                     Make.New(2),
-                   Make.New(5))), identity.Suggestion);
+                   Make.New(5))), suggestion);
         }
 
         [TestMethod]
@@ -174,16 +171,15 @@ namespace ThreeOneSevenBee.ModelTests
             ExpressionBase selection1;
             ExpressionBase selection2;
             ExpressionBase parent;
-            Identity identity;
 
             // x^-2 = 1/x^2
             parent = Make.Power(
                 selection1 = Make.New("x"),
                 selection2 = Make.Minus(Make.New(2)));
 
-            identity = Rules.VariableWithNegativeExponent(parent, new List<ExpressionBase>() { selection1, selection2 });
-            Assert.IsNotNull(identity);
-            Assert.AreEqual(Make.Divide(Make.New(1), Make.Power(Make.New("x"), Make.New(2))), identity.Suggestion);
+            var suggestion = Rules.VariableWithNegativeExponent(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(suggestion);
+            Assert.AreEqual(Make.Divide(Make.New(1), Make.Power(Make.New("x"), Make.New(2))), suggestion);
         }
 
         [TestMethod]
@@ -193,7 +189,6 @@ namespace ThreeOneSevenBee.ModelTests
             ExpressionBase selection2;
             ExpressionBase selection3;
             ExpressionBase parent;
-            Identity identity;
 
             // x^-2 = 1/x^2
             parent = selection1 = Make.Divide(
@@ -202,9 +197,9 @@ namespace ThreeOneSevenBee.ModelTests
                     selection3 = Make.New("x"),
                     Make.New(2)));
 
-            identity = Rules.ReverseVariableWithNegativeExponent(parent, new List<ExpressionBase>() { selection1, selection2, selection3 });
-            Assert.IsNotNull(identity);
-            Assert.AreEqual(Make.Power(Make.New("x"), Make.Minus(Make.New(2))), identity.Suggestion);
+            var suggestion = Rules.ReverseVariableWithNegativeExponent(parent, new List<ExpressionBase>() { selection1, selection2, selection3 });
+            Assert.IsNotNull(suggestion);
+            Assert.AreEqual(Make.Power(Make.New("x"), Make.Minus(Make.New(2))), suggestion);
         }
 
         [TestMethod]
@@ -212,13 +207,12 @@ namespace ThreeOneSevenBee.ModelTests
         {
             ExpressionBase selection1;
             ExpressionBase parent;
-            Identity identity;
 
             // 2/10 = 2/5*2
             parent = selection1 = Make.New(10);
 
-            identity = Rules.FactorizationRule(parent, new List<ExpressionBase>() { selection1 });
-            Assert.IsNotNull(identity);
+            var suggestion = Rules.FactorizationRule(parent, new List<ExpressionBase>() { selection1 });
+            Assert.IsNotNull(suggestion);
             throw new NotImplementedException();
         }
 
@@ -229,16 +223,15 @@ namespace ThreeOneSevenBee.ModelTests
         ExpressionBase selection2;
         ExpressionBase selection3;
         ExpressionBase parent;
-        Identity identity;
             
         // a/b + c/b = a+c/b
         parent = Make.Add(
         selection1 = Make.Divide(Make.New("a"), Make.New("b")),
         selection2 = Make.Divide(Make.New("c"), Make.New("b")));
  
-        identity = Rules.AddFractionsWithSameNumerators(parent, new List<ExpressionBase>() { selection1, selection2});
-        Assert.IsNotNull(identity);
-        Assert.AreEqual(Make.Divide(Make.Add(Make.New("a"), Make.New("c")), Make.New("b")), identity.Suggestion);
+        var suggestion = Rules.AddFractionsWithSameNumerators(parent, new List<ExpressionBase>() { selection1, selection2});
+        Assert.IsNotNull(suggestion);
+        Assert.AreEqual(Make.Divide(Make.Add(Make.New("a"), Make.New("c")), Make.New("b")), suggestion);
  
         // a/x - y/x + b/x + 3 = {a-y+b}/x + 3
         parent = Make.Add(
@@ -246,10 +239,10 @@ namespace ThreeOneSevenBee.ModelTests
             selection2 = Make.Divide(Make.Minus(Make.New("y")), Make.New("x")),
             selection3 = Make.Divide(Make.New("b"), Make.New("x")),
             Make.New(3));
- 
-         identity = Rules.AddFractionsWithSameNumerators(parent, new List<ExpressionBase>() { selection1, selection2, selection3});
-         Assert.IsNotNull(identity);
-         Assert.AreEqual(Make.Add(Make.Divide(Make.Add(Make.New("a"), Make.Minus(Make.New("y")), Make.New("b")), Make.New("x")), Make.New(3)), identity.Result);
+
+         suggestion = Rules.AddFractionsWithSameNumerators(parent, new List<ExpressionBase>() { selection1, selection2, selection3});
+         Assert.IsNotNull(suggestion);
+         Assert.AreEqual(Make.Add(Make.Divide(Make.Add(Make.New("a"), Make.Minus(Make.New("y")), Make.New("b")), Make.New("x")), Make.New(3)), suggestion);
         }
 
         [TestMethod]
@@ -257,29 +250,28 @@ namespace ThreeOneSevenBee.ModelTests
         {
             ExpressionBase parent;
             ExpressionBase selection1;
-            Identity identity;
 
             // {a+b}/c = a/c + b/c
             parent = selection1 = Make.Divide(
             Make.Add(Make.New("a"), Make.New("b")),
             Make.New("c"));
             
-            identity = Rules.SplittingFractions(parent, new List<ExpressionBase>() { selection1 });
-            Assert.IsNotNull(identity);
-            Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("c")), Make.Divide(Make.New("b"), Make.New("c"))), identity.Suggestion);
+            var suggestion = Rules.SplittingFractions(parent, new List<ExpressionBase>() { selection1 });
+            Assert.IsNotNull(suggestion);
+            Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("c")), Make.Divide(Make.New("b"), Make.New("c"))), suggestion);
             
                         // {a-c-d+f}/x + 3 = a/x - c/x - d/x + f/x + 3
             parent = Make.Add(
                 selection1 = Make.Divide(Make.Add(Make.New("a"), Make.Minus(Make.New("c")), 
                 Make.Minus(Make.New("d")), Make.New("f")), Make.New("x")), Make.New(3));
 
-            identity = Rules.SplittingFractions(parent, new List<ExpressionBase>() { selection1 });
+            suggestion = Rules.SplittingFractions(parent, new List<ExpressionBase>() { selection1 });
             
                 // TODO: Nedenstående er: a/x + -c/x + -d/x + f/x + 3, denne virker
                 // Den nedenunder er: a/x - c/x - d/x + f/x + 3, den virker ikke, det skal ændres i reglen
                 //Husk at Bruge issue nummeret ved commit!
             
-            Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("x")), Make.Divide(Make.Minus(Make.New("c")), Make.New("x")), Make.Divide(Make.Minus(Make.New("d")), Make.New("x")), Make.Divide(Make.New("f"), Make.New("x")), Make.New(3)), identity.Result);
+            Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("x")), Make.Divide(Make.Minus(Make.New("c")), Make.New("x")), Make.Divide(Make.Minus(Make.New("d")), Make.New("x")), Make.Divide(Make.New("f"), Make.New("x")), Make.New(3)), suggestion);
             
             //Assert.AreEqual(Make.Add(Make.Divide(Make.New("a"), Make.New("x")), Make.Minus(Make.Divide(Make.New("c"), Make.New("x"))), Make.Minus(Make.Divide(Make.New("d"), Make.New("x"))), Make.Divide(Make.New("f"), Make.New("x")), Make.New(3)), identity.Result);
         }
@@ -289,19 +281,18 @@ namespace ThreeOneSevenBee.ModelTests
         {
             ExpressionBase selection1;
             ExpressionBase parent;
-            Identity identity;
 
 
             parent = selection1 = Make.Divide(Make.New(15), Make.New(15));
 
-            identity = Rules.DivisionEqualsOneRule(parent, new List<ExpressionBase>() { selection1 });
-            Assert.IsNotNull(identity);
+            var suggestion = Rules.DivisionEqualsOneRule(parent, new List<ExpressionBase>() { selection1 });
+            Assert.IsNotNull(suggestion);
 
             NumericExpression a = new NumericExpression(1);
             NumericExpression b = new NumericExpression(2);
 
-            Assert.IsTrue(identity.Suggestion == a);
-            Assert.IsFalse(identity.Suggestion == b);
+            Assert.IsTrue(suggestion == a);
+            Assert.IsFalse(suggestion == b);
 
         }
 
@@ -321,9 +312,9 @@ namespace ThreeOneSevenBee.ModelTests
                     selection2 = Make.New("a"),
                     Make.New("c")));
 
-            var identity = Rules.ProductParenthesis(parent, new List<ExpressionBase>() { selection1, selection2 });
-            Assert.IsNotNull(identity);
-            Assert.AreEqual(Make.Multiply(Make.New("a"), Make.Delimiter(Make.Add(Make.New("b"), Make.New("c")))), identity.Suggestion);
+            var suggestion = Rules.ProductParenthesis(parent, new List<ExpressionBase>() { selection1, selection2 });
+            Assert.IsNotNull(suggestion);
+            Assert.AreEqual(Make.Multiply(Make.New("a"), Make.Delimiter(Make.Add(Make.New("b"), Make.New("c")))), suggestion);
         }
     }
 }

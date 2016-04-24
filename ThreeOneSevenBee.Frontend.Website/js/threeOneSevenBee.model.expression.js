@@ -74,9 +74,10 @@
             var $t, $t1, $t2, $t3;
             var identities = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.Identity)();
     
-            if (Bridge.Linq.Enumerable.from(selection).count() === 0) {
+            if (selection.getCount() === 0) {
                 return identities;
             }
+    
             var commonParent = this.getCommonParent$1(selection);
             if (Bridge.is(commonParent, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression)) {
                 var clone = Bridge.as(commonParent.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
@@ -206,7 +207,8 @@
                  * @return  {void}
                  */
                 Parent: null,
-                Selected: false
+                Selected: false,
+                ToBeReplaced: false
             }
         },
         /**

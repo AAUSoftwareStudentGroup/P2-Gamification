@@ -22,7 +22,7 @@
     
                 gameAPI.getCurrentPlayer(function (u) {
                     u.addCategory(Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("wat"), [
-                        [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "a*(a+a)", "a*(a+a)", ["2*a^2"])]
+                        [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4/3", "4/2", ["2"])]
                     ] ));
                     gameAPI.getPlayers(function (p) {
                         gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
@@ -124,7 +124,7 @@
             $t = Bridge.getEnumerator(lines);
             while ($t.moveNext()) {
                 var line = $t.getCurrent();
-                this.context.font = height / lines.length + "px Georgia";
+                this.context.font = height / lines.length + "px Arial";
                 this.context.textAlign = "center";
                 if (this.context.measureText(line).width > width) {
                     minFontSize = Math.min(minFontSize, width / this.context.measureText(line).width * (height / lines.length));
@@ -132,7 +132,7 @@
             }
     
             for (var index = 0; index < lines.length; index++) {
-                this.context.font = minFontSize + "px Georgia";
+                this.context.font = minFontSize + "px Arial";
                 this.context.textAlign = "center";
                 this.context.fillText(lines[index], Bridge.Int.trunc((x + width / 2)), Bridge.Int.trunc((y + (index + 0.5) * (height / lines.length))));
             }

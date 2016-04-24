@@ -97,10 +97,11 @@ namespace ThreeOneSevenBee.Model.Expression
         {
             var identities = new List<Identity>();
 
-            if (selection.Count() == 0)
+            if (selection.Count == 0)
             {
                 return identities;
             }
+
             ExpressionBase commonParent = GetCommonParent(selection);
             if (commonParent is VariadicOperatorExpression)
             {

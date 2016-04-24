@@ -39,6 +39,8 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public virtual bool Selected { get; set; } = false;
 
+        public virtual bool ToBeReplaced { get; set; } = false;
+
         /// <summary>
         /// Clones the tree recursively, making new references all the way.
         /// </summary>
