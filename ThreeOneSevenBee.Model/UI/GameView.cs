@@ -32,7 +32,7 @@ namespace ThreeOneSevenBee.Model.UI
 
             titleView = new TitleView(game.User, game.Players);
 
-            levelView = new LevelView(game, context.Width, context.Height)
+            levelView = new LevelView(game)
             {
                 OnExit = () =>
                 {
@@ -71,6 +71,11 @@ namespace ThreeOneSevenBee.Model.UI
             game.OnChanged = Update;
 
             setContent(titleView);
+
+            context.OnResize = (w, h) =>
+            {
+                updateContent();
+            };
 
             context.SetContentView(this);
         }

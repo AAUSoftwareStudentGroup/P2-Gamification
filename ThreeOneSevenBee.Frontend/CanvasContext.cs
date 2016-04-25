@@ -31,9 +31,23 @@ namespace ThreeOneSevenBee.Frontend
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
                         e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
                 });
-
+            Window.OnResize = (e) => ResizeContent();
             context.Canvas.OnKeyDown += KeyPressed;
-            lastClick = new Vector2(-1, -1);
+        }
+
+        public void ResizeContent()
+        {
+            context.Canvas.Width = Document.DocumentElement.ClientWidth;
+            context.Canvas.Height = Document.DocumentElement.ClientHeight;
+            Width = context.Canvas.Width;
+            Height = context.Canvas.Height;
+            contentView.Width = Width;
+            contentView.Height = Height;
+            if(OnResize != null)
+            {
+                OnResize(Width, Height);
+            }
+            Draw();
         }
 
         public string ColorToString(Color color)

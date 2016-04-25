@@ -67,6 +67,7 @@
     <Content Include="img\masterofalgebra.png" />
     <Content Include="img\playbutton.png" />
     <Content Include="img\potensv2.png" />
+    <Content Include="img\restart.png" />
     <Content Include="img\spildonebadge.png" />
     <Content Include="img\star.png" />
     <Content Include="img\star_activated.png" />

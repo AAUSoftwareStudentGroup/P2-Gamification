@@ -71,9 +71,20 @@
             this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             }));
-    
+            window.onresize = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f1);
             this.context.canvas.onkeydown = Bridge.fn.combine(this.context.canvas.onkeydown, Bridge.fn.bind(this, this.keyPressed));
-            this.setlastClick(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", -1, -1));
+        },
+        resizeContent: function () {
+            this.context.canvas.width = document.documentElement.clientWidth;
+            this.context.canvas.height = document.documentElement.clientHeight;
+            this.setWidth(this.context.canvas.width);
+            this.setHeight(this.context.canvas.height);
+            this.contentView.setWidth(this.getWidth());
+            this.contentView.setHeight(this.getHeight());
+            if (Bridge.hasValue(this.getOnResize())) {
+                this.getOnResize()(this.getWidth(), this.getHeight());
+            }
+            this.draw();
         },
         colorToString: function (color) {
             return Bridge.String.format("rgba({0},{1},{2},{3})", Bridge.Int.format(color.red, 'G'), Bridge.Int.format(color.green, 'G'), Bridge.Int.format(color.blue, 'G'), Bridge.Int.format(color.alpha, 'G'));
@@ -153,6 +164,14 @@
                     this.context.fillStyle = "#000000";
                 });
             }
+        }
+    });
+    
+    Bridge.ns("ThreeOneSevenBee.Frontend.CanvasContext", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Frontend.CanvasContext, {
+        f1: function (e) {
+            this.resizeContent();
         }
     });
     

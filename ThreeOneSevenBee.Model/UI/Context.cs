@@ -19,7 +19,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public virtual double Width { get; set; }
         public virtual double Height { get; set; }
-
+        public Action<double, double> OnResize { get; set; }
         protected View contentView;
 
         public abstract void Clear();

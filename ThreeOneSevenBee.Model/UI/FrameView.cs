@@ -62,6 +62,11 @@ namespace ThreeOneSevenBee.Model.UI
             Content = Align(Fit(content));
         }
 
+        public virtual void updateContent()
+        {
+            Content = Align(Fit(Content));
+        }
+
         public override void Click(double x, double y)
         {
 

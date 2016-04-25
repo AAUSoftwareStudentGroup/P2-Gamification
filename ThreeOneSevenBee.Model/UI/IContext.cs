@@ -10,6 +10,7 @@ namespace ThreeOneSevenBee.Model.UI
     {
         double Width { get; }
         double Height { get; }
+        Action<double, double> OnResize { get; set; }
         void Clear();
         void SetContentView(View view);
         void Draw();
