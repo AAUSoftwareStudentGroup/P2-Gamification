@@ -1279,7 +1279,7 @@
             this.build(progressbar);
         },
         build: function (progressbar) {
-            this.progress = Bridge.merge(new ThreeOneSevenBee.Model.UI.View(0, 0, Math.max(0, this.getWidth() * progressbar.getPercentage()), this.getHeight()), {
+            this.progress = Bridge.merge(new ThreeOneSevenBee.Model.UI.View(0, 0, Math.min(this.getWidth(), Math.max(0, this.getWidth() * progressbar.getPercentage())), this.getHeight()), {
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 175, 100)
             } );
             this.stars = new Bridge.List$1(ThreeOneSevenBee.Model.UI.ImageView)();
