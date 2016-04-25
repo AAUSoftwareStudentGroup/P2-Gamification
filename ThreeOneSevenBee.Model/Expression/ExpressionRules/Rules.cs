@@ -637,7 +637,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     BinaryOperatorExpression binaryBase = delimiterBase.Expression as BinaryOperatorExpression;
                     if(binaryBase != null)
                     {
-                        return new BinaryOperatorExpression(binaryBase.Left, new VariadicOperatorExpression(OperatorType.Multiply, binaryBase.Right, binaryOperatorExpression.Right), OperatorType.Power);
+                        return new BinaryOperatorExpression(binaryBase.Left.Clone(), new VariadicOperatorExpression(OperatorType.Multiply, binaryBase.Right.Clone(), binaryOperatorExpression.Right.Clone()), OperatorType.Power);
                     }
                 }
             }
@@ -726,37 +726,20 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
 
         // 1 * a = a
-        public static ExpressionBase ProductOfOneAndSomethingRule(ExpressionBase expression, List<ExpressionBase> selection)
+        public static ExpressionBase MultiplyOneRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
-            var variadicExpression = expression as VariadicOperatorExpression;
-            NumericExpression one;
-
-            if (variadicExpression != null && variadicExpression.Type == OperatorType.Multiply && variadicExpression.Count == 2)
+            VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
+            if(variadicExpression != null && variadicExpression.Type == OperatorType.Multiply && variadicExpression.Count == 2)
             {
-                if (variadicExpression[0] is NumericExpression)
+                NumericExpression one = variadicExpression[0] as NumericExpression;
+                if(variadicExpression[0].ToString() == "1")
                 {
-                    one = variadicExpression[0] as NumericExpression;
-                    if (one.Number == 1)
-                    {
-                        ExpressionBase suggestion = variadicExpression[1].GetParentPath().First((e) => ReferenceEquals(e.Parent, expression));
-                        return suggestion.Clone();
-                    }
+                    return variadicExpression[1].Clone();
                 }
-                else if (variadicExpression[1] is NumericExpression)
+                else if(variadicExpression[1].ToString() == "1")
                 {
-                    one = variadicExpression[1] as NumericExpression;
-                    if (one.Number == 1)
-                    {
-                        ExpressionBase suggestion = variadicExpression[0].GetParentPath().First((e) => ReferenceEquals(e.Parent, expression)).Clone();
-                        return suggestion.Clone();
-                    }
+                    return variadicExpression[0].Clone();
                 }
-                else
-                {
-                    return null;
-                }
-
-                // Der er en bug med power
             }
             return null;
         }

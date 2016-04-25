@@ -663,9 +663,10 @@
                             if (variadicExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && Bridge.hasValue(minus)) {
                                 operatorView2 = new ThreeOneSevenBee.Model.UI.OperatorView(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract);
                                 operand = this.buildView(minus.getExpression(), model);
-                                operand.onClick = function () {
-                                    model.select(minus.getExpression());
+                                operatorView2.onClick = function () {
+                                    model.select(minus);
                                 };
+                                operatorView2.setLineColor(minus.getSelected() ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 175, 100) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0));
                             }
                             else  {
                                 operatorView2 = new ThreeOneSevenBee.Model.UI.OperatorView(variadicExpression.getType());

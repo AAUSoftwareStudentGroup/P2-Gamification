@@ -513,7 +513,7 @@
                     if (Bridge.hasValue(delimiterBase)) {
                         var binaryBase = Bridge.as(delimiterBase.getExpression(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
                         if (Bridge.hasValue(binaryBase)) {
-                            return new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(binaryBase.getLeft(), new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, binaryBase.getRight(), binaryOperatorExpression.getRight()), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
+                            return new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(binaryBase.getLeft().clone(), new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, binaryBase.getRight().clone(), binaryOperatorExpression.getRight().clone()), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
                         }
                     }
                 }
@@ -586,36 +586,18 @@
                 }
                 return null;
             },
-            productOfOneAndSomethingRule: function (expression, selection) {
+            multiplyOneRule: function (expression, selection) {
                 var variadicExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
-                var one;
-    
                 if (Bridge.hasValue(variadicExpression) && variadicExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply && variadicExpression.getCount() === 2) {
-                    if (Bridge.is(variadicExpression.getItem(0), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression)) {
-                        one = Bridge.as(variadicExpression.getItem(0), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
-                        if (one.number === 1) {
-                            var suggestion = Bridge.Linq.Enumerable.from(variadicExpression.getItem(1).getParentPath()).first(function (e) {
-                                return e.getParent() === expression;
-                            });
-                            return suggestion.clone();
-                        }
+                    var one = Bridge.as(variadicExpression.getItem(0), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
+                    if (variadicExpression.getItem(0).toString() === "1") {
+                        return variadicExpression.getItem(1).clone();
                     }
                     else  {
-                        if (Bridge.is(variadicExpression.getItem(1), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression)) {
-                            one = Bridge.as(variadicExpression.getItem(1), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
-                            if (one.number === 1) {
-                                var suggestion1 = Bridge.Linq.Enumerable.from(variadicExpression.getItem(0).getParentPath()).first(function (e) {
-                                    return e.getParent() === expression;
-                                }).clone();
-                                return suggestion1.clone();
-                            }
-                        }
-                        else  {
-                            return null;
+                        if (variadicExpression.getItem(1).toString() === "1") {
+                            return variadicExpression.getItem(0).clone();
                         }
                     }
-    
-                    // Der er en bug med power
                 }
                 return null;
             }
