@@ -23,14 +23,14 @@ namespace ThreeOneSevenBee.Frontend
 
             IContext context = new CanvasContext(canvas);
 
-            JQueryGameAPI gameAPI = new JQueryGameAPI();
+            IGameAPI gameAPI = new JQueryGameAPI();
 
             GameModel gameModel;
             GameView gameView;
 
             gameAPI.GetCurrentPlayer((u) =>
             {
-                u.AddCategory(new LevelCategory("wat") { new Level("4/3", "4/2", new string[] { "2" }) });
+                u.AddCategory(new LevelCategory("wat") { new Level("4/3", "4/2", 0, new string[] { "2" }) });
                 gameAPI.GetPlayers((p) =>
                 {
                     gameModel = new GameModel(u, p)
@@ -40,10 +40,10 @@ namespace ThreeOneSevenBee.Frontend
                         (
                             level.LevelID,
                             level.CurrentExpression,
+                            level.Stars,
                             (success) => Console.WriteLine(success)
                         )
                     };
-                    gameModel.CurrentExpression.PrettyPrint();
                     gameView = new GameView(gameModel, context);
                 });
             });

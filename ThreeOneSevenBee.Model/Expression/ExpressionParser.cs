@@ -358,7 +358,7 @@ namespace ThreeOneSevenBee.Model.Expression
                         break;
 
                     case TokenType.Number:
-                        root = new NumericExpression((double)token.Data);
+                        root = new NumericExpression((int)token.Data);
                         stack.Push(root);
                         break;
 

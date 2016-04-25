@@ -76,14 +76,21 @@ namespace ThreeOneSevenBee.Model.Game
                 Rules.NumericBinaryRule, Rules.NumericCalculateRule, Rules.CommonPowerParenthesisRule,
                 Rules.ReverseCommonPowerParenthesisRule, Rules.SplittingFractions, Rules.ProductParenthesis,
                 Rules.ReverseProductParenthesis, Rules.ParenthesisPowerRule, Rules.FractionToProductRule, Rules.SquareRootRule,
-                Rules.RemoveParenthesisRule, Rules.ProductOfConstantAndFraction);
+                Rules.RemoveParenthesisRule, Rules.ProductOfConstantAndFraction, Rules.FactorizeUnaryMinus, Rules.FactorizationRule);
             onExpressionChanged(ExprModel);
+        }
+
+        public void RestartLevel()
+        {
+            User.CurrentLevel.CurrentExpression = User.CurrentLevel.StartExpression;
+            SetLevel(User.CurrentLevelIndex, User.CurrentCategoryIndex);
         }
 
         private void onExpressionChanged(ExpressionModel model)
         {
             ProgressBar.CurrentValue = model.Expression.Size;
             User.CurrentLevel.CurrentExpression = model.Expression.ToString();
+            User.CurrentLevel.Stars = Math.Max(User.CurrentLevel.Stars, ProgressBar.ActivatedStarPercentages().Count());
             if (OnChanged != null)
             {
                 OnChanged(this);

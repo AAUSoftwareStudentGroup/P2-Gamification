@@ -307,7 +307,7 @@
             this.number = value;
         },
         getValue: function () {
-            return Bridge.Int.format(this.number, 'G');
+            return this.number.toString();
         },
         getSize: function () {
             return 1;

@@ -92,6 +92,7 @@ namespace ThreeOneSevenBee.Model.UI
                         {
                             operatorView = new OperatorView(OperatorType.Subtract);
                             operand = BuildView(minus.Expression, model);
+                            operand.OnClick = () => model.Select(minus.Expression);
                         }
                         else
                         {

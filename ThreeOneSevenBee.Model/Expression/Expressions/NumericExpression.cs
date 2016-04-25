@@ -8,9 +8,9 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 {
     public class NumericExpression : ExpressionBase, ILeaf
     {
-		public double Number;
+		public int Number;
 
-        public NumericExpression(double value)
+        public NumericExpression(int value)
         {
             Number = value;
         }

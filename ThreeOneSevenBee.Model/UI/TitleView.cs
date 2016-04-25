@@ -89,6 +89,7 @@ namespace ThreeOneSevenBee.Model.UI
                 X = 340,
                 Y = 50
             };
+
             Children = new List<View>(){
                 WelcomeText,
                 LevelButton,

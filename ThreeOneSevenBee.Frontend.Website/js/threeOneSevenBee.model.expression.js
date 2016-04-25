@@ -58,11 +58,56 @@
             }).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase);
         },
         wrapInDelimiterIfNeccessary: function (expression, parent) {
+            var table = Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Boolean))(), [
+                [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus, Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Boolean)(), [
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus, true],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, true],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, true],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power, true]
+                ] )],
+                [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Boolean)(), [
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus, true],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, true],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power, true]
+                ] )],
+                [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide, Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Boolean)(), [
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power, false]
+                ] )],
+                [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Boolean)(), [
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus, true],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power, true]
+                ] )],
+                [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power, Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Boolean)(), [
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, false],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power, false]
+                ] )]
+            ] );
+    
+            var operatorExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
+            var parentExpression = Bridge.as(parent, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
+    
             var isNeccessary = true;
-            // ...
-            // kode der afgør om der skal sættes parentes omkring.
-            // f.eks. skal der hvis expression = 4+4 (variadic plus) og parent = 4*4 (Variadic gange)
-            // ...
+    
+            if (!Bridge.hasValue(operatorExpression) || !Bridge.hasValue(parentExpression)) {
+                isNeccessary = false;
+            }
+            else  {
+                isNeccessary = table.get(operatorExpression.getType()).get(parentExpression.getType());
+            }
+    
             if (isNeccessary) {
                 return new ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression(expression);
             }
@@ -731,7 +776,7 @@
                         }
                         break;
                     case ThreeOneSevenBee.Model.Expression.TokenType.number: 
-                        root = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(Bridge.cast(token.getData(), Number));
+                        root = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(Bridge.cast(token.getData(), Bridge.Int));
                         stack.push(root);
                         break;
                     case ThreeOneSevenBee.Model.Expression.TokenType.constant: 

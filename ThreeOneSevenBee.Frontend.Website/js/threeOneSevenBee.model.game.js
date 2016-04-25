@@ -8,7 +8,7 @@
                 LastLoginTime: null
             },
             init: function () {
-                this.badges = new Bridge.List$1(String)() || null;
+                this.badges = new Bridge.List$1(Bridge.Int)() || null;
             }
         },
         constructor: function (playername) {
@@ -66,12 +66,17 @@
                 this.getStarExpressions().add(starExpressionBase);
                 this.progressBar.add(starExpressionBase.getSize());
             }
-            this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel("constructor", this.getUser().categories.getItem(category).getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f1), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericCalculateRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commonPowerParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseCommonPowerParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).splittingFractions, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productParenthesis, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseProductParenthesis, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).parenthesisPowerRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).fractionToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).squareRootRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).removeParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productOfConstantAndFraction]));
+            this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel("constructor", this.getUser().categories.getItem(category).getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f1), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionsWithSameNumerators, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).numericCalculateRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commonPowerParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseCommonPowerParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).splittingFractions, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productParenthesis, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseProductParenthesis, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).parenthesisPowerRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).fractionToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).squareRootRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).removeParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productOfConstantAndFraction, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).factorizeUnaryMinus, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).factorizationRule]));
             this.onExpressionChanged(this.getExprModel());
+        },
+        restartLevel: function () {
+            this.getUser().getCurrentLevel().currentExpression = this.getUser().getCurrentLevel().startExpression;
+            this.setLevel(this.getUser().currentLevelIndex, this.getUser().currentCategoryIndex);
         },
         onExpressionChanged: function (model) {
             this.progressBar.currentValue = model.getExpression().getSize();
             this.getUser().getCurrentLevel().currentExpression = model.getExpression().toString();
+            this.getUser().getCurrentLevel().stars = Math.max(this.getUser().getCurrentLevel().stars, Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count());
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged(this);
             }
@@ -123,15 +128,16 @@
         levelID: 0,
         levelIndex: 0,
         categoryIndex: 0,
-        constructor$2: function (startExpression, currentExpression, starExpressions) {
-            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, -1, startExpression, currentExpression, starExpressions);
+        stars: 0,
+        constructor$2: function (startExpression, currentExpression, stars, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, -1, startExpression, stars, currentExpression, starExpressions);
     
         },
-        constructor$1: function (levelID, startExpression, currentExpression, starExpressions) {
-            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, levelID, -1, -1, startExpression, currentExpression, starExpressions);
+        constructor$1: function (levelID, startExpression, stars, currentExpression, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, levelID, -1, -1, startExpression, stars, currentExpression, starExpressions);
     
         },
-        constructor: function (levelID, levelIndex, categoryIndex, startExpression, currentExpression, starExpressions) {
+        constructor: function (levelID, levelIndex, categoryIndex, startExpression, stars, currentExpression, starExpressions) {
             var $t;
             if (starExpressions === void 0) { starExpressions = []; }
             this.levelID = levelID;
@@ -139,6 +145,7 @@
             this.categoryIndex = categoryIndex;
             this.startExpression = startExpression;
             this.currentExpression = currentExpression;
+            this.stars = stars;
             this.starExpressions = new Bridge.List$1(String)();
             $t = Bridge.getEnumerator(starExpressions);
             while ($t.moveNext()) {
