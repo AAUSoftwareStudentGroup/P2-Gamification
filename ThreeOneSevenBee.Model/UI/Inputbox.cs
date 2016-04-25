@@ -8,10 +8,10 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class Inputbox : LabelView
     {
-        private string emptyString;
+        //private string emptyString;
         public Inputbox(string emptyString) : base(emptyString)
         {
-            this.emptyString = emptyString;
+            //this.emptyString = emptyString;
             BackgroundColor = new Color(0, 255, 100);
         }
 
