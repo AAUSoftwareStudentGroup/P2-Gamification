@@ -62,6 +62,9 @@ namespace ThreeOneSevenBee.Development.Desktop
 		}
 
 
+		public void DrawPNGImage(string fileName, double x, double y, double width, double height) {
+		}
+
 		public void DrawLine(Vector2 first, Vector2 second, Color lineColor, double lineWidth)
 		{
 			spriteBatch.DrawLine ((int)first.X, (int)first.Y, (int)second.X, (int)second.Y, ConvertColor (lineColor), (float)lineWidth);
