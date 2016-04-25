@@ -36,11 +36,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         //a^2 = a*a
         public static ExpressionBase ExponentToProductRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
-            if (selection.Count != 2)
-            {
-                return null;
-            }
-
             BinaryOperatorExpression exponent = expression as BinaryOperatorExpression;
 
             if (exponent != null && exponent.Type == OperatorType.Power)
@@ -107,18 +102,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
         public static ExpressionBase RemoveParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             DelimiterExpression parenthesis = expression as DelimiterExpression;
-            if (selection.Count == 1
-                && ReferenceEquals(parenthesis, expression))
+            if(parenthesis != null)
             {
-                if (parenthesis.Expression is VariableExpression
-                    || parenthesis.Expression is NumericExpression
-                    || parenthesis.Expression is DelimiterExpression
-                    || (parenthesis.Expression is VariadicOperatorExpression && parenthesis.Parent is VariadicOperatorExpression
-                       && (parenthesis.Expression as VariadicOperatorExpression).Type == (parenthesis.Parent as VariadicOperatorExpression).Type))
-                {
-                    ExpressionBase suggestion = parenthesis.Expression.Clone();
-                    return suggestion;
-                }
+                return parenthesis.Expression;
             }
             return null;
         }
@@ -163,7 +149,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     }
                     else if (binaryExpression.Type == OperatorType.Power)
                     {
-                        result = new NumericExpression(Math.Pow(numericLeft.Number, numericRight.Number));
+                        result = new NumericExpression((int)Math.Pow(numericLeft.Number, numericRight.Number));
                     }
                     else
                     {

@@ -84,6 +84,7 @@ namespace ThreeOneSevenBee.Model.Game
         {
             ProgressBar.CurrentValue = model.Expression.Size;
             User.CurrentLevel.CurrentExpression = model.Expression.ToString();
+            User.CurrentLevel.Stars = ProgressBar.ActivatedStarPercentages().Count();
             if (OnChanged != null)
             {
                 OnChanged(this);

@@ -72,6 +72,7 @@
         onExpressionChanged: function (model) {
             this.progressBar.currentValue = model.getExpression().getSize();
             this.getUser().getCurrentLevel().currentExpression = model.getExpression().toString();
+            this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged(this);
             }
@@ -123,15 +124,16 @@
         levelID: 0,
         levelIndex: 0,
         categoryIndex: 0,
-        constructor$2: function (startExpression, currentExpression, starExpressions) {
-            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, -1, startExpression, currentExpression, starExpressions);
+        stars: 0,
+        constructor$2: function (startExpression, currentExpression, stars, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, -1, startExpression, stars, currentExpression, starExpressions);
     
         },
-        constructor$1: function (levelID, startExpression, currentExpression, starExpressions) {
-            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, levelID, -1, -1, startExpression, currentExpression, starExpressions);
+        constructor$1: function (levelID, startExpression, stars, currentExpression, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, levelID, -1, -1, startExpression, stars, currentExpression, starExpressions);
     
         },
-        constructor: function (levelID, levelIndex, categoryIndex, startExpression, currentExpression, starExpressions) {
+        constructor: function (levelID, levelIndex, categoryIndex, startExpression, stars, currentExpression, starExpressions) {
             var $t;
             if (starExpressions === void 0) { starExpressions = []; }
             this.levelID = levelID;
@@ -139,6 +141,7 @@
             this.categoryIndex = categoryIndex;
             this.startExpression = startExpression;
             this.currentExpression = currentExpression;
+            this.stars = stars;
             this.starExpressions = new Bridge.List$1(String)();
             $t = Bridge.getEnumerator(starExpressions);
             while ($t.moveNext()) {

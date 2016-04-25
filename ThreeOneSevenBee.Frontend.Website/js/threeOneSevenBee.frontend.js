@@ -22,15 +22,14 @@
     
                 gameAPI.getCurrentPlayer(function (u) {
                     u.addCategory(Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("wat"), [
-                        [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4/3", "4/2", ["2"])]
+                        [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4/3", "4/2", 0, ["2"])]
                     ] ));
                     gameAPI.getPlayers(function (p) {
                         gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
                             onSaveLevel: function (level) {
-                                gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, $_.ThreeOneSevenBee.Frontend.App.f1);
+                                gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, level.stars, $_.ThreeOneSevenBee.Frontend.App.f1);
                             }
                         } );
-                        gameModel.getCurrentExpression().prettyPrint();
                         gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
                     });
                 });
@@ -156,7 +155,7 @@
                     $t1 = Bridge.getEnumerator(levelsData);
                     while ($t1.moveNext()) {
                         var levelData = $t1.getCurrent();
-                        var level = new ThreeOneSevenBee.Model.Game.Level("constructor$1", Bridge.Int.parseInt(Bridge.cast(levelData.id, String), -2147483648, 2147483647), Bridge.cast(levelData.initial_expression, String), Bridge.cast(levelData.initial_expression, String), Bridge.Linq.Enumerable.from((Bridge.as(levelData.star_expressions, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f1).toArray());
+                        var level = new ThreeOneSevenBee.Model.Game.Level("constructor$1", Bridge.Int.parseInt(Bridge.cast(levelData.id, String), -2147483648, 2147483647), Bridge.cast(levelData.initial_expression, String), Bridge.Int.parseInt(Bridge.cast(levelData.stars, String), -2147483648, 2147483647), Bridge.cast(levelData.current_expression, String), Bridge.Linq.Enumerable.from((Bridge.as(levelData.star_expressions, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f1).toArray());
                         levelCategory.add(level);
                     }
                     categories.add(levelCategory);
@@ -188,8 +187,8 @@
                 callback(result);
             });
         },
-        saveUserLevelProgress: function (levelID, currentExpression, callback) {
-            $.post("/api/", { action: "save_user_level_progress", debug: 1, level_id: levelID, current_expression: currentExpression }, function (data, textStatus, request) {
+        saveUserLevelProgress: function (levelID, currentExpression, stars, callback) {
+            $.post("/api/", { action: "save_user_level_progress", debug: 1, level_id: levelID, current_expression: currentExpression, stars: stars }, function (data, textStatus, request) {
                 var jdata = JSON.parse(Bridge.cast(data, String));
                 callback(Bridge.cast(jdata.success, String) === "true");
             });
