@@ -64,10 +64,10 @@ namespace ThreeOneSevenBee.Model.UI
                 Y = Height - 125
             };
 
-            expression = new ExpressionView(game.ExprModel, Width, Height - 175, 8)
+            expression = new ExpressionView(game.ExprModel, Width - 100, Height - 275, 8)
             {
-                X = 0,
-                Y = 50,
+                X = 50,
+                Y = 100,
             };
 
             toolTipView = new ToolTipView("Denne bar viser hvor langt du er nået.", 300, 75)

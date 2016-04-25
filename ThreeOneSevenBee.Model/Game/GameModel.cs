@@ -71,13 +71,13 @@ namespace ThreeOneSevenBee.Model.Game
                 ProgressBar.Add(starExpressionBase.Size);
             }
             ExprModel = new ExpressionModel(User.Categories[category][level].CurrentExpression, (m) => onExpressionChanged(m),
-                Rules.ExponentToProductRule, Rules.ProductToExponentRule, Rules.AddFractionsWithSameNumerators,
+                Rules.ExponentToProductRule, Rules.ProductToExponentRule,
                 Rules.VariableWithNegativeExponent, Rules.ReverseVariableWithNegativeExponent, Rules.ExponentProduct,
-                Rules.NumericBinaryRule, Rules.NumericCalculateRule, Rules.CommonPowerParenthesisRule,
+                Rules.NumericCalculateRule, Rules.CommonPowerParenthesisRule,
                 Rules.ReverseCommonPowerParenthesisRule, Rules.SplittingFractions, Rules.ProductParenthesis,
                 Rules.ReverseProductParenthesis, Rules.ParenthesisPowerRule, Rules.FractionToProductRule, Rules.SquareRootRule,
                 Rules.RemoveParenthesisRule, Rules.ProductOfConstantAndFraction, Rules.FactorizeUnaryMinus, Rules.FactorizationRule,
-                Rules.MultiplyOneRule);
+                Rules.MultiplyOneRule, Rules.AddFractionWithCommonDenominatorRule);
             onExpressionChanged(ExprModel);
         }
 

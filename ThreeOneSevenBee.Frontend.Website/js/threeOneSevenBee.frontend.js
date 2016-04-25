@@ -138,7 +138,6 @@
             }
         },
         drawPNGImage: function (fileName, x, y, width, height) {
-            console.log(width + " " + height);
     
             if (this.imageCache.containsKey(fileName)) {
                 this.context.fillStyle = "transparent";
@@ -171,7 +170,8 @@
     
                     var levelCategory = new ThreeOneSevenBee.Model.Game.LevelCategory(Bridge.cast(categoryData.name, String));
                     var levelsData = Bridge.as(categoryData.levels, Array);
-                    console.log(levelsData);
+    
+    
                     $t1 = Bridge.getEnumerator(levelsData);
                     while ($t1.moveNext()) {
                         var levelData = $t1.getCurrent();

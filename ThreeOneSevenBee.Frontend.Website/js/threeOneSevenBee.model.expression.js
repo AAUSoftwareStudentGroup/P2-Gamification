@@ -21,13 +21,6 @@
             this.rules.remove(rule);
         },
         getCommonParent$1: function (selection) {
-            var $t;
-            var c = 0;
-            $t = Bridge.getEnumerator(selection);
-            while ($t.moveNext()) {
-                var select = $t.getCurrent();
-                console.log(c++ + ": " + Bridge.cast(Bridge.Linq.Enumerable.from(select.getParentPath()).toArray(), Array).join(","));
-            }
             if (selection.getCount() === 0) {
                 return null;
             }

@@ -26,7 +26,8 @@ namespace ThreeOneSevenBee.Frontend
                         
                         LevelCategory levelCategory = new LevelCategory((string)categoryData["name"]);
                         var levelsData = categoryData["levels"] as object[];
-                        Console.WriteLine(levelsData);
+
+
                         foreach (var levelData in levelsData)
                         {
                             Level level = new Level(

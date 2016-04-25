@@ -116,6 +116,7 @@
             return this.getValue();
         },
         treePrint: function (indent, isLast) {
+    
             console.log(indent + "|-" + this.getValue());
             return indent + (isLast ? "  " : "| ");
         }
@@ -553,7 +554,8 @@
         return this.expressions.getItem(index);
     },
     setItem: function (index, value) {
-        this.expressions.setItem(index, value);
+        this.removeAt(index);
+        this.insert(index, value);
     },
     replace$1: function (old, replacement, doRecursively) {
         var hasReplaced = false;
@@ -587,9 +589,9 @@
             this.add(item);
         }
     },
-    add$3: function (item) {
+    add$2: function (item) {
         var $t;
-        if (item.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && item.getType() === this.getType()) {
+        if (item.getType() === this.getType()) {
             $t = Bridge.getEnumerator(item);
             while ($t.moveNext()) {
                 var subItem = $t.getCurrent();
@@ -601,28 +603,13 @@
             item.setParent(this);
         }
     },
-    add$2: function (item) {
-        if (item.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && item.getType() === this.getType()) {
-            this.add(item.getLeft());
-            this.add(item.getRight());
+    add: function (item) {
+        if (Bridge.is(item, ThreeOneSevenBee.Model.Expression.Expressions.VariadicExpression)) {
+            this.add$2(Bridge.cast(item, ThreeOneSevenBee.Model.Expression.Expressions.VariadicExpression));
         }
         else  {
             this.expressions.add(item);
             item.setParent(this);
-        }
-    },
-    add: function (item) {
-        if (Bridge.is(item, ThreeOneSevenBee.Model.Expression.Expressions.VariadicExpression)) {
-            this.add$3(Bridge.cast(item, ThreeOneSevenBee.Model.Expression.Expressions.VariadicExpression));
-        }
-        else  {
-            if (Bridge.is(item, ThreeOneSevenBee.Model.Expression.Expressions.BinaryExpression)) {
-                this.add$2(Bridge.cast(item, ThreeOneSevenBee.Model.Expression.Expressions.BinaryExpression));
-            }
-            else  {
-                this.expressions.add(item);
-                item.setParent(this);
-            }
         }
     },
     remove: function (item) {
@@ -644,8 +631,21 @@
         return this.expressions.indexOf(item);
     },
     insert: function (index, item) {
-        this.expressions.insert(index, item);
-        item.setParent(this);
+        var $t;
+        var variadicExpression = Bridge.as(item, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+        if (!Bridge.hasValue(variadicExpression) || variadicExpression.getType() !== this.getType()) {
+            this.expressions.insert(index, item);
+            item.setParent(this);
+        }
+        else  {
+            var offset = 0;
+            $t = Bridge.getEnumerator(variadicExpression);
+            while ($t.moveNext()) {
+                var operand = $t.getCurrent();
+                this.expressions.insert(index + offset++, operand);
+                operand.setParent(this);
+            }
+        }
     },
     removeAt: function (index) {
         this.expressions.removeAt(index);

@@ -112,7 +112,6 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void DrawPNGImage(string fileName, double x, double y, double width, double height)
         {
-            Console.WriteLine(width + " " + height);
 
             if (imageCache.ContainsKey(fileName))
             {

@@ -14,22 +14,24 @@ namespace ThreeOneSevenBee.Model.UI
             int offsetY = 5;
             foreach (Player player in players)
             {
-                Children.Add(
-                    new CompositeView(Width, Height)
+                View row = new CompositeView(Width, 20)
                     {
                         new LabelView(player.PlayerName)
                         {
-                            X = 0,
-                            Y = offsetY,
-                            Width = Width - 20,
+                            Width = Width - 30,
                             Height = 20,
-                            BackgroundColor = new Color(239, 239, 239),
                         },
                         new ImageView("spildonebadge.png", 20, 20)
                         {
-                            X = Width - 20
+                            X = Width - 30
                         }
-                    });
+                    };
+                row.X = 5;
+                row.Y = offsetY;
+                row.Width = Width - 10;
+                row.BackgroundColor = new Color(239, 239, 239);
+                Children.Add(row);
+
                 offsetY += 25;
 
             }

@@ -1125,9 +1125,9 @@
                 setY: this.getHeight() - 125
             } );
     
-            this.expression = Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView("constructor$2", game.getExprModel(), this.getWidth(), this.getHeight() - 175, 8), {
-                setX: 0,
-                setY: 50
+            this.expression = Bridge.merge(new ThreeOneSevenBee.Model.UI.ExpressionView("constructor$2", game.getExprModel(), this.getWidth() - 100, this.getHeight() - 275, 8), {
+                setX: 50,
+                setY: 100
             } );
     
             this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Denne bar viser hvor langt du er nået.", 300, 75), {
@@ -1222,18 +1222,21 @@
             $t = Bridge.getEnumerator(players);
             while ($t.moveNext()) {
                 var player = $t.getCurrent();
-                this.children.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(this.getWidth(), this.getHeight()), [
+                var row = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(this.getWidth(), 20), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(player.getPlayerName()), {
-                        setX: 0,
-                        setY: offsetY,
-                        setWidth: this.getWidth() - 20,
-                        setHeight: 20,
-                        setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 239, 239, 239)
+                        setWidth: this.getWidth() - 30,
+                        setHeight: 20
                     } )],
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("spildonebadge.png", 20, 20), {
-                        setX: this.getWidth() - 20
+                        setX: this.getWidth() - 30
                     } )]
-                ] ));
+                ] );
+                row.setX(5);
+                row.setY(offsetY);
+                row.setWidth(this.getWidth() - 10);
+                row.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 239, 239, 239));
+                this.children.add(row);
+    
                 offsetY += 25;
     
             }

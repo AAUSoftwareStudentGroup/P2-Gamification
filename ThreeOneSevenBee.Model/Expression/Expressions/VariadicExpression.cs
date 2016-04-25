@@ -83,7 +83,8 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
             set
             {
-                expressions[index] = value;
+                RemoveAt(index);
+                Insert(index, value);
             }
         }
 
@@ -97,7 +98,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public void Add(VariadicExpression item)
         {
-            if (item.Type == OperatorType.Add && item.Type == this.Type)
+            if (item.Type == this.Type)
             {
                 foreach (var subItem in item)
                     this.Add(subItem);
@@ -109,26 +110,12 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             }
         }
 
-        public void Add(BinaryExpression item)
-        {
-            if (item.Type == OperatorType.Add && item.Type == this.Type)
-            {
-                this.Add(item.Left);
-                this.Add(item.Right);
-            }
-            else
-            {
-                expressions.Add(item);
-                item.Parent = this;
-            }
-        }
-
         public void Add(ExpressionBase item)
         {
             if (item is VariadicExpression)
+            {
                 this.Add((VariadicExpression)item);
-            else if (item is BinaryExpression)
-                this.Add((BinaryExpression)item);
+            }
             else
             {
                 expressions.Add(item);
@@ -175,8 +162,21 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public void Insert(Int32 index, ExpressionBase item)
         {
-            expressions.Insert(index, item);
-            item.Parent = this;
+            VariadicOperatorExpression variadicExpression = item as VariadicOperatorExpression;
+            if(variadicExpression == null || variadicExpression.Type != Type)
+            {
+                expressions.Insert(index, item);
+                item.Parent = this;
+            }
+            else
+            {
+                int offset = 0;
+                foreach (ExpressionBase operand in variadicExpression)
+                {
+                    expressions.Insert(index + offset++, operand);
+                    operand.Parent = this;
+                }
+            }
         }
 
         public void RemoveAt(Int32 index)
