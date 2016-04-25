@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ThreeOneSevenBee.Model.Euclidean;
+#if BRIDGE
+using Bridge.Html5;
+#endif
 
 namespace ThreeOneSevenBee.Model.UI
 {
