@@ -76,7 +76,8 @@ namespace ThreeOneSevenBee.Model.Game
                 Rules.NumericBinaryRule, Rules.NumericCalculateRule, Rules.CommonPowerParenthesisRule,
                 Rules.ReverseCommonPowerParenthesisRule, Rules.SplittingFractions, Rules.ProductParenthesis,
                 Rules.ReverseProductParenthesis, Rules.ParenthesisPowerRule, Rules.FractionToProductRule, Rules.SquareRootRule,
-                Rules.RemoveParenthesisRule, Rules.ProductOfConstantAndFraction, Rules.FactorizeUnaryMinus, Rules.FactorizationRule);
+                Rules.RemoveParenthesisRule, Rules.ProductOfConstantAndFraction, Rules.FactorizeUnaryMinus, Rules.FactorizationRule,
+                Rules.MultiplyOneRule);
             onExpressionChanged(ExprModel);
         }
 
