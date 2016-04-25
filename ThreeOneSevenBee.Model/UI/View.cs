@@ -1,5 +1,4 @@
-﻿using Bridge.Html5;
-using System;
+﻿using System;
 using ThreeOneSevenBee.Model.Euclidean;
 
 namespace ThreeOneSevenBee.Model.UI
