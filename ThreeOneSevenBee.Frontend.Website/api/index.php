@@ -210,7 +210,7 @@ class API {
                         level.initial_expression AS initial_expression, 
                         level.star_expressions AS star_expressions,
                         IFNULL(level_progress.progress,initial_expression) AS progress,
-                        level_progress.stars AS stars
+                        IFNULL(level_progress.stars,0) AS stars
                     FROM 
                         gamedb.level AS level
                     LEFT JOIN 
