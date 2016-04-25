@@ -108,5 +108,28 @@ namespace ThreeOneSevenBee.Frontend
                 context.FillText(lines[index], (int)(x + width / 2), (int)(y + (index + 0.5) * (height / lines.Length)));
             }
         }
+
+        public override void DrawPNGImage(string fileName, double x, double y, double width, double height)
+        {
+            Console.WriteLine(width + " " + height);
+
+            if (imageCache.ContainsKey(fileName))
+            {
+                context.FillStyle = "transparent";
+                context.DrawImage(imageCache[fileName], x, y, width, height);
+                context.FillStyle = "#000000";
+            }
+            else
+            {
+                imageCache[fileName] = new ImageElement();
+                imageCache[fileName].Src = "img/" + fileName;
+                imageCache[fileName].OnLoad = (e) =>
+                {
+                    context.FillStyle = "transparent";
+                    context.DrawImage(imageCache[fileName], x, y, width, height);
+                    context.FillStyle = "#000000";
+                };
+            }
+        }
     }
 }

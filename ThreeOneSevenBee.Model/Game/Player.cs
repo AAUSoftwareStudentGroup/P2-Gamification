@@ -12,7 +12,7 @@ namespace ThreeOneSevenBee.Model.Game
             this.PlayerName = playername;
         }
 
-        public List<string> Badges = new List<string>();
+        public List<int> Badges = new List<int>();
 
         public string PlayerName { get; private set; }
 
