@@ -618,6 +618,50 @@
                     // Der er en bug med power
                 }
                 return null;
+            },
+            removeNull: function (expression, selection) {
+                if (selection.getCount() !== 2) {
+                    return null;
+                }
+    
+                var variadicExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+    
+                if (!Bridge.hasValue(variadicExpression) || variadicExpression.getType() !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
+                    return null;
+                }
+    
+                if (variadicExpression.getItem(0).toString() === "0" || variadicExpression.getItem(0).toString() === "-{0}") {
+                    return variadicExpression.getItem(1);
+                }
+                else  {
+                    if (variadicExpression.getItem(1).toString() === "0" || variadicExpression.getItem(1).toString() === "-{0}") {
+                        return variadicExpression.getItem(0);
+                    }
+                    else  {
+                        return null;
+                    }
+                }
+            },
+            multiplyByNull: function (expression, selection) {
+                var $t;
+                if (selection.getCount() < 2) {
+                    return null;
+                }
+    
+                var variadicExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+    
+                if (!Bridge.hasValue(variadicExpression) || variadicExpression.getType() !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
+                    return null;
+                }
+    
+                $t = Bridge.getEnumerator(variadicExpression);
+                while ($t.moveNext()) {
+                    var item = $t.getCurrent();
+                    if (item.toString() === "0" || item.toString() === "-{0}") {
+                        return new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(0);
+                    }
+                }
+                return null;
             }
         }
     });
