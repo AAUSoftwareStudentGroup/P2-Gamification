@@ -30,7 +30,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public virtual void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
-            context.DrawRectangle(X + offsetX, Y + offsetY, Width, Height, Active? new Color(0, 255, 0) : new Color(0, 255, 255));
+			context.DrawRectangle(X + offsetX, Y + offsetY, Width, Height, BackgroundColor);
         }
 
         public virtual void Click(double x, double y)
