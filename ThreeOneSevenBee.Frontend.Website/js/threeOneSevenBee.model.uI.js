@@ -11,6 +11,7 @@
                 Height: 0,
                 X: 0,
                 Y: 0,
+                Active: false,
                 Baseline: 0,
                 BackgroundColor: null,
                 Visible: false
@@ -29,13 +30,19 @@
             context.drawRectangle(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), this.getBackgroundColor());
         },
         click: function (x, y) {
-            if (this.containsPoint(x, y) && Bridge.hasValue(this.onClick)) {
-                this.onClick();
+            if (this.containsPoint(x, y)) {
+                if (Bridge.hasValue(this.onClick)) {
+                    this.onClick();
+                }
+                this.setActive(true);
+            }
+            else  {
+                this.setActive(false);
             }
         },
-        keyPressed: function (key, lastClick) {
-            if (Bridge.hasValue(this.onKeyPressed)) {
-                this.onKeyPressed(key, lastClick.$clone());
+        keyPressed: function (key) {
+            if (Bridge.hasValue(this.onKeyPressed) && this.getActive()) {
+                this.onKeyPressed(key);
             }
         },
         scale: function (factor) {
@@ -145,6 +152,20 @@
             this.setPropagateClick(true);
             this.setPropagateKeypress(true);
         },
+        getActive: function () {
+            return ThreeOneSevenBee.Model.UI.View.prototype.getActive.call(this);
+        },
+        setActive: function (value) {
+            var $t;
+            if (value === false) {
+                $t = Bridge.getEnumerator(this.children);
+                while ($t.moveNext()) {
+                    var child = $t.getCurrent();
+                    child.setActive(value);
+                }
+            }
+            ThreeOneSevenBee.Model.UI.View.prototype.setActive.call(this, value);
+        },
         drawWithContext: function (context, offsetX, offsetY) {
             var $t;
             if (this.getVisible() === true) {
@@ -159,6 +180,7 @@
         click: function (x, y) {
             var $t;
             if (ThreeOneSevenBee.Model.UI.View.prototype.containsPoint.call(this, x, y)) {
+                this.setActive(true);
                 if (this.getPropagateClick()) {
                     $t = Bridge.getEnumerator(this.children);
                     while ($t.moveNext()) {
@@ -171,14 +193,17 @@
                     this.onClick();
                 }
             }
+            else  {
+                this.setActive(false);
+            }
         },
-        keyPressed: function (key, lastClick) {
+        keyPressed: function (key) {
             var $t;
             if (this.getPropagateKeypress()) {
                 $t = Bridge.getEnumerator(this.children);
                 while ($t.moveNext()) {
                     var child = $t.getCurrent();
-                    child.keyPressed(key, lastClick.$clone());
+                    child.keyPressed(key);
                 }
             }
         },
@@ -286,6 +311,14 @@
         getInnerHeight: function () {
             return this.getHeight() - this.padding;
         },
+        getActive: function () {
+            return this.getContent$1().getActive();
+        },
+        setActive: function (value) {
+            if (Bridge.hasValue(this.getContent$1())) {
+                this.getContent$1().setActive(value);
+            }
+        },
         setContent: function (content) {
             this.setContent$1(this.align(this.fit(content)));
         },
@@ -300,10 +333,13 @@
                     this.onClick();
                 }
             }
+            else  {
+                this.setActive(false);
+            }
         },
-        keyPressed: function (key, lastClick) {
+        keyPressed: function (key) {
             if (this.getPropagateKeypress()) {
-                this.getContent$1().keyPressed(key, lastClick.$clone());
+                this.getContent$1().keyPressed(key);
             }
         },
         drawWithContext: function (context, offsetX, offsetY) {
@@ -819,6 +855,8 @@
                 setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1)
             } );
     
+            //loginView = new LoginView();
+    
             this.titleView.playButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f2);
     
             this.titleView.levelButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f3);
@@ -891,14 +929,16 @@
     
     Bridge.define('ThreeOneSevenBee.Model.UI.Inputbox', {
         inherits: [ThreeOneSevenBee.Model.UI.LabelView],
-        emptyString: null,
         constructor: function (emptyString) {
             ThreeOneSevenBee.Model.UI.LabelView.prototype.$constructor.call(this, emptyString);
     
-            this.emptyString = emptyString;
+            //this.emptyString = emptyString;
+            this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 255, 100));
         },
-        keyPressed: function (key, lastClick) {
-            console.log("Key: " + key);
+        keyPressed: function (key) {
+            if (this.getActive()) {
+                console.log("Key: " + key);
+            }
         }
     });
     
@@ -1148,6 +1188,22 @@
         },
         f2: function () {
             this.getOnNextLevel()();
+        }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.UI.LoginView', {
+        inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
+        username: null,
+        constructor: function () {
+            ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, 600, 400);
+    
+            this.username = new ThreeOneSevenBee.Model.UI.Inputbox("Username");
+            this.username.setX(100);
+            this.username.setY(100);
+            this.username.setWidth(100);
+            this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
+                [this.username]
+            ] );
         }
     });
     
