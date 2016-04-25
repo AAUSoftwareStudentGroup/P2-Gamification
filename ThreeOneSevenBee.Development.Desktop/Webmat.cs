@@ -59,12 +59,11 @@ namespace ThreeOneSevenBee.Development.Desktop
 //			textBatch = new TextBatch (GraphicsDevice);
 			font = Content.Load<SpriteFont>("Georgia");
 
-			context = new DesktopContext(spriteBatch, textBatch, font, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+			context = new DesktopContext(spriteBatch, font, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
 
 			IGameAPI gameAPI = new DesktopGameAPI();
 
 			GameModel gameModel;
-			GameView gameView;
 
 			gameAPI.GetCurrentPlayer((u) =>
 				{
@@ -77,14 +76,14 @@ namespace ThreeOneSevenBee.Development.Desktop
 									(
 										level.LevelID,
 										level.CurrentExpression,
+										level.Stars,
 										(success) => Console.WriteLine(success)
 									)
 							};
 
-							gameView = new GameView(gameModel, context);
+							new GameView(gameModel, context);
 						});
 				});
-
 			//TODO: use this.Content to load your game content here 
 		}
 
