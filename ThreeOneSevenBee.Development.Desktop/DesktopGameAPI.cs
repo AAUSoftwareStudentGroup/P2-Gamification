@@ -42,8 +42,9 @@ namespace ThreeOneSevenBee.Development.Desktop
 								starExpressions.Add(starArray[j].ToString());
 							}
 							Level level = new Level(
-								levelsData[i].SelectToken("id").Value<int>(),
+								int.Parse(levelsData[i].SelectToken("id").Value<string>()),
 								levelsData[i].SelectToken("initial_expression").Value<string>(),
+								int.Parse(levelsData[i].SelectToken("stars").Value<string>()),
 								levelsData[i].SelectToken("initial_expression").Value<string>(),
 								starExpressions.ToArray());
 							levelCategory.Add(level);
@@ -106,9 +107,30 @@ namespace ThreeOneSevenBee.Development.Desktop
 			}
 		}
 
-		public void SaveUserLevelProgress(int levelID, string currentExpression, Action<bool> callback)
+		public void SaveUserLevelProgress(int levelID, string currentExpression, int stars, Action<bool> callback)
 		{
 			callback(true);
 		}
+
+		/*
+		public void SaveUserLevelProgress(int levelID, string currentExpression, int stars, Action<bool> callback)
+		{
+			jQuery.Post(
+				"/api/",
+				new {
+					action = "save_user_level_progress",
+					debug = 1,
+					level_id = levelID,
+					current_expression = currentExpression,
+					stars = stars
+				},
+				(data, textStatus, request) =>
+				{
+					var jdata = JSON.Parse((string)data);
+					callback((string)jdata["success"] == "true");
+				}
+			);
+		}
+		*/
 	}
 }

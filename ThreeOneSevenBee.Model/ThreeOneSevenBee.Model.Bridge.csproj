@@ -88,6 +88,7 @@
     <Compile Include="UI\LabelView.cs" />
     <Compile Include="UI\LevelSelectView.cs" />
     <Compile Include="UI\LevelView.cs" />
+    <Compile Include="UI\LoginView.cs" />
     <Compile Include="UI\OperatorView.cs" />
     <Compile Include="UI\ParenthesisView.cs" />
     <Compile Include="UI\PlayerListView.cs" />

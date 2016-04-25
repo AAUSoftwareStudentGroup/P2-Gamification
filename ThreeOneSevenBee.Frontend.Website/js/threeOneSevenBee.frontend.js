@@ -22,7 +22,7 @@
     
                 gameAPI.getCurrentPlayer(function (u) {
                     u.addCategory(Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("wat"), [
-                        [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "2+3*5*-{7}*0+1", "2+3*5*-{7}*0+1", 0, ["3"])]
+                        [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4/3", "4/2", 0, ["2"])]
                     ] ));
                     gameAPI.getPlayers(function (p) {
                         gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
@@ -91,9 +91,10 @@
             last.x = x;
             last.y = y;
             this.setlastClick(last.$clone());
+            this.draw();
         },
         keyPressed: function (e) {
-            this.contentView.keyPressed(e.keyCode, this.getlastClick().$clone());
+            this.contentView.keyPressed(e.keyCode);
         },
         drawPolygon$1: function (path, fillColor, lineColor, lineWidth) {
             var $t;

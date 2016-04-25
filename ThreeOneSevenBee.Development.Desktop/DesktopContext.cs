@@ -22,18 +22,15 @@ namespace ThreeOneSevenBee.Development.Desktop
 		public View contentView;
 		double width, height;
 
-		Texture2D pixel;
 		SpriteBatch spriteBatch;
-		TextBatch textBatch;
 		SpriteFont font;
 
-		public DesktopContext (SpriteBatch sb, TextBatch tb, SpriteFont vf, double width, double height)
+		public DesktopContext (SpriteBatch sb, SpriteFont vf, double width, double height)
 		{
 			contentView = null;
 			this.width = width;
 			this.height = height;
 			spriteBatch = sb;
-			textBatch = tb;
 			font = vf;
 		}
 
@@ -61,6 +58,9 @@ namespace ThreeOneSevenBee.Development.Desktop
 			spriteBatch.End();
 		}
 
+
+		public void DrawPNGImage(string fileName, double x, double y, double width, double height) {
+		}
 
 		public void DrawLine(Vector2 first, Vector2 second, Color lineColor, double lineWidth)
 		{

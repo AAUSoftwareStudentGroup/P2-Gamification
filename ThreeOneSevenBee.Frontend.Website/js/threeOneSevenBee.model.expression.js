@@ -776,7 +776,7 @@
                         }
                         break;
                     case ThreeOneSevenBee.Model.Expression.TokenType.number: 
-                        root = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(Bridge.cast(token.getData(), Bridge.Int));
+                        root = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(Bridge.Int.parseInt(token.getData().toString(), -2147483648, 2147483647));
                         stack.push(root);
                         break;
                     case ThreeOneSevenBee.Model.Expression.TokenType.constant: 

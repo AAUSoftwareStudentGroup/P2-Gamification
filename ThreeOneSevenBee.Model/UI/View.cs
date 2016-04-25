@@ -9,6 +9,7 @@ namespace ThreeOneSevenBee.Model.UI
         public virtual double Height { get; set; }
         public virtual double X { get; set; }
         public virtual double Y { get; set; }
+        public virtual bool Active { get; set; }
 
         public double Baseline { get; set; }
 
@@ -29,24 +30,31 @@ namespace ThreeOneSevenBee.Model.UI
 
         public virtual void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
-            context.DrawRectangle(X + offsetX, Y + offsetY, Width, Height, BackgroundColor);
+			context.DrawRectangle(X + offsetX, Y + offsetY, Width, Height, BackgroundColor);
         }
 
         public virtual void Click(double x, double y)
         {
-            if (ContainsPoint(x, y) && OnClick != null)
+            if (ContainsPoint(x, y))
             {
-                OnClick();
+                if (OnClick != null)
+                {
+                    OnClick();
+                }
+                Active = true;
+            } else
+            {
+                Active = false;
             }
         }
-        public virtual void KeyPressed(int key, Vector2 lastClick)
+        public virtual void KeyPressed(int key)
         {
-            if(OnKeyPressed != null)
-                OnKeyPressed(key, lastClick);
+            if(OnKeyPressed != null && Active)
+                OnKeyPressed(key);
         }
 
         public Action OnClick;
-        public Action<int, Vector2> OnKeyPressed;
+        public Action<int> OnKeyPressed;
         public Action OnChanged;
         
         public virtual View Scale(double factor)
