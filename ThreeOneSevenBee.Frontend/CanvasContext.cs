@@ -59,11 +59,12 @@ namespace ThreeOneSevenBee.Frontend
             last.X = x;
             last.Y = y;
             lastClick = last;
+            Draw();
         }
 
         private void KeyPressed(KeyboardEvent<CanvasElement> e)
         {
-            contentView.KeyPressed(e.As<KeyboardEvent>().KeyCode, lastClick);
+            contentView.KeyPressed(e.As<KeyboardEvent>().KeyCode);
         }
 
         public override void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth)

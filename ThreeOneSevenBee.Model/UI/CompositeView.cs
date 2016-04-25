@@ -20,6 +20,25 @@ namespace ThreeOneSevenBee.Model.UI
 
         public bool PropagateClick { set; get; }
         public bool PropagateKeypress { set; get; }
+        public override bool Active
+        {
+            get
+            {
+                return base.Active; 
+            }
+
+            set
+            {
+                if (value == false)
+                {
+                    foreach (View child in Children)
+                    {
+                        child.Active = value;
+                    }
+                }
+                base.Active = value;
+            }
+        }
 
         public override void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
@@ -37,6 +56,7 @@ namespace ThreeOneSevenBee.Model.UI
         {
             if (base.ContainsPoint(x, y))
             {
+                Active = true;
                 if (PropagateClick)
                 {
                     foreach (View child in Children)
@@ -49,16 +69,19 @@ namespace ThreeOneSevenBee.Model.UI
                 {
                     OnClick();
                 }
+            } else
+            {
+                Active = false;
             }
         }
 
-        public override void KeyPressed(int key, Vector2 lastClick)
+        public override void KeyPressed(int key)
         {
             if (PropagateKeypress)
             {
                 foreach (View child in Children)
                 {
-                    child.KeyPressed(key, lastClick);
+                    child.KeyPressed(key);
                 }
             }
         }
