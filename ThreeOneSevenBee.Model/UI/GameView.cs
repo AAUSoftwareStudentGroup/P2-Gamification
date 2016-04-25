@@ -14,6 +14,7 @@ namespace ThreeOneSevenBee.Model.UI
         TitleView titleView;
         LevelView levelView;
         LevelSelectView levelSelectView;
+        //LoginView loginView;
         IContext context;
 
         public void Update(GameModel game)
@@ -60,6 +61,8 @@ namespace ThreeOneSevenBee.Model.UI
                 },
                 OnExit = () => setContent(titleView)
             };
+
+            //loginView = new LoginView();
 
             titleView.PlayButton.OnClick = () => setContent(levelView);
 

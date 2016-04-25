@@ -41,6 +41,19 @@ namespace ThreeOneSevenBee.Model.UI
         public double InnerY { get { return Y - Padding; } }
         public double InnerWidth { get { return Width - Padding; } }
         public double InnerHeight { get { return Height - Padding; } }
+        public override bool Active
+        {
+            get
+            {
+                return Content.Active;
+            }
+
+            set
+            {
+                if(Content != null)
+                    Content.Active = value;
+            }
+        }
 
         public double MaxScale;
 
@@ -63,13 +76,16 @@ namespace ThreeOneSevenBee.Model.UI
                 {
                     OnClick();
                 }
+            } else
+            {
+                Active = false;
             }
         }
-        public override void KeyPressed(int key, Vector2 lastClick)
+        public override void KeyPressed(int key)
         {
             if (PropagateKeypress)
             {
-                Content.KeyPressed(key, lastClick);
+                Content.KeyPressed(key);
             }
         }
 

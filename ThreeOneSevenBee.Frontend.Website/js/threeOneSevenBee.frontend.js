@@ -91,9 +91,10 @@
             last.x = x;
             last.y = y;
             this.setlastClick(last.$clone());
+            this.draw();
         },
         keyPressed: function (e) {
-            this.contentView.keyPressed(e.keyCode, this.getlastClick().$clone());
+            this.contentView.keyPressed(e.keyCode);
         },
         drawPolygon$1: function (path, fillColor, lineColor, lineWidth) {
             var $t;
