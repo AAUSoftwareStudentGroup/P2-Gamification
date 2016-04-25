@@ -13,12 +13,13 @@ namespace ThreeOneSevenBee.Model.UI
         public Inputbox(string emptyString) : base(emptyString)
         {
             this.emptyString = emptyString;
+            BackgroundColor = new Color(0, 255, 100);
         }
 
-        public override void KeyPressed(int key, Vector2 lastClick)
+        public override void KeyPressed(int key)
         {
-            Console.WriteLine("Key: " + key);
+            if(Active)
+                Console.WriteLine("Key: " + key);
         }
-
     }
 }
