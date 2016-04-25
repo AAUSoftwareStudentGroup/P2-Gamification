@@ -607,5 +607,59 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
             return null;
         }
+
+        // a + 4 + 0 + k = a + 4 + k, - Select anything (only one thing other than null) AND null
+        public static ExpressionBase RemoveNull(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if(selection.Count != 2)
+            {
+                return null;
+            }
+
+            VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
+
+            if(variadicExpression == null || variadicExpression.Type != OperatorType.Add)
+            {
+                return null;
+            }
+
+            if(variadicExpression[0].ToString() == "0" || variadicExpression[0].ToString() == "-{0}")
+            {
+                return variadicExpression[1];
+            }
+            else if(variadicExpression[1].ToString() == "0" || variadicExpression[1].ToString() == "-{0}")
+            {
+                return variadicExpression[0];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        // 2 + 3 * 5 * (-7) * 0 + 1 = 3
+        public static ExpressionBase MultiplyByNull(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            if(selection.Count < 2)
+            {
+                return null;
+            }
+
+            VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
+
+            if(variadicExpression == null ||variadicExpression.Type != OperatorType.Multiply)
+            {
+                return null;
+            }
+
+            foreach (ExpressionBase item in variadicExpression)
+            {
+                if(item.ToString() == "0" || item.ToString() == "-{0}")
+                {
+                    return new NumericExpression(0);
+                }
+            }
+            return null;
+        }
     }
 }
