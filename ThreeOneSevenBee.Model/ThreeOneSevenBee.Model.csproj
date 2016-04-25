@@ -105,6 +105,8 @@
     <Compile Include="UI\ToolTipView.cs" />
     <Compile Include="UI\VectorImageView.cs" />
     <Compile Include="UI\View.cs" />
+    <Compile Include="UI\Inputbox.cs" />
+    <Compile Include="UI\LoginView.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
