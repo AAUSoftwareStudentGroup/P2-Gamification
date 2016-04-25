@@ -71,19 +71,87 @@ namespace ThreeOneSevenBee.Model.Expression
         {
             int secondIndex = 0;
             return first.TakeWhile(
-                (expr) => 
-                secondIndex == second.Count || 
+                (expr) =>
+                secondIndex == second.Count ||
                 ReferenceEquals(expr, second[secondIndex++])).ToList();
         }
 
         public ExpressionBase WrapInDelimiterIfNeccessary(ExpressionBase expression, ExpressionBase parent)
         {
+            Dictionary<OperatorType, Dictionary<OperatorType, bool>> table = new Dictionary<OperatorType, Dictionary<OperatorType, bool>>()
+            {
+                {
+                    OperatorType.Minus,
+                    new Dictionary<OperatorType, bool>()
+                    {
+                        { OperatorType.Minus, true },
+                        { OperatorType.Add, true }, //problem, therefore true as a precaution
+                        { OperatorType.Divide, false },
+                        { OperatorType.Multiply, true },
+                        { OperatorType.Power, true } //problem, therefore true as a precaution
+                    }
+                },
+                {
+                    OperatorType.Add,
+                    new Dictionary<OperatorType, bool>()
+                    {
+                        { OperatorType.Minus, true },
+                        { OperatorType.Add, false },
+                        { OperatorType.Divide, false },
+                        { OperatorType.Multiply, true },
+                        { OperatorType.Power, true } //problem, therefore true as a precaution
+                    }
+                },
+                {
+                    OperatorType.Divide,
+                    new Dictionary<OperatorType, bool>()
+                    {
+                        { OperatorType.Minus, false },
+                        { OperatorType.Add, false },
+                        { OperatorType.Divide, false },
+                        { OperatorType.Multiply, false },
+                        { OperatorType.Power, false }
+                    }
+                },
+                {
+                    OperatorType.Multiply,
+                    new Dictionary<OperatorType, bool>()
+                    {
+                        { OperatorType.Minus, true },
+                        { OperatorType.Add, false },
+                        { OperatorType.Divide, false },
+                        { OperatorType.Multiply, false },
+                        { OperatorType.Power, true } //problem, therefore true as a precaution
+                    }
+                },
+                {
+                    OperatorType.Power,
+                    new Dictionary<OperatorType, bool>()
+                    {
+                        { OperatorType.Minus, false },
+                        { OperatorType.Add, false },
+                        { OperatorType.Divide, false },
+                        { OperatorType.Multiply, false },
+                        { OperatorType.Power, false }
+                    }
+                }
+            };
+
+            OperatorExpression operatorExpression = expression as OperatorExpression;
+            OperatorExpression parentExpression = parent as OperatorExpression;
+
             bool isNeccessary = true;
-            // ...
-            // kode der afgør om der skal sættes parentes omkring.
-            // f.eks. skal der hvis expression = 4+4 (variadic plus) og parent = 4*4 (Variadic gange)
-            // ...
-            if(isNeccessary)
+
+            if (operatorExpression == null || parentExpression == null)
+            {
+                isNeccessary = false;
+            }
+            else
+            {
+                isNeccessary = table[operatorExpression.Type][parentExpression.Type];
+            }
+
+            if (isNeccessary)
             {
                 return new DelimiterExpression(expression);
             }
@@ -113,7 +181,7 @@ namespace ThreeOneSevenBee.Model.Expression
 
                 foreach (ExpressionBase operand in clone)
                 {
-                    if(operand.Selected == false && operand.GetNodesRecursive().Any((n) => n.Selected == true) == false)
+                    if (operand.Selected == false && operand.GetNodesRecursive().Any((n) => n.Selected == true) == false)
                     {
                         if (selectedOperands.Count == 0)
                         {
@@ -142,11 +210,11 @@ namespace ThreeOneSevenBee.Model.Expression
                 foreach (ExpressionRule rule in rules)
                 {
                     ExpressionBase suggestion = rule(toBeReplaced, toBeReplacedSelection);
-                    
+
                     if (suggestion != null)
                     {
                         ExpressionBase result;
-                        if(clone.Count == selectedOperands.Count)
+                        if (clone.Count == selectedOperands.Count)
                         {
                             result = suggestion;
                         }

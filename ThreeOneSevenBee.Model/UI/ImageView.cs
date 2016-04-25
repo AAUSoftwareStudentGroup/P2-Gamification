@@ -14,5 +14,10 @@ namespace ThreeOneSevenBee.Model.UI
             Image = image;
             BackgroundColor = new Color();
         }
+        public override void DrawWithContext(IContext context, double offsetX, double offsetY)
+        {
+            base.DrawWithContext(context, offsetX, offsetY);
+            context.DrawPNGImage(Image, X + offsetX, Y + offsetY, Width, Height);
+        }
     }
 }

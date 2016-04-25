@@ -1,4 +1,5 @@
 ﻿#if BRIDGE
+using System;
 using Bridge.Html5;
 #else
 using System;
@@ -77,5 +78,7 @@ namespace ThreeOneSevenBee.Model.UI
         public abstract void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth);
 
         public abstract void DrawText(double x, double y, double width, double height, string text, Color textColor);
+
+        public abstract void DrawPNGImage(string fileName, double x, double y, double width, double height);
     }
 }

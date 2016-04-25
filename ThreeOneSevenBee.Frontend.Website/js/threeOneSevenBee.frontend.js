@@ -135,6 +135,24 @@
                 this.context.textAlign = "center";
                 this.context.fillText(lines[index], Bridge.Int.trunc((x + width / 2)), Bridge.Int.trunc((y + (index + 0.5) * (height / lines.length))));
             }
+        },
+        drawPNGImage: function (fileName, x, y, width, height) {
+            console.log(width + " " + height);
+    
+            if (this.imageCache.containsKey(fileName)) {
+                this.context.fillStyle = "transparent";
+                this.context.drawImage(this.imageCache.get(fileName), x, y, width, height);
+                this.context.fillStyle = "#000000";
+            }
+            else  {
+                this.imageCache.set(fileName, new Image());
+                this.imageCache.get(fileName).src = "img/" + fileName;
+                this.imageCache.get(fileName).onload = Bridge.fn.bind(this, function (e) {
+                    this.context.fillStyle = "transparent";
+                    this.context.drawImage(this.imageCache.get(fileName), x, y, width, height);
+                    this.context.fillStyle = "#000000";
+                });
+            }
         }
     });
     
@@ -142,7 +160,7 @@
         inherits: [ThreeOneSevenBee.Model.Game.IGameAPI],
         getCategories: function (callback) {
             $.get("/api/?action=get_levels&debug=1", { }, function (data, textStatus, request) {
-                var $t, $t1;
+                var $t, $t1, $t2;
                 var jdata = JSON.parse(Bridge.cast(data, String));
                 var categories = new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)();
                 var categoriesData = Bridge.as(jdata.data, Array);
@@ -152,10 +170,11 @@
     
                     var levelCategory = new ThreeOneSevenBee.Model.Game.LevelCategory(Bridge.cast(categoryData.name, String));
                     var levelsData = Bridge.as(categoryData.levels, Array);
+                    console.log(levelsData);
                     $t1 = Bridge.getEnumerator(levelsData);
                     while ($t1.moveNext()) {
                         var levelData = $t1.getCurrent();
-                        var level = new ThreeOneSevenBee.Model.Game.Level("constructor$1", Bridge.Int.parseInt(Bridge.cast(levelData.id, String), -2147483648, 2147483647), Bridge.cast(levelData.initial_expression, String), Bridge.Int.parseInt(Bridge.cast(levelData.stars, String), -2147483648, 2147483647), Bridge.cast(levelData.current_expression, String), Bridge.Linq.Enumerable.from((Bridge.as(levelData.star_expressions, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f1).toArray());
+                        var level = new ThreeOneSevenBee.Model.Game.Level("constructor$1", Bridge.Int.parseInt(Bridge.cast(levelData.id, String), -2147483648, 2147483647), Bridge.cast(levelData.initial_expression, String), Bridge.Int.parseInt(($t2 = Bridge.cast(levelData.stars, String), Bridge.hasValue($t2) ? $t2 : "0"), -2147483648, 2147483647), Bridge.cast(levelData.current_expression, String), Bridge.Linq.Enumerable.from((Bridge.as(levelData.star_expressions, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f1).toArray());
                         levelCategory.add(level);
                     }
                     categories.add(levelCategory);
