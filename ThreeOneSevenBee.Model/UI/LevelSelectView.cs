@@ -109,22 +109,39 @@ namespace ThreeOneSevenBee.Model.UI
             int numberOfLevels = user.Categories[Category].Count;
             foreach (Level level in user.Categories[Category])
             {
-                levelButtons.Add(
+                CompositeView levelButton = new CompositeView(40, 40)
+                {
+                    X = levelNumber % (int)Math.Sqrt(numberOfLevels) * 50 + 5,
+                    Y = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50 + 5,
+                    BackgroundColor = new Color(40, 130, 120)
+                };
+                levelButton.Add(
                     new ButtonView((levelNumber + 1).ToString(), () => OnLevelSelect(level))
                     {
-                        Width = 50 - 10,
-                        Height = 50 - 10,
-                        X = levelNumber % (int)Math.Sqrt(numberOfLevels) * 50 + 5,
-                        Y = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50 + 5,
+                        Width = levelButton.Width,
+                        Height = levelButton.Width * 0.75,
                         BackgroundColor = new Color(40, 130, 120),
                         TextColor = new Color(255, 255, 255),
                     });
+                for (int n = 0; n < level.Stars; n++)
+                {
+                    double temp = (levelButton.Width - (levelButton.Width * 0.25) / 2);
+                    levelButton.Add(new ImageView("star_activated.png", levelButton.Width * 0.25, levelButton.Width * 0.25)
+                    {
+                        Y = levelButton.Height - levelButton.Width*0.25,     
+                        X = temp                   
+                    });
+                }
+                // imageviews
+                levelButtons.Add(levelButton);
+
                 levelNumber += 1;
 
             }
             levelButtons.Width = (int)Math.Sqrt(numberOfLevels) * 50;
             levelButtons.Height = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50;
             Levels.setContent(levelButtons);
+
         }
 
         public LevelSelectView(CurrentPlayer user) : base(400, 300)
