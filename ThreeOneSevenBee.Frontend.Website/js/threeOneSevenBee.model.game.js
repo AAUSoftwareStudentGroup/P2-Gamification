@@ -1,23 +1,34 @@
 ﻿(function (globals) {
     "use strict";
 
+    Bridge.define('ThreeOneSevenBee.Model.Game.BadgeName', {
+        statics: {
+            brokBadge: 0,
+            masterOfAlgebra: 1,
+            potens: 2,
+            spilDoneBadge: 3,
+            tutorialBadge: 4
+        },
+        $enum: true
+    });
+    
     Bridge.define('ThreeOneSevenBee.Model.Game.Player', {
+        badges: null,
         config: {
             properties: {
                 PlayerName: null,
                 LastLoginTime: null
-            },
-            init: function () {
-                this.badges = new Bridge.List$1(Bridge.Int)() || null;
             }
         },
         constructor: function (playername) {
             this.setPlayerName(playername);
+            this.badges = new Bridge.List$1(ThreeOneSevenBee.Model.Game.BadgeName)();
         }
     });
     
     Bridge.define('ThreeOneSevenBee.Model.Game.GameModel', {
         onChanged: null,
+        onBadgeAchieved: null,
         onSaveLevel: null,
         progressBar: null,
         config: {
@@ -55,8 +66,9 @@
             this.getUser().currentCategoryIndex = category;
             var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
             var endValue = serializer.deserialize(Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(category).getItem(level).starExpressions).last()).getSize();
-            var currentValue = serializer.deserialize(this.getUser().categories.getItem(category).getItem(level).startExpression).getSize();
-            this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(currentValue, endValue, currentValue);
+            var startValue = serializer.deserialize(this.getUser().categories.getItem(category).getItem(level).startExpression).getSize();
+            var currentValue = serializer.deserialize(this.getUser().categories.getItem(category).getItem(level).currentExpression).getSize();
+            this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(startValue, endValue, currentValue);
             this.setStarExpressions(new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)());
     
             $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getItem(this.getUser().currentLevelIndex).starExpressions);
@@ -73,10 +85,21 @@
             this.getUser().getCurrentLevel().currentExpression = this.getUser().getCurrentLevel().startExpression;
             this.setLevel(this.getUser().currentLevelIndex, this.getUser().currentCategoryIndex);
         },
+        updateBadge: function () {
+            if (Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(this.getUser().currentCategoryIndex)).all($_.ThreeOneSevenBee.Model.Game.GameModel.f2)) {
+                if (Bridge.hasValue(this.onBadgeAchieved) && Bridge.hasValue(this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getBadge())) {
+                    this.onBadgeAchieved(this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getBadge());
+                }
+            }
+        },
         onExpressionChanged: function (model) {
             this.progressBar.currentValue = model.getExpression().getSize();
             this.getUser().getCurrentLevel().currentExpression = model.getExpression().toString();
-            this.getUser().getCurrentLevel().stars = Math.max(this.getUser().getCurrentLevel().stars, Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count());
+            if (Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() > this.getUser().getCurrentLevel().stars) {
+                this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
+                this.updateBadge();
+            }
+    
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged(this);
             }
@@ -116,6 +139,9 @@
     Bridge.apply($_.ThreeOneSevenBee.Model.Game.GameModel, {
         f1: function (m) {
             this.onExpressionChanged(m);
+        },
+        f2: function (l) {
+            return l.stars === l.starExpressions.getCount();
         }
     });
     
@@ -151,6 +177,9 @@
             while ($t.moveNext()) {
                 var star = $t.getCurrent();
                 this.starExpressions.add(star);
+            }
+            for (var n = 0; n < 3 - Bridge.Linq.Enumerable.from(starExpressions).count(); n++) {
+                this.starExpressions.add(Bridge.Linq.Enumerable.from(starExpressions).last());
             }
     }
     });
@@ -234,12 +263,30 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Game.LevelCategory', {
         inherits: [Bridge.IEnumerable$1(ThreeOneSevenBee.Model.Game.Level)],
+        statics: {
+            config: {
+                init: function () {
+                    this.categoryBadges = Bridge.merge(new Bridge.Dictionary$2(String,ThreeOneSevenBee.Model.Game.BadgeName)(), [
+        ["Tutorial", ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge],
+        ["Potenser", ThreeOneSevenBee.Model.Game.BadgeName.potens],
+        ["Brøker", ThreeOneSevenBee.Model.Game.BadgeName.brokBadge],
+        ["Master of Algebra", ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra]
+    ] ) || null;
+                }
+            }
+        },
         name: null,
         categoryIndex: 0,
         levels: null,
         constructor: function (name) {
             this.name = name;
             this.levels = new Bridge.List$1(ThreeOneSevenBee.Model.Game.Level)();
+        },
+        getCompleted: function () {
+            return Bridge.Linq.Enumerable.from(this.levels).all($_.ThreeOneSevenBee.Model.Game.LevelCategory.f1);
+        },
+        getBadge: function () {
+            return Bridge.get(ThreeOneSevenBee.Model.Game.LevelCategory).categoryBadges.containsKey(this.name) ? Bridge.get(ThreeOneSevenBee.Model.Game.LevelCategory).categoryBadges.get(this.name) : Bridge.getDefaultValue(ThreeOneSevenBee.Model.Game.BadgeName);
         },
         getCategoryIndex: function () {
             return this.categoryIndex;
@@ -272,6 +319,14 @@
         },
         getEnumerator: function () {
             return this.getEnumerator$1();
+        }
+    });
+    
+    Bridge.ns("ThreeOneSevenBee.Model.Game.LevelCategory", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Model.Game.LevelCategory, {
+        f1: function (l) {
+            return l.stars === l.starExpressions.getCount();
         }
     });
     

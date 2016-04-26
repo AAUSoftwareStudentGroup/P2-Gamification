@@ -72,10 +72,15 @@ namespace ThreeOneSevenBee.Frontend
                         foreach (LevelCategory category in categories)
                         {
                             currentPlayer.AddCategory(category);
+                            if(category.Completed == false)
+                            {
+                                currentPlayer.Badges.Add(category.Badge);
+                            }
                         }
+                        
+                        Console.WriteLine(currentPlayer.Badges);
                         callback(currentPlayer);
                     });
-                    callback(currentPlayer);
                 }
             );
         }
@@ -149,6 +154,24 @@ namespace ThreeOneSevenBee.Frontend
                     bool success = (string)jdata["success"] == "true";
                     token = (string)jdata["success"] == "true" ? (string)jdata["data"]["token"] : null;
                     callback(success);
+                }
+            );
+        }
+
+        public void UserAddBadge(BadgeName badge, Action<bool> callback)
+        {
+            jQuery.Post(
+                "/api/",
+                new
+                {
+                    action = "user_add_badge",
+                    token = token,
+                    badge_id = (int)badge
+                },
+                (data, textStatus, request) =>
+                {
+                    var jdata = JSON.Parse((string)data);
+                    callback((string)jdata["success"] == "true");
                 }
             );
         }

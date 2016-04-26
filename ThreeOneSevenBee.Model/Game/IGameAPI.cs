@@ -12,5 +12,6 @@ namespace ThreeOneSevenBee.Model.Game
         void GetPlayers(Action<List<Player>> callback);
         void SaveUserLevelProgress(int levelID, string currentExpression, int stars, Action<bool> callback);
         void GetCurrentPlayer(Action<CurrentPlayer> callback);
+        void UserAddBadge(BadgeName badge, Action<bool> callback);
     }
 }

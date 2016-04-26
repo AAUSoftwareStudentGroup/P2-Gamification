@@ -31,6 +31,9 @@
                                             gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
                                                 onSaveLevel: function (level) {
                                                     gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, level.stars, $_.ThreeOneSevenBee.Frontend.App.f1);
+                                                },
+                                                onBadgeAchieved: function (badge) {
+                                                    gameAPI.userAddBadge(badge, $_.ThreeOneSevenBee.Frontend.App.f2);
                                                 }
                                             } );
                                             gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
@@ -59,6 +62,9 @@
     Bridge.apply($_.ThreeOneSevenBee.Frontend.App, {
         f1: function (IsSaved) {
             console.log(IsSaved ? "Level saved" : "Could not save");
+        },
+        f2: function (IsAdded) {
+            console.log(IsAdded ? "Badge added" : "Badge not added");
         }
     });
     
@@ -231,10 +237,14 @@
                     while ($t.moveNext()) {
                         var category = $t.getCurrent();
                         currentPlayer.addCategory(category);
+                        if (category.getCompleted() === false) {
+                            currentPlayer.badges.add(category.getBadge());
+                        }
                     }
+    
+                    console.log(currentPlayer.badges);
                     callback(currentPlayer);
                 });
-                callback(currentPlayer);
             }));
         },
         getPlayers: function (callback) {
@@ -265,6 +275,12 @@
                 this.token = Bridge.cast(jdata.success, String) === "true" ? Bridge.cast(jdata.data.token, String) : null;
                 callback(success);
             }));
+        },
+        userAddBadge: function (badge, callback) {
+            $.post("/api/", { action: "user_add_badge", token: this.token, badge_id: Bridge.cast(badge, Bridge.Int) }, function (data, textStatus, request) {
+                var jdata = JSON.parse(Bridge.cast(data, String));
+                callback(Bridge.cast(jdata.success, String) === "true");
+            });
         }
     });
     

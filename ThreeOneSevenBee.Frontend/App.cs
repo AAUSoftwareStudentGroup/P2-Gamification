@@ -52,6 +52,11 @@ namespace ThreeOneSevenBee.Frontend
                                                 level.CurrentExpression,
                                                 level.Stars,
                                                 (IsSaved) => Console.WriteLine(IsSaved ? "Level saved" : "Could not save")
+                                            ),
+                                            OnBadgeAchieved = (badge) =>
+                                            gameAPI.UserAddBadge(
+                                                badge,
+                                                (IsAdded) => Console.WriteLine(IsAdded ? "Badge added" : "Badge not added")
                                             )
                                         };
                                         gameView = new GameView(gameModel, context);
