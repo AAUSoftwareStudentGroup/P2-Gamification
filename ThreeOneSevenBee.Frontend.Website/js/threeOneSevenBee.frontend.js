@@ -22,7 +22,7 @@
     
                 gameAPI.getCurrentPlayer(function (u) {
                     u.addCategory(Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("wat"), [
-                        [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4/3", "4/2", 0, ["2"])]
+                        [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4/3+0", "4/2+0", 0, ["4/2"])]
                     ] ));
                     gameAPI.getPlayers(function (p) {
                         gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {

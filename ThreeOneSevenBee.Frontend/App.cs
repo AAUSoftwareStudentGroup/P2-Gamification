@@ -30,7 +30,7 @@ namespace ThreeOneSevenBee.Frontend
 
             gameAPI.GetCurrentPlayer((u) =>
             {
-                u.AddCategory(new LevelCategory("wat") { new Level("4/3", "4/2", 0, new string[] { "2" }) });
+                u.AddCategory(new LevelCategory("wat") { new Level("4/3+0", "4/2+0", 0, new string[] { "4/2" }) });
                 gameAPI.GetPlayers((p) =>
                 {
                     gameModel = new GameModel(u, p)
