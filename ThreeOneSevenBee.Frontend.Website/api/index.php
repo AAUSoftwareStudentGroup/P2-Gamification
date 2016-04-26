@@ -216,9 +216,11 @@ class API {
                     LEFT JOIN 
                         gamedb.level_category AS category ON level.level_category_id=category.id
                     LEFT JOIN 
-                        gamedb.user_level_progress AS level_progress ON level_progress.level_id = level.id
-                    WHERE 
-                        level_progress.user_id=? OR level_progress.user_id IS NULL
+                        gamedb.user_level_progress AS level_progress 
+                        ON 
+                            level_progress.level_id = level.id
+                        AND 
+                            level_progress.user_id=?
                     ORDER BY category.order ASC, level.order ASC;",
                     $_SESSION['authorized']
         );
