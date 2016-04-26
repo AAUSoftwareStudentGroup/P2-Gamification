@@ -26,6 +26,71 @@
         }
     });
     
+    Bridge.define('ThreeOneSevenBee.Model.Game.Game', {
+        gameAPI: null,
+        context: null,
+        gameModel: null,
+        gameView: null,
+        constructor: function (context, gameAPI) {
+            this.gameAPI = gameAPI;
+            this.context = context;
+        },
+        start: function () {
+            this.gameAPI.isAuthenticated(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f1));
+        },
+        loadGameData: function () {
+            this.gameAPI.getCurrentPlayer(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f6));
+        }
+    });
+    
+    var $_ = {};
+    
+    Bridge.ns("ThreeOneSevenBee.Model.Game.Game", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Model.Game.Game, {
+        f1: function (isAuthenticated) {
+            if (isAuthenticated === false) {
+                var loginView = new ThreeOneSevenBee.Model.UI.LoginView(this.context.getWidth(), this.context.getHeight());
+                this.context.setContentView(loginView);
+                loginView.onLogin = Bridge.fn.bind(this, function (username, password) {
+                    this.gameAPI.authenticate(username, password, Bridge.fn.bind(this, function (authenticateSuccess) {
+                        if (authenticateSuccess) {
+                            this.loadGameData();
+                        }
+                        else  {
+                            loginView.showLoginError();
+                        }
+                    }));
+                });
+                loginView.onLogin("Morten RaskRask", "adminadmin");
+            }
+            else  {
+                this.loadGameData();
+            }
+        },
+        f2: function (IsSaved) {
+            console.log(IsSaved ? "Level saved" : "Could not save");
+        },
+        f3: function (level) {
+            this.gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, level.stars, $_.ThreeOneSevenBee.Model.Game.Game.f2);
+        },
+        f4: function (IsAdded) {
+            console.log(IsAdded ? "Badge added" : "Badge not added");
+        },
+        f5: function (badge) {
+            this.gameAPI.userAddBadge(badge, $_.ThreeOneSevenBee.Model.Game.Game.f4);
+        },
+        f6: function (u) {
+            this.gameAPI.getPlayers(Bridge.fn.bind(this, function (p) {
+                this.gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
+                    onSaveLevel: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f3),
+                    onBadgeAchieved: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f5)
+                } );
+                this.gameView = new ThreeOneSevenBee.Model.UI.GameView(this.gameModel, this.context);
+            }));
+        }
+    });
+    
     Bridge.define('ThreeOneSevenBee.Model.Game.GameModel', {
         onChanged: null,
         onBadgeAchieved: null,
@@ -131,8 +196,6 @@
             }
         }
     });
-    
-    var $_ = {};
     
     Bridge.ns("ThreeOneSevenBee.Model.Game.GameModel", $_)
     

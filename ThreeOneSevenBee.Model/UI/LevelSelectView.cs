@@ -110,13 +110,13 @@ namespace ThreeOneSevenBee.Model.UI
             foreach (Level level in user.Categories[Category])
             {
                 CompositeView levelButton = new CompositeView(40, 40)
-                {
+                {   OnClick = () => OnLevelSelect(level),
                     X = levelNumber % (int)Math.Sqrt(numberOfLevels) * 50 + 5,
                     Y = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50 + 5,
                     BackgroundColor = new Color(40, 130, 120)
                 };
                 levelButton.Add(
-                    new ButtonView((levelNumber + 1).ToString(), () => OnLevelSelect(level))
+                    new LabelView((levelNumber + 1).ToString())
                     {
                         Width = levelButton.Width,
                         Height = levelButton.Width * 0.75,

@@ -837,7 +837,7 @@
             this.levelView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LevelView(game), {
                 setOnExit: Bridge.fn.bind(this, function () {
                     game.saveLevel();
-                    this.setContent(this.titleView);
+                    this.setContent(this.levelSelectView);
                 }),
                 setOnNextLevel: function () {
                     game.saveLevel();
@@ -1040,13 +1040,14 @@
                 (function () {
                     var level = $t.getCurrent();
                     var levelButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(40, 40), {
+                        onClick: Bridge.fn.bind(this, function () {
+                            this.onLevelSelect(level);
+                        }),
                         setX: levelNumber % Bridge.Int.trunc(Math.sqrt(numberOfLevels)) * 50 + 5,
                         setY: Bridge.Int.div(levelNumber, Bridge.Int.trunc(Math.sqrt(numberOfLevels))) * 50 + 5,
                         setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 130, 120)
                     } );
-                    levelButton.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView((levelNumber + 1).toString(), Bridge.fn.bind(this, function () {
-                        this.onLevelSelect(level);
-                    })), {
+                    levelButton.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView((levelNumber + 1).toString()), {
                         setWidth: levelButton.getWidth(),
                         setHeight: levelButton.getWidth() * 0.75,
                         setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 130, 120),
