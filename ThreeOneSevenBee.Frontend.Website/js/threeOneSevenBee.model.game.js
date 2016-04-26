@@ -1,18 +1,34 @@
 ﻿(function (globals) {
     "use strict";
 
+    Bridge.define('ThreeOneSevenBee.Model.Game.BadgeName', {
+        statics: {
+            brokBadge: 0,
+            masterOfAlgebra: 1,
+            potens: 2,
+            spilDoneBadge: 3,
+            tutorialBadge: 4
+        },
+        $enum: true
+    });
+    
     Bridge.define('ThreeOneSevenBee.Model.Game.Player', {
+        badges: null,
         config: {
             properties: {
                 PlayerName: null,
                 LastLoginTime: null
-            },
-            init: function () {
-                this.badges = new Bridge.List$1(Bridge.Int)() || null;
             }
         },
         constructor: function (playername) {
             this.setPlayerName(playername);
+            this.badges = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.BadgeName)(), [
+                [ThreeOneSevenBee.Model.Game.BadgeName.brokBadge],
+                [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra],
+                [ThreeOneSevenBee.Model.Game.BadgeName.potens],
+                [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge],
+                [ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge]
+            ] );
         }
     });
     
@@ -55,8 +71,9 @@
             this.getUser().currentCategoryIndex = category;
             var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
             var endValue = serializer.deserialize(Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(category).getItem(level).starExpressions).last()).getSize();
-            var currentValue = serializer.deserialize(this.getUser().categories.getItem(category).getItem(level).startExpression).getSize();
-            this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(currentValue, endValue, currentValue);
+            var startValue = serializer.deserialize(this.getUser().categories.getItem(category).getItem(level).startExpression).getSize();
+            var currentValue = serializer.deserialize(this.getUser().categories.getItem(category).getItem(level).currentExpression).getSize();
+            this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(startValue, endValue, currentValue);
             this.setStarExpressions(new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)());
     
             $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getItem(this.getUser().currentLevelIndex).starExpressions);
@@ -151,6 +168,9 @@
             while ($t.moveNext()) {
                 var star = $t.getCurrent();
                 this.starExpressions.add(star);
+            }
+            for (var n = 0; n < 3 - Bridge.Linq.Enumerable.from(starExpressions).count(); n++) {
+                this.starExpressions.add(Bridge.Linq.Enumerable.from(starExpressions).last());
             }
     }
     });
