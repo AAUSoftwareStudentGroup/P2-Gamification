@@ -8,8 +8,14 @@ namespace ThreeOneSevenBee.Model.UI
     public class LoginView : CompositeView
     {
         Inputbox username;
+        public Action<string, string> OnLogin;
 
-        public LoginView() : base(600, 400)
+        public void ShowLoginError()
+        {
+
+        }
+
+        public LoginView(double width, double height) : base(width, height)
         {
             username = new Inputbox("Username");
             username.X = 100;

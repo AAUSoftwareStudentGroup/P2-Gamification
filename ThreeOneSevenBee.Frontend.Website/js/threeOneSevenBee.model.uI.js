@@ -1215,8 +1215,9 @@
     Bridge.define('ThreeOneSevenBee.Model.UI.LoginView', {
         inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
         username: null,
-        constructor: function () {
-            ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, 600, 400);
+        onLogin: null,
+        constructor: function (width, height) {
+            ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
     
             this.username = new ThreeOneSevenBee.Model.UI.Inputbox("Username");
             this.username.setX(100);
@@ -1225,6 +1226,9 @@
             this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
                 [this.username]
             ] );
+        },
+        showLoginError: function () {
+    
         }
     });
     

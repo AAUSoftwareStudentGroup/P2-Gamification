@@ -19,19 +19,34 @@
     
                 var gameModel;
                 var gameView;
-    
-                gameAPI.getCurrentPlayer(function (u) {
-                    u.addCategory(Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("wat"), [
-                        [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "4/3+0", "4/2+0", 0, ["4/2"])]
-                    ] ));
-                    gameAPI.getPlayers(function (p) {
-                        gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
-                            onSaveLevel: function (level) {
-                                gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, level.stars, $_.ThreeOneSevenBee.Frontend.App.f1);
-                            }
-                        } );
-                        gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
-                    });
+                gameAPI.isAuthenticated(function (isAuthenticated) {
+                    if (isAuthenticated === false) {
+                        var loginView = new ThreeOneSevenBee.Model.UI.LoginView(context.getWidth(), context.getHeight());
+                        context.setContentView(loginView);
+                        loginView.onLogin = function (username, password) {
+                            gameAPI.authenticate(username, password, function (authenticateSuccess) {
+                                if (authenticateSuccess) {
+                                    gameAPI.getCurrentPlayer(function (u) {
+                                        gameAPI.getPlayers(function (p) {
+                                            gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
+                                                onSaveLevel: function (level) {
+                                                    gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, level.stars, $_.ThreeOneSevenBee.Frontend.App.f1);
+                                                }
+                                            } );
+                                            gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
+                                        });
+                                    });
+                                }
+                                else  {
+                                    loginView.showLoginError();
+                                }
+                            });
+                        };
+                        loginView.onLogin("Morten RaskRask", "adminadmin");
+                    }
+                    else  {
+                        // Already authenticated dont show login view code here...
+                    }
                 });
             }
         }
@@ -42,8 +57,8 @@
     Bridge.ns("ThreeOneSevenBee.Frontend.App", $_)
     
     Bridge.apply($_.ThreeOneSevenBee.Frontend.App, {
-        f1: function (success) {
-            console.log(success);
+        f1: function (IsSaved) {
+            console.log(IsSaved ? "Level saved" : "Could not save");
         }
     });
     
@@ -177,10 +192,13 @@
     
     Bridge.define('ThreeOneSevenBee.Frontend.JQueryGameAPI', {
         inherits: [ThreeOneSevenBee.Model.Game.IGameAPI],
+        token: null,
         getCategories: function (callback) {
-            $.get("/api/?action=get_levels&debug=1", { }, function (data, textStatus, request) {
+            console.log(this.token);
+            $.post("/api/", { action: "get_levels", token: this.token }, function (data, textStatus, request) {
                 var $t, $t1, $t2;
                 var jdata = JSON.parse(Bridge.cast(data, String));
+                console.log(jdata.data);
                 var categories = new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)();
                 var categoriesData = Bridge.as(jdata.data, Array);
                 $t = Bridge.getEnumerator(categoriesData);
@@ -204,7 +222,7 @@
             });
         },
         getCurrentPlayer: function (callback) {
-            $.get("/api/?action=get_current_user&debug=1", { }, Bridge.fn.bind(this, function (data, textStatus, request) {
+            $.post("/api/", { action: "get_current_user", token: this.token }, Bridge.fn.bind(this, function (data, textStatus, request) {
                 var jdata = JSON.parse(Bridge.cast(data, String));
                 var currentPlayer = new ThreeOneSevenBee.Model.Game.CurrentPlayer(Bridge.cast(jdata.data.name, String));
                 this.getCategories(function (categories) {
@@ -220,17 +238,33 @@
             }));
         },
         getPlayers: function (callback) {
-            $.get("/api/?action=get_users", { }, function (data, textStatus, request) {
+            $.post("/api/", { action: "get_users", token: this.token }, function (data, textStatus, request) {
                 var jdata = JSON.parse(Bridge.cast(data, String));
                 var result = Bridge.Linq.Enumerable.from((Bridge.as(jdata.data, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f2).toList(ThreeOneSevenBee.Model.Game.Player);
                 callback(result);
             });
         },
         saveUserLevelProgress: function (levelID, currentExpression, stars, callback) {
-            $.post("/api/", { action: "save_user_level_progress", debug: 1, level_id: levelID, current_expression: currentExpression, stars: stars }, function (data, textStatus, request) {
+            $.post("/api/", { action: "save_user_level_progress", debug: 1, level_id: levelID, current_expression: currentExpression, stars: stars, token: this.token }, function (data, textStatus, request) {
                 var jdata = JSON.parse(Bridge.cast(data, String));
                 callback(Bridge.cast(jdata.success, String) === "true");
             });
+        },
+        isAuthenticated: function (callback) {
+            $.get("/api/?action=is_authenticated", { }, Bridge.fn.bind(this, function (data, textStatus, request) {
+                var jdata = JSON.parse(Bridge.cast(data, String));
+                var success = Bridge.cast(jdata.success, String) === "true";
+                this.token = Bridge.cast(jdata.success, String) === "true" ? Bridge.cast(jdata.data.token, String) : null;
+                callback(success);
+            }));
+        },
+        authenticate: function (username, password, callback) {
+            $.post("/api/", { action: "user_login", username: username, password: password }, Bridge.fn.bind(this, function (data, textStatus, request) {
+                var jdata = JSON.parse(Bridge.cast(data, String));
+                var success = Bridge.cast(jdata.success, String) === "true";
+                this.token = Bridge.cast(jdata.success, String) === "true" ? Bridge.cast(jdata.data.token, String) : null;
+                callback(success);
+            }));
         }
     });
     
