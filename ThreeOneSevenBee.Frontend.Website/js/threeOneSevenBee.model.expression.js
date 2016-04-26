@@ -85,7 +85,7 @@
                     [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, false],
                     [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide, false],
                     [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, false],
-                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power, false]
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power, true]
                 ] )]
             ] );
     
