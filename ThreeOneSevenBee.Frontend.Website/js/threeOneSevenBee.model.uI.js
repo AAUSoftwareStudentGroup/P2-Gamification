@@ -1052,16 +1052,24 @@
                         setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 130, 120),
                         setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255)
                     } ));
-                    for (var n = 0; n < level.stars; n++) {
-                        var temp = (levelButton.getWidth() - (levelButton.getWidth() * 0.25) / 2);
-                        levelButton.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("star_activated.png", levelButton.getWidth() * 0.25, levelButton.getWidth() * 0.25), {
-                            setY: levelButton.getHeight() - levelButton.getWidth() * 0.25,
-                            setX: temp
-                        } ));
+                    var starsize = levelButton.getWidth() * 0.25;
+                    var startPostition = (levelButton.getWidth() - (starsize)) / 2;
+                    if (level.stars === 2) {
+                        startPostition = levelButton.getWidth() / 2 - starsize;
                     }
-                    // imageviews
+                    else  {
+                        if (level.stars === 3) {
+                            startPostition = (levelButton.getWidth() - (starsize)) / 2 - starsize;
+                        }
+                    }
+                    for (var n = 0; n < level.stars; n++) {
+                        levelButton.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("star_activated.png", starsize, starsize), {
+                            setY: levelButton.getHeight() - starsize,
+                            setX: startPostition
+                        } ));
+                        startPostition += starsize;
+                    }
                     levelButtons.add(levelButton);
-    
                     levelNumber += 1;
     
                 }).call(this);

@@ -73,7 +73,30 @@ namespace ThreeOneSevenBee.Frontend
                 }
                 else
                 {
-                    // Already authenticated dont show login view code here...
+                    // Make this a method..
+                    gameAPI.GetCurrentPlayer((u) =>
+                    {
+                        gameAPI.GetPlayers((p) =>
+                        {
+                            gameModel = new GameModel(u, p)
+                            {
+                                OnSaveLevel = (level) =>
+                                gameAPI.SaveUserLevelProgress
+                                (
+                                    level.LevelID,
+                                    level.CurrentExpression,
+                                    level.Stars,
+                                    (IsSaved) => Console.WriteLine(IsSaved ? "Level saved" : "Could not save")
+                                ),
+                                OnBadgeAchieved = (badge) =>
+                                gameAPI.UserAddBadge(
+                                    badge,
+                                    (IsAdded) => Console.WriteLine(IsAdded ? "Badge added" : "Badge not added")
+                                )
+                            };
+                            gameView = new GameView(gameModel, context);
+                        });
+                    });
                 }
             });
         }

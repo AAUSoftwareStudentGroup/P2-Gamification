@@ -48,7 +48,20 @@
                         loginView.onLogin("Morten RaskRask", "adminadmin");
                     }
                     else  {
-                        // Already authenticated dont show login view code here...
+                        // Make this a method..
+                        gameAPI.getCurrentPlayer(function (u) {
+                            gameAPI.getPlayers(function (p) {
+                                gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
+                                    onSaveLevel: function (level) {
+                                        gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, level.stars, $_.ThreeOneSevenBee.Frontend.App.f1);
+                                    },
+                                    onBadgeAchieved: function (badge) {
+                                        gameAPI.userAddBadge(badge, $_.ThreeOneSevenBee.Frontend.App.f2);
+                                    }
+                                } );
+                                gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
+                            });
+                        });
                     }
                 });
             }
@@ -237,12 +250,7 @@
                     while ($t.moveNext()) {
                         var category = $t.getCurrent();
                         currentPlayer.addCategory(category);
-                        if (category.getCompleted() === false) {
-                            currentPlayer.badges.add(category.getBadge());
-                        }
                     }
-    
-                    console.log(currentPlayer.badges);
                     callback(currentPlayer);
                 });
             }));

@@ -72,13 +72,7 @@ namespace ThreeOneSevenBee.Frontend
                         foreach (LevelCategory category in categories)
                         {
                             currentPlayer.AddCategory(category);
-                            if(category.Completed == false)
-                            {
-                                currentPlayer.Badges.Add(category.Badge);
-                            }
                         }
-                        
-                        Console.WriteLine(currentPlayer.Badges);
                         callback(currentPlayer);
                     });
                 }
