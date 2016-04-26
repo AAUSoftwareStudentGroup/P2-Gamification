@@ -22,7 +22,11 @@
         },
         constructor: function (playername) {
             this.setPlayerName(playername);
-            this.badges = new Bridge.List$1(ThreeOneSevenBee.Model.Game.BadgeName)();
+            this.badges = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.BadgeName)(), [
+                [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra],
+                [ThreeOneSevenBee.Model.Game.BadgeName.potens],
+                [ThreeOneSevenBee.Model.Game.BadgeName.brokBadge]
+            ] );
         }
     });
     
@@ -150,19 +154,11 @@
             this.getUser().getCurrentLevel().currentExpression = this.getUser().getCurrentLevel().startExpression;
             this.setLevel(this.getUser().currentLevelIndex, this.getUser().currentCategoryIndex);
         },
-        updateBadge: function () {
-            if (Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(this.getUser().currentCategoryIndex)).all($_.ThreeOneSevenBee.Model.Game.GameModel.f2)) {
-                if (Bridge.hasValue(this.onBadgeAchieved) && Bridge.hasValue(this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getBadge())) {
-                    this.onBadgeAchieved(this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getBadge());
-                }
-            }
-        },
         onExpressionChanged: function (model) {
             this.progressBar.currentValue = model.getExpression().getSize();
             this.getUser().getCurrentLevel().currentExpression = model.getExpression().toString();
             if (Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() > this.getUser().getCurrentLevel().stars) {
                 this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
-                this.updateBadge();
             }
     
             if (Bridge.hasValue(this.onChanged)) {
@@ -202,9 +198,6 @@
     Bridge.apply($_.ThreeOneSevenBee.Model.Game.GameModel, {
         f1: function (m) {
             this.onExpressionChanged(m);
-        },
-        f2: function (l) {
-            return l.stars === l.starExpressions.getCount();
         }
     });
     

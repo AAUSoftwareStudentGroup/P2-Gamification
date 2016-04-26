@@ -133,12 +133,13 @@
                 this.context.fillStyle = "#000000";
             }
             else  {
-                this.imageCache.set(fileName, new Image());
-                this.imageCache.get(fileName).src = "img/" + fileName;
-                this.imageCache.get(fileName).onload = Bridge.fn.bind(this, function (e) {
+                var img = new Image();
+                img.src = "img/" + fileName;
+                img.onload = Bridge.fn.bind(this, function (e) {
                     this.context.fillStyle = "transparent";
-                    this.context.drawImage(this.imageCache.get(fileName), x, y, width, height);
+                    this.context.drawImage(img, x, y, width, height);
                     this.context.fillStyle = "#000000";
+                    this.imageCache.add(fileName, img);
                 });
             }
         }

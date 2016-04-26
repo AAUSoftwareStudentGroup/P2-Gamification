@@ -89,17 +89,6 @@ namespace ThreeOneSevenBee.Model.Game
             SetLevel(User.CurrentLevelIndex, User.CurrentCategoryIndex);
         }
 
-        private void updateBadge()
-        {
-            if(User.Categories[User.CurrentCategoryIndex].All((l) => l.Stars == l.StarExpressions.Count))
-            {
-                if(OnBadgeAchieved != null && User.Categories[User.CurrentCategoryIndex].Badge != null)
-                {
-                    OnBadgeAchieved((BadgeName)User.Categories[User.CurrentCategoryIndex].Badge);
-                }
-            }
-        }
-
         private void onExpressionChanged(ExpressionModel model)
         {
             ProgressBar.CurrentValue = model.Expression.Size;
@@ -107,7 +96,6 @@ namespace ThreeOneSevenBee.Model.Game
             if (ProgressBar.ActivatedStarPercentages().Count() > User.CurrentLevel.Stars)
             {
                 User.CurrentLevel.Stars = ProgressBar.ActivatedStarPercentages().Count();
-                updateBadge();
             }
             
             if (OnChanged != null)

@@ -135,13 +135,14 @@ namespace ThreeOneSevenBee.Frontend
             }
             else
             {
-                imageCache[fileName] = new ImageElement();
-                imageCache[fileName].Src = "img/" + fileName;
-                imageCache[fileName].OnLoad = (e) =>
+                ImageElement img = new ImageElement();
+                img.Src = "img/" + fileName;
+                img.OnLoad = (e) =>
                 {
                     context.FillStyle = "transparent";
-                    context.DrawImage(imageCache[fileName], x, y, width, height);
+                    context.DrawImage(img, x, y, width, height);
                     context.FillStyle = "#000000";
+                    imageCache.Add(fileName, img);
                 };
             }
         }
