@@ -28,7 +28,7 @@ namespace ThreeOneSevenBee.Model.UI
                 int badgesWidth = (badgeDictionary.Count-1) * 10;
                 CompositeView row = new CompositeView(Width, 20)
                     {
-                        new LabelView(player.PlayerName)
+                        new LabelView(" " + player.PlayerName + " ")
                         {
                             Width = Width - badgesWidth - 20,
                             Height = 20,

@@ -1283,7 +1283,7 @@
                 var player = $t.getCurrent();
                 var badgesWidth = (this.badgeDictionary.getCount() - 1) * 10;
                 var row = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(this.getWidth(), 20), [
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(player.getPlayerName()), {
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(" " + player.getPlayerName() + " "), {
                         setWidth: this.getWidth() - badgesWidth - 20,
                         setHeight: 20
                     } )]
