@@ -27,25 +27,49 @@ namespace ThreeOneSevenBee.Frontend
 
             GameModel gameModel;
             GameView gameView;
-
-            gameAPI.GetCurrentPlayer((u) =>
+            gameAPI.IsAuthenticated((isAuthenticated) =>
             {
-                u.AddCategory(new LevelCategory("wat") { new Level("4/3", "4/2", 0, new string[] { "2" }) });
-                gameAPI.GetPlayers((p) =>
+                if(isAuthenticated == false)
                 {
-                    gameModel = new GameModel(u, p)
+                    LoginView loginView = new LoginView(context.Width, context.Height);
+                    context.SetContentView(loginView);
+                    loginView.OnLogin = (username, password) =>
                     {
-                        OnSaveLevel = (level) => 
-                        gameAPI.SaveUserLevelProgress
-                        (
-                            level.LevelID,
-                            level.CurrentExpression,
-                            level.Stars,
-                            (success) => Console.WriteLine(success)
-                        )
+                        gameAPI.Authenticate(username, password, (authenticateSuccess) =>
+                        {
+                            if (authenticateSuccess)
+                            {
+                                gameAPI.GetCurrentPlayer((u) =>
+                                {
+                                    gameAPI.GetPlayers((p) =>
+                                    {
+                                        gameModel = new GameModel(u, p)
+                                        {
+                                            OnSaveLevel = (level) =>
+                                            gameAPI.SaveUserLevelProgress
+                                            (
+                                                level.LevelID,
+                                                level.CurrentExpression,
+                                                level.Stars,
+                                                (IsSaved) => Console.WriteLine(IsSaved ? "Level saved" : "Could not save")
+                                            )
+                                        };
+                                        gameView = new GameView(gameModel, context);
+                                    });
+                                });
+                            }
+                            else
+                            {
+                                loginView.ShowLoginError();
+                            }
+                        });
                     };
-                    gameView = new GameView(gameModel, context);
-                });
+                    loginView.OnLogin("Morten RaskRask", "adminadmin");
+                }
+                else
+                {
+                    // Already authenticated dont show login view code here...
+                }
             });
         }
     }

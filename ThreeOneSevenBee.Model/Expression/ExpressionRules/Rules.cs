@@ -101,7 +101,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             DelimiterExpression parenthesis = expression as DelimiterExpression;
             if(parenthesis != null)
             {
-                return parenthesis.Expression;
+                return parenthesis.Expression.Clone();
             }
             return null;
         }

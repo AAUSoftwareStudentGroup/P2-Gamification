@@ -66,7 +66,7 @@
             removeParenthesisRule: function (expression, selection) {
                 var parenthesis = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression);
                 if (Bridge.hasValue(parenthesis)) {
-                    return parenthesis.getExpression();
+                    return parenthesis.getExpression().clone();
                 }
                 return null;
             },

@@ -11,14 +11,22 @@ namespace ThreeOneSevenBee.Frontend
 {
     class JQueryGameAPI : IGameAPI
     {
+        private string token = null;
+
         private void getCategories(Action<List<LevelCategory>> callback)
         {
-            jQuery.Get(
-                "/api/?action=get_levels&debug=1",
-                new object(),
+            Console.WriteLine(token);
+            jQuery.Post(
+                "/api/",
+                new
+                {
+                    action = "get_levels",
+                    token = token
+                },
                 (data, textStatus, request) =>
                 {
                     var jdata = JSON.Parse((string)data);
+                    Console.WriteLine(jdata["data"]);
                     List<LevelCategory> categories = new List<LevelCategory>();
                     var categoriesData = jdata["data"] as object[];
                     foreach (var categoryData in categoriesData)
@@ -48,9 +56,13 @@ namespace ThreeOneSevenBee.Frontend
 
         public void GetCurrentPlayer(Action<CurrentPlayer> callback)
         {
-            jQuery.Get(
-                "/api/?action=get_current_user&debug=1",
-                new object(),
+            jQuery.Post(
+                "/api/",
+                new
+                {
+                    action = "get_current_user",
+                    token = token
+                },
                 (data, textStatus, request) =>
                 {
                     var jdata = JSON.Parse((string)data);
@@ -70,9 +82,13 @@ namespace ThreeOneSevenBee.Frontend
 
         public void GetPlayers(Action<List<Player>> callback)
         {
-            jQuery.Get(
-                "/api/?action=get_users",
-                new object(),
+            jQuery.Post(
+                "/api/",
+                new
+                {
+                    action = "get_users",
+                    token = token
+                },
                 (data, textStatus, request) =>
                 {
                     var jdata = JSON.Parse((string)data);
@@ -91,12 +107,48 @@ namespace ThreeOneSevenBee.Frontend
                     debug = 1,
                     level_id = levelID,
                     current_expression = currentExpression,
-                    stars = stars
+                    stars = stars,
+                    token = token
                 },
                 (data, textStatus, request) =>
                 {
                     var jdata = JSON.Parse((string)data);
                     callback((string)jdata["success"] == "true");
+                }
+            );
+        }
+
+        public void IsAuthenticated(Action<bool> callback)
+        {
+            jQuery.Get(
+                "/api/?action=is_authenticated",
+                new object(),
+                (data, textStatus, request) =>
+                {
+                    var jdata = JSON.Parse((string)data);
+                    bool success = (string)jdata["success"] == "true";
+                    token = (string)jdata["success"] == "true" ? (string)jdata["data"]["token"] : null;
+                    callback(success);
+                }
+            );
+        }
+
+        public void Authenticate(string username, string password, Action<bool> callback)
+        {
+            jQuery.Post(
+                "/api/",
+                new
+                {
+                    action = "user_login",
+                    username = username,
+                    password = password
+                },
+                (data, textStatus, request) =>
+                {
+                    var jdata = JSON.Parse((string)data);
+                    bool success = (string)jdata["success"] == "true";
+                    token = (string)jdata["success"] == "true" ? (string)jdata["data"]["token"] : null;
+                    callback(success);
                 }
             );
         }
