@@ -281,6 +281,11 @@ class API {
         }
     }
 
+    static function is_authenticated($IN, $db) {
+        if(!isset($_SESSION['authorized']))
+            API::respond(false, "user not authorized");
+        API::respond(true);
+    }
 
     static function get_current_user($IN, $db) {
         if(!isset($_SESSION['authorized']))
