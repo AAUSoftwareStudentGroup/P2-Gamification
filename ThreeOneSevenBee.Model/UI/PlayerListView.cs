@@ -3,29 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ThreeOneSevenBee.Model.Game;
+using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.UI
 {
     public class PlayerListView : CompositeView
     {
+
+        Dictionary<BadgeName, string> badgeDictionary = new Dictionary<BadgeName, string>()
+        {
+            {BadgeName.brokBadge, "brøkbadge.png"},
+            {BadgeName.masterOfAlgebra, "masterofalgebra.png"},
+            {BadgeName.potens, "potensv2.png"},
+            {BadgeName.tutorialBadge, "tutorialbadge.png" },
+            {BadgeName.spilDoneBadge, "spildonebadge.png"}
+
+        };
         public void Build(IEnumerable<Player> players)
         {
             Children = new List<View>();
             int offsetY = 5;
             foreach (Player player in players)
             {
-                View row = new CompositeView(Width, 20)
+                int badgesWidth = (badgeDictionary.Count-1) * 10;
+                CompositeView row = new CompositeView(Width, 20)
                     {
                         new LabelView(player.PlayerName)
                         {
-                            Width = Width - 30,
+                            Width = Width - badgesWidth - 20,
                             Height = 20,
                         },
-                        new ImageView("spildonebadge.png", 20, 20)
-                        {
-                            X = Width - 30
-                        }
                     };
+                foreach (var badge in player.Badges)
+                {
+                    row.Add(new ImageView(badgeDictionary[badge], 10, 10)
+                    {
+                        X = Width - badgesWidth + 20,
+                        Y = 5
+                    });
+                    badgesWidth += 10;
+                }
+
                 row.X = 5;
                 row.Y = offsetY;
                 row.Width = Width - 10;
@@ -33,7 +51,6 @@ namespace ThreeOneSevenBee.Model.UI
                 Children.Add(row);
 
                 offsetY += 25;
-
             }
         }
 
