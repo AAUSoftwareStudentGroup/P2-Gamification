@@ -127,7 +127,7 @@ namespace ThreeOneSevenBee.Model.Expression
                         { OperatorType.Add, false },
                         { OperatorType.Divide, false },
                         { OperatorType.Multiply, false },
-                        { OperatorType.Power, false }
+                        { OperatorType.Power, true }
                     }
                 }
             };
