@@ -69,6 +69,7 @@
     <Compile Include="Expression\Operator.cs" />
     <Compile Include="Expression\Token.cs" />
     <Compile Include="Game\CurrentPlayer.cs" />
+    <Compile Include="Game\Game.cs" />
     <Compile Include="Game\IGameAPI.cs" />
     <Compile Include="Game\GameModel.cs" />
     <Compile Include="Game\Level.cs" />

@@ -109,22 +109,47 @@ namespace ThreeOneSevenBee.Model.UI
             int numberOfLevels = user.Categories[Category].Count;
             foreach (Level level in user.Categories[Category])
             {
-                levelButtons.Add(
-                    new ButtonView((levelNumber + 1).ToString(), () => OnLevelSelect(level))
+                CompositeView levelButton = new CompositeView(40, 40)
+                {   OnClick = () => OnLevelSelect(level),
+                    X = levelNumber % (int)Math.Sqrt(numberOfLevels) * 50 + 5,
+                    Y = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50 + 5,
+                    BackgroundColor = new Color(40, 130, 120)
+                };
+                levelButton.Add(
+                    new LabelView((levelNumber + 1).ToString())
                     {
-                        Width = 50 - 10,
-                        Height = 50 - 10,
-                        X = levelNumber % (int)Math.Sqrt(numberOfLevels) * 50 + 5,
-                        Y = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50 + 5,
+                        Width = levelButton.Width,
+                        Height = levelButton.Width * 0.75,
                         BackgroundColor = new Color(40, 130, 120),
                         TextColor = new Color(255, 255, 255),
                     });
+                double starsize = levelButton.Width * 0.25;
+                double startPostition = (levelButton.Width - (starsize)) / 2;
+                if (level.Stars == 2)
+                {
+                    startPostition = levelButton.Width / 2 - starsize;
+                }
+                else if (level.Stars == 3)
+                {
+                    startPostition = (levelButton.Width - (starsize)) / 2 - starsize;
+                }
+                for (int n = 0; n < level.Stars; n++)
+                {
+                    levelButton.Add(new ImageView("star_activated.png", starsize, starsize)
+                    {
+                        Y = levelButton.Height - starsize,     
+                        X = startPostition             
+                    });
+                    startPostition += starsize;
+                }
+                levelButtons.Add(levelButton);
                 levelNumber += 1;
 
             }
             levelButtons.Width = (int)Math.Sqrt(numberOfLevels) * 50;
             levelButtons.Height = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50;
             Levels.setContent(levelButtons);
+
         }
 
         public LevelSelectView(CurrentPlayer user) : base(400, 300)

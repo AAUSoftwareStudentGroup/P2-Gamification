@@ -29,7 +29,7 @@ namespace ThreeOneSevenBee.Model.UI
         {
             if(Visible == true) { 
                 context.DrawPolygon(Path.Select((p) => new Vector2(X + p.X + offsetX, Y + p.Y + offsetY)).ToArray(), BackgroundColor);
-            }
+			}
         }
 
         public IEnumerator<Vector2> GetEnumerator()

@@ -216,9 +216,11 @@ class API {
                     LEFT JOIN 
                         gamedb.level_category AS category ON level.level_category_id=category.id
                     LEFT JOIN 
-                        gamedb.user_level_progress AS level_progress ON level_progress.level_id = level.id
-                    WHERE 
-                        level_progress.user_id=? OR level_progress.user_id IS NULL
+                        gamedb.user_level_progress AS level_progress 
+                        ON 
+                            level_progress.level_id = level.id
+                        AND 
+                            level_progress.user_id=?
                     ORDER BY category.order ASC, level.order ASC;",
                     $_SESSION['authorized']
         );
@@ -250,6 +252,35 @@ class API {
             
         }
         API::respond(true, $categories);
+    }
+
+    static function user_add_badge($IN, $db) {
+        if(!isset($_SESSION['authorized']))
+            API::respond(false, null, "User not logged in");
+        
+        $db->query("SELECT user.badges
+                    FROM gamedb.user
+                    WHERE user.id=?",
+                    $_SESSION['authorized']
+                );
+        if($row = $db->fetch()) {
+            $badges = explode(',', $row['badges']);
+            $badges[] = $IN['badge_id'];
+            if(empty($badges[0]))
+                array_shift($badges);
+            $badges = array_unique($badges, SORT_NUMERIC);
+
+            $badges = implode(',', $badges);
+            $db->query("UPDATE gamedb.user
+                        SET user.badges=?
+                        WHERE user.id=?",
+                        $badges,
+                        $_SESSION['authorized']
+                    );
+            API::respond();
+        }
+        else
+            API::respond(false, null, "Invalid user");
     }
 
     static function save_user_level_progress($IN, $db) {
@@ -292,12 +323,15 @@ class API {
         $db->query("SELECT 
                         user.id AS id, 
                         user.name AS name, 
-                        user.session_token AS token 
+                        user.session_token AS token,
+                        user.badges AS badges 
                     FROM gamedb.user AS user
                     WHERE user.id = ?",
                     (isset($_SESSION['authorized']) ? $_SESSION['authorized'] : 0));
-        if($result = $db->fetch())
+        if($result = $db->fetch()) {
+            $result['badges'] = explode(',', $result['badges']);
             API::respond(true, $result);
+        }
         API::respond(false, null, "Unkown error");
     }
 }

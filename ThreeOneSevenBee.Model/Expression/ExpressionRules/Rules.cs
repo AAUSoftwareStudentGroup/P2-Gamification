@@ -101,7 +101,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             DelimiterExpression parenthesis = expression as DelimiterExpression;
             if(parenthesis != null)
             {
-                return parenthesis.Expression;
+                return parenthesis.Expression.Clone();
             }
             return null;
         }
@@ -470,12 +470,12 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                             {
                                 itemsInParenthesis.Add(new BinaryOperatorExpression(item, commonparrent, OperatorType.Power));
                             }
-                            suggestion = new VariadicOperatorExpression(OperatorType.Multiply, itemsInParenthesis[0].Clone(), itemsInParenthesis[1].Clone());
+                            suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new DelimiterExpression(itemsInParenthesis[0].Clone()), new DelimiterExpression(itemsInParenthesis[1].Clone()));
                             if (itemsInParenthesis.Count > 2)
                             {
                                 foreach (var item in itemsInParenthesis.Skip(2))
                                 {
-                                    suggestion.Add(item.Clone());
+                                    suggestion.Add(new DelimiterExpression(item.Clone()));
                                 }
                                 return suggestion;
                             }
@@ -501,7 +501,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     BinaryOperatorExpression binaryBase = delimiterBase.Expression as BinaryOperatorExpression;
                     if(binaryBase != null)
                     {
-                        return new BinaryOperatorExpression(binaryBase.Left.Clone(), new VariadicOperatorExpression(OperatorType.Multiply, binaryBase.Right.Clone(), binaryOperatorExpression.Right.Clone()), OperatorType.Power);
+                        return new BinaryOperatorExpression(binaryBase.Left.Clone(), new VariadicOperatorExpression(OperatorType.Multiply, new DelimiterExpression(binaryBase.Right.Clone()), binaryOperatorExpression.Right.Clone()), OperatorType.Power);
                     }
                 }
             }

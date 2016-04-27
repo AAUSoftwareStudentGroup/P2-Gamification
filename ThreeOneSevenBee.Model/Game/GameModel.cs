@@ -19,6 +19,7 @@ namespace ThreeOneSevenBee.Model.Game
         public ExpressionBase StartExpression { get; private set; }
         public List<ExpressionBase> StarExpressions { get; private set; }
         public Action<GameModel> OnChanged;
+        public Action<BadgeName> OnBadgeAchieved;
         public Action<Level> OnSaveLevel;
         public ProgressbarStar ProgressBar;
 
@@ -60,8 +61,9 @@ namespace ThreeOneSevenBee.Model.Game
             User.CurrentCategoryIndex = category;
             ExpressionSerializer serializer = new ExpressionSerializer();
             int endValue = serializer.Deserialize(User.Categories[category][level].StarExpressions.Last()).Size;
-            int currentValue = serializer.Deserialize(User.Categories[category][level].StartExpression).Size;
-            ProgressBar = new ProgressbarStar(currentValue, endValue, currentValue);
+            int startValue = serializer.Deserialize(User.Categories[category][level].StartExpression).Size;
+            int currentValue = serializer.Deserialize(User.Categories[category][level].CurrentExpression).Size;
+            ProgressBar = new ProgressbarStar(startValue, endValue, currentValue);
             StarExpressions = new List<ExpressionBase>();
 
             foreach (string starExpression in User.Categories[User.CurrentCategoryIndex][User.CurrentLevelIndex].StarExpressions)
@@ -91,7 +93,11 @@ namespace ThreeOneSevenBee.Model.Game
         {
             ProgressBar.CurrentValue = model.Expression.Size;
             User.CurrentLevel.CurrentExpression = model.Expression.ToString();
-            User.CurrentLevel.Stars = Math.Max(User.CurrentLevel.Stars, ProgressBar.ActivatedStarPercentages().Count());
+            if (ProgressBar.ActivatedStarPercentages().Count() > User.CurrentLevel.Stars)
+            {
+                User.CurrentLevel.Stars = ProgressBar.ActivatedStarPercentages().Count();
+            }
+            
             if (OnChanged != null)
             {
                 OnChanged(this);
@@ -124,7 +130,7 @@ namespace ThreeOneSevenBee.Model.Game
         public void SaveLevel()
         {
             if(OnSaveLevel != null)
-        {
+            {
                 OnSaveLevel(User.CurrentLevel);
             }
         }
@@ -134,6 +140,7 @@ namespace ThreeOneSevenBee.Model.Game
             User = user;
             Players = players;
             SetLevel(User.CurrentLevelIndex, User.CurrentCategoryIndex);
+
         }
     }
 }
