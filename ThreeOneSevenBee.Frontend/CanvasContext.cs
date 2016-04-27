@@ -24,8 +24,8 @@ namespace ThreeOneSevenBee.Frontend
             input.Focus();
             input.OnInput = (e) =>
             {
-                KeyPressed(input.Value);
-                input.Value = "";
+                KeyPressed(input.Value.Substring(1));
+                input.Value = " ";
             };
             input.OnKeyDown = (e) =>
             {
@@ -35,8 +35,9 @@ namespace ThreeOneSevenBee.Frontend
                 {
                     KeyPressed("Back");
                 }
-                input.Value = "";
+                input.Value = " ";
             };
+            input.Value = " ";
 
 
             context = canvas.GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D);

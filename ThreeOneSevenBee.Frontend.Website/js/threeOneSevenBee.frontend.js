@@ -44,8 +44,8 @@
             input.type = "text";
             input.focus();
             input.oninput = Bridge.fn.bind(this, function (e) {
-                this.keyPressed(input.value);
-                input.value = "";
+                this.keyPressed(input.value.substr(1));
+                input.value = " ";
             });
             input.onkeydown = Bridge.fn.bind(this, function (e) {
                 var keyCode = e.keyCode;
@@ -53,8 +53,9 @@
                 if (keyCode === 8) {
                     this.keyPressed("Back");
                 }
-                input.value = "";
+                input.value = " ";
             });
+            input.value = " ";
     
     
             this.context = canvas.getContext("2d");
