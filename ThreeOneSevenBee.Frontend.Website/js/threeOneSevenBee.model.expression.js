@@ -54,7 +54,7 @@
             var table = Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Boolean))(), [
                 [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus, Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Boolean)(), [
                     [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus, true],
-                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, true],
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, false],
                     [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide, false],
                     [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, true],
                     [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power, true]

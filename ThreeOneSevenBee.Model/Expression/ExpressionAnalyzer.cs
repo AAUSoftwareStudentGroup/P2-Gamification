@@ -80,7 +80,7 @@ namespace ThreeOneSevenBee.Model.Expression
                     new Dictionary<OperatorType, bool>()
                     {
                         { OperatorType.Minus, true },
-                        { OperatorType.Add, true }, //problem, therefore true as a precaution
+                        { OperatorType.Add, false }, //problem, therefore true as a precaution
                         { OperatorType.Divide, false },
                         { OperatorType.Multiply, true },
                         { OperatorType.Power, true } //problem, therefore true as a precaution
