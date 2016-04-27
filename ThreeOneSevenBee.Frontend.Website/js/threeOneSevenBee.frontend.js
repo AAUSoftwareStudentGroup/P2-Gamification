@@ -185,6 +185,7 @@
             console.log(keyCode);
             if (keyCode === 8) {
                 this.keyPressed("Back");
+                e.preventDefault();
             }
         },
         f2: function (e) {

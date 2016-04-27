@@ -34,6 +34,7 @@ namespace ThreeOneSevenBee.Frontend
                 if(keyCode == 8)
                 {
                     KeyPressed("Back");
+                    e.PreventDefault();
                 }
             };
 
