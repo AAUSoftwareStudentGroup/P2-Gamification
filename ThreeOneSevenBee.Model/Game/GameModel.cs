@@ -140,6 +140,7 @@ namespace ThreeOneSevenBee.Model.Game
             User = user;
             Players = players;
             SetLevel(User.CurrentLevelIndex, User.CurrentCategoryIndex);
+
         }
     }
 }

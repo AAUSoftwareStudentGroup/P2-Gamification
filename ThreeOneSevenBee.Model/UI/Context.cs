@@ -20,7 +20,7 @@ namespace ThreeOneSevenBee.Model.UI
         public virtual double Width { get; set; }
         public virtual double Height { get; set; }
         public Action<double, double> OnResize { get; set; }
-        protected View contentView;
+        public View contentView;
 
         public abstract void Clear();
 
@@ -80,5 +80,7 @@ namespace ThreeOneSevenBee.Model.UI
         public abstract void DrawText(double x, double y, double width, double height, string text, Color textColor);
 
         public abstract void DrawPNGImage(string fileName, double x, double y, double width, double height);
+
+		public abstract Vector2 GetTextDimensions(string text, double maxWidth, double maxHeight);
     }
 }
