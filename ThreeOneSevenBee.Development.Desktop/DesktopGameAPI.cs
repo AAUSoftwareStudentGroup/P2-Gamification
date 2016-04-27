@@ -16,12 +16,12 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 		public void IsAuthenticated(Action<bool> callback)
 		{
-			callback (true);
+			callback (false);
 		}
 
 		public void Authenticate(string username, string password, Action<bool> callback)
 		{
-			callback (true);
+			callback (false);
 		}
 
 		public void GetCurrentPlayer(Action<CurrentPlayer> callback)
@@ -120,7 +120,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 		}
 
 		public void UserAddBadge(BadgeName badge, Action<bool> callback) {
-			callback (true);
+			callback (false);
 		}
 	}
 }

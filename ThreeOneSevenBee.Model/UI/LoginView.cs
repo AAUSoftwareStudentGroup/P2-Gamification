@@ -39,10 +39,10 @@ namespace ThreeOneSevenBee.Model.UI
 			submit.Height = 30;
 			submit.BackgroundColor = new Color (200, 200, 200);
 
-			LabelView Status = new LabelView ("");
+			Status = new LabelView (" ");
 			Status.X = 300;
 			Status.Y = 250;
-			Status.Width = 80;
+			Status.Width = 200;
 			Status.Height = 30;
 
 			Children = new List<View>() {

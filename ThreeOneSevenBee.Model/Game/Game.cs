@@ -44,7 +44,6 @@ namespace ThreeOneSevenBee.Model.Game
                             }
                         });
                     };
-                    loginView.OnLogin("Morten RaskRask", "adminadmin");
                 }
                 else
                 {

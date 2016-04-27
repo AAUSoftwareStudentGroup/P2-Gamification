@@ -36,7 +36,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 		public override void Clear()
 		{
-			graphicsDeviceManager.GraphicsDevice.Clear(XNA.Color.TransparentBlack);
+			graphicsDeviceManager.GraphicsDevice.Clear(XNA.Color.White);
 		}
 
 		public override void DrawPNGImage(string fileName, double x, double y, double width, double height) {

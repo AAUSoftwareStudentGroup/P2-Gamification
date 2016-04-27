@@ -1,6 +1,6 @@
 ﻿using System;
 using ThreeOneSevenBee.Model.UI;
-using ThreeOneSevenBee.Model.Game;
+using TOSBGame = ThreeOneSevenBee.Model.Game;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,7 +15,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 	/// <summary>
 	/// This is the main type for your game.
 	/// </summary>
-	public class Webmat : Microsoft.Xna.Framework.Game
+	public class Webmat : Game
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
@@ -64,30 +64,10 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 			context = new DesktopContext(graphics, spriteBatch, font, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
 
-			IGameAPI gameAPI = new DesktopGameAPI();
+			TOSBGame.IGameAPI gameAPI = new DesktopGameAPI();
 
-			GameModel gameModel;
-
-			gameAPI.GetCurrentPlayer((u) =>
-				{
-					gameAPI.GetPlayers((p) =>
-						{
-							gameModel = new GameModel(u, p)
-							{
-								OnSaveLevel = (level) =>
-									gameAPI.SaveUserLevelProgress
-									(
-										level.LevelID,
-										level.CurrentExpression,
-										level.Stars,
-										(success) => Console.WriteLine(success)
-									)
-							};
-
-							new GameView(gameModel, context);
-						});
-				});
-			//TODO: use this.Content to load your game content here 
+			TOSBGame.Game game = new TOSBGame.Game (context, gameAPI);
+			game.Start ();
 		}
 
 		/// <summary>
