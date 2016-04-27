@@ -55,12 +55,9 @@ namespace ThreeOneSevenBee.Frontend
             context.Canvas.Height = Document.DocumentElement.ClientHeight;
             Width = context.Canvas.Width;
             Height = context.Canvas.Height;
-            contentView.Width = Width;
-            contentView.Height = Height;
-            if(OnResize != null)
-            {
-                OnResize(Width, Height);
-            }
+            ContentView.Width = Width;
+            ContentView.Height = Height;
+            ContentView.Update();
             Draw();
         }
 
@@ -69,7 +66,7 @@ namespace ThreeOneSevenBee.Frontend
             return string.Format("rgba({0},{1},{2},{3})", color.Red.ToString(), color.Green.ToString(), color.Blue.ToString(), color.Alpha.ToString());
         }
 
-        public override void SetContentView(View view)
+        public override void SetContentView(FrameView view)
         {
             base.SetContentView(view);
             Draw();
@@ -82,12 +79,12 @@ namespace ThreeOneSevenBee.Frontend
 
         private void click(double x, double y)
         {
-            contentView.Click(x, y, this);
+            ContentView.Click(x, y, this);
             Vector2 last = lastClick;
             last.X = x;
             last.Y = y;
             lastClick = last;
-            if (contentView.Active == true)
+            if (ContentView.Active == true)
             {
                 input.Focus();
             }
@@ -96,7 +93,7 @@ namespace ThreeOneSevenBee.Frontend
 
         private void KeyPressed(string text)
         {
-            contentView.KeyPressed(text, this);
+            ContentView.KeyPressed(text, this);
             Draw();
         }
 

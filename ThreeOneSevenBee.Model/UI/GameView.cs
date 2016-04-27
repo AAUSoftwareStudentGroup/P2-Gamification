@@ -14,20 +14,21 @@ namespace ThreeOneSevenBee.Model.UI
         TitleView titleView;
         LevelView levelView;
         LevelSelectView levelSelectView;
-        //LoginView loginView;
-        IContext context;
+
+        public Action OnExit { get; set; }
 
         public void Update(GameModel game)
         {
             levelView.Update(game);
             levelSelectView.Update(game.User);
-            context.Draw();
+            if(OnChanged != null)
+            {
+                OnChanged();
+            }
         }
 
-        public GameView(GameModel game, IContext context) : base(context.Width, context.Height)
+        public GameView(GameModel game, double width, double height) : base(width, height)
         {
-            this.context = context;
-
             BackgroundColor = new Color(255, 255, 255);
 
             titleView = new TitleView(game.User, game.Players);
@@ -62,28 +63,30 @@ namespace ThreeOneSevenBee.Model.UI
                 OnExit = () => setContent(titleView)
             };
 
-            //loginView = new LoginView(Width, Height);
-
             titleView.PlayButton.OnClick = () => setContent(levelView);
 
             titleView.LevelButton.OnClick = () => setContent(levelSelectView);
 
+            titleView.OnLogout = () =>
+            {
+                if (OnExit != null)
+                {
+                    OnExit();
+                }
+            };
+
             game.OnChanged = Update;
 
 			setContent(titleView);
-
-            context.OnResize = (w, h) =>
-            {
-                updateContent();
-            };
-
-            context.SetContentView(this);
         }
 
         public override void setContent(View content)
         {
             base.setContent(content);
-            context.Draw();
+            if(OnChanged != null)
+            {
+                OnChanged();
+            }
         }
     }
 }

@@ -169,5 +169,22 @@ namespace ThreeOneSevenBee.Frontend
                 }
             );
         }
+
+        public void logout(Action<bool> callback)
+        {
+            jQuery.Post(
+                "/api/",
+                new
+                {
+                    action = "user_logout",
+                    token = token
+                },
+                (data, textStatus, request) =>
+                {
+                    var jdata = JSON.Parse((string)data);
+                    callback((string)jdata["success"] == "true");
+                }
+            );
+        }
     }
 }

@@ -251,25 +251,25 @@
     
     Bridge.define('ThreeOneSevenBee.Model.UI.Context', {
         inherits: [ThreeOneSevenBee.Model.UI.IContext],
-        contentView: null,
         config: {
             properties: {
                 Width: 0,
                 Height: 0,
-                OnResize: null
+                OnResize: null,
+                ContentView$1: null
             }
         },
         constructor: function (width, height) {
-            this.contentView = new ThreeOneSevenBee.Model.UI.View(0, 0, 0, 0);
+            this.setContentView$1(new ThreeOneSevenBee.Model.UI.FrameView("constructor", 0, 0));
             this.setWidth(width);
             this.setHeight(height);
         },
         setContentView: function (view) {
-            this.contentView = view;
+            this.setContentView$1(view);
         },
         draw: function () {
             this.clear();
-            this.contentView.drawWithContext(this, 0, 0);
+            this.getContentView$1().drawWithContext(this, 0, 0);
         },
         drawRectangle: function (x, y, width, height, fillColor) {
             this.drawRectangle$1(x, y, width, height, fillColor, new ThreeOneSevenBee.Model.UI.Color("constructor"), 0);
@@ -342,7 +342,7 @@
         setContent: function (content) {
             this.setContent$1(this.align(this.fit(content)));
         },
-        updateContent: function () {
+        update: function () {
             this.setContent$1(this.align(this.fit(this.getContent$1())));
         },
         click: function (x, y, context) {
@@ -366,7 +366,7 @@
             }
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            this.updateContent();
+            this.update();
             ThreeOneSevenBee.Model.UI.View.prototype.drawWithContext.call(this, context, offsetX, offsetY);
             this.getContent$1().drawWithContext(context, offsetX + this.getInnerX(), offsetY + this.getInnerY());
         },
@@ -726,6 +726,8 @@
                             if (variadicExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && Bridge.hasValue(minus)) {
                                 operatorView2 = new ThreeOneSevenBee.Model.UI.OperatorView(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract);
                                 operand = this.buildView(minus.getExpression(), model);
+                                operand.setBackgroundColor(model.getSelected() === expr ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
+                                operatorView2.setBackgroundColor(operand.getBackgroundColor());
                                 operatorView2.onClick = function () {
                                     model.select(minus);
                                 };
@@ -841,7 +843,7 @@
                 this.setContent(content);
             }
         },
-        update: function (model) {
+        update$1: function (model) {
             this.build(model);
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged();
@@ -864,11 +866,13 @@
         titleView: null,
         levelView: null,
         levelSelectView: null,
-        context: null,
-        constructor: function (game, context) {
-            ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, context.getWidth(), context.getHeight());
-    
-            this.context = context;
+        config: {
+            properties: {
+                OnExit: null
+            }
+        },
+        constructor: function (game, width, height) {
+            ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
     
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
     
@@ -888,39 +892,39 @@
             this.levelSelectView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LevelSelectView(game.getUser()), {
                 onChanged: Bridge.fn.bind(this, function () {
                     this.setContent(this.levelSelectView);
-                    this.update(game);
+                    this.update$1(game);
                     this.levelSelectView.update(game.getUser());
                 }),
                 onLevelSelect: Bridge.fn.bind(this, function (level) {
                     this.setContent(this.levelView);
-                    this.update(game);
+                    this.update$1(game);
                     game.setLevel(level.levelIndex, level.categoryIndex);
                 }),
                 setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1)
             } );
     
-            //loginView = new LoginView(Width, Height);
-    
             this.titleView.playButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f2);
     
             this.titleView.levelButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f3);
     
-            game.onChanged = Bridge.fn.bind(this, this.update);
+            this.titleView.onLogout = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f4);
+    
+            game.onChanged = Bridge.fn.bind(this, this.update$1);
     
             this.setContent(this.titleView);
-    
-            context.setOnResize(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f4));
-    
-            context.setContentView(this);
         },
-        update: function (game) {
+        update$1: function (game) {
             this.levelView.update(game);
             this.levelSelectView.update(game.getUser());
-            this.context.draw();
+            if (Bridge.hasValue(this.onChanged)) {
+                this.onChanged();
+            }
         },
         setContent: function (content) {
             ThreeOneSevenBee.Model.UI.FrameView.prototype.setContent.call(this, content);
-            this.context.draw();
+            if (Bridge.hasValue(this.onChanged)) {
+                this.onChanged();
+            }
         }
     });
     
@@ -936,8 +940,10 @@
         f3: function () {
             this.setContent(this.levelSelectView);
         },
-        f4: function (w, h) {
-            this.updateContent();
+        f4: function () {
+            if (Bridge.hasValue(this.getOnExit())) {
+                this.getOnExit()();
+            }
         }
     });
     
@@ -1396,7 +1402,7 @@
         update: function (game) {
             this.progressbar.update(game.progressBar);
             this.identityMenu.update(game.getExprModel().getIdentities(), game.getExprModel());
-            this.expression.update(game.getExprModel());
+            this.expression.update$1(game.getExprModel());
             this.nextButton.setBackgroundColor(game.getIsLevelCompleted() ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 190, 190, 190));
             this.toolTipView.setVisible(game.getIsFirstLevel());
             this.toolTipView2.setVisible(game.getIsFirstLevel());
@@ -1430,14 +1436,14 @@
     
     
             var username = new ThreeOneSevenBee.Model.UI.Inputbox("constructor", "Username");
-            username.setX(300);
+            username.setX(150);
             username.setY(100);
             username.setWidth(300);
             username.setHeight(24);
             username.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var password = new ThreeOneSevenBee.Model.UI.Inputbox("constructor$1", "Password", true);
-            password.setX(300);
+            password.setX(150);
             password.setY(150);
             password.setWidth(300);
             password.setHeight(24);
@@ -1448,11 +1454,11 @@
                     this.onLogin(username.getText(), password.getText());
                 }
             }));
-            submit.setX(300);
+            submit.setX(260);
             submit.setY(200);
             submit.setWidth(80);
             submit.setHeight(30);
-            submit.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 200, 200, 200));
+            submit.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 175, 100));
     
             this.status = new ThreeOneSevenBee.Model.UI.LabelView(" ");
             this.status.setX(300);
@@ -1579,6 +1585,8 @@
         levelButton: null,
         playButton: null,
         playerList: null,
+        logoutButton: null,
+        onLogout: null,
         constructor: function (user, players) {
             ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, 600, 300);
     
@@ -1595,6 +1603,9 @@
                 [75, 50],
                 [25, 75]
             ] );
+    
+            this.logoutButton = new ThreeOneSevenBee.Model.UI.ButtonView("Log ud", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.TitleView.f1));
+    
             playIcon.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
             this.playButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(100, 100), [
                 [playIcon]
@@ -1656,6 +1667,16 @@
                 [this.playerList],
                 [this.playButton]
             ] );
+        }
+    });
+    
+    Bridge.ns("ThreeOneSevenBee.Model.UI.TitleView", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Model.UI.TitleView, {
+        f1: function () {
+            if (Bridge.hasValue(this.onLogout)) {
+                this.onLogout();
+            }
         }
     });
     

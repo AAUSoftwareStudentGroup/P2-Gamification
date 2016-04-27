@@ -61,20 +61,33 @@ namespace ThreeOneSevenBee.Model.Game
                     gameModel = new GameModel(u, p)
                     {
                         OnSaveLevel = (level) =>
-                        gameAPI.SaveUserLevelProgress
-                        (
-                            level.LevelID,
-                            level.CurrentExpression,
-                            level.Stars,
-                            (IsSaved) => Console.WriteLine(IsSaved ? "Level saved" : "Could not save")
-                        ),
+                            gameAPI.SaveUserLevelProgress
+                            (
+                                level.LevelID,
+                                level.CurrentExpression,
+                                level.Stars,
+                                (IsSaved) => Console.WriteLine(IsSaved ? "Level saved" : "Could not save")
+                            ),
                         OnBadgeAchieved = (badge) =>
-                        gameAPI.UserAddBadge(
-                            badge,
-                            (IsAdded) => Console.WriteLine(IsAdded ? "Badge added" : "Badge not added")
-                        )
+                            gameAPI.UserAddBadge(
+                                badge,
+                                (IsAdded) => Console.WriteLine(IsAdded ? "Badge added" : "Badge not added")
+                            )
                     };
-                    gameView = new GameView(gameModel, context);
+
+                    gameView = new GameView(gameModel, context.Width, context.Height)
+                    {
+                        OnExit = () =>
+                        {
+                            gameAPI.logout((success) =>
+                            {
+                                Console.WriteLine(success ? "Logout success" : "Logout failed");
+                                Start();
+                            });
+                        }
+                    };
+
+                    context.SetContentView(gameView);
                 });
             });
         }

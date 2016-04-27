@@ -8,6 +8,7 @@ namespace ThreeOneSevenBee.Model.Game
     public interface IGameAPI
     {
         void IsAuthenticated(Action<bool> callback);
+        void logout(Action<bool> callback);
         void Authenticate(string username, string password, Action<bool> callback);
         void GetPlayers(Action<List<Player>> callback);
         void SaveUserLevelProgress(int levelID, string currentExpression, int stars, Action<bool> callback);

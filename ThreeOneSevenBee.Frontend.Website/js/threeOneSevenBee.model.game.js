@@ -43,7 +43,7 @@
             this.gameAPI.isAuthenticated(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f1));
         },
         loadGameData: function () {
-            this.gameAPI.getCurrentPlayer(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f6));
+            this.gameAPI.getCurrentPlayer(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f8));
         }
     });
     
@@ -83,13 +83,25 @@
         f5: function (badge) {
             this.gameAPI.userAddBadge(badge, $_.ThreeOneSevenBee.Model.Game.Game.f4);
         },
-        f6: function (u) {
+        f6: function (success) {
+            console.log(success ? "Logout success" : "Logout failed");
+            this.start();
+        },
+        f7: function () {
+            this.gameAPI.logout(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f6));
+        },
+        f8: function (u) {
             this.gameAPI.getPlayers(Bridge.fn.bind(this, function (p) {
                 this.gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
                     onSaveLevel: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f3),
                     onBadgeAchieved: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f5)
                 } );
-                this.gameView = new ThreeOneSevenBee.Model.UI.GameView(this.gameModel, this.context);
+    
+                this.gameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.GameView(this.gameModel, this.context.getWidth(), this.context.getHeight()), {
+                    setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f7)
+                } );
+    
+                this.context.setContentView(this.gameView);
             }));
         }
     });
@@ -270,10 +282,10 @@
             }
         },
         activatedStarPercentages: function () {
-            return Bridge.Linq.Enumerable.from(this.stars).where(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f1)).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f2));
+            return Bridge.Linq.Enumerable.from(this.stars).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f1)).where(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f2));
         },
         deactivatedStarPercentages: function () {
-            return Bridge.Linq.Enumerable.from(this.stars).where(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f3)).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f2));
+            return Bridge.Linq.Enumerable.from(this.stars).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f1)).where(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.ProgressbarStar.f3));
         },
         getEnumerator$1: function () {
             return this.stars.getEnumerator();
@@ -287,13 +299,13 @@
     
     Bridge.apply($_.ThreeOneSevenBee.Model.Game.ProgressbarStar, {
         f1: function (s) {
-            return s >= this.currentValue;
-        },
-        f2: function (s) {
             return this.calculatePercentage(s);
         },
-        f3: function (s) {
-            return s < this.currentValue;
+        f2: function (p) {
+            return p <= this.getPercentage();
+        },
+        f3: function (p) {
+            return p > this.getPercentage();
         }
     });
     

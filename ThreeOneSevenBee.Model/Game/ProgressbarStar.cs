@@ -51,12 +51,12 @@ namespace ThreeOneSevenBee.Model.Game
 
         public IEnumerable<double> ActivatedStarPercentages()
         {
-            return stars.Where((s) => s >= CurrentValue).Select((s) => CalculatePercentage(s));
+            return stars.Select((s) => CalculatePercentage(s)).Where((p) => p <= Percentage);
         }
 
         public IEnumerable<double> DeactivatedStarPercentages()
         {
-            return stars.Where((s) => s < CurrentValue).Select((s) => CalculatePercentage(s));
+            return stars.Select((s) => CalculatePercentage(s)).Where((p) => p > Percentage);
         }
 
         public IEnumerator<int> GetEnumerator()

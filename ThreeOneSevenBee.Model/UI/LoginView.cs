@@ -19,14 +19,14 @@ namespace ThreeOneSevenBee.Model.UI
         {
 
             Inputbox username = new Inputbox("Username");
-            username.X = 300;
+            username.X = 150;
             username.Y = 100;
             username.Width = 300;
             username.Height = 24;
             username.Align = TextAlignment.Left;
 
             Inputbox password = new Inputbox("Password", true);
-            password.X = 300;
+            password.X = 150;
             password.Y = 150;
             password.Width = 300;
             password.Height = 24;
@@ -36,11 +36,11 @@ namespace ThreeOneSevenBee.Model.UI
                 if (OnLogin != null)
                     OnLogin(username.Text, password.Text);
             });
-            submit.X = 300;
+            submit.X = 260;
             submit.Y = 200;
             submit.Width = 80;
             submit.Height = 30;
-            submit.BackgroundColor = new Color(200, 200, 200);
+            submit.BackgroundColor = new Color(40, 175, 100);
 
             Status = new LabelView(" ");
             Status.X = 300;

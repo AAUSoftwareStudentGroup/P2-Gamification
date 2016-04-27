@@ -63,7 +63,7 @@ namespace ThreeOneSevenBee.Model.UI
             Content = Align(Fit(content));
         }
 
-        public virtual void updateContent()
+        public virtual void Update()
         {
             Content = Align(Fit(Content));
         }
@@ -97,7 +97,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public override void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
-            updateContent();
+            Update();
             base.DrawWithContext(context, offsetX, offsetY);
             Content.DrawWithContext(context, offsetX + InnerX, offsetY + InnerY);
         }

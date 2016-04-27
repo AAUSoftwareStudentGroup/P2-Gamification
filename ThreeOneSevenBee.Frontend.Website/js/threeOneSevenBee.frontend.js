@@ -69,11 +69,9 @@
             this.context.canvas.height = document.documentElement.clientHeight;
             this.setWidth(this.context.canvas.width);
             this.setHeight(this.context.canvas.height);
-            this.contentView.setWidth(this.getWidth());
-            this.contentView.setHeight(this.getHeight());
-            if (Bridge.hasValue(this.getOnResize())) {
-                this.getOnResize()(this.getWidth(), this.getHeight());
-            }
+            this.getContentView$1().setWidth(this.getWidth());
+            this.getContentView$1().setHeight(this.getHeight());
+            this.getContentView$1().update();
             this.draw();
         },
         colorToString: function (color) {
@@ -87,18 +85,18 @@
             this.context.clearRect(0, 0, Bridge.Int.trunc(this.getWidth()), Bridge.Int.trunc(this.getHeight()));
         },
         click: function (x, y) {
-            this.contentView.click(x, y, this);
+            this.getContentView$1().click(x, y, this);
             var last = this.getlastClick().$clone();
             last.x = x;
             last.y = y;
             this.setlastClick(last.$clone());
-            if (this.contentView.getActive() === true) {
+            if (this.getContentView$1().getActive() === true) {
                 this.input.focus();
             }
             this.draw();
         },
         keyPressed: function (text) {
-            this.contentView.keyPressed(text, this);
+            this.getContentView$1().keyPressed(text, this);
             this.draw();
         },
         drawPolygon$1: function (path, fillColor, lineColor, lineWidth) {
@@ -258,6 +256,12 @@
         },
         userAddBadge: function (badge, callback) {
             $.post("/api/", { action: "user_add_badge", token: this.token, badge_id: Bridge.cast(badge, Bridge.Int) }, function (data, textStatus, request) {
+                var jdata = JSON.parse(Bridge.cast(data, String));
+                callback(Bridge.cast(jdata.success, String) === "true");
+            });
+        },
+        logout: function (callback) {
+            $.post("/api/", { action: "user_logout", token: this.token }, function (data, textStatus, request) {
                 var jdata = JSON.parse(Bridge.cast(data, String));
                 callback(Bridge.cast(jdata.success, String) === "true");
             });

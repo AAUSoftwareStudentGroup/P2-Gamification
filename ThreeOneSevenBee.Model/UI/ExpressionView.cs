@@ -96,6 +96,8 @@ namespace ThreeOneSevenBee.Model.UI
                         {
                             operatorView = new OperatorView(OperatorType.Subtract);
                             operand = BuildView(minus.Expression, model);
+                            operand.BackgroundColor = ReferenceEquals(model.Selected, expr) ? new Color(230, 230, 230) : new Color();
+                            operatorView.BackgroundColor = operand.BackgroundColor;
                             operatorView.OnClick = () => model.Select(minus);
                             operatorView.LineColor = minus.Selected ? new Color(40, 175, 100) : new Color(0, 0, 0);
                         }
