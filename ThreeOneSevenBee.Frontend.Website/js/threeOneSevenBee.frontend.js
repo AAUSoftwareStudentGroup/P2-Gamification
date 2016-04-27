@@ -67,7 +67,7 @@
             this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             }));
-            document.body.addEventListener("keydown", function (e) {
+            document.body.addEventListener("mousedown", function (e) {
                 input.focus();
             });
     
