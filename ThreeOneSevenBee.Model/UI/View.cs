@@ -21,6 +21,7 @@ namespace ThreeOneSevenBee.Model.UI
         {
             X = x;
             Y = y;
+            Active = false;
             Width = width;
             Height = height;
             Baseline = height / 2;
