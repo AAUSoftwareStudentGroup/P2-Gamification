@@ -117,10 +117,9 @@ namespace ThreeOneSevenBee.Frontend
             context.Stroke();
         }
 
-        public void DrawText(double x, double y, double width, double height, string text, Color textColor)
+        public override void DrawText(double x, double y, double width, double height, string text, Color textColor, TextAlignment alignment)
         {
             string[] lines = text.Split('\n');
-
             context.TextBaseline = CanvasTypes.CanvasTextBaselineAlign.Middle;
             context.FillStyle = ColorToString(textColor);
             double minFontSize = height;
@@ -128,7 +127,8 @@ namespace ThreeOneSevenBee.Frontend
             foreach (string line in lines)
             {
                 context.Font = height / lines.Length + "px Arial";
-                context.TextAlign = CanvasTypes.CanvasTextAlign.Left;
+                context.TextAlign = alignment == TextAlignment.Centered ? CanvasTypes.CanvasTextAlign.Center :
+                                    alignment == TextAlignment.Left ? CanvasTypes.CanvasTextAlign.Left : CanvasTypes.CanvasTextAlign.Right;
                 if (context.MeasureText(line).Width > width)
                 {
                     minFontSize = Math.Min(minFontSize, width / context.MeasureText(line).Width * (height / lines.Length));
@@ -138,8 +138,9 @@ namespace ThreeOneSevenBee.Frontend
             for (int index = 0; index < lines.Length; index++)
             {
                 context.Font = minFontSize + "px Arial";
-                context.TextAlign = CanvasTypes.CanvasTextAlign.Left;
-                context.FillText(lines[index], (int)(x), (int)(y + (index + 0.5) * (height / lines.Length)));
+                context.TextAlign = alignment == TextAlignment.Centered ? CanvasTypes.CanvasTextAlign.Center :
+                                    alignment == TextAlignment.Left ? CanvasTypes.CanvasTextAlign.Left : CanvasTypes.CanvasTextAlign.Right;
+                context.FillText(lines[index], (int)(x + (alignment == TextAlignment.Centered ? width / 2 : 0)), (int)(y + (index + 0.5) * (height / lines.Length)));
             }
         }
 
@@ -177,11 +178,6 @@ namespace ThreeOneSevenBee.Frontend
                 minFontSize = Math.Min(minFontSize, maxWidth / context.MeasureText(text).Width * maxHeight);
             }
             return new Vector2(context.MeasureText(text).Width, minFontSize);
-        }
-
-        public override void DrawText(double x, double y, double width, double height, string text, Color textColor, TextAlignment alignment)
-        {
-            DrawText(x, y, width, height, text, textColor);
         }
     }
 }

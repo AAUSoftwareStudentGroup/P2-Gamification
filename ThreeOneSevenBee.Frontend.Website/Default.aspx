@@ -21,6 +21,6 @@
 </head>
 <body style="margin: 0;overflow:hidden">
     <canvas id="canvas" width="600" height="400"></canvas>
-    <input id="input" style="/*position: fixed; width: 0px; height:0px*/" type="text" />
+    <input id="input" style="position: fixed; width: 0px; height:0px" type="text" />
 </body>
 </html>

@@ -118,10 +118,9 @@
             this.context.fill();
             this.context.stroke();
         },
-        drawText$1: function (x, y, width, height, text, textColor) {
+        drawText: function (x, y, width, height, text, textColor, alignment) {
             var $t;
             var lines = text.split(String.fromCharCode(10));
-    
             this.context.textBaseline = "middle";
             this.context.fillStyle = this.colorToString(textColor);
             var minFontSize = height;
@@ -130,7 +129,7 @@
             while ($t.moveNext()) {
                 var line = $t.getCurrent();
                 this.context.font = height / lines.length + "px Arial";
-                this.context.textAlign = "left";
+                this.context.textAlign = alignment === ThreeOneSevenBee.Model.UI.TextAlignment.centered ? "center" : alignment === ThreeOneSevenBee.Model.UI.TextAlignment.left ? "left" : "right";
                 if (this.context.measureText(line).width > width) {
                     minFontSize = Math.min(minFontSize, width / this.context.measureText(line).width * (height / lines.length));
                 }
@@ -138,12 +137,9 @@
     
             for (var index = 0; index < lines.length; index++) {
                 this.context.font = minFontSize + "px Arial";
-                this.context.textAlign = "left";
-                this.context.fillText(lines[index], Bridge.Int.trunc((x)), Bridge.Int.trunc((y + (index + 0.5) * (height / lines.length))));
+                this.context.textAlign = alignment === ThreeOneSevenBee.Model.UI.TextAlignment.centered ? "center" : alignment === ThreeOneSevenBee.Model.UI.TextAlignment.left ? "left" : "right";
+                this.context.fillText(lines[index], Bridge.Int.trunc((x + (alignment === ThreeOneSevenBee.Model.UI.TextAlignment.centered ? width / 2 : 0))), Bridge.Int.trunc((y + (index + 0.5) * (height / lines.length))));
             }
-        },
-        drawText: function (x, y, width, height, text, textColor, alignment) {
-            this.drawText$1(x, y, width, height, text, textColor);
         },
         drawPNGImage: function (fileName, x, y, width, height) {
     

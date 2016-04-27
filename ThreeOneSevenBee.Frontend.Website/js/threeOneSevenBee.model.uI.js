@@ -366,6 +366,7 @@
             }
         },
         drawWithContext: function (context, offsetX, offsetY) {
+            this.updateContent();
             ThreeOneSevenBee.Model.UI.View.prototype.drawWithContext.call(this, context, offsetX, offsetY);
             this.getContent$1().drawWithContext(context, offsetX + this.getInnerX(), offsetY + this.getInnerY());
         },
