@@ -31,9 +31,23 @@ namespace ThreeOneSevenBee.Frontend
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
                         e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
                 });
-
+            Window.OnResize = (e) => ResizeContent();
             context.Canvas.OnKeyDown += KeyPressed;
-            lastClick = new Vector2(-1, -1);
+        }
+
+        public void ResizeContent()
+        {
+            context.Canvas.Width = Document.DocumentElement.ClientWidth;
+            context.Canvas.Height = Document.DocumentElement.ClientHeight;
+            Width = context.Canvas.Width;
+            Height = context.Canvas.Height;
+            contentView.Width = Width;
+            contentView.Height = Height;
+            if(OnResize != null)
+            {
+                OnResize(Width, Height);
+            }
+            Draw();
         }
 
         public string ColorToString(Color color)
@@ -112,7 +126,6 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void DrawPNGImage(string fileName, double x, double y, double width, double height)
         {
-            Console.WriteLine(width + " " + height);
 
             if (imageCache.ContainsKey(fileName))
             {
@@ -122,13 +135,14 @@ namespace ThreeOneSevenBee.Frontend
             }
             else
             {
-                imageCache[fileName] = new ImageElement();
-                imageCache[fileName].Src = "img/" + fileName;
-                imageCache[fileName].OnLoad = (e) =>
+                ImageElement img = new ImageElement();
+                img.Src = "img/" + fileName;
+                img.OnLoad = (e) =>
                 {
                     context.FillStyle = "transparent";
-                    context.DrawImage(imageCache[fileName], x, y, width, height);
+                    context.DrawImage(img, x, y, width, height);
                     context.FillStyle = "#000000";
+                    imageCache.Add(fileName, img);
                 };
             }
         }

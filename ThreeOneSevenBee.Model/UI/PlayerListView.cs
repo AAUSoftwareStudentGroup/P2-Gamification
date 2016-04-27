@@ -8,30 +8,48 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class PlayerListView : CompositeView
     {
+
+        Dictionary<BadgeName, string> badgeDictionary = new Dictionary<BadgeName, string>()
+        {
+            {BadgeName.brokBadge, "brøkbadge.png"},
+            {BadgeName.masterOfAlgebra, "masterofalgebra.png"},
+            {BadgeName.potens, "potensv2.png"},
+            {BadgeName.tutorialBadge, "tutorialbadge.png" },
+            {BadgeName.spilDoneBadge, "spildonebadge.png"}
+
+        };
         public void Build(IEnumerable<Player> players)
         {
             Children = new List<View>();
             int offsetY = 5;
             foreach (Player player in players)
             {
-                Children.Add(
-                    new CompositeView(Width, Height)
+                int badgesWidth = (badgeDictionary.Count-1) * 10;
+                CompositeView row = new CompositeView(Width, 20)
                     {
-                        new LabelView(player.PlayerName)
+                        new LabelView(" " + player.PlayerName + " ")
                         {
-                            X = 0,
-                            Y = offsetY,
-                            Width = Width - 20,
+                            Width = Width - badgesWidth - 20,
                             Height = 20,
-                            BackgroundColor = new Color(239, 239, 239),
                         },
-                        new ImageView("spildonebadge.png", 20, 20)
-                        {
-                            X = Width - 20
-                        }
+                    };
+                foreach (var badge in player.Badges)
+                {
+                    row.Add(new ImageView(badgeDictionary[badge], 10, 10)
+                    {
+                        X = Width - badgesWidth + 20,
+                        Y = 5
                     });
-                offsetY += 25;
+                    badgesWidth += 10;
+                }
 
+                row.X = 5;
+                row.Y = offsetY;
+                row.Width = Width - 10;
+                row.BackgroundColor = new Color(239, 239, 239);
+                Children.Add(row);
+
+                offsetY += 25;
             }
         }
 

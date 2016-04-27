@@ -16,7 +16,8 @@ namespace ThreeOneSevenBee.Model.UI
 
         ButtonView menuButton;
         ButtonView nextButton;
-        ButtonView restartButton;
+        ImageView restartButton;
+        ButtonView helpButton;
         ProgressbarStarView progressbar;
         IdentityMenuView identityMenu;
         ExpressionView expression;
@@ -39,23 +40,31 @@ namespace ThreeOneSevenBee.Model.UI
                 X = Width - 100,
                 Width = 100,
                 Height = 50,
-                BackgroundColor = game.IsLevelCompleted ? new Color(22, 160, 134) : new Color(190, 190, 190),
+                BackgroundColor = game.IsLevelCompleted ? new Color(40, 120, 130) : new Color(190, 190, 190),
                 TextColor = new Color(255, 255, 255),
             };
 
-            restartButton = new ButtonView("Forfra", () => game.RestartLevel())
+            restartButton = new ImageView("restart.png", 30, 30)
             {
-                X = Width / 2 - 50,
-                Y = 50,
-                Width = 100,
-                Height = 50,
-                BackgroundColor = new Color(192, 57, 43),
-                TextColor = new Color(255, 255, 255),
-            };
-
-            progressbar = new ProgressbarStarView(game.ProgressBar, Width - 220, 30)
-            {
+                OnClick = () => game.RestartLevel(),
                 X = 110,
+                Y = 10,
+                BackgroundColor = new Color(192, 57, 43)
+            };
+
+            helpButton = new ButtonView("?", () => Console.WriteLine("Show help"))
+            {
+                X = Width - 140,
+                Y = 10,
+                Width = 30,
+                Height = 30,
+                BackgroundColor = new Color(40, 120, 130),
+                TextColor = new Color(255, 255, 255),
+            };
+
+            progressbar = new ProgressbarStarView(game.ProgressBar, Width - 300, 30)
+            {
+                X = 150,
                 Y = 10
             };
 
@@ -64,10 +73,10 @@ namespace ThreeOneSevenBee.Model.UI
                 Y = Height - 125
             };
 
-            expression = new ExpressionView(game.ExprModel, Width, Height - 175, 8)
+            expression = new ExpressionView(game.ExprModel, Width - 100, Height - 275, 8)
             {
-                X = 0,
-                Y = 50,
+                X = 50,
+                Y = 100,
             };
 
             toolTipView = new ToolTipView("Denne bar viser hvor langt du er nået.", 300, 75)
@@ -106,6 +115,7 @@ namespace ThreeOneSevenBee.Model.UI
                 menuButton,
                 nextButton,
                 restartButton,
+                helpButton,
                 progressbar,
                 identityMenu,
                 expression,
@@ -135,7 +145,7 @@ namespace ThreeOneSevenBee.Model.UI
             }
         }
 
-        public LevelView(GameModel game, double width, double height) : base(width, height)
+        public LevelView(GameModel game) : base(700, 400)
         {
             BackgroundColor = new Color(255, 255, 255);
             Build(game);

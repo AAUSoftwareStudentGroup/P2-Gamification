@@ -33,11 +33,6 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public ExpressionBase GetCommonParent(List<ExpressionBase> selection)
         {
-            int c = 0;
-            foreach (var select in selection)
-            {
-                Console.WriteLine(c++ + ": " + string.Join(",", (object[])select.GetParentPath().ToArray()));
-            }
             if (selection.Count == 0)
             {
                 return null;
@@ -132,7 +127,7 @@ namespace ThreeOneSevenBee.Model.Expression
                         { OperatorType.Add, false },
                         { OperatorType.Divide, false },
                         { OperatorType.Multiply, false },
-                        { OperatorType.Power, false }
+                        { OperatorType.Power, true }
                     }
                 }
             };

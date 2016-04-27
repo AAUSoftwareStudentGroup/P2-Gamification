@@ -14,7 +14,7 @@ namespace ThreeOneSevenBee.Model.UI
         TitleView titleView;
         LevelView levelView;
         LevelSelectView levelSelectView;
-        LoginView loginView;
+        //LoginView loginView;
         IContext context;
 
         public void Update(GameModel game)
@@ -32,12 +32,12 @@ namespace ThreeOneSevenBee.Model.UI
 
             titleView = new TitleView(game.User, game.Players);
 
-            levelView = new LevelView(game, context.Width, context.Height)
+            levelView = new LevelView(game)
             {
                 OnExit = () =>
                 {
                     game.SaveLevel();
-                    setContent(titleView);
+                    setContent(levelSelectView);
                 },
                 OnNextLevel = () =>
                 {
@@ -62,7 +62,7 @@ namespace ThreeOneSevenBee.Model.UI
                 OnExit = () => setContent(titleView)
             };
 
-            loginView = new LoginView();
+            //loginView = new LoginView();
 
             titleView.PlayButton.OnClick = () => setContent(levelView);
 
@@ -70,7 +70,12 @@ namespace ThreeOneSevenBee.Model.UI
 
             game.OnChanged = Update;
 
-            setContent(loginView);
+            setContent(titleView);
+
+            context.OnResize = (w, h) =>
+            {
+                updateContent();
+            };
 
             context.SetContentView(this);
         }

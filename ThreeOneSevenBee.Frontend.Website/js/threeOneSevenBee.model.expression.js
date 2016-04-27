@@ -21,13 +21,6 @@
             this.rules.remove(rule);
         },
         getCommonParent$1: function (selection) {
-            var $t;
-            var c = 0;
-            $t = Bridge.getEnumerator(selection);
-            while ($t.moveNext()) {
-                var select = $t.getCurrent();
-                console.log(c++ + ": " + Bridge.cast(Bridge.Linq.Enumerable.from(select.getParentPath()).toArray(), Array).join(","));
-            }
             if (selection.getCount() === 0) {
                 return null;
             }
@@ -92,7 +85,7 @@
                     [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, false],
                     [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide, false],
                     [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, false],
-                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power, false]
+                    [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power, true]
                 ] )]
             ] );
     
@@ -776,7 +769,7 @@
                         }
                         break;
                     case ThreeOneSevenBee.Model.Expression.TokenType.number: 
-                        root = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(Bridge.cast(token.getData(), Bridge.Int));
+                        root = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(Bridge.Int.parseInt(token.getData().toString(), -2147483648, 2147483647));
                         stack.push(root);
                         break;
                     case ThreeOneSevenBee.Model.Expression.TokenType.constant: 

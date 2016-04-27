@@ -36,6 +36,10 @@ namespace ThreeOneSevenBee.Model.Game
             {
                 StarExpressions.Add(star);
             }
+            for (int n = 0; n < 3 - starExpressions.Count(); n++)
+            {
+                StarExpressions.Add(starExpressions.Last());
+            }
         }
     }
 }

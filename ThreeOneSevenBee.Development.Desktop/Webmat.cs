@@ -15,7 +15,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 	/// <summary>
 	/// This is the main type for your game.
 	/// </summary>
-	public class Webmat : Game
+	public class Webmat : Microsoft.Xna.Framework.Game
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
