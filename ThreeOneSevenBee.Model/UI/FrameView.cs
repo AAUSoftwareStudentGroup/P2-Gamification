@@ -67,14 +67,14 @@ namespace ThreeOneSevenBee.Model.UI
             Content = Align(Fit(Content));
         }
 
-        public override void Click(double x, double y)
+		public override void Click(double x, double y, IContext context)
         {
 
             if (base.ContainsPoint(x, y))
             {
                 if (PropagateClick)
                 {
-                    Content.Click(x - X, y - Y);
+					Content.Click(x - X, y - Y, context);
                 }
 
                 if (OnClick != null)
@@ -86,11 +86,11 @@ namespace ThreeOneSevenBee.Model.UI
                 Active = false;
             }
         }
-        public override void KeyPressed(string key)
+        public override void KeyPressed(string key, IContext context)
         {
             if (PropagateKeypress)
             {
-                Content.KeyPressed(key);
+                Content.KeyPressed(key, context);
             }
         }
 
