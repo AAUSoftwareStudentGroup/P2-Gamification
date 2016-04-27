@@ -67,6 +67,10 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 		public override void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth)
 		{
+			for (int i = 0; i < path.Length-1; i++) {
+				this.DrawLine (path [i], path [i + 1], fillColor, lineWidth);
+			}
+
 			VertexPositionColor[] _vertices = new VertexPositionColor[path.Length];
 			int[] indicies = new int[_vertices.Length];
 
@@ -81,10 +85,6 @@ namespace ThreeOneSevenBee.Development.Desktop
 				_vertices, 0, _vertices.Length,
 				indicies,  0, _vertices.Length-2
 			);
-
-			for (int i = 0; i < path.Length-1; i++) {
-				this.DrawLine (path [i], path [i + 1], fillColor, lineWidth);
-			}
 		}
 		public override void DrawText(double x, double y, double width, double height, string text, Color textColor)
 		{

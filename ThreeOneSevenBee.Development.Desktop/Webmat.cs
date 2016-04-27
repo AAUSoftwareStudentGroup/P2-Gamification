@@ -21,10 +21,8 @@ namespace ThreeOneSevenBee.Development.Desktop
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-		TextBatch textBatch;
 		DesktopContext context;
 		SpriteFont font;
-		VectorFont _font;
 		MouseState oldMouseState, currentMouseState;
 		Keys[] lastKeys;
 
@@ -148,7 +146,6 @@ namespace ThreeOneSevenBee.Development.Desktop
 			context.graphicsDeviceManager = graphics;
 			context.Draw ();
 			//TODO: Add your drawing code here
-
 
 			base.Draw (gameTime);
 		}
