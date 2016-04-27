@@ -67,8 +67,8 @@
             this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             }));
-            this.context.canvas.addEventListener("focus", Bridge.fn.bind(this, function (e) {
-                if (this.contentView.getActive()) {
+            document.body.addEventListener("click", Bridge.fn.bind(this, function (e) {
+                if (this.contentView.getActive() === true) {
                     input.focus();
                 }
             }));
