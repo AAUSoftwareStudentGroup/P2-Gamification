@@ -1437,17 +1437,17 @@
     
     
             var username = new ThreeOneSevenBee.Model.UI.Inputbox("constructor", "Username");
-            username.setX(150);
+            username.setX(75);
             username.setY(100);
-            username.setWidth(300);
-            username.setHeight(24);
+            username.setWidth(450);
+            username.setHeight(36);
             username.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var password = new ThreeOneSevenBee.Model.UI.Inputbox("constructor$1", "Password", true);
-            password.setX(150);
-            password.setY(150);
-            password.setWidth(300);
-            password.setHeight(24);
+            password.setX(75);
+            password.setY(160);
+            password.setWidth(450);
+            password.setHeight(36);
             password.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var submit = new ThreeOneSevenBee.Model.UI.ButtonView("Log in", Bridge.fn.bind(this, function () {
@@ -1455,10 +1455,10 @@
                     this.onLogin(username.getText(), password.getText());
                 }
             }));
-            submit.setX(260);
-            submit.setY(200);
-            submit.setWidth(80);
-            submit.setHeight(30);
+            submit.setX(220);
+            submit.setY(220);
+            submit.setWidth(160);
+            submit.setHeight(60);
             submit.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 175, 100));
     
             this.status = new ThreeOneSevenBee.Model.UI.LabelView(" ");
