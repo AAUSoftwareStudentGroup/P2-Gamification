@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using ThreeOneSevenBee.Model.UI;
 using TOSBGame = ThreeOneSevenBee.Model.Game;
 
@@ -19,10 +21,8 @@ namespace ThreeOneSevenBee.Development.Desktop
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-		TextBatch textBatch;
 		DesktopContext context;
 		SpriteFont font;
-		VectorFont _font;
 		MouseState oldMouseState, currentMouseState;
 		Keys[] lastKeys;
 
@@ -63,6 +63,20 @@ namespace ThreeOneSevenBee.Development.Desktop
 			font = Content.Load<SpriteFont>("Georgia");
 
 			context = new DesktopContext(graphics, spriteBatch, font, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+
+			Stream stream;
+			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/star.png")).BaseStream;
+			context.imageCache.Add("star.png", Texture2D.FromStream (GraphicsDevice, stream));
+			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/masterofalgebra.png")).BaseStream;
+			context.imageCache.Add("masterofalgebra.png", Texture2D.FromStream (GraphicsDevice, stream));
+			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/potensv2.png")).BaseStream;
+			context.imageCache.Add("potensv2.png", Texture2D.FromStream (GraphicsDevice, stream));
+			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/brøkbadge.png")).BaseStream;
+			context.imageCache.Add("brøkbadge.png", Texture2D.FromStream (GraphicsDevice, stream));
+			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/restart.png")).BaseStream;
+			context.imageCache.Add("restart.png", Texture2D.FromStream (GraphicsDevice, stream));
+			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/star_activated.png")).BaseStream;
+			context.imageCache.Add("star_activated.png", Texture2D.FromStream (GraphicsDevice, stream));
 
 			TOSBGame.IGameAPI gameAPI = new DesktopGameAPI();
 
@@ -132,7 +146,6 @@ namespace ThreeOneSevenBee.Development.Desktop
 			context.graphicsDeviceManager = graphics;
 			context.Draw ();
 			//TODO: Add your drawing code here
-
 
 			base.Draw (gameTime);
 		}

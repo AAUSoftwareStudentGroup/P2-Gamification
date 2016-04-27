@@ -21,7 +21,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public override void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
-            context.DrawText(X + offsetX, Y + offsetY, Width, Height, Type == ParenthesisType.Left ? "(" : ")", LineColor);
+			context.DrawText(X + offsetX, Y + offsetY, Width, Height, Type == ParenthesisType.Left ? "(" : ")", LineColor, TextAlignment.Centered);
         }
 
         public override View Scale(double factor)
