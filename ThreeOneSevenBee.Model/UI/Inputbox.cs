@@ -34,7 +34,7 @@ namespace ThreeOneSevenBee.Model.UI
 				if (Active == true && string.Compare (Text, placeholder) == 0)
 					Text = "";
 				for(int i = 0; i <= Text.Length; i++) {
-					if(context.GetTextDimensions (Text.Substring(0, i), Width, Height).X > x - this.X) {
+					if(context.GetTextDimensions (hidden? GetHiddenText().Substring(0, i) : Text.Substring(0, i), Width, Height).X > x - this.X) {
 						cursorPos = i-1;
 						break;
 					}
@@ -67,41 +67,41 @@ namespace ThreeOneSevenBee.Model.UI
 				default:
 					if (key.Length == 1) {
 						Text = Text.Insert (cursorPos, key);
-						if(context.GetTextDimensions (Text, Width, Height).X > Width-1) {
-							KeyPressed("Back", context);
-						}
 						cursorPos++;
+						if (context.GetTextDimensions (hidden ? GetHiddenText () : Text, Width, Height).X > Width - 5) {
+							KeyPressed ("Back", context);
+						}
 					}
 					break;
 				}
 			}
         }
 
+		protected string GetHiddenText() {
+			string hiddenText = "";
+			for (int i = 0; i < Text.Length; i++) {
+				hiddenText += "*";
+			}
+			return hiddenText;
+		}
+
 		public override void DrawWithContext(IContext context, double offsetX, double offsetY)
 		{
-			string hiddenText = "";
 			if (!hidden)
 				base.DrawWithContext (context, offsetX, offsetY);
 			else {
-				for (int i = 0; i < Text.Length; i++) {
-					hiddenText += "*";
-				}
-				context.DrawText (X + offsetX, Y + offsetY, Width, Height, Text, TextColor);
 				string TextBackup = Text;
 				if (Text == placeholder)
 					Text = placeholder;
 				else
-					Text = hiddenText;
+					Text = GetHiddenText ();
 				base.DrawWithContext (context, offsetX, offsetY);
 				Text = TextBackup;
 			}
 			if (Active) {
 				double textWidth = 0;
 				if (cursorPos > 0 && Text.Length != 0) {
-					if (hidden) {
-						textWidth = context.GetTextDimensions (hiddenText.Substring (0, cursorPos), Width, Height).X;	
-					}
-					textWidth = context.GetTextDimensions (Text.Substring (0, cursorPos), Width, Height).X;
+					textWidth = context.GetTextDimensions (hidden? GetHiddenText().Substring(0, cursorPos) : Text.Substring (0, cursorPos), Width, Height).X;
 				}
 				context.DrawLine (new Vector2 (textWidth + offsetX + X + 1, Y + offsetY), new Vector2 (textWidth + offsetX + X + 1, offsetY + Y + Height), new Color (0, 0, 0), 1);
 			}
