@@ -1221,7 +1221,7 @@
                             this.getBadgeView().setImage("brøkbadge.png");
                             break;
                         case "Parenteser": 
-                            this.getBadgeView().setImage("spildonebadge.png");
+                            this.getBadgeView().setImage("parantes.png");
                             break;
                         case "Master of Algebra": 
                             this.getBadgeView().setImage("masterofalgebra.png");
@@ -1450,7 +1450,7 @@
         [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra, "masterofalgebra.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.potens, "potensv2.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge, "tutorialbadge.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge, "spildonebadge.png"]
+        [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge, "parantes.png"]
     ] ) || null;
             }
         },

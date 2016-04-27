@@ -199,7 +199,7 @@ namespace ThreeOneSevenBee.Model.UI
                         break;
 
                     case "Parenteser":
-                        BadgeView.Image = "spildonebadge.png";
+                        BadgeView.Image = "parantes.png";
                         break;
 
                     case "Master of Algebra":
