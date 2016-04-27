@@ -52,10 +52,13 @@ namespace ThreeOneSevenBee.Frontend
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
                         e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
                 });
-            Document.Body.AddEventListener(EventType.MouseDown,
+            Document.Body.AddEventListener(EventType.Click,
                 (e) =>
                 {
-                    input.Focus();
+                    if (contentView.Active == true)
+                    {
+                        input.Focus();
+                    }
                 });
 
             Window.OnResize = (e) => ResizeContent();

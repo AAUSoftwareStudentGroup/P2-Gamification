@@ -67,9 +67,11 @@
             this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             }));
-            document.body.addEventListener("mousedown", function (e) {
-                input.focus();
-            });
+            document.body.addEventListener("click", Bridge.fn.bind(this, function (e) {
+                if (this.contentView.getActive() === true) {
+                    input.focus();
+                }
+            }));
     
             window.onresize = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f1);
         },
