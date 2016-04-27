@@ -11,7 +11,28 @@ namespace ThreeOneSevenBee.Model.Game
 {
     public class LevelCategory : IEnumerable<Level>
     {
+        public static Dictionary<string, BadgeName> CategoryBadges = new Dictionary<string, BadgeName>()
+        {
+            { "Tutorial", BadgeName.tutorialBadge },
+            { "Potenser", BadgeName.potens },
+            { "Brøker", BadgeName.brokBadge },
+            { "Master of Algebra", BadgeName.masterOfAlgebra },
+        };
+        public bool Completed
+        {
+            get
+            {
+                return levels.All((l) => l.Stars == l.StarExpressions.Count);
+            }
+        }
         public string Name;
+        public BadgeName Badge
+        {
+            get
+            {
+                return CategoryBadges.ContainsKey(Name) ? CategoryBadges[Name] : default(BadgeName);
+            }
+        }
         public int categoryIndex;
         public int CategoryIndex {
             get

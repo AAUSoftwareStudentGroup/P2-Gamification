@@ -37,9 +37,9 @@ namespace ThreeOneSevenBee.Model.UI
             Update(model.Identities, model);
         }
 
-        public override void Click(double x, double y)
+		public override void Click(double x, double y, IContext context)
         {
-            base.Click(x, y);
+			base.Click(x, y, context);
         }
     }
 }

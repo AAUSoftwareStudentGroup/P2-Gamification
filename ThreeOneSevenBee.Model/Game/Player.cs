@@ -6,8 +6,6 @@ using System.Text;
 namespace ThreeOneSevenBee.Model.Game
 {
    public class Player {
-
-
         public List<BadgeName> Badges;
 
         public Player(string playername)
@@ -15,11 +13,9 @@ namespace ThreeOneSevenBee.Model.Game
             this.PlayerName = playername;
             Badges = new List<BadgeName>()
             {
-                BadgeName.brokBadge,
                 BadgeName.masterOfAlgebra,
                 BadgeName.potens,
-                BadgeName.spilDoneBadge,
-                BadgeName.tutorialBadge
+                BadgeName.brokBadge,
             };
         }
 
@@ -27,10 +23,6 @@ namespace ThreeOneSevenBee.Model.Game
 
         public string LastLoginTime { get; set; }
     }
-
-
-
-    
 
     public enum BadgeName
     {

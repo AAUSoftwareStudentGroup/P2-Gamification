@@ -24,7 +24,14 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 int result = 0;
                 if (Type == OperatorType.Power)
                 {
-                    result = 1 + Left.Size + Right.Size;
+                    if (Left is DelimiterExpression)
+                    {
+                        result = 1 + (Left.Size/2) + Right.Size;
+                    }
+                    else
+                    {
+                        result = 1 + Left.Size + Right.Size;
+                    }    
                 }
                 else if (Type == OperatorType.Add ||
                     Type == OperatorType.Subtract ||

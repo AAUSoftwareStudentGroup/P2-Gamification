@@ -71,19 +71,17 @@ namespace ThreeOneSevenBee.Model.Expression
                 ReferenceEquals(expr, second[secondIndex++])).ToList();
         }
 
-        public ExpressionBase WrapInDelimiterIfNeccessary(ExpressionBase expression, ExpressionBase parent)
-        {
-            Dictionary<OperatorType, Dictionary<OperatorType, bool>> table = new Dictionary<OperatorType, Dictionary<OperatorType, bool>>()
+        public Dictionary<OperatorType, Dictionary<OperatorType, bool>> WrapInParenthesis = new Dictionary<OperatorType, Dictionary<OperatorType, bool>>()
             {
                 {
                     OperatorType.Minus,
                     new Dictionary<OperatorType, bool>()
                     {
                         { OperatorType.Minus, true },
-                        { OperatorType.Add, true }, //problem, therefore true as a precaution
+                        { OperatorType.Add, false }, //problem, therefore true as a precaution
                         { OperatorType.Divide, false },
                         { OperatorType.Multiply, true },
-                        { OperatorType.Power, true } //problem, therefore true as a precaution
+                        { OperatorType.Power, false } //problem, therefore true as a precaution
                     }
                 },
                 {
@@ -132,19 +130,9 @@ namespace ThreeOneSevenBee.Model.Expression
                 }
             };
 
-            OperatorExpression operatorExpression = expression as OperatorExpression;
-            OperatorExpression parentExpression = parent as OperatorExpression;
-
-            bool isNeccessary = true;
-
-            if (operatorExpression == null || parentExpression == null)
-            {
-                isNeccessary = false;
-            }
-            else
-            {
-                isNeccessary = table[operatorExpression.Type][parentExpression.Type];
-            }
+        public ExpressionBase WrapInDelimiterIfNeccessary(OperatorExpression expression, OperatorType parentType)
+        {
+            bool isNeccessary = WrapInParenthesis[expression.Type][parentType];
 
             if (isNeccessary)
             {
@@ -153,6 +141,21 @@ namespace ThreeOneSevenBee.Model.Expression
             else
             {
                 return expression;
+            }
+        }
+
+        public ExpressionBase WrapInDelimiterIfNeccessary(ExpressionBase expression, ExpressionBase parent)
+        {
+            OperatorExpression operatorExpression = expression as OperatorExpression;
+            OperatorExpression parentExpression = parent as OperatorExpression;
+
+            if (operatorExpression == null || parentExpression == null)
+            {
+                return expression;
+            }
+            else
+            {
+                return WrapInDelimiterIfNeccessary(operatorExpression, parentExpression.Type);
             }
         }
 

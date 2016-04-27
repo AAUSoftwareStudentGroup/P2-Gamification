@@ -23,17 +23,80 @@
         constructor: function (playername) {
             this.setPlayerName(playername);
             this.badges = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.BadgeName)(), [
-                [ThreeOneSevenBee.Model.Game.BadgeName.brokBadge],
                 [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra],
                 [ThreeOneSevenBee.Model.Game.BadgeName.potens],
-                [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge],
-                [ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge]
+                [ThreeOneSevenBee.Model.Game.BadgeName.brokBadge]
             ] );
+        }
+    });
+    
+    Bridge.define('ThreeOneSevenBee.Model.Game.Game', {
+        gameAPI: null,
+        context: null,
+        gameModel: null,
+        gameView: null,
+        constructor: function (context, gameAPI) {
+            this.gameAPI = gameAPI;
+            this.context = context;
+        },
+        start: function () {
+            this.gameAPI.isAuthenticated(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f1));
+        },
+        loadGameData: function () {
+            this.gameAPI.getCurrentPlayer(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f6));
+        }
+    });
+    
+    var $_ = {};
+    
+    Bridge.ns("ThreeOneSevenBee.Model.Game.Game", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Model.Game.Game, {
+        f1: function (isAuthenticated) {
+            if (isAuthenticated === false) {
+                var loginView = new ThreeOneSevenBee.Model.UI.LoginView(this.context.getWidth(), this.context.getHeight());
+                this.context.setContentView(loginView);
+                loginView.onLogin = Bridge.fn.bind(this, function (username, password) {
+                    this.gameAPI.authenticate(username, password, Bridge.fn.bind(this, function (authenticateSuccess) {
+                        if (authenticateSuccess) {
+                            this.loadGameData();
+                        }
+                        else  {
+                            loginView.showLoginError();
+                        }
+                    }));
+                });
+            }
+            else  {
+                this.loadGameData();
+            }
+        },
+        f2: function (IsSaved) {
+            console.log(IsSaved ? "Level saved" : "Could not save");
+        },
+        f3: function (level) {
+            this.gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, level.stars, $_.ThreeOneSevenBee.Model.Game.Game.f2);
+        },
+        f4: function (IsAdded) {
+            console.log(IsAdded ? "Badge added" : "Badge not added");
+        },
+        f5: function (badge) {
+            this.gameAPI.userAddBadge(badge, $_.ThreeOneSevenBee.Model.Game.Game.f4);
+        },
+        f6: function (u) {
+            this.gameAPI.getPlayers(Bridge.fn.bind(this, function (p) {
+                this.gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
+                    onSaveLevel: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f3),
+                    onBadgeAchieved: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f5)
+                } );
+                this.gameView = new ThreeOneSevenBee.Model.UI.GameView(this.gameModel, this.context);
+            }));
         }
     });
     
     Bridge.define('ThreeOneSevenBee.Model.Game.GameModel', {
         onChanged: null,
+        onBadgeAchieved: null,
         onSaveLevel: null,
         progressBar: null,
         config: {
@@ -49,6 +112,7 @@
             this.setUser(user);
             this.setPlayers(players);
             this.setLevel(this.getUser().currentLevelIndex, this.getUser().currentCategoryIndex);
+    
         },
         getCurrentExpression: function () {
             return this.getExprModel().getExpression();
@@ -93,7 +157,10 @@
         onExpressionChanged: function (model) {
             this.progressBar.currentValue = model.getExpression().getSize();
             this.getUser().getCurrentLevel().currentExpression = model.getExpression().toString();
-            this.getUser().getCurrentLevel().stars = Math.max(this.getUser().getCurrentLevel().stars, Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count());
+            if (Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() > this.getUser().getCurrentLevel().stars) {
+                this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
+            }
+            model.getExpression().prettyPrint();
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged(this);
             }
@@ -125,8 +192,6 @@
             }
         }
     });
-    
-    var $_ = {};
     
     Bridge.ns("ThreeOneSevenBee.Model.Game.GameModel", $_)
     
@@ -254,12 +319,30 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Game.LevelCategory', {
         inherits: [Bridge.IEnumerable$1(ThreeOneSevenBee.Model.Game.Level)],
+        statics: {
+            config: {
+                init: function () {
+                    this.categoryBadges = Bridge.merge(new Bridge.Dictionary$2(String,ThreeOneSevenBee.Model.Game.BadgeName)(), [
+        ["Tutorial", ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge],
+        ["Potenser", ThreeOneSevenBee.Model.Game.BadgeName.potens],
+        ["Brøker", ThreeOneSevenBee.Model.Game.BadgeName.brokBadge],
+        ["Master of Algebra", ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra]
+    ] ) || null;
+                }
+            }
+        },
         name: null,
         categoryIndex: 0,
         levels: null,
         constructor: function (name) {
             this.name = name;
             this.levels = new Bridge.List$1(ThreeOneSevenBee.Model.Game.Level)();
+        },
+        getCompleted: function () {
+            return Bridge.Linq.Enumerable.from(this.levels).all($_.ThreeOneSevenBee.Model.Game.LevelCategory.f1);
+        },
+        getBadge: function () {
+            return Bridge.get(ThreeOneSevenBee.Model.Game.LevelCategory).categoryBadges.containsKey(this.name) ? Bridge.get(ThreeOneSevenBee.Model.Game.LevelCategory).categoryBadges.get(this.name) : Bridge.getDefaultValue(ThreeOneSevenBee.Model.Game.BadgeName);
         },
         getCategoryIndex: function () {
             return this.categoryIndex;
@@ -292,6 +375,14 @@
         },
         getEnumerator: function () {
             return this.getEnumerator$1();
+        }
+    });
+    
+    Bridge.ns("ThreeOneSevenBee.Model.Game.LevelCategory", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Model.Game.LevelCategory, {
+        f1: function (l) {
+            return l.stars === l.starExpressions.getCount();
         }
     });
     

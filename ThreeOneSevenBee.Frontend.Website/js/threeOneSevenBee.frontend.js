@@ -12,53 +12,16 @@
                 var canvas = document.getElementById("canvas");
                 canvas.width = document.documentElement.clientWidth;
                 canvas.height = document.documentElement.clientHeight;
+                var input = document.getElementById("input");
     
-                var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas);
+                var context = new ThreeOneSevenBee.Frontend.CanvasContext(canvas, input);
     
                 var gameAPI = new ThreeOneSevenBee.Frontend.JQueryGameAPI();
     
-                var gameModel;
-                var gameView;
-                gameAPI.isAuthenticated(function (isAuthenticated) {
-                    if (isAuthenticated === false) {
-                        var loginView = new ThreeOneSevenBee.Model.UI.LoginView(context.getWidth(), context.getHeight());
-                        context.setContentView(loginView);
-                        loginView.onLogin = function (username, password) {
-                            gameAPI.authenticate(username, password, function (authenticateSuccess) {
-                                if (authenticateSuccess) {
-                                    gameAPI.getCurrentPlayer(function (u) {
-                                        gameAPI.getPlayers(function (p) {
-                                            gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
-                                                onSaveLevel: function (level) {
-                                                    gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, level.stars, $_.ThreeOneSevenBee.Frontend.App.f1);
-                                                }
-                                            } );
-                                            gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
-                                        });
-                                    });
-                                }
-                                else  {
-                                    loginView.showLoginError();
-                                }
-                            });
-                        };
-                        loginView.onLogin("Morten RaskRask", "adminadmin");
-                    }
-                    else  {
-                        // Already authenticated dont show login view code here...
-                    }
-                });
+                var game = new ThreeOneSevenBee.Model.Game.Game(context, gameAPI);
+    
+                game.start();
             }
-        }
-    });
-    
-    var $_ = {};
-    
-    Bridge.ns("ThreeOneSevenBee.Frontend.App", $_)
-    
-    Bridge.apply($_.ThreeOneSevenBee.Frontend.App, {
-        f1: function (IsSaved) {
-            console.log(IsSaved ? "Level saved" : "Could not save");
         }
     });
     
@@ -66,15 +29,33 @@
         inherits: [ThreeOneSevenBee.Model.UI.Context],
         imageCache: null,
         context: null,
+        input: null,
         config: {
             init: function () {
                 Bridge.property(this, "lastClick", new ThreeOneSevenBee.Model.Euclidean.Vector2() || new ThreeOneSevenBee.Model.Euclidean.Vector2());
             }
         },
-        constructor: function (canvas) {
+        constructor: function (canvas, input) {
             ThreeOneSevenBee.Model.UI.Context.prototype.$constructor.call(this, canvas.width, canvas.height);
     
             this.imageCache = new Bridge.Dictionary$2(String,HTMLImageElement)();
+    
+            this.input = input;
+            input.type = "text";
+            input.focus();
+            input.oninput = Bridge.fn.bind(this, function (e) {
+                this.keyPressed(input.value);
+                input.value = "";
+            });
+            input.onkeydown = Bridge.fn.bind(this, function (e) {
+                var keyCode = e.keyCode;
+                console.log(keyCode);
+                if (keyCode === 8) {
+                    this.keyPressed("Back");
+                }
+                input.value = "";
+            });
+    
     
             this.context = canvas.getContext("2d");
             this.context.fillStyle = "#000000";
@@ -86,8 +67,11 @@
             this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             }));
+            this.context.canvas.addEventListener("focus", function (e) {
+                input.focus();
+            });
+    
             window.onresize = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f1);
-            this.context.canvas.onkeydown = Bridge.fn.combine(this.context.canvas.onkeydown, Bridge.fn.bind(this, this.keyPressed));
         },
         resizeContent: function () {
             this.context.canvas.width = document.documentElement.clientWidth;
@@ -112,15 +96,16 @@
             this.context.clearRect(0, 0, Bridge.Int.trunc(this.getWidth()), Bridge.Int.trunc(this.getHeight()));
         },
         click: function (x, y) {
-            this.contentView.click(x, y);
+            this.contentView.click(x, y, this);
             var last = this.getlastClick().$clone();
             last.x = x;
             last.y = y;
             this.setlastClick(last.$clone());
             this.draw();
         },
-        keyPressed: function (e) {
-            this.contentView.keyPressed(e.keyCode);
+        keyPressed: function (text) {
+            this.contentView.keyPressed(text, this);
+            this.draw();
         },
         drawPolygon$1: function (path, fillColor, lineColor, lineWidth) {
             var $t;
@@ -151,7 +136,7 @@
             while ($t.moveNext()) {
                 var line = $t.getCurrent();
                 this.context.font = height / lines.length + "px Arial";
-                this.context.textAlign = "center";
+                this.context.textAlign = "left";
                 if (this.context.measureText(line).width > width) {
                     minFontSize = Math.min(minFontSize, width / this.context.measureText(line).width * (height / lines.length));
                 }
@@ -159,8 +144,8 @@
     
             for (var index = 0; index < lines.length; index++) {
                 this.context.font = minFontSize + "px Arial";
-                this.context.textAlign = "center";
-                this.context.fillText(lines[index], Bridge.Int.trunc((x + width / 2)), Bridge.Int.trunc((y + (index + 0.5) * (height / lines.length))));
+                this.context.textAlign = "left";
+                this.context.fillText(lines[index], Bridge.Int.trunc((x)), Bridge.Int.trunc((y + (index + 0.5) * (height / lines.length))));
             }
         },
         drawPNGImage: function (fileName, x, y, width, height) {
@@ -171,16 +156,29 @@
                 this.context.fillStyle = "#000000";
             }
             else  {
-                this.imageCache.set(fileName, new Image());
-                this.imageCache.get(fileName).src = "img/" + fileName;
-                this.imageCache.get(fileName).onload = Bridge.fn.bind(this, function (e) {
+                var img = new Image();
+                img.src = "img/" + fileName;
+                img.onload = Bridge.fn.bind(this, function (e) {
                     this.context.fillStyle = "transparent";
-                    this.context.drawImage(this.imageCache.get(fileName), x, y, width, height);
+                    this.context.drawImage(img, x, y, width, height);
                     this.context.fillStyle = "#000000";
+                    this.imageCache.set(fileName, img);
                 });
             }
+        },
+        getTextDimensions: function (text, maxWidth, maxHeight) {
+            var minFontSize = maxHeight;
+            this.context.font = maxHeight + "px Arial";
+            this.context.textAlign = "left";
+            this.context.font = minFontSize + "px Arial";
+            if (this.context.measureText(text).width > maxWidth) {
+                minFontSize = Math.min(minFontSize, maxWidth / this.context.measureText(text).width * maxHeight);
+            }
+            return new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.context.measureText(text).width, minFontSize);
         }
     });
+    
+    var $_ = {};
     
     Bridge.ns("ThreeOneSevenBee.Frontend.CanvasContext", $_)
     
@@ -234,7 +232,6 @@
                     }
                     callback(currentPlayer);
                 });
-                callback(currentPlayer);
             }));
         },
         getPlayers: function (callback) {
@@ -265,6 +262,12 @@
                 this.token = Bridge.cast(jdata.success, String) === "true" ? Bridge.cast(jdata.data.token, String) : null;
                 callback(success);
             }));
+        },
+        userAddBadge: function (badge, callback) {
+            $.post("/api/", { action: "user_add_badge", token: this.token, badge_id: Bridge.cast(badge, Bridge.Int) }, function (data, textStatus, request) {
+                var jdata = JSON.parse(Bridge.cast(data, String));
+                callback(Bridge.cast(jdata.success, String) === "true");
+            });
         }
     });
     
