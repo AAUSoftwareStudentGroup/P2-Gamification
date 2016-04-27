@@ -14,5 +14,5 @@ $_scripts[] = "js/threeOneSevenBee.model.polygon.js";
 ?>
 <? require('header.php'); ?>
     <canvas id="canvas" width="600" height="400"></canvas>
-    <input id="input" style="position: fixed;" type="text" />
+    <input id="input" style="position: fixed; left: -500px; height: -500px" type="text" />
 <? require('footer.php'); ?>
