@@ -20,6 +20,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 	public class DesktopContext : Context
 	{
 		double width, height;
+		public Dictionary<string, Texture2D> imageCache;
 
 		SpriteBatch spriteBatch;
 		SpriteFont font;
@@ -32,6 +33,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 			spriteBatch = sb;
 			font = vf;
 			graphicsDeviceManager = gdm;
+			imageCache = new Dictionary<string, Texture2D> ();
 		}
 
 		public override void Clear()
@@ -40,6 +42,12 @@ namespace ThreeOneSevenBee.Development.Desktop
 		}
 
 		public override void DrawPNGImage(string fileName, double x, double y, double width, double height) {
+			if (imageCache.ContainsKey (fileName)) {
+				spriteBatch.Begin ();
+				spriteBatch.Draw (imageCache [fileName], new XNA.Rectangle ((int)x, (int)y, (int)width, (int)height), XNA.Color.White);
+				spriteBatch.End ();
+			} else
+				Console.WriteLine (fileName);
 		}
 
 		public override void DrawLine(Vector2 first, Vector2 second, Color lineColor, double lineWidth)
