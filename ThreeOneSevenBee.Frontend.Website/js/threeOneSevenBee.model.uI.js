@@ -1068,7 +1068,11 @@
                 ArrowLeft: null,
                 ArrowRight: null,
                 Levels: null,
-                CategoryName: null
+                CategoryName: null,
+                TitelView: null,
+                StarTextView: null,
+                StarView: null,
+                BadgeView: null
             }
         },
         constructor: function (user) {
@@ -1086,12 +1090,36 @@
                 setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255)
             } ));
     
-            this.setCategoryName(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(user.categories.getItem(this.getCategory()).name), {
+            this.setTitelView(Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(200, 40), {
                 setX: 100,
-                setY: 20,
-                setWidth: 200,
-                setHeight: 40
+                setY: 10
             } ));
+            this.setCategoryName(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(user.categories.getItem(this.getCategory()).name), {
+                setWidth: this.getTitelView().getWidth() * 0.6,
+                setHeight: this.getTitelView().getHeight()
+            } ));
+    
+            this.setStarTextView(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView("5/27"), {
+                setWidth: this.getTitelView().getWidth() * 0.25,
+                setHeight: 15,
+                setX: this.getCategoryName().getX() + this.getCategoryName().getWidth() + 7.5,
+                setY: this.getCategoryName().getY() + ((this.getCategoryName().getHeight()) / 2) - 7.5
+            } ));
+    
+            this.setStarView(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("star_activated.png", this.getTitelView().getWidth() * 0.1, this.getTitelView().getWidth() * 0.1), {
+                setX: this.getCategoryName().getX() + this.getCategoryName().getWidth() + this.getStarTextView().getWidth() + 7.5,
+                setY: this.getCategoryName().getY() + 0.5 * (this.getTitelView().getWidth() * 0.1)
+            } ));
+    
+            this.setBadgeView(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("tutorialbadge.png", this.getTitelView().getWidth() * 0.1, this.getTitelView().getWidth() * 0.1), {
+                setX: this.getCategoryName().getX() + this.getCategoryName().getWidth() + this.getStarTextView().getWidth() + this.getStarView().getWidth() + 7.5,
+                setY: this.getCategoryName().getY() + 0.5 * (this.getTitelView().getWidth() * 0.1)
+            } ));
+    
+            this.getTitelView().add(this.getStarTextView());
+            this.getTitelView().add(this.getCategoryName());
+            this.getTitelView().add(this.getStarView());
+            this.getTitelView().add(this.getBadgeView());
     
             this.setLevels(Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor", this.getWidth() - 100, this.getHeight() - (this.getCategoryName().getY() + this.getCategoryName().getHeight())), {
                 setX: 50,
@@ -1124,10 +1152,10 @@
             this.getArrowLeft().setVisible(this.getCategory() > 0);
     
             this.children.add(this.getMenuButton());
-            this.children.add(this.getCategoryName());
             this.children.add(this.getArrowLeft());
             this.children.add(this.getArrowRight());
             this.children.add(this.getLevels());
+            this.children.add(this.getTitelView());
     
             this.update(user);
         },
@@ -1136,6 +1164,8 @@
             this.getCategoryName().setText(user.categories.getItem(this.getCategory()).name);
             this.getArrowLeft().setVisible(this.getCategory() > 0);
             this.getArrowRight().setVisible(this.getCategory() < user.categories.getCount() - 1);
+            var totalStars = user.categories.getItem(this.getCategory()).getCount() * 3;
+            var userStarsInCategory = 0;
     
             var levelButtons = new ThreeOneSevenBee.Model.UI.CompositeView(400, 400);
     
@@ -1145,6 +1175,7 @@
             while ($t.moveNext()) {
                 (function () {
                     var level = $t.getCurrent();
+                    userStarsInCategory += level.stars;
                     var levelButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(40, 40), {
                         onClick: Bridge.fn.bind(this, function () {
                             this.onLevelSelect(level);
@@ -1179,8 +1210,29 @@
                     levelButtons.add(levelButton);
                     levelNumber += 1;
     
+                    switch (user.categories.getItem(this.getCategory()).name) {
+                        case "Tutorial": 
+                            this.getBadgeView().setImage("tutorialbadge.png");
+                            break;
+                        case "Potenser": 
+                            this.getBadgeView().setImage("potensv2.png");
+                            break;
+                        case "Brøker": 
+                            this.getBadgeView().setImage("brøkbadge.png");
+                            break;
+                        case "Parenteser": 
+                            this.getBadgeView().setImage("spildonebadge.png");
+                            break;
+                        case "Master of Algebra": 
+                            this.getBadgeView().setImage("masterofalgebra.png");
+                            break;
+                        default: 
+                            break;
+                    }
+    
                 }).call(this);
             }
+            this.getStarTextView().setText(userStarsInCategory + " / " + totalStars);
             levelButtons.setWidth(Bridge.Int.trunc(Math.sqrt(numberOfLevels)) * 50);
             levelButtons.setHeight(Bridge.Int.div(levelNumber, Bridge.Int.trunc(Math.sqrt(numberOfLevels))) * 50);
             this.getLevels().setContent(levelButtons);
