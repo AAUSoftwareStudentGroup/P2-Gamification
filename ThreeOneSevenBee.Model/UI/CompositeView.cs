@@ -24,17 +24,20 @@ namespace ThreeOneSevenBee.Model.UI
         {
             get
             {
-				foreach (View child in Children)
-				{
-					if (child.Active)
-						return true;
-				}
+                if (Children != null)
+                {
+                    foreach (View child in Children)
+                    {
+                        if (child.Active)
+                            return true;
+                    }
+                }
 				return false;
             }
 
             set
             {
-                if (value == false)
+                if (value == false && Children != null)
                 {
                     foreach (View child in Children)
                     {

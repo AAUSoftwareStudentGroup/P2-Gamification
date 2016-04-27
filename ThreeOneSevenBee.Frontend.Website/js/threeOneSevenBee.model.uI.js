@@ -20,6 +20,7 @@
         constructor: function (x, y, width, height) {
             this.setX(x);
             this.setY(y);
+            this.setActive(false);
             this.setWidth(width);
             this.setHeight(height);
             this.setBaseline(height / 2);
@@ -162,18 +163,20 @@
         },
         getActive: function () {
             var $t;
-            $t = Bridge.getEnumerator(this.children);
-            while ($t.moveNext()) {
-                var child = $t.getCurrent();
-                if (child.getActive()) {
-                    return true;
+            if (Bridge.hasValue(this.children)) {
+                $t = Bridge.getEnumerator(this.children);
+                while ($t.moveNext()) {
+                    var child = $t.getCurrent();
+                    if (child.getActive()) {
+                        return true;
+                    }
                 }
             }
             return false;
         },
         setActive: function (value) {
             var $t;
-            if (value === false) {
+            if (value === false && Bridge.hasValue(this.children)) {
                 $t = Bridge.getEnumerator(this.children);
                 while ($t.moveNext()) {
                     var child = $t.getCurrent();
