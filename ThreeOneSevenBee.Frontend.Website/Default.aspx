@@ -22,10 +22,6 @@
 </head>
 <body style="margin: 0;overflow:hidden">
     <canvas id="canvas" tabindex='1' width="600" height="400"></canvas>
-    <form id="form1" runat="server">
-        <div>
-
-        </div>
-    </form>
+    <input id="input" style="width: 0px; height:0px" type="text" />
 </body>
 </html>

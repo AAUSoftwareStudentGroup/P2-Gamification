@@ -71,7 +71,7 @@ namespace ThreeOneSevenBee.Model.Expression
                 ReferenceEquals(expr, second[secondIndex++])).ToList();
         }
 
-        public static Dictionary<OperatorType, Dictionary<OperatorType, bool>> WrapInParenthesis = new Dictionary<OperatorType, Dictionary<OperatorType, bool>>()
+        public Dictionary<OperatorType, Dictionary<OperatorType, bool>> WrapInParenthesis = new Dictionary<OperatorType, Dictionary<OperatorType, bool>>()
             {
                 {
                     OperatorType.Minus,
@@ -130,7 +130,7 @@ namespace ThreeOneSevenBee.Model.Expression
                 }
             };
 
-        public static ExpressionBase WrapInDelimiterIfNeccessary(OperatorExpression expression, OperatorType parentType)
+        public ExpressionBase WrapInDelimiterIfNeccessary(OperatorExpression expression, OperatorType parentType)
         {
             bool isNeccessary = WrapInParenthesis[expression.Type][parentType];
 
@@ -144,7 +144,7 @@ namespace ThreeOneSevenBee.Model.Expression
             }
         }
 
-        public static ExpressionBase WrapInDelimiterIfNeccessary(ExpressionBase expression, ExpressionBase parent)
+        public ExpressionBase WrapInDelimiterIfNeccessary(ExpressionBase expression, ExpressionBase parent)
         {
             OperatorExpression operatorExpression = expression as OperatorExpression;
             OperatorExpression parentExpression = parent as OperatorExpression;

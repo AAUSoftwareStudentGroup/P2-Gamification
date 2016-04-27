@@ -66,7 +66,6 @@
                         }
                     }));
                 });
-                loginView.onLogin("Morten RaskRask", "adminadmin");
             }
             else  {
                 this.loadGameData();
@@ -113,6 +112,7 @@
             this.setUser(user);
             this.setPlayers(players);
             this.setLevel(this.getUser().currentLevelIndex, this.getUser().currentCategoryIndex);
+    
         },
         getCurrentExpression: function () {
             return this.getExprModel().getExpression();

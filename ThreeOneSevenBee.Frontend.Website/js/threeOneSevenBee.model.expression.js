@@ -10,10 +10,10 @@
      * @class ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer
      */
     Bridge.define('ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer', {
-        statics: {
-            config: {
-                init: function () {
-                    this.wrapInParenthesis = Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Boolean))(), [
+        rules: null,
+        config: {
+            init: function () {
+                this.wrapInParenthesis = Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Boolean))(), [
         [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus, Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType,Boolean)(), [
             [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus, true],
             [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, false],
@@ -50,31 +50,8 @@
             [ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power, true]
         ] )]
     ] ) || null;
-                }
-            },
-            wrapInDelimiterIfNeccessary$1: function (expression, parentType) {
-                var isNeccessary = Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer).wrapInParenthesis.get(expression.getType()).get(parentType);
-    
-                if (isNeccessary) {
-                    return new ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression(expression);
-                }
-                else  {
-                    return expression;
-                }
-            },
-            wrapInDelimiterIfNeccessary: function (expression, parent) {
-                var operatorExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
-                var parentExpression = Bridge.as(parent, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
-    
-                if (!Bridge.hasValue(operatorExpression) || !Bridge.hasValue(parentExpression)) {
-                    return expression;
-                }
-                else  {
-                    return Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer).wrapInDelimiterIfNeccessary$1(operatorExpression, parentExpression.getType());
-                }
             }
         },
-        rules: null,
         constructor: function () {
             this.rules = new Bridge.List$1(Function)();
         },
@@ -113,6 +90,27 @@
             return Bridge.Linq.Enumerable.from(first).takeWhile(function (expr) {
                 return secondIndex === second.getCount() || expr === second.getItem(secondIndex++);
             }).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase);
+        },
+        wrapInDelimiterIfNeccessary$1: function (expression, parentType) {
+            var isNeccessary = this.wrapInParenthesis.get(expression.getType()).get(parentType);
+    
+            if (isNeccessary) {
+                return new ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression(expression);
+            }
+            else  {
+                return expression;
+            }
+        },
+        wrapInDelimiterIfNeccessary: function (expression, parent) {
+            var operatorExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
+            var parentExpression = Bridge.as(parent, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
+    
+            if (!Bridge.hasValue(operatorExpression) || !Bridge.hasValue(parentExpression)) {
+                return expression;
+            }
+            else  {
+                return this.wrapInDelimiterIfNeccessary$1(operatorExpression, parentExpression.getType());
+            }
         },
         getIdentities: function (selection) {
             var $t, $t1, $t2, $t3;
@@ -169,7 +167,7 @@
                         else  {
                             var variadicResult = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", clone.getType(), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(-1), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(-1));
                             variadicResult.add$1(Bridge.Linq.Enumerable.from(operandsLeftOfSelection).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f2).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
-                            variadicResult.add(Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer).wrapInDelimiterIfNeccessary(suggestion.clone(), variadicResult));
+                            variadicResult.add(this.wrapInDelimiterIfNeccessary(suggestion.clone(), variadicResult));
                             variadicResult.add$1(Bridge.Linq.Enumerable.from(operandsRightOfSelection).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f2).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
                             variadicResult.removeAt(0);
                             variadicResult.removeAt(0);
@@ -408,7 +406,7 @@
             this.expression = identity;
         }
         else  {
-            this.getSelected().replace(Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer).wrapInDelimiterIfNeccessary(identity, parent));
+            this.getSelected().replace(this.analyzer.wrapInDelimiterIfNeccessary(identity, parent));
         }
         this.getSelected().setParent(parent);
         this.updateSelection();

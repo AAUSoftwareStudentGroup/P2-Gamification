@@ -681,7 +681,12 @@
         getSize: function () {
             var result = 0;
             if (this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
-                result = 1 + this.getLeft().getSize() + this.getRight().getSize();
+                if (Bridge.is(this.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression)) {
+                    result = 1 + (Bridge.Int.div(this.getLeft().getSize(), 2)) + this.getRight().getSize();
+                }
+                else  {
+                    result = 1 + this.getLeft().getSize() + this.getRight().getSize();
+                }
             }
             else  {
                 if (this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
