@@ -1,6 +1,4 @@
 <?
-requireAuth();
-
 $_scripts[] = "js/bridge.js";
 $_scripts[] = "js/threeOneSevenBee.model.euclidean.js";
 $_scripts[] = "js/threeOneSevenBee.model.uI.js";
