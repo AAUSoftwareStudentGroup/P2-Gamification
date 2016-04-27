@@ -331,15 +331,6 @@
         getInnerHeight: function () {
             return this.getHeight() - this.padding;
         },
-        getWidth: function () {
-            return ThreeOneSevenBee.Model.UI.View.prototype.getWidth.call(this);
-        },
-        setWidth: function (value) {
-            ThreeOneSevenBee.Model.UI.View.prototype.setWidth.call(this, value);
-            if (Bridge.hasValue(this.getContent$1())) {
-                this.setContent$1(this.align(this.fit(this.getContent$1())));
-            }
-        },
         getActive: function () {
             return this.getContent$1().getActive();
         },

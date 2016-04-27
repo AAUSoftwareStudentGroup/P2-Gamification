@@ -45,9 +45,16 @@
             input.focus();
             input.oninput = Bridge.fn.bind(this, function (e) {
                 this.keyPressed(input.value.substr(Math.max(0, input.value.length - 1), input.value.length));
-                input.selectionStart = 1;
+                input.value = ":";
             });
-            input.onkeydown = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f1);
+            input.onkeydown = Bridge.fn.bind(this, function (e) {
+                var keyCode = e.keyCode;
+                if (keyCode === 8) {
+                    this.keyPressed("Back");
+                    e.preventDefault();
+                }
+                input.value = ":";
+            });
     
             this.context = canvas.getContext("2d");
             this.context.fillStyle = "#000000";
@@ -56,16 +63,11 @@
     
             var canvasLeft = this.context.canvas.getBoundingClientRect().left;
             var canvasRight = this.context.canvas.getBoundingClientRect().left;
-            this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
+            this.context.canvas.addEventListener("click", Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             }));
-            document.body.addEventListener("click", Bridge.fn.bind(this, function (e) {
-                if (this.contentView.getActive() === true) {
-                    input.focus();
-                }
-            }));
     
-            window.onresize = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f2);
+            window.onresize = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f1);
         },
         resizeContent: function () {
             this.context.canvas.width = document.documentElement.clientWidth;
@@ -95,6 +97,9 @@
             last.x = x;
             last.y = y;
             this.setlastClick(last.$clone());
+            if (this.contentView.getActive() === true) {
+                this.input.focus();
+            }
             this.draw();
         },
         keyPressed: function (text) {
@@ -181,14 +186,6 @@
     
     Bridge.apply($_.ThreeOneSevenBee.Frontend.CanvasContext, {
         f1: function (e) {
-            var keyCode = e.keyCode;
-            console.log(keyCode);
-            if (keyCode === 8) {
-                this.keyPressed("Back");
-                e.preventDefault();
-            }
-        },
-        f2: function (e) {
             this.resizeContent();
         }
     });

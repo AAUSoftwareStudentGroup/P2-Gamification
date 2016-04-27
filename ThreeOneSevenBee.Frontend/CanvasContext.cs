@@ -25,17 +25,17 @@ namespace ThreeOneSevenBee.Frontend
             input.OnInput = (e) =>
             {
                 KeyPressed(input.Value.Substr(Math.Max(0, input.Value.Length - 1), input.Value.Length));
-                input.SelectionStart = 1;
+                input.Value = ":";
             };
             input.OnKeyDown = (e) =>
             {
                 int keyCode = e.As<KeyboardEvent>().KeyCode;
-                Console.WriteLine(keyCode);
                 if(keyCode == 8)
                 {
                     KeyPressed("Back");
                     e.PreventDefault();
                 }
+                input.Value = ":";
             };
 
             context = canvas.GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D);
@@ -45,19 +45,11 @@ namespace ThreeOneSevenBee.Frontend
 
             double canvasLeft = context.Canvas.GetBoundingClientRect().Left;
             double canvasRight = context.Canvas.GetBoundingClientRect().Left;
-            context.Canvas.AddEventListener(EventType.MouseDown,
+            context.Canvas.AddEventListener(EventType.Click,
                 (e) =>
                 {
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
                         e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
-                });
-            Document.Body.AddEventListener(EventType.Click,
-                (e) =>
-                {
-                    if (contentView.Active == true)
-                    {
-                        input.Focus();
-                    }
                 });
 
             Window.OnResize = (e) => ResizeContent();
@@ -101,6 +93,10 @@ namespace ThreeOneSevenBee.Frontend
             last.X = x;
             last.Y = y;
             lastClick = last;
+            if (contentView.Active == true)
+            {
+                input.Focus();
+            }
             Draw();
         }
 
