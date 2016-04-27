@@ -62,7 +62,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 //			textBatch = new TextBatch (GraphicsDevice);
 			font = Content.Load<SpriteFont>("Georgia");
 
-			context = new DesktopContext(spriteBatch, font, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+			context = new DesktopContext(graphics, spriteBatch, font, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
 
 			IGameAPI gameAPI = new DesktopGameAPI();
 
@@ -148,11 +148,12 @@ namespace ThreeOneSevenBee.Development.Desktop
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw (GameTime gameTime)
 		{
-			graphics.GraphicsDevice.Clear (Microsoft.Xna.Framework.Color.CornflowerBlue);
-			context.Draw ();
 
+			context.graphicsDeviceManager = graphics;
+			context.Draw ();
 			//TODO: Add your drawing code here
-            
+
+
 			base.Draw (gameTime);
 		}
 	}
