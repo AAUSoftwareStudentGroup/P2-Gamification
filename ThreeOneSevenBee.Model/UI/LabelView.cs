@@ -8,11 +8,13 @@ namespace ThreeOneSevenBee.Model.UI
     public class LabelView : View
     {
         public virtual Color TextColor { get; set; }
+		public TextAlignment Align { get; set; }
 
         public LabelView(string text) : base(0, 0, 10, 10)
         {
             Text = text;
             TextColor = new Color(0, 0, 0);
+			Align = TextAlignment.Centered;
         }
 
         public virtual string Text { get; set; }
@@ -20,7 +22,15 @@ namespace ThreeOneSevenBee.Model.UI
         public override void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
             base.DrawWithContext(context, offsetX, offsetY);
-            context.DrawText(X + offsetX, Y + offsetY, Width, Height, Text, TextColor);
+
+            context.DrawText(X + offsetX, Y + offsetY, Width, Height, Text, TextColor, Align);
         }
     }
+
+	public enum TextAlignment
+	{
+		Left,
+		Right,
+		Centered
+	}
 }
