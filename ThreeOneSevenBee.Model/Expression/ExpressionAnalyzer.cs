@@ -110,7 +110,7 @@ namespace ThreeOneSevenBee.Model.Expression
                     OperatorType.Multiply,
                     new Dictionary<OperatorType, bool>()
                     {
-                        { OperatorType.Minus, true },
+                        { OperatorType.Minus, false },
                         { OperatorType.Add, false },
                         { OperatorType.Divide, false },
                         { OperatorType.Multiply, false },
