@@ -90,9 +90,15 @@ class API {
 
     static function get_users($IN, $db) {
         $result = array();
-        $db->query("SELECT user.name FROM gamedb.user AS user WHERE user.deleted_at IS NULL");
-        while($row = $db->fetch())
+        $db->query("SELECT 
+        				user.name,
+        				user.badges
+        			FROM gamedb.user AS user 
+        			WHERE user.deleted_at IS NULL");
+        while($row = $db->fetch()) {
+            $row['badges'] = explode(',', $row['badges']);
             $result[] = $row;
+        }
         API::respond(true, $result);
     }
 
