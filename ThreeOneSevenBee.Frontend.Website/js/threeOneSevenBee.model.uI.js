@@ -34,10 +34,6 @@
                 if (Bridge.hasValue(this.onClick)) {
                     this.onClick();
                 }
-                this.setActive(true);
-            }
-            else  {
-                this.setActive(false);
             }
         },
         keyPressed: function (key, context) {
@@ -116,11 +112,21 @@
         }
     });
     
+    Bridge.define('ThreeOneSevenBee.Model.UI.TextAlignment', {
+        statics: {
+            left: 0,
+            right: 1,
+            centered: 2
+        },
+        $enum: true
+    });
+    
     Bridge.define('ThreeOneSevenBee.Model.UI.LabelView', {
         inherits: [ThreeOneSevenBee.Model.UI.View],
         config: {
             properties: {
                 TextColor: null,
+                Align: null,
                 Text: null
             }
         },
@@ -129,10 +135,12 @@
     
             this.setText(text);
             this.setTextColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0));
+            this.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.centered);
         },
         drawWithContext: function (context, offsetX, offsetY) {
             ThreeOneSevenBee.Model.UI.View.prototype.drawWithContext.call(this, context, offsetX, offsetY);
-            context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), this.getText(), this.getTextColor());
+    
+            context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), this.getText(), this.getTextColor(), this.getAlign());
         }
     });
     
@@ -153,7 +161,15 @@
             this.setPropagateKeypress(true);
         },
         getActive: function () {
-            return ThreeOneSevenBee.Model.UI.View.prototype.getActive.call(this);
+            var $t;
+            $t = Bridge.getEnumerator(this.children);
+            while ($t.moveNext()) {
+                var child = $t.getCurrent();
+                if (child.getActive()) {
+                    return true;
+                }
+            }
+            return false;
         },
         setActive: function (value) {
             var $t;
@@ -312,6 +328,15 @@
         getInnerHeight: function () {
             return this.getHeight() - this.padding;
         },
+        getWidth: function () {
+            return ThreeOneSevenBee.Model.UI.View.prototype.getWidth.call(this);
+        },
+        setWidth: function (value) {
+            ThreeOneSevenBee.Model.UI.View.prototype.setWidth.call(this, value);
+            if (Bridge.hasValue(this.getContent$1())) {
+                this.setContent$1(this.align(this.fit(this.getContent$1())));
+            }
+        },
         getActive: function () {
             return this.getContent$1().getActive();
         },
@@ -403,19 +428,19 @@
             ThreeOneSevenBee.Model.UI.View.prototype.drawWithContext.call(this, context, offsetX, offsetY);
             switch (this.getType()) {
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add: 
-                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "+", this.getLineColor());
+                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "+", this.getLineColor(), ThreeOneSevenBee.Model.UI.TextAlignment.centered);
                     break;
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract: 
-                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "-", this.getLineColor());
+                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "-", this.getLineColor(), ThreeOneSevenBee.Model.UI.TextAlignment.centered);
                     break;
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus: 
-                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "-", this.getLineColor());
+                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "-", this.getLineColor(), ThreeOneSevenBee.Model.UI.TextAlignment.centered);
                     break;
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide: 
                     context.drawLine(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetY + this.getHeight() / 2), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth(), this.getY() + offsetY + this.getHeight() / 2), this.getLineColor(), this.getLineWidth());
                     break;
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply: 
-                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "·", this.getLineColor());
+                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "·", this.getLineColor(), ThreeOneSevenBee.Model.UI.TextAlignment.centered);
                     break;
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power: 
                     break;
@@ -444,7 +469,7 @@
             this.setType(type);
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), this.getType() === ThreeOneSevenBee.Model.UI.ParenthesisType.left ? "(" : ")", this.getLineColor());
+            context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), this.getType() === ThreeOneSevenBee.Model.UI.ParenthesisType.left ? "(" : ")", this.getLineColor(), ThreeOneSevenBee.Model.UI.TextAlignment.centered);
         },
         scale: function (factor) {
             this.setLineWidth(this.getLineWidth()*factor);
@@ -972,7 +997,15 @@
     
         },
         click: function (x, y, context) {
-            ThreeOneSevenBee.Model.UI.LabelView.prototype.click.call(this, x, y, context);
+            if (this.containsPoint(x, y)) {
+                if (Bridge.hasValue(this.onClick)) {
+                    this.onClick();
+                }
+                this.setActive(true);
+            }
+            else  {
+                this.setActive(false);
+            }
             if (this.getActive() === false && this.getText().length === 0) {
                 this.setText(this.placeholder);
             }
@@ -1142,8 +1175,8 @@
             });
     
             this.setArrowLeft(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(5, this.getLevels().getY() + this.getLevels().getHeight() / 2 - 37, 50, 75), [
-                [50, 0],
                 [25, 37],
+                [50, 0],
                 [50, 75]
             ] ));
     
@@ -1394,23 +1427,26 @@
     });
     
     Bridge.define('ThreeOneSevenBee.Model.UI.LoginView', {
-        inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
+        inherits: [ThreeOneSevenBee.Model.UI.FrameView],
         onLogin: null,
         status: null,
         constructor: function (width, height) {
-            ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
+            ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
+    
     
             var username = new ThreeOneSevenBee.Model.UI.Inputbox("constructor", "Username");
             username.setX(300);
             username.setY(100);
             username.setWidth(300);
             username.setHeight(24);
+            username.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var password = new ThreeOneSevenBee.Model.UI.Inputbox("constructor$1", "Password", true);
             password.setX(300);
             password.setY(150);
             password.setWidth(300);
             password.setHeight(24);
+            password.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var submit = new ThreeOneSevenBee.Model.UI.ButtonView("Log in", Bridge.fn.bind(this, function () {
                 if (Bridge.hasValue(this.onLogin)) {
@@ -1429,12 +1465,14 @@
             this.status.setWidth(200);
             this.status.setHeight(30);
     
-            this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
-                [username],
-                [password],
-                [submit],
-                [this.status]
-            ] );
+            this.setContent(Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), {
+                children: Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
+                    [username],
+                    [password],
+                    [submit],
+                    [this.status]
+                ] )
+            } ));
         },
         showLoginError: function () {
             this.status.setText("Forkert brugernavn eller kode");

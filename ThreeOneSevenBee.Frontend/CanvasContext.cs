@@ -24,8 +24,8 @@ namespace ThreeOneSevenBee.Frontend
             input.Focus();
             input.OnInput = (e) =>
             {
-                KeyPressed(input.Value);
-                input.Value = "";
+                KeyPressed(input.Value.Substr(Math.Max(0, input.Value.Length - 1), input.Value.Length));
+                input.SelectionStart = 1;
             };
             input.OnKeyDown = (e) =>
             {
@@ -34,10 +34,9 @@ namespace ThreeOneSevenBee.Frontend
                 if(keyCode == 8)
                 {
                     KeyPressed("Back");
+                    e.PreventDefault();
                 }
-                input.Value = "";
             };
-
 
             context = canvas.GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D);
             context.FillStyle = "#000000";
@@ -52,10 +51,13 @@ namespace ThreeOneSevenBee.Frontend
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
                         e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
                 });
-            context.Canvas.AddEventListener(EventType.Focus,
+            Document.Body.AddEventListener(EventType.Click,
                 (e) =>
                 {
-                    input.Focus();
+                    if (contentView.Active == true)
+                    {
+                        input.Focus();
+                    }
                 });
 
             Window.OnResize = (e) => ResizeContent();
@@ -125,7 +127,7 @@ namespace ThreeOneSevenBee.Frontend
             context.Stroke();
         }
 
-        public override void DrawText(double x, double y, double width, double height, string text, Color textColor)
+        public void DrawText(double x, double y, double width, double height, string text, Color textColor)
         {
             string[] lines = text.Split('\n');
 
@@ -185,6 +187,11 @@ namespace ThreeOneSevenBee.Frontend
                 minFontSize = Math.Min(minFontSize, maxWidth / context.MeasureText(text).Width * maxHeight);
             }
             return new Vector2(context.MeasureText(text).Width, minFontSize);
+        }
+
+        public override void DrawText(double x, double y, double width, double height, string text, Color textColor, TextAlignment alignment)
+        {
+            DrawText(x, y, width, height, text, textColor);
         }
     }
 }

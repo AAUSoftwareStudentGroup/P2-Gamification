@@ -44,18 +44,10 @@
             input.type = "text";
             input.focus();
             input.oninput = Bridge.fn.bind(this, function (e) {
-                this.keyPressed(input.value);
-                input.value = "";
+                this.keyPressed(input.value.substr(Math.max(0, input.value.length - 1), input.value.length));
+                input.selectionStart = 1;
             });
-            input.onkeydown = Bridge.fn.bind(this, function (e) {
-                var keyCode = e.keyCode;
-                console.log(keyCode);
-                if (keyCode === 8) {
-                    this.keyPressed("Back");
-                }
-                input.value = "";
-            });
-    
+            input.onkeydown = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f1);
     
             this.context = canvas.getContext("2d");
             this.context.fillStyle = "#000000";
@@ -67,11 +59,13 @@
             this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             }));
-            this.context.canvas.addEventListener("focus", function (e) {
-                input.focus();
-            });
+            document.body.addEventListener("click", Bridge.fn.bind(this, function (e) {
+                if (this.contentView.getActive() === true) {
+                    input.focus();
+                }
+            }));
     
-            window.onresize = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f1);
+            window.onresize = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f2);
         },
         resizeContent: function () {
             this.context.canvas.width = document.documentElement.clientWidth;
@@ -124,7 +118,7 @@
             this.context.fill();
             this.context.stroke();
         },
-        drawText: function (x, y, width, height, text, textColor) {
+        drawText$1: function (x, y, width, height, text, textColor) {
             var $t;
             var lines = text.split(String.fromCharCode(10));
     
@@ -147,6 +141,9 @@
                 this.context.textAlign = "left";
                 this.context.fillText(lines[index], Bridge.Int.trunc((x)), Bridge.Int.trunc((y + (index + 0.5) * (height / lines.length))));
             }
+        },
+        drawText: function (x, y, width, height, text, textColor, alignment) {
+            this.drawText$1(x, y, width, height, text, textColor);
         },
         drawPNGImage: function (fileName, x, y, width, height) {
     
@@ -184,6 +181,14 @@
     
     Bridge.apply($_.ThreeOneSevenBee.Frontend.CanvasContext, {
         f1: function (e) {
+            var keyCode = e.keyCode;
+            console.log(keyCode);
+            if (keyCode === 8) {
+                this.keyPressed("Back");
+                e.preventDefault();
+            }
+        },
+        f2: function (e) {
             this.resizeContent();
         }
     });

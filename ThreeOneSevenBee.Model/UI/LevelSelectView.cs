@@ -108,8 +108,8 @@ namespace ThreeOneSevenBee.Model.UI
 
             ArrowLeft = new VectorImageView(5, Levels.Y + Levels.Height / 2 - 75 / 2, 50, 75)
             {
+				{ 25,75/2 },
                 { 50,0    },
-                { 25,75/2 },
                 { 50,75   },
             };
 

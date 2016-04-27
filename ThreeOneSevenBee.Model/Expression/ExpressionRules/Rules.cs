@@ -326,10 +326,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 if(variadicContent != null && variadicContent.Type == OperatorType.Add)
                 {
                     VariadicOperatorExpression suggestion = variadicContent.Clone() as VariadicOperatorExpression;
-                    foreach (ExpressionBase operand in suggestion)
-                    {
-                        operand.Replace(new VariadicOperatorExpression(OperatorType.Multiply, other, operand.Clone()));
-                    }
+					for (int i = 0; i < suggestion.Count; i++) {
+						suggestion[i].Replace(new VariadicOperatorExpression(OperatorType.Multiply, other, suggestion[i].Clone()));
+					}
                     return suggestion;
                 }
                 else

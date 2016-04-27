@@ -41,6 +41,22 @@ namespace ThreeOneSevenBee.Model.UI
         public double InnerY { get { return Y - Padding; } }
         public double InnerWidth { get { return Width - Padding; } }
         public double InnerHeight { get { return Height - Padding; } }
+
+        public override double Width
+        {
+            get
+            {
+                return base.Width;
+            }
+
+            set
+            {
+                base.Width = value;
+                if (Content != null)
+                    Content = Align(Fit(Content));
+            }
+        }
+
         public override bool Active
         {
             get

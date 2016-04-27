@@ -27,8 +27,19 @@ namespace ThreeOneSevenBee.Model.UI
 
 		public override void Click (double x, double y, IContext context)
 		{
-			base.Click (x, y, context);
-			if (Active == false && Text.Length == 0)
+            if (ContainsPoint(x, y))
+            {
+                if (OnClick != null)
+                {
+                    OnClick();
+                }
+                Active = true;
+            }
+            else
+            {
+                Active = false;
+            }
+            if (Active == false && Text.Length == 0)
 				Text = placeholder;
 			if (ContainsPoint (x, y)) {
 				if (Active == true && string.Compare (Text, placeholder) == 0)
