@@ -1,6 +1,6 @@
 ﻿using System;
 using ThreeOneSevenBee.Model.UI;
-using ThreeOneSevenBee.Model.Game;
+using TOSBGame = ThreeOneSevenBee.Model.Game;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -24,7 +24,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 		SpriteFont font;
 		VectorFont _font;
 		MouseState oldMouseState, currentMouseState;
-
+		Keys[] lastKeys;
 
 		public Webmat ()
 		{
@@ -44,6 +44,9 @@ namespace ThreeOneSevenBee.Development.Desktop
 		protected override void Initialize ()
 		{
 			// TODO: Add your initialization logic here
+			graphics.PreferredBackBufferWidth = 1360;  // set this value to the desired width of your window
+			graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
+			graphics.ApplyChanges();
 
 			base.Initialize ();
 		}
@@ -61,30 +64,10 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 			context = new DesktopContext(graphics, spriteBatch, font, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
 
-			IGameAPI gameAPI = new DesktopGameAPI();
+			TOSBGame.IGameAPI gameAPI = new DesktopGameAPI();
 
-			GameModel gameModel;
-
-			gameAPI.GetCurrentPlayer((u) =>
-				{
-					gameAPI.GetPlayers((p) =>
-						{
-							gameModel = new GameModel(u, p)
-							{
-								OnSaveLevel = (level) =>
-									gameAPI.SaveUserLevelProgress
-									(
-										level.LevelID,
-										level.CurrentExpression,
-										level.Stars,
-										(success) => Console.WriteLine(success)
-									)
-							};
-
-							new GameView(gameModel, context);
-						});
-				});
-			//TODO: use this.Content to load your game content here 
+			TOSBGame.Game game = new TOSBGame.Game (context, gameAPI);
+			game.Start ();
 		}
 
 		/// <summary>
@@ -104,8 +87,36 @@ namespace ThreeOneSevenBee.Development.Desktop
 			oldMouseState = currentMouseState;
 			currentMouseState = Mouse.GetState();
 			if (currentMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton == ButtonState.Released) {
-				context.contentView.Click (currentMouseState.Position.X, currentMouseState.Position.Y);
+				context.contentView.Click (currentMouseState.Position.X, currentMouseState.Position.Y, context);
 			}
+			KeyboardState state = Keyboard.GetState();
+			foreach(Keys key in state.GetPressedKeys () ) {
+				bool brk = false;
+				bool upperCase = false;
+				if(lastKeys != null) { // Some logic to avoid sending a keypress every frame
+					foreach (Keys lastKey in lastKeys) {
+						if (key.ToString () == lastKey.ToString () )
+							brk = true;
+						if (lastKey.ToString () == "RightShift" || lastKey.ToString () == "LeftShift")
+							upperCase = true;
+					}
+				}
+				if(!brk) {
+					string keys;
+					// Add special keys here
+					if (key.ToString ().Length == 1) {
+						if (upperCase)
+							keys = key.ToString ().ToUpper ();
+						else
+							keys = key.ToString ().ToLower ();
+					} else
+						keys = key.ToString ();
+					context.contentView.KeyPressed (keys, context);
+
+				}
+			}
+			lastKeys = state.GetPressedKeys ();
+		
 			// TODO: Add your update logic here
             
 			base.Update (gameTime);

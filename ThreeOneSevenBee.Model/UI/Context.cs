@@ -80,5 +80,7 @@ namespace ThreeOneSevenBee.Model.UI
         public abstract void DrawText(double x, double y, double width, double height, string text, Color textColor);
 
         public abstract void DrawPNGImage(string fileName, double x, double y, double width, double height);
+
+		public abstract Vector2 GetTextDimensions(string text, double maxWidth, double maxHeight);
     }
 }

@@ -13,6 +13,17 @@ namespace ThreeOneSevenBee.Development.Desktop
 {
 	class DesktopGameAPI : IGameAPI
 	{
+
+		public void IsAuthenticated(Action<bool> callback)
+		{
+			callback (false);
+		}
+
+		public void Authenticate(string username, string password, Action<bool> callback)
+		{
+			callback (false);
+		}
+
 		public void GetCurrentPlayer(Action<CurrentPlayer> callback)
 		{
 			JObject response = MakeRequest ("http://webmat.cs.aau.dk/api/?action=get_current_user");
@@ -106,6 +117,10 @@ namespace ThreeOneSevenBee.Development.Desktop
 					return JObject.Parse (content);
 				}
 			}
+		}
+
+		public void UserAddBadge(BadgeName badge, Action<bool> callback) {
+			callback (false);
 		}
 	}
 }

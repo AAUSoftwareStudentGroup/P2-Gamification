@@ -36,7 +36,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 		public override void Clear()
 		{
-			graphicsDeviceManager.GraphicsDevice.Clear(XNA.Color.TransparentBlack);
+			graphicsDeviceManager.GraphicsDevice.Clear(XNA.Color.White);
 		}
 
 		public override void DrawPNGImage(string fileName, double x, double y, double width, double height) {
@@ -87,6 +87,15 @@ namespace ThreeOneSevenBee.Development.Desktop
 			spriteBatch.Begin ();
 			spriteBatch.DrawString (font, text, new XNA.Vector2 ((float)x, (float)y), ConvertColor (textColor), 0, new XNA.Vector2 (0, 0), scale, SpriteEffects.None, 0.5f); 
 			spriteBatch.End ();
+		}
+
+		public override Vector2 GetTextDimensions(string text, double maxWidth, double maxHeight) {
+			XNA.Vector2 stringSize = font.MeasureString (text);
+			double widthScale = maxWidth / stringSize.X;
+			double heightScale = maxHeight / stringSize.Y;
+			double scale = Math.Min (widthScale, heightScale);
+
+			return new Vector2 (stringSize.X * scale, stringSize.Y * scale);
 		}
 
 		private XNA.Color ConvertColor(Color c)

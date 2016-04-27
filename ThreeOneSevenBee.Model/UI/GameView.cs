@@ -62,7 +62,7 @@ namespace ThreeOneSevenBee.Model.UI
                 OnExit = () => setContent(titleView)
             };
 
-            //loginView = new LoginView();
+            //loginView = new LoginView(Width, Height);
 
             titleView.PlayButton.OnClick = () => setContent(levelView);
 
@@ -70,7 +70,7 @@ namespace ThreeOneSevenBee.Model.UI
 
             game.OnChanged = Update;
 
-            setContent(titleView);
+			setContent(titleView);
 
             context.OnResize = (w, h) =>
             {
