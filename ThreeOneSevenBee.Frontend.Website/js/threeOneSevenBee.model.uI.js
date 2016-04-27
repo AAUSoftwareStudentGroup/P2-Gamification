@@ -34,10 +34,6 @@
                 if (Bridge.hasValue(this.onClick)) {
                     this.onClick();
                 }
-                this.setActive(true);
-            }
-            else  {
-                this.setActive(false);
             }
         },
         keyPressed: function (key, context) {
@@ -165,7 +161,15 @@
             this.setPropagateKeypress(true);
         },
         getActive: function () {
-            return ThreeOneSevenBee.Model.UI.View.prototype.getActive.call(this);
+            var $t;
+            $t = Bridge.getEnumerator(this.children);
+            while ($t.moveNext()) {
+                var child = $t.getCurrent();
+                if (child.getActive()) {
+                    return true;
+                }
+            }
+            return false;
         },
         setActive: function (value) {
             var $t;
@@ -993,7 +997,15 @@
     
         },
         click: function (x, y, context) {
-            ThreeOneSevenBee.Model.UI.LabelView.prototype.click.call(this, x, y, context);
+            if (this.containsPoint(x, y)) {
+                if (Bridge.hasValue(this.onClick)) {
+                    this.onClick();
+                }
+                this.setActive(true);
+            }
+            else  {
+                this.setActive(false);
+            }
             if (this.getActive() === false && this.getText().length === 0) {
                 this.setText(this.placeholder);
             }

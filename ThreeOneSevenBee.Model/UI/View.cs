@@ -41,10 +41,6 @@ namespace ThreeOneSevenBee.Model.UI
                 {
                     OnClick();
                 }
-                Active = true;
-            } else
-            {
-                Active = false;
             }
         }
         public virtual void KeyPressed(string key, IContext context)
