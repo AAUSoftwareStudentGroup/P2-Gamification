@@ -44,21 +44,10 @@
             input.type = "text";
             input.focus();
             input.oninput = Bridge.fn.bind(this, function (e) {
-                this.keyPressed(input.value.substr(1));
-                input.value = " ";
+                this.keyPressed(input.value.substr(Math.max(0, input.value.length - 1), input.value.length));
                 input.selectionStart = 1;
             });
-            input.onkeydown = Bridge.fn.bind(this, function (e) {
-                var keyCode = e.keyCode;
-                console.log(keyCode);
-                if (keyCode === 8) {
-                    this.keyPressed("Back");
-                }
-                input.value = " ";
-                input.selectionStart = 1;
-            });
-            input.value = " ";
-            input.selectionStart = 1;
+            input.onkeydown = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f1);
     
             this.context = canvas.getContext("2d");
             this.context.fillStyle = "#000000";
@@ -76,7 +65,7 @@
                 }
             }));
     
-            window.onresize = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f1);
+            window.onresize = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f2);
         },
         resizeContent: function () {
             this.context.canvas.width = document.documentElement.clientWidth;
@@ -192,6 +181,13 @@
     
     Bridge.apply($_.ThreeOneSevenBee.Frontend.CanvasContext, {
         f1: function (e) {
+            var keyCode = e.keyCode;
+            console.log(keyCode);
+            if (keyCode === 8) {
+                this.keyPressed("Back");
+            }
+        },
+        f2: function (e) {
             this.resizeContent();
         }
     });
