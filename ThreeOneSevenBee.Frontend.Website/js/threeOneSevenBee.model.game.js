@@ -160,7 +160,7 @@
             if (Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() > this.getUser().getCurrentLevel().stars) {
                 this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
             }
-    
+            model.getExpression().prettyPrint();
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged(this);
             }

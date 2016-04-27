@@ -142,7 +142,7 @@ namespace ThreeOneSevenBee.Frontend
                     context.FillStyle = "transparent";
                     context.DrawImage(img, x, y, width, height);
                     context.FillStyle = "#000000";
-                    imageCache.Add(fileName, img);
+                    imageCache[fileName] = img;
                 };
             }
         }

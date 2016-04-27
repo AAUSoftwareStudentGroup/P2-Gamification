@@ -48,7 +48,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             var hasReplaced = false;
 
-            var expressionArray = expressions.ToArray();
+            ExpressionBase[] expressionArray = expressions.ToArray();
 
             for (int i = 0; i < expressionArray.Length; i++)
             {
@@ -65,7 +65,13 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             }
 
             if (hasReplaced)
-                expressions = new List<ExpressionBase>(expressionArray);
+            {
+                expressions.Clear();
+                foreach(ExpressionBase expr in expressionArray)
+                {
+                    Add(expr);
+                }
+            }
 
             return hasReplaced;
         }

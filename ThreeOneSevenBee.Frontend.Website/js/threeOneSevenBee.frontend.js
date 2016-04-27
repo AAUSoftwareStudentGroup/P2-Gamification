@@ -139,7 +139,7 @@
                     this.context.fillStyle = "transparent";
                     this.context.drawImage(img, x, y, width, height);
                     this.context.fillStyle = "#000000";
-                    this.imageCache.add(fileName, img);
+                    this.imageCache.set(fileName, img);
                 });
             }
         }

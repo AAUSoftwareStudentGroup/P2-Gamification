@@ -558,6 +558,7 @@
         this.insert(index, value);
     },
     replace$1: function (old, replacement, doRecursively) {
+        var $t;
         var hasReplaced = false;
     
         var expressionArray = this.expressions.toArray();
@@ -576,7 +577,12 @@
         }
     
         if (hasReplaced) {
-            this.expressions = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)(expressionArray);
+            this.expressions.clear();
+            $t = Bridge.getEnumerator(expressionArray);
+            while ($t.moveNext()) {
+                var expr = $t.getCurrent();
+                this.add(expr);
+            }
         }
     
         return hasReplaced;
