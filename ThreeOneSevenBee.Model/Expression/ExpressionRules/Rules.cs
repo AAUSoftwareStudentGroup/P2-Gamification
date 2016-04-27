@@ -12,6 +12,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 {
     public static class Rules
     {
+
         //a*a = a^2
         public static ExpressionBase ProductToExponentRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
@@ -78,7 +79,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 ExpressionBase exponent = new BinaryOperatorExpression(
                     new DelimiterExpression(fraction.Right.Clone()),
-                    new UnaryMinusExpression(new NumericExpression(1)),
+                    new DelimiterExpression(new UnaryMinusExpression(new NumericExpression(1))),
                     OperatorType.Power
                 );
                 ExpressionBase suggestion = new VariadicOperatorExpression(

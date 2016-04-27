@@ -7,7 +7,6 @@
     <title>317B</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="js/bridge.js"></script>
-    
     <script src="js/threeOneSevenBee.model.euclidean.js"></script>
     <script src="js/threeOneSevenBee.model.uI.js"></script>
     <script src="js/threeOneSevenBee.model.game.js"></script>
@@ -22,10 +21,6 @@
 </head>
 <body style="margin: 0;overflow:hidden">
     <canvas id="canvas" tabindex='1' width="600" height="400"></canvas>
-    <form id="form1" runat="server">
-        <div>
-
-        </div>
-    </form>
+    <input id="input" style="width: 0px; height:0px" type="text" />
 </body>
 </html>

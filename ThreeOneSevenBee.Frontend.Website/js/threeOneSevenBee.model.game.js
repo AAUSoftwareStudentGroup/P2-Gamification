@@ -66,7 +66,6 @@
                         }
                     }));
                 });
-                loginView.onLogin("Morten RaskRask", "adminadmin");
             }
             else  {
                 this.loadGameData();
@@ -113,6 +112,7 @@
             this.setUser(user);
             this.setPlayers(players);
             this.setLevel(this.getUser().currentLevelIndex, this.getUser().currentCategoryIndex);
+    
         },
         getCurrentExpression: function () {
             return this.getExprModel().getExpression();
@@ -160,7 +160,7 @@
             if (Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() > this.getUser().getCurrentLevel().stars) {
                 this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
             }
-    
+            model.getExpression().prettyPrint();
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged(this);
             }
