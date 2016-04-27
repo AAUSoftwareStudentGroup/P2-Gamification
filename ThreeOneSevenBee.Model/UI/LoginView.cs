@@ -14,7 +14,8 @@ namespace ThreeOneSevenBee.Model.UI
             username = new Inputbox("Username");
             username.X = 100;
             username.Y = 100;
-            username.Width = 100;
+            username.Width = 300;
+			username.Height = 24;
             Children = new List<View>() {
                 username
             };

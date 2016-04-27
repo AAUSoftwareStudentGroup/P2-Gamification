@@ -81,7 +81,7 @@ namespace ThreeOneSevenBee.Model.UI
                 Active = false;
             }
         }
-        public override void KeyPressed(int key)
+        public override void KeyPressed(string key)
         {
             if (PropagateKeypress)
             {

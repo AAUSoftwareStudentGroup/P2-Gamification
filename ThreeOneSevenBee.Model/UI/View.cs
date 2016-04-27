@@ -47,14 +47,14 @@ namespace ThreeOneSevenBee.Model.UI
                 Active = false;
             }
         }
-        public virtual void KeyPressed(int key)
+        public virtual void KeyPressed(string key)
         {
             if(OnKeyPressed != null && Active)
                 OnKeyPressed(key);
         }
 
         public Action OnClick;
-        public Action<int> OnKeyPressed;
+        public Action<string> OnKeyPressed;
         public Action OnChanged;
         
         public virtual View Scale(double factor)

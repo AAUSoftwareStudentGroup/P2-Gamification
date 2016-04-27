@@ -98,10 +98,19 @@ namespace ThreeOneSevenBee.Development.Desktop
 			float scale = Math.Min (widthScale, heightScale);
 			spriteBatch.DrawString (font, text, new XNA.Vector2 ((float)x, (float)y), ConvertColor (textColor), 0, new XNA.Vector2 (0, 0), scale, SpriteEffects.None, 0.5f); 
 		}
-
+			
 		private XNA.Color ConvertColor(Color c)
 		{
 			return new XNA.Color ((int)c.Red, (int)c.Green, (int)c.Blue, (int)(c.Alpha * 255)); 
+		}
+
+		public Vector2 GetTextDimensions(string text, double maxWidth, double maxHeight) {
+			XNA.Vector2 stringSize = font.MeasureString (text);
+			double widthScale = maxWidth / stringSize.X;
+			double heightScale = maxHeight / stringSize.Y;
+			double scale = Math.Min (widthScale, heightScale);
+
+			return new Vector2 (stringSize.X * scale, stringSize.Y * scale);
 		}
 	}
 }

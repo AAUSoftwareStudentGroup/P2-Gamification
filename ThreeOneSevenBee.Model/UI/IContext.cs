@@ -21,5 +21,7 @@ namespace ThreeOneSevenBee.Model.UI
         void DrawPolygon(Vector2[] path, Color fillColor);
         void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth);
         void DrawText(double x, double y, double width, double height, string text, Color textColor);
+
+		Vector2 GetTextDimensions(string text, double maxWidth, double maxHeight);
     }
 }
