@@ -25,52 +25,9 @@ namespace ThreeOneSevenBee.Frontend
 
             IGameAPI gameAPI = new JQueryGameAPI();
 
-            GameModel gameModel;
-            GameView gameView;
-            gameAPI.IsAuthenticated((isAuthenticated) =>
-            {
-                if(isAuthenticated == false)
-                {
-                    LoginView loginView = new LoginView(context.Width, context.Height);
-                    context.SetContentView(loginView);
-                    loginView.OnLogin = (username, password) =>
-                    {
-                        gameAPI.Authenticate(username, password, (authenticateSuccess) =>
-                        {
-                            if (authenticateSuccess)
-                            {
-                                gameAPI.GetCurrentPlayer((u) =>
-                                {
-                                    gameAPI.GetPlayers((p) =>
-                                    {
-                                        gameModel = new GameModel(u, p)
-                                        {
-                                            OnSaveLevel = (level) =>
-                                            gameAPI.SaveUserLevelProgress
-                                            (
-                                                level.LevelID,
-                                                level.CurrentExpression,
-                                                level.Stars,
-                                                (IsSaved) => Console.WriteLine(IsSaved ? "Level saved" : "Could not save")
-                                            )
-                                        };
-                                        gameView = new GameView(gameModel, context);
-                                    });
-                                });
-                            }
-                            else
-                            {
-                                loginView.ShowLoginError();
-                            }
-                        });
-                    };
-                    loginView.OnLogin("Morten RaskRask", "adminadmin");
-                }
-                else
-                {
-                    // Already authenticated dont show login view code here...
-                }
-            });
+            Game game = new Game(context, gameAPI);
+
+            game.Start();
         }
     }
 }

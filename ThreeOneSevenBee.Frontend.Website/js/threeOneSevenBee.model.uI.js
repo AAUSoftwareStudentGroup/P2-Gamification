@@ -837,7 +837,7 @@
             this.levelView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LevelView(game), {
                 setOnExit: Bridge.fn.bind(this, function () {
                     game.saveLevel();
-                    this.setContent(this.titleView);
+                    this.setContent(this.levelSelectView);
                 }),
                 setOnNextLevel: function () {
                     game.saveLevel();
@@ -1039,16 +1039,38 @@
             while ($t.moveNext()) {
                 (function () {
                     var level = $t.getCurrent();
-                    levelButtons.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView((levelNumber + 1).toString(), Bridge.fn.bind(this, function () {
-                        this.onLevelSelect(level);
-                    })), {
-                        setWidth: 40,
-                        setHeight: 40,
+                    var levelButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(40, 40), {
+                        onClick: Bridge.fn.bind(this, function () {
+                            this.onLevelSelect(level);
+                        }),
                         setX: levelNumber % Bridge.Int.trunc(Math.sqrt(numberOfLevels)) * 50 + 5,
                         setY: Bridge.Int.div(levelNumber, Bridge.Int.trunc(Math.sqrt(numberOfLevels))) * 50 + 5,
+                        setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 130, 120)
+                    } );
+                    levelButton.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView((levelNumber + 1).toString()), {
+                        setWidth: levelButton.getWidth(),
+                        setHeight: levelButton.getWidth() * 0.75,
                         setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 130, 120),
                         setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255)
                     } ));
+                    var starsize = levelButton.getWidth() * 0.25;
+                    var startPostition = (levelButton.getWidth() - (starsize)) / 2;
+                    if (level.stars === 2) {
+                        startPostition = levelButton.getWidth() / 2 - starsize;
+                    }
+                    else  {
+                        if (level.stars === 3) {
+                            startPostition = (levelButton.getWidth() - (starsize)) / 2 - starsize;
+                        }
+                    }
+                    for (var n = 0; n < level.stars; n++) {
+                        levelButton.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("star_activated.png", starsize, starsize), {
+                            setY: levelButton.getHeight() - starsize,
+                            setX: startPostition
+                        } ));
+                        startPostition += starsize;
+                    }
+                    levelButtons.add(levelButton);
                     levelNumber += 1;
     
                 }).call(this);
@@ -1056,6 +1078,7 @@
             levelButtons.setWidth(Bridge.Int.trunc(Math.sqrt(numberOfLevels)) * 50);
             levelButtons.setHeight(Bridge.Int.div(levelNumber, Bridge.Int.trunc(Math.sqrt(numberOfLevels))) * 50);
             this.getLevels().setContent(levelButtons);
+    
         }
     });
     
@@ -1234,6 +1257,17 @@
     
     Bridge.define('ThreeOneSevenBee.Model.UI.PlayerListView', {
         inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
+        config: {
+            init: function () {
+                this.badgeDictionary = Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Game.BadgeName,String)(), [
+        [ThreeOneSevenBee.Model.Game.BadgeName.brokBadge, "brøkbadge.png"],
+        [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra, "masterofalgebra.png"],
+        [ThreeOneSevenBee.Model.Game.BadgeName.potens, "potensv2.png"],
+        [ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge, "tutorialbadge.png"],
+        [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge, "spildonebadge.png"]
+    ] ) || null;
+            }
+        },
         constructor: function (players, width, height) {
             ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
     
@@ -1241,21 +1275,29 @@
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 209, 209, 209));
         },
         build: function (players) {
-            var $t;
+            var $t, $t1;
             this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
             var offsetY = 5;
             $t = Bridge.getEnumerator(players);
             while ($t.moveNext()) {
                 var player = $t.getCurrent();
+                var badgesWidth = (this.badgeDictionary.getCount() - 1) * 10;
                 var row = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(this.getWidth(), 20), [
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(player.getPlayerName()), {
-                        setWidth: this.getWidth() - 30,
+                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(" " + player.getPlayerName() + " "), {
+                        setWidth: this.getWidth() - badgesWidth - 20,
                         setHeight: 20
-                    } )],
-                    [Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("spildonebadge.png", 20, 20), {
-                        setX: this.getWidth() - 30
                     } )]
                 ] );
+                $t1 = Bridge.getEnumerator(player.badges);
+                while ($t1.moveNext()) {
+                    var badge = $t1.getCurrent();
+                    row.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(this.badgeDictionary.get(badge), 10, 10), {
+                        setX: this.getWidth() - badgesWidth + 20,
+                        setY: 5
+                    } ));
+                    badgesWidth += 10;
+                }
+    
                 row.setX(5);
                 row.setY(offsetY);
                 row.setWidth(this.getWidth() - 10);
@@ -1263,7 +1305,6 @@
                 this.children.add(row);
     
                 offsetY += 25;
-    
             }
         },
         update: function (players) {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ThreeOneSevenBee.Model.Game;
-using System.Collections.Generic;
 
 namespace ThreeOneSevenBee.Model.UI
 {
@@ -28,7 +27,7 @@ namespace ThreeOneSevenBee.Model.UI
                 int badgesWidth = (badgeDictionary.Count-1) * 10;
                 CompositeView row = new CompositeView(Width, 20)
                     {
-                        new LabelView(player.PlayerName)
+                        new LabelView(" " + player.PlayerName + " ")
                         {
                             Width = Width - badgesWidth - 20,
                             Height = 20,

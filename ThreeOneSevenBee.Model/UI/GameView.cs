@@ -37,7 +37,7 @@ namespace ThreeOneSevenBee.Model.UI
                 OnExit = () =>
                 {
                     game.SaveLevel();
-                    setContent(titleView);
+                    setContent(levelSelectView);
                 },
                 OnNextLevel = () =>
                 {

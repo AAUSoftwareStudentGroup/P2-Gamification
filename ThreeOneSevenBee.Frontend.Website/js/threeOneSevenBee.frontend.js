@@ -17,48 +17,10 @@
     
                 var gameAPI = new ThreeOneSevenBee.Frontend.JQueryGameAPI();
     
-                var gameModel;
-                var gameView;
-                gameAPI.isAuthenticated(function (isAuthenticated) {
-                    if (isAuthenticated === false) {
-                        var loginView = new ThreeOneSevenBee.Model.UI.LoginView(context.getWidth(), context.getHeight());
-                        context.setContentView(loginView);
-                        loginView.onLogin = function (username, password) {
-                            gameAPI.authenticate(username, password, function (authenticateSuccess) {
-                                if (authenticateSuccess) {
-                                    gameAPI.getCurrentPlayer(function (u) {
-                                        gameAPI.getPlayers(function (p) {
-                                            gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
-                                                onSaveLevel: function (level) {
-                                                    gameAPI.saveUserLevelProgress(level.levelID, level.currentExpression, level.stars, $_.ThreeOneSevenBee.Frontend.App.f1);
-                                                }
-                                            } );
-                                            gameView = new ThreeOneSevenBee.Model.UI.GameView(gameModel, context);
-                                        });
-                                    });
-                                }
-                                else  {
-                                    loginView.showLoginError();
-                                }
-                            });
-                        };
-                        loginView.onLogin("Morten RaskRask", "adminadmin");
-                    }
-                    else  {
-                        // Already authenticated dont show login view code here...
-                    }
-                });
+                var game = new ThreeOneSevenBee.Model.Game.Game(context, gameAPI);
+    
+                game.start();
             }
-        }
-    });
-    
-    var $_ = {};
-    
-    Bridge.ns("ThreeOneSevenBee.Frontend.App", $_)
-    
-    Bridge.apply($_.ThreeOneSevenBee.Frontend.App, {
-        f1: function (IsSaved) {
-            console.log(IsSaved ? "Level saved" : "Could not save");
         }
     });
     
@@ -171,16 +133,19 @@
                 this.context.fillStyle = "#000000";
             }
             else  {
-                this.imageCache.set(fileName, new Image());
-                this.imageCache.get(fileName).src = "img/" + fileName;
-                this.imageCache.get(fileName).onload = Bridge.fn.bind(this, function (e) {
+                var img = new Image();
+                img.src = "img/" + fileName;
+                img.onload = Bridge.fn.bind(this, function (e) {
                     this.context.fillStyle = "transparent";
-                    this.context.drawImage(this.imageCache.get(fileName), x, y, width, height);
+                    this.context.drawImage(img, x, y, width, height);
                     this.context.fillStyle = "#000000";
+                    this.imageCache.add(fileName, img);
                 });
             }
         }
     });
+    
+    var $_ = {};
     
     Bridge.ns("ThreeOneSevenBee.Frontend.CanvasContext", $_)
     
@@ -234,7 +199,6 @@
                     }
                     callback(currentPlayer);
                 });
-                callback(currentPlayer);
             }));
         },
         getPlayers: function (callback) {
@@ -265,6 +229,12 @@
                 this.token = Bridge.cast(jdata.success, String) === "true" ? Bridge.cast(jdata.data.token, String) : null;
                 callback(success);
             }));
+        },
+        userAddBadge: function (badge, callback) {
+            $.post("/api/", { action: "user_add_badge", token: this.token, badge_id: Bridge.cast(badge, Bridge.Int) }, function (data, textStatus, request) {
+                var jdata = JSON.parse(Bridge.cast(data, String));
+                callback(Bridge.cast(jdata.success, String) === "true");
+            });
         }
     });
     
