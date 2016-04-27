@@ -51,9 +51,9 @@ namespace ThreeOneSevenBee.Model.UI
 
             set
             {
-                if(Content != null)
-                    Content = Align(Fit(Content));
                 base.Width = value;
+                if (Content != null)
+                    Content = Align(Fit(Content));
             }
         }
 
