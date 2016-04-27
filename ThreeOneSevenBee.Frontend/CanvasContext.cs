@@ -45,6 +45,14 @@ namespace ThreeOneSevenBee.Frontend
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
                         e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
                 });
+            context.Canvas.AddEventListener(EventType.Click,
+                (e) =>
+                {
+                    if (ContentView.Active == true)
+                    {
+                        input.Focus();
+                    }
+                });
 
             Window.OnResize = (e) => ResizeContent();
         }
@@ -84,10 +92,6 @@ namespace ThreeOneSevenBee.Frontend
             last.X = x;
             last.Y = y;
             lastClick = last;
-            if (ContentView.Active == true)
-            {
-                input.Focus();
-            }
             Draw();
         }
 

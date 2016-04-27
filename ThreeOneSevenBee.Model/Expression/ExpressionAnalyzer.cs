@@ -171,13 +171,13 @@ namespace ThreeOneSevenBee.Model.Expression
             ExpressionBase commonParent = GetCommonParent(selection);
             if (commonParent is VariadicOperatorExpression)
             {
-                VariadicOperatorExpression clone = commonParent.Clone() as VariadicOperatorExpression;
+                VariadicOperatorExpression variadicParent = commonParent as VariadicOperatorExpression;
 
                 List<ExpressionBase> operandsLeftOfSelection = new List<ExpressionBase>();
                 List<ExpressionBase> operandsRightOfSelection = new List<ExpressionBase>();
                 List<ExpressionBase> selectedOperands = new List<ExpressionBase>();
 
-                foreach (ExpressionBase operand in clone)
+                foreach (ExpressionBase operand in variadicParent)
                 {
                     if (operand.Selected == false && operand.GetNodesRecursive().Any((n) => n.Selected == true) == false)
                     {
@@ -196,7 +196,7 @@ namespace ThreeOneSevenBee.Model.Expression
                     }
                 }
 
-                VariadicOperatorExpression toBeReplaced = new VariadicOperatorExpression(clone.Type, selectedOperands[0].Clone(), selectedOperands[1].Clone());
+                VariadicOperatorExpression toBeReplaced = new VariadicOperatorExpression(variadicParent.Type, selectedOperands[0].Clone(), selectedOperands[1].Clone());
                 List<ExpressionBase> toBeReplacedSelection = new List<ExpressionBase>();
                 foreach (ExpressionBase operand in selectedOperands.Skip(2))
                 {
@@ -212,13 +212,13 @@ namespace ThreeOneSevenBee.Model.Expression
                     if (suggestion != null)
                     {
                         ExpressionBase result;
-                        if (clone.Count == selectedOperands.Count)
+                        if (variadicParent.Count == selectedOperands.Count)
                         {
                             result = suggestion;
                         }
                         else
                         {
-                            VariadicOperatorExpression variadicResult = new VariadicOperatorExpression(clone.Type, new NumericExpression(-1), new NumericExpression(-1));
+                            VariadicOperatorExpression variadicResult = new VariadicOperatorExpression(variadicParent.Type, new NumericExpression(-1), new NumericExpression(-1));
                             variadicResult.Add(operandsLeftOfSelection.Select((o) => o.Clone()).ToList());
                             variadicResult.Add(WrapInDelimiterIfNeccessary(suggestion.Clone(), variadicResult));
                             variadicResult.Add(operandsRightOfSelection.Select((o) => o.Clone()).ToList());

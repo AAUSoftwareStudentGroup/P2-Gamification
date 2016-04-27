@@ -61,6 +61,11 @@
             this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
             }));
+            this.context.canvas.addEventListener("click", Bridge.fn.bind(this, function (e) {
+                if (this.getContentView$1().getActive() === true) {
+                    input.focus();
+                }
+            }));
     
             window.onresize = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Frontend.CanvasContext.f1);
         },
@@ -90,9 +95,6 @@
             last.x = x;
             last.y = y;
             this.setlastClick(last.$clone());
-            if (this.getContentView$1().getActive() === true) {
-                this.input.focus();
-            }
             this.draw();
         },
         keyPressed: function (text) {

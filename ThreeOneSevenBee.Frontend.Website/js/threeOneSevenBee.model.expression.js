@@ -122,13 +122,13 @@
     
             var commonParent = this.getCommonParent$1(selection);
             if (Bridge.is(commonParent, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression)) {
-                var clone = Bridge.as(commonParent.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+                var variadicParent = Bridge.as(commonParent, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
     
                 var operandsLeftOfSelection = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
                 var operandsRightOfSelection = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
                 var selectedOperands = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
     
-                $t = Bridge.getEnumerator(clone);
+                $t = Bridge.getEnumerator(variadicParent);
                 while ($t.moveNext()) {
                     var operand = $t.getCurrent();
                     if (operand.getSelected() === false && Bridge.Linq.Enumerable.from(operand.getNodesRecursive()).any($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f1) === false) {
@@ -144,7 +144,7 @@
                     }
                 }
     
-                var toBeReplaced = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", clone.getType(), selectedOperands.getItem(0).clone(), selectedOperands.getItem(1).clone());
+                var toBeReplaced = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", variadicParent.getType(), selectedOperands.getItem(0).clone(), selectedOperands.getItem(1).clone());
                 var toBeReplacedSelection = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
                 $t1 = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(selectedOperands).skip(2));
                 while ($t1.moveNext()) {
@@ -161,11 +161,11 @@
     
                     if (Bridge.hasValue(suggestion)) {
                         var result;
-                        if (clone.getCount() === selectedOperands.getCount()) {
+                        if (variadicParent.getCount() === selectedOperands.getCount()) {
                             result = suggestion;
                         }
                         else  {
-                            var variadicResult = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", clone.getType(), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(-1), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(-1));
+                            var variadicResult = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", variadicParent.getType(), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(-1), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(-1));
                             variadicResult.add$1(Bridge.Linq.Enumerable.from(operandsLeftOfSelection).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f2).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
                             variadicResult.add(this.wrapInDelimiterIfNeccessary(suggestion.clone(), variadicResult));
                             variadicResult.add$1(Bridge.Linq.Enumerable.from(operandsRightOfSelection).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f2).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
