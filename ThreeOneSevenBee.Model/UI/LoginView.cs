@@ -22,12 +22,14 @@ namespace ThreeOneSevenBee.Model.UI
 			username.Y = 100;
 			username.Width = 300;
 			username.Height = 24;
+			username.Align = TextAlignment.Left;
 
 			Inputbox password = new Inputbox("Password", true);
 			password.X = 300;
 			password.Y = 150;
 			password.Width = 300;
 			password.Height = 24;
+			password.Align = TextAlignment.Left;
 
 			ButtonView submit = new ButtonView ("Log in", () => {
 				if(OnLogin != null)

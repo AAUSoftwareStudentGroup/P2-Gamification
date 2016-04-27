@@ -77,6 +77,10 @@ namespace ThreeOneSevenBee.Development.Desktop
 			context.imageCache.Add("restart.png", Texture2D.FromStream (GraphicsDevice, stream));
 			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/star_activated.png")).BaseStream;
 			context.imageCache.Add("star_activated.png", Texture2D.FromStream (GraphicsDevice, stream));
+			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/spildonebadge.png")).BaseStream;
+			context.imageCache.Add("spildonebadge.png", Texture2D.FromStream (GraphicsDevice, stream));
+			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/tutorialbadge.png")).BaseStream;
+			context.imageCache.Add("tutorialbadge.png", Texture2D.FromStream (GraphicsDevice, stream));
 
 			TOSBGame.IGameAPI gameAPI = new DesktopGameAPI();
 
