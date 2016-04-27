@@ -251,6 +251,9 @@
                 Parent: null,
                 Selected: false,
                 ToBeReplaced: false
+            },
+            init: function () {
+                this.analyzer = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer() || null;
             }
         },
         /**

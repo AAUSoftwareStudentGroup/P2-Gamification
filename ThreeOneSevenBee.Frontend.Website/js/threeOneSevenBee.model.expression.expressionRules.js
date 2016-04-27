@@ -263,7 +263,7 @@
                         return suggestion;
                     }
                     else  {
-                        return new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, other, delimiterExpression.getExpression());
+                        return null;
                     }
                 }
                 return null;

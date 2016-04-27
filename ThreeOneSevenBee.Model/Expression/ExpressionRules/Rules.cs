@@ -345,7 +345,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 }
                 else
                 {
-                    return new VariadicOperatorExpression(OperatorType.Multiply, other, delimiterExpression.Expression);
+                    return null;
                 }
             }
             return null;

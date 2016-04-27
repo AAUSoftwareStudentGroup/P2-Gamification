@@ -605,8 +605,9 @@
             }
         }
         else  {
-            this.expressions.add(item);
-            item.setParent(this);
+            var wrapped = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer().wrapInDelimiterIfNeccessary(item, this);
+            this.expressions.add(wrapped);
+            wrapped.setParent(this);
         }
     },
     add: function (item) {
@@ -614,8 +615,9 @@
             this.add$2(Bridge.cast(item, ThreeOneSevenBee.Model.Expression.Expressions.VariadicExpression));
         }
         else  {
-            this.expressions.add(item);
-            item.setParent(this);
+            var wrapped = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer().wrapInDelimiterIfNeccessary(item, this);
+            this.expressions.add(wrapped);
+            wrapped.setParent(this);
         }
     },
     remove: function (item) {
@@ -640,16 +642,18 @@
         var $t;
         var variadicExpression = Bridge.as(item, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
         if (!Bridge.hasValue(variadicExpression) || variadicExpression.getType() !== this.getType()) {
-            this.expressions.insert(index, item);
-            item.setParent(this);
+            var wrapped = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer().wrapInDelimiterIfNeccessary(item, this);
+            this.expressions.insert(index, wrapped);
+            wrapped.setParent(this);
         }
         else  {
             var offset = 0;
             $t = Bridge.getEnumerator(variadicExpression);
             while ($t.moveNext()) {
                 var operand = $t.getCurrent();
-                this.expressions.insert(index + offset++, operand);
-                operand.setParent(this);
+                var wrapped1 = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer().wrapInDelimiterIfNeccessary(item, this);
+                this.expressions.insert(index + offset++, wrapped1);
+                wrapped1.setParent(this);
             }
         }
     },

@@ -5,6 +5,8 @@ namespace ThreeOneSevenBee.Model.Expression
 {
     public abstract class ExpressionBase : IEquatable<ExpressionBase>
     {
+        ExpressionAnalyzer analyzer = new ExpressionAnalyzer();
+
         public static bool operator ==(ExpressionBase left, ExpressionBase right)
         {
             if (System.Object.ReferenceEquals(left, null))
