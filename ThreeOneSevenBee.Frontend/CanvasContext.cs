@@ -52,7 +52,7 @@ namespace ThreeOneSevenBee.Frontend
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
                         e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
                 });
-            context.Canvas.AddEventListener(EventType.Focus,
+            Document.Body.AddEventListener(EventType.KeyDown,
                 (e) =>
                 {
                     input.Focus();
