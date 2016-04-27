@@ -324,6 +324,15 @@
         getInnerHeight: function () {
             return this.getHeight() - this.padding;
         },
+        getWidth: function () {
+            return ThreeOneSevenBee.Model.UI.View.prototype.getWidth.call(this);
+        },
+        setWidth: function (value) {
+            if (Bridge.hasValue(this.getContent$1())) {
+                this.setContent$1(this.align(this.fit(this.getContent$1())));
+            }
+            ThreeOneSevenBee.Model.UI.View.prototype.setWidth.call(this, value);
+        },
         getActive: function () {
             return this.getContent$1().getActive();
         },
@@ -1406,23 +1415,26 @@
     });
     
     Bridge.define('ThreeOneSevenBee.Model.UI.LoginView', {
-        inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
+        inherits: [ThreeOneSevenBee.Model.UI.FrameView],
         onLogin: null,
         status: null,
         constructor: function (width, height) {
-            ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
+            ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
+    
     
             var username = new ThreeOneSevenBee.Model.UI.Inputbox("constructor", "Username");
             username.setX(300);
             username.setY(100);
             username.setWidth(300);
             username.setHeight(24);
+            username.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var password = new ThreeOneSevenBee.Model.UI.Inputbox("constructor$1", "Password", true);
             password.setX(300);
             password.setY(150);
             password.setWidth(300);
             password.setHeight(24);
+            password.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var submit = new ThreeOneSevenBee.Model.UI.ButtonView("Log in", Bridge.fn.bind(this, function () {
                 if (Bridge.hasValue(this.onLogin)) {
@@ -1441,12 +1453,14 @@
             this.status.setWidth(200);
             this.status.setHeight(30);
     
-            this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
-                [username],
-                [password],
-                [submit],
-                [this.status]
-            ] );
+            this.setContent(Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(600, 400), {
+                children: Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
+                    [username],
+                    [password],
+                    [submit],
+                    [this.status]
+                ] )
+            } ));
         },
         showLoginError: function () {
             this.status.setText("Forkert brugernavn eller kode");
