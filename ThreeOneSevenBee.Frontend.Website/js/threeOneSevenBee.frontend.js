@@ -44,16 +44,11 @@
             input.type = "text";
             input.focus();
             input.oninput = Bridge.fn.bind(this, function (e) {
-                this.keyPressed(input.value.substr(Math.max(0, input.value.length - 1), input.value.length));
-                input.value = ":";
-            });
-            input.onkeydown = Bridge.fn.bind(this, function (e) {
-                var keyCode = e.keyCode;
-                if (keyCode === 8) {
+                if (input.value === "") {
                     this.keyPressed("Back");
-                    e.preventDefault();
                 }
-                input.value = ":";
+                this.keyPressed(input.value.substr(Math.max(0, input.value.length - 1), input.value.length));
+                input.value = "A";
             });
     
             this.context = canvas.getContext("2d");

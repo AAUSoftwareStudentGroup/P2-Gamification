@@ -24,18 +24,12 @@ namespace ThreeOneSevenBee.Frontend
             input.Focus();
             input.OnInput = (e) =>
             {
-                KeyPressed(input.Value.Substr(Math.Max(0, input.Value.Length - 1), input.Value.Length));
-                input.Value = ":";
-            };
-            input.OnKeyDown = (e) =>
-            {
-                int keyCode = e.As<KeyboardEvent>().KeyCode;
-                if(keyCode == 8)
+                if(input.Value == "")
                 {
                     KeyPressed("Back");
-                    e.PreventDefault();
                 }
-                input.Value = ":";
+                KeyPressed(input.Value.Substr(Math.Max(0, input.Value.Length - 1), input.Value.Length));
+                input.Value = "A";
             };
 
             context = canvas.GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D);
