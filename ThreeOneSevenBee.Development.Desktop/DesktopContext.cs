@@ -17,86 +17,76 @@ using Nuclex.Fonts;
 
 namespace ThreeOneSevenBee.Development.Desktop
 {
-	public class DesktopContext : IContext
+	public class DesktopContext : Context
 	{
-		public View contentView;
 		double width, height;
 
 		SpriteBatch spriteBatch;
 		SpriteFont font;
+		public XNA.GraphicsDeviceManager graphicsDeviceManager;
 
-		public DesktopContext (SpriteBatch sb, SpriteFont vf, double width, double height)
+		public DesktopContext (XNA.GraphicsDeviceManager gdm, SpriteBatch sb, SpriteFont vf, double width, double height) : base(width, height)
 		{
-			contentView = null;
 			this.width = width;
 			this.height = height;
 			spriteBatch = sb;
 			font = vf;
+			graphicsDeviceManager = gdm;
 		}
 
-		public double Width { get { return width; } }
-		public double Height { get { return height; } }
-
-		public void Clear()
+		public override void Clear()
 		{
-			
+			graphicsDeviceManager.GraphicsDevice.Clear(XNA.Color.TransparentBlack);
 		}
 
-		public void SetContentView(View view)
-		{
-			contentView = view;	
+		public override void DrawPNGImage(string fileName, double x, double y, double width, double height) {
 		}
-		public void Draw()
+
+		public override void DrawLine(Vector2 first, Vector2 second, Color lineColor, double lineWidth)
 		{
 			spriteBatch.Begin ();
-//			textBatch.Begin ();
-
-			if (contentView != null)
-				contentView.DrawWithContext (this, 0, 0);
-
-//			textBatch.End ();
+			spriteBatch.DrawLine ((int)first.X, (int)first.Y, (int)second.X, (int)second.Y, ConvertColor (lineColor), (float)lineWidth);
 			spriteBatch.End();
 		}
 
-
-		public void DrawPNGImage(string fileName, double x, double y, double width, double height) {
-		}
-
-		public void DrawLine(Vector2 first, Vector2 second, Color lineColor, double lineWidth)
+		public override void DrawRectangle(double x, double y, double width, double height, Color fillColor, Color lineColor, double lineWidth)
 		{
-			spriteBatch.DrawLine ((int)first.X, (int)first.Y, (int)second.X, (int)second.Y, ConvertColor (lineColor), (float)lineWidth);
-
-		}
-		public void DrawRectangle(double x, double y, double width, double height, Color fillColor)
-		{
-			this.DrawRectangle (x, y, width, height, fillColor, fillColor, 0);
-		}
-		public void DrawRectangle(double x, double y, double width, double height, Color fillColor, Color lineColor, double lineWidth)
-		{
+			spriteBatch.Begin ();
 			spriteBatch.FillRectangle (new XNA.Rectangle ((int)x, (int)y, (int)width, (int)height), ConvertColor (fillColor));
 			spriteBatch.DrawRectangle (new XNA.Rectangle ((int)x, (int)y, (int)width, (int)height), ConvertColor (lineColor), (float)lineWidth);
+			spriteBatch.End ();
 		}
-		public void DrawPolygon(Vector2[] path, Color fillColor)
+
+		public override void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth)
 		{
-			this.DrawPolygon (path, fillColor, fillColor, 1);
-		}
-		public void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth)
-		{
+			VertexPositionColor[] _vertices = new VertexPositionColor[path.Length];
+			int[] indicies = new int[_vertices.Length];
+
+			for (int i = 0; i < path.Length; i++) {
+				_vertices [i] = new VertexPositionColor (new XNA.Vector3 ((float)path [i].X, (float)path [i].Y, 0), ConvertColor (fillColor));
+				indicies [i] = i;
+			}
+
+			graphicsDeviceManager.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>
+			(
+				PrimitiveType.TriangleStrip, 
+				_vertices, 0, _vertices.Length,
+				indicies,  0, _vertices.Length-2
+			);
+
 			for (int i = 0; i < path.Length-1; i++) {
 				this.DrawLine (path [i], path [i + 1], fillColor, lineWidth);
 			}
 		}
-		public void DrawText(double x, double y, double width, double height, string text, Color textColor)
+		public override void DrawText(double x, double y, double width, double height, string text, Color textColor)
 		{
-//			textBatch.ViewProjection;
-//			Text t = font.Fill(text);
-//			this.textBatch.DrawText (t, XNA.Color.White);
-
 			XNA.Vector2 stringSize = font.MeasureString (text);
 			float widthScale = (float)width / stringSize.X;
 			float heightScale = (float)height / stringSize.Y;
 			float scale = Math.Min (widthScale, heightScale);
+			spriteBatch.Begin ();
 			spriteBatch.DrawString (font, text, new XNA.Vector2 ((float)x, (float)y), ConvertColor (textColor), 0, new XNA.Vector2 (0, 0), scale, SpriteEffects.None, 0.5f); 
+			spriteBatch.End ();
 		}
 
 		private XNA.Color ConvertColor(Color c)
@@ -105,4 +95,3 @@ namespace ThreeOneSevenBee.Development.Desktop
 		}
 	}
 }
-
