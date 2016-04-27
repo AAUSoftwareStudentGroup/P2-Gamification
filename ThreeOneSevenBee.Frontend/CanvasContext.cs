@@ -26,6 +26,7 @@ namespace ThreeOneSevenBee.Frontend
             {
                 KeyPressed(input.Value.Substring(1));
                 input.Value = " ";
+                input.SelectionStart = 1;
             };
             input.OnKeyDown = (e) =>
             {
@@ -36,9 +37,10 @@ namespace ThreeOneSevenBee.Frontend
                     KeyPressed("Back");
                 }
                 input.Value = " ";
+                input.SelectionStart = 1;
             };
             input.Value = " ";
-
+            input.SelectionStart = 1;
 
             context = canvas.GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D);
             context.FillStyle = "#000000";
@@ -129,7 +131,7 @@ namespace ThreeOneSevenBee.Frontend
             context.Stroke();
         }
 
-        public override void DrawText(double x, double y, double width, double height, string text, Color textColor)
+        public void DrawText(double x, double y, double width, double height, string text, Color textColor)
         {
             string[] lines = text.Split('\n');
 
@@ -189,6 +191,11 @@ namespace ThreeOneSevenBee.Frontend
                 minFontSize = Math.Min(minFontSize, maxWidth / context.MeasureText(text).Width * maxHeight);
             }
             return new Vector2(context.MeasureText(text).Width, minFontSize);
+        }
+
+        public override void DrawText(double x, double y, double width, double height, string text, Color textColor, TextAlignment alignment)
+        {
+            DrawText(x, y, width, height, text, textColor);
         }
     }
 }

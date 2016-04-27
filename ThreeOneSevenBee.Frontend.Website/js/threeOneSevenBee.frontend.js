@@ -46,6 +46,7 @@
             input.oninput = Bridge.fn.bind(this, function (e) {
                 this.keyPressed(input.value.substr(1));
                 input.value = " ";
+                input.selectionStart = 1;
             });
             input.onkeydown = Bridge.fn.bind(this, function (e) {
                 var keyCode = e.keyCode;
@@ -54,9 +55,10 @@
                     this.keyPressed("Back");
                 }
                 input.value = " ";
+                input.selectionStart = 1;
             });
             input.value = " ";
-    
+            input.selectionStart = 1;
     
             this.context = canvas.getContext("2d");
             this.context.fillStyle = "#000000";
@@ -127,7 +129,7 @@
             this.context.fill();
             this.context.stroke();
         },
-        drawText: function (x, y, width, height, text, textColor) {
+        drawText$1: function (x, y, width, height, text, textColor) {
             var $t;
             var lines = text.split(String.fromCharCode(10));
     
@@ -150,6 +152,9 @@
                 this.context.textAlign = "left";
                 this.context.fillText(lines[index], Bridge.Int.trunc((x)), Bridge.Int.trunc((y + (index + 0.5) * (height / lines.length))));
             }
+        },
+        drawText: function (x, y, width, height, text, textColor, alignment) {
+            this.drawText$1(x, y, width, height, text, textColor);
         },
         drawPNGImage: function (fileName, x, y, width, height) {
     

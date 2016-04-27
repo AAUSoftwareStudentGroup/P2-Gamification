@@ -116,11 +116,21 @@
         }
     });
     
+    Bridge.define('ThreeOneSevenBee.Model.UI.TextAlignment', {
+        statics: {
+            left: 0,
+            right: 1,
+            centered: 2
+        },
+        $enum: true
+    });
+    
     Bridge.define('ThreeOneSevenBee.Model.UI.LabelView', {
         inherits: [ThreeOneSevenBee.Model.UI.View],
         config: {
             properties: {
                 TextColor: null,
+                Align: null,
                 Text: null
             }
         },
@@ -129,10 +139,12 @@
     
             this.setText(text);
             this.setTextColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0));
+            this.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.centered);
         },
         drawWithContext: function (context, offsetX, offsetY) {
             ThreeOneSevenBee.Model.UI.View.prototype.drawWithContext.call(this, context, offsetX, offsetY);
-            context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), this.getText(), this.getTextColor());
+    
+            context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), this.getText(), this.getTextColor(), this.getAlign());
         }
     });
     
@@ -403,19 +415,19 @@
             ThreeOneSevenBee.Model.UI.View.prototype.drawWithContext.call(this, context, offsetX, offsetY);
             switch (this.getType()) {
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add: 
-                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "+", this.getLineColor());
+                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "+", this.getLineColor(), ThreeOneSevenBee.Model.UI.TextAlignment.centered);
                     break;
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract: 
-                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "-", this.getLineColor());
+                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "-", this.getLineColor(), ThreeOneSevenBee.Model.UI.TextAlignment.centered);
                     break;
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus: 
-                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "-", this.getLineColor());
+                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "-", this.getLineColor(), ThreeOneSevenBee.Model.UI.TextAlignment.centered);
                     break;
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide: 
                     context.drawLine(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX, this.getY() + offsetY + this.getHeight() / 2), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.getX() + offsetX + this.getWidth(), this.getY() + offsetY + this.getHeight() / 2), this.getLineColor(), this.getLineWidth());
                     break;
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply: 
-                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "·", this.getLineColor());
+                    context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), "·", this.getLineColor(), ThreeOneSevenBee.Model.UI.TextAlignment.centered);
                     break;
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power: 
                     break;
@@ -444,7 +456,7 @@
             this.setType(type);
         },
         drawWithContext: function (context, offsetX, offsetY) {
-            context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), this.getType() === ThreeOneSevenBee.Model.UI.ParenthesisType.left ? "(" : ")", this.getLineColor());
+            context.drawText(this.getX() + offsetX, this.getY() + offsetY, this.getWidth(), this.getHeight(), this.getType() === ThreeOneSevenBee.Model.UI.ParenthesisType.left ? "(" : ")", this.getLineColor(), ThreeOneSevenBee.Model.UI.TextAlignment.centered);
         },
         scale: function (factor) {
             this.setLineWidth(this.getLineWidth()*factor);
@@ -1142,8 +1154,8 @@
             });
     
             this.setArrowLeft(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(5, this.getLevels().getY() + this.getLevels().getHeight() / 2 - 37, 50, 75), [
-                [50, 0],
                 [25, 37],
+                [50, 0],
                 [50, 75]
             ] ));
     
