@@ -13,7 +13,7 @@ namespace ThreeOneSevenBee.Model.UI
         {
             {BadgeName.brokBadge, "brøkbadge.png"},
             {BadgeName.masterOfAlgebra, "masterofalgebra.png"},
-            {BadgeName.potens, "potensv2.png"},
+            {BadgeName.potens, "potens.png"},
             {BadgeName.tutorialBadge, "tutorialbadge.png" },
             {BadgeName.spilDoneBadge, "parantes.png"}
 
