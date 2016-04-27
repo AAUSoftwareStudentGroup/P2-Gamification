@@ -27,6 +27,14 @@ namespace ThreeOneSevenBee.Model.UI
 
         public LabelView CategoryName { get; private set; }
 
+        public CompositeView TitelView { get; private set; }
+
+        public LabelView StarTextView { get; private set; }
+
+        public ImageView StarView { get; private set; }
+
+        public ImageView BadgeView { get; private set; }
+
 
         public void Build(CurrentPlayer user)
         {
@@ -38,13 +46,41 @@ namespace ThreeOneSevenBee.Model.UI
                 TextColor = new Color(255, 255, 255),
             };
 
-            CategoryName = new LabelView(user.Categories[Category].Name)
+            TitelView = new CompositeView(200, 40)
             {
                 X = 100,
-                Y = 20,
-                Width = 200,
-                Height = 40,
+                Y = 10,
             };
+            CategoryName = new LabelView(user.Categories[Category].Name)
+            {
+                Width = TitelView.Width * 0.6,
+                Height = TitelView.Height,
+            };
+
+            StarTextView = new LabelView("5/27")
+            {
+                Width = TitelView.Width * 0.25, 
+                Height = 15,
+                X = CategoryName.X + CategoryName.Width + 7.5,
+                Y = CategoryName.Y + ((CategoryName.Height) / 2) - 7.5
+            };
+
+            StarView = new ImageView("star_activated.png", TitelView.Width * 0.10, TitelView.Width * 0.10)
+            {
+                X = CategoryName.X + CategoryName.Width + StarTextView.Width + 7.5,
+                Y = CategoryName.Y + 0.5 * (TitelView.Width * 0.10)
+            };
+
+            BadgeView = new ImageView("tutorialbadge.png", TitelView.Width * 0.10, TitelView.Width * 0.10)
+            {
+                X = CategoryName.X + CategoryName.Width + StarTextView.Width + StarView.Width + 7.5,
+                Y = CategoryName.Y + 0.5 * (TitelView.Width * 0.10)
+            };
+
+            TitelView.Add(StarTextView);
+            TitelView.Add(CategoryName);
+            TitelView.Add(StarView);
+            TitelView.Add(BadgeView);
 
             Levels = new FrameView(Width - 100, Height - (CategoryName.Y + CategoryName.Height))
             {
@@ -89,10 +125,10 @@ namespace ThreeOneSevenBee.Model.UI
             ArrowLeft.Visible = Category > 0;
 
             Children.Add(MenuButton);
-            Children.Add(CategoryName);
             Children.Add(ArrowLeft);
             Children.Add(ArrowRight);
             Children.Add(Levels);
+            Children.Add(TitelView);
 
             Update(user);
         }
@@ -102,6 +138,8 @@ namespace ThreeOneSevenBee.Model.UI
             CategoryName.Text = user.Categories[Category].Name;
             ArrowLeft.Visible = Category > 0;
             ArrowRight.Visible = Category < user.Categories.Count - 1;
+            int totalStars = user.Categories[Category].Count * 3;
+            int userStarsInCategory = 0;
 
             CompositeView levelButtons = new CompositeView(400, 400);
 
@@ -109,6 +147,7 @@ namespace ThreeOneSevenBee.Model.UI
             int numberOfLevels = user.Categories[Category].Count;
             foreach (Level level in user.Categories[Category])
             {
+                userStarsInCategory += level.Stars;
                 CompositeView levelButton = new CompositeView(40, 40)
                 {
                     X = levelNumber % (int)Math.Sqrt(numberOfLevels) * 50 + 5,
@@ -145,7 +184,33 @@ namespace ThreeOneSevenBee.Model.UI
                 levelButtons.Add(levelButton);
                 levelNumber += 1;
 
+                switch (user.Categories[Category].Name)
+                {
+                    case "Tutorial":
+                        BadgeView.Image = "tutorialbadge.png";
+                        break;
+
+                    case "Potenser":
+                        BadgeView.Image = "potensv2.png";
+                        break;
+
+                    case "Brøker":
+                        BadgeView.Image = "brøkbadge.png";
+                        break;
+
+                    case "Parenteser":
+                        BadgeView.Image = "spildonebadge.png";
+                        break;
+
+                    case "Master of Algebra":
+                        BadgeView.Image = "masterofalgebra.png";
+                        break;
+                    default:
+                        break;
+                }
+
             }
+            StarTextView.Text = userStarsInCategory + " / " + totalStars;
             levelButtons.Width = (int)Math.Sqrt(numberOfLevels) * 50;
             levelButtons.Height = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50;
             Levels.setContent(levelButtons);
