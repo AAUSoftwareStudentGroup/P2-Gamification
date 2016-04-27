@@ -97,7 +97,6 @@ namespace ThreeOneSevenBee.Model.Game
             {
                 User.CurrentLevel.Stars = ProgressBar.ActivatedStarPercentages().Count();
             }
-            model.Expression.PrettyPrint();
             if (OnChanged != null)
             {
                 OnChanged(this);

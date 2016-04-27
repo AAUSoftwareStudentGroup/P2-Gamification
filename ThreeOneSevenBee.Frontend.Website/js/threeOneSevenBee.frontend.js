@@ -185,11 +185,9 @@
         inherits: [ThreeOneSevenBee.Model.Game.IGameAPI],
         token: null,
         getCategories: function (callback) {
-            console.log(this.token);
             $.post("/api/", { action: "get_levels", token: this.token }, function (data, textStatus, request) {
                 var $t, $t1, $t2;
                 var jdata = JSON.parse(Bridge.cast(data, String));
-                console.log(jdata.data);
                 var categories = new Bridge.List$1(ThreeOneSevenBee.Model.Game.LevelCategory)();
                 var categoriesData = Bridge.as(jdata.data, Array);
                 $t = Bridge.getEnumerator(categoriesData);

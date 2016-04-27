@@ -124,16 +124,19 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression', {
         inherits: [ThreeOneSevenBee.Model.Expression.ExpressionBase],
-        config: {
-            properties: {
-                Expression: null
-            }
-        },
+        expression: null,
         constructor: function (expression) {
             ThreeOneSevenBee.Model.Expression.ExpressionBase.prototype.$constructor.call(this);
     
             this.setExpression(expression);
             this.getExpression().setParent(this);
+        },
+        getExpression: function () {
+            return this.expression;
+        },
+        setExpression: function (value) {
+            this.expression = value;
+            this.expression.setParent(this);
         },
         getValue: function () {
             return "(" + this.getExpression().toString() + ")";
@@ -214,9 +217,9 @@
                 }
             }
         },
+        expression: null,
         config: {
             properties: {
-                Expression: null,
                 Function: null
             }
         },
@@ -226,6 +229,13 @@
             this.setExpression(expression);
             this.getExpression().setParent(this);
             this.setFunction($function.toLowerCase());
+        },
+        getExpression: function () {
+            return this.expression;
+        },
+        setExpression: function (value) {
+            this.expression = value;
+            this.expression.setParent(this);
         },
         getValue: function () {
             return this.getFunction() + this.getExpression();
@@ -406,12 +416,8 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Expression.Expressions.BinaryExpression', {
         inherits: [ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression],
-        config: {
-            properties: {
-                Left: null,
-                Right: null
-            }
-        },
+        left: null,
+        right: null,
         constructor: function (left, right, type) {
             ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression.prototype.$constructor.call(this, type);
     
@@ -423,9 +429,22 @@
             }
     
             this.setLeft(left);
-            this.getLeft().setParent(this);
             this.setRight(right);
-            this.getRight().setParent(this);
+        },
+        getLeft: function () {
+            return this.left;
+        },
+        setLeft: function (value) {
+            var wrapped = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer().wrapInDelimiterIfNeccessary(value, this);
+            this.left = wrapped;
+            this.left.setParent(this);
+        },
+        getRight: function () {
+            return this.right;
+        },
+        setRight: function (value) {
+            this.right = value;
+            this.right.setParent(this);
         },
         replace$1: function (old, replacement, doRecursively) {
             var hasReplaced = false;
