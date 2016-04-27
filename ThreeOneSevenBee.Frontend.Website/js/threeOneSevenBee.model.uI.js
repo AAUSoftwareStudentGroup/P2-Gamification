@@ -1248,7 +1248,7 @@
                             this.getBadgeView().setImage("tutorialbadge.png");
                             break;
                         case "Potenser": 
-                            this.getBadgeView().setImage("potensv2.png");
+                            this.getBadgeView().setImage("potens.png");
                             break;
                         case "Brøker": 
                             this.getBadgeView().setImage("brøkbadge.png");
@@ -1486,7 +1486,7 @@
                 this.badgeDictionary = Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Game.BadgeName,String)(), [
         [ThreeOneSevenBee.Model.Game.BadgeName.brokBadge, "brøkbadge.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra, "masterofalgebra.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.potens, "potensv2.png"],
+        [ThreeOneSevenBee.Model.Game.BadgeName.potens, "potens.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge, "tutorialbadge.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge, "parantes.png"]
     ] ) || null;

@@ -191,7 +191,7 @@ namespace ThreeOneSevenBee.Model.UI
                         break;
 
                     case "Potenser":
-                        BadgeView.Image = "potensv2.png";
+                        BadgeView.Image = "potens.png";
                         break;
 
                     case "Brøker":
