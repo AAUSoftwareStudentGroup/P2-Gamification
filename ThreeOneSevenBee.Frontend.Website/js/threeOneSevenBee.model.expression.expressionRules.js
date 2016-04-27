@@ -195,9 +195,18 @@
                             selectedProductOperands = Bridge.Linq.Enumerable.from(product).where($_.ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules.f2).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase);
                             nonSelectedProductOperands = Bridge.Linq.Enumerable.from(product).where($_.ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules.f3).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase);
                         }
-                        console.log(selectedProductOperands);
-                        console.log(nonSelectedProductOperands);
-                        if (Bridge.Linq.Enumerable.from(commonProductOperands).union(selectedProductOperands).count() === commonProductOperands.getCount() || commonProductOperands.getCount() === 0) {
+                        var allEqual = true;
+                        if (commonProductOperands.getCount() === 0 || commonProductOperands.getCount() === selectedProductOperands.getCount()) {
+                            for (var index = 0; index < commonProductOperands.getCount(); index++) {
+                                if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Inequality(commonProductOperands.getItem(index), selectedProductOperands.getItem(index))) {
+                                    allEqual = false;
+                                }
+                            }
+                        }
+                        else  {
+                            return null;
+                        }
+                        if (allEqual || commonProductOperands.getCount() === 0) {
                             commonProductOperands = selectedProductOperands;
                             if (nonSelectedProductOperands.getCount() === 0) {
                                 suggestionSum.add(new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1));
@@ -218,7 +227,6 @@
                             return null;
                         }
                     }
-                    console.log("wat");
                     var sumExpression = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add, suggestionSum.getItem(0), suggestionSum.getItem(1));
                     sumExpression.add$1(Bridge.Linq.Enumerable.from(suggestionSum).skip(2).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
                     var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, new ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression(sumExpression), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(-1));

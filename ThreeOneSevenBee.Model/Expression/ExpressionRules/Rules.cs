@@ -260,9 +260,22 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         selectedProductOperands = product.Where((o) => (o.Selected == true || o.GetNodesRecursive().Any((n) => n.Selected))).ToList();
                         nonSelectedProductOperands = product.Where((o) => o.Selected == false && o.GetNodesRecursive().Any((n) => n.Selected) == false).ToList();
                     }
-                    Console.WriteLine(selectedProductOperands);
-                    Console.WriteLine(nonSelectedProductOperands);
-                    if (commonProductOperands.Union(selectedProductOperands).Count() == commonProductOperands.Count || commonProductOperands.Count == 0)
+                    bool allEqual = true;
+                    if (commonProductOperands.Count == 0 || commonProductOperands.Count == selectedProductOperands.Count)
+                    {
+                        for (int index = 0; index < commonProductOperands.Count; index++)
+                        {
+                            if (commonProductOperands[index] != selectedProductOperands[index])
+                            {
+                                allEqual = false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    if (allEqual || commonProductOperands.Count == 0)
                     {
                         commonProductOperands = selectedProductOperands;
                         if (nonSelectedProductOperands.Count == 0)
@@ -286,7 +299,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         return null;
                     }
                 }
-                Console.WriteLine("wat");
                 VariadicOperatorExpression sumExpression = new VariadicOperatorExpression(OperatorType.Add, suggestionSum[0], suggestionSum[1]);
                 sumExpression.Add(suggestionSum.Skip(2).ToList());
                 VariadicOperatorExpression suggestion = new VariadicOperatorExpression(OperatorType.Multiply, new DelimiterExpression(sumExpression), new NumericExpression(-1));
