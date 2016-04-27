@@ -392,7 +392,7 @@
         this.updateSelection();
         this.selectionParent = this.analyzer.getCommonParent$1(this.selection);
         this.identities = this.analyzer.getIdentities(this.selection);
-    
+        console.log("Identities updated");
         if (Bridge.hasValue(this.onChanged)) {
             this.onChanged(this);
         }

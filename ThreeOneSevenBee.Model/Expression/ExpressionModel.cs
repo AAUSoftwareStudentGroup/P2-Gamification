@@ -89,7 +89,7 @@ namespace ThreeOneSevenBee.Model.Expression
             UpdateSelection();
             selectionParent = analyzer.GetCommonParent(selection);
             identities = analyzer.GetIdentities(selection);
-
+            Console.WriteLine("Identities updated");
             if (OnChanged != null)
                 OnChanged(this);
         }
