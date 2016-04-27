@@ -55,10 +55,7 @@ namespace ThreeOneSevenBee.Frontend
             context.Canvas.AddEventListener(EventType.Focus,
                 (e) =>
                 {
-                    if (contentView.Active)
-                    {
-                        input.Focus();
-                    }
+                    input.Focus();
                 });
 
             Window.OnResize = (e) => ResizeContent();
