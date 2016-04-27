@@ -115,7 +115,7 @@ namespace ThreeOneSevenBee.Model.Expression
             }
             else
             {
-                Selected.Replace(analyzer.WrapInDelimiterIfNeccessary(identity, parent));
+                Selected.Replace(identity);
             }
             Selected.Parent = parent;
             UpdateSelection();

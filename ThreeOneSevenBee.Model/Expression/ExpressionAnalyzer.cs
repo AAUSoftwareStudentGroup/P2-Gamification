@@ -146,6 +146,10 @@ namespace ThreeOneSevenBee.Model.Expression
 
         public ExpressionBase WrapInDelimiterIfNeccessary(ExpressionBase expression, ExpressionBase parent)
         {
+            if(parent == null)
+            {
+                return expression;
+            }
             OperatorExpression operatorExpression = expression as OperatorExpression;
             OperatorExpression parentExpression = parent as OperatorExpression;
 
@@ -226,7 +230,7 @@ namespace ThreeOneSevenBee.Model.Expression
                             variadicResult.RemoveAt(0);
                             result = variadicResult;
                         }
-                        identities.Add(new Identity(suggestion, result));
+                        identities.Add(new Identity(suggestion, WrapInDelimiterIfNeccessary(result, commonParent.Parent)));
                     }
                 }
             }
@@ -234,7 +238,7 @@ namespace ThreeOneSevenBee.Model.Expression
             {
                 foreach (ExpressionRule rule in rules)
                 {
-                    ExpressionBase suggestion = rule(commonParent, selection);
+                    ExpressionBase suggestion = WrapInDelimiterIfNeccessary(rule(commonParent, selection), commonParent.Parent);
                     if (suggestion != null)
                     {
                         identities.Add(new Identity(suggestion, suggestion));

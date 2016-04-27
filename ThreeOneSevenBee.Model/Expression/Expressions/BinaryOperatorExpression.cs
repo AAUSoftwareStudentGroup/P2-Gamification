@@ -51,7 +51,6 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             {
                 case OperatorType.Add:
                 case OperatorType.Subtract:
-                case OperatorType.Divide:
                 case OperatorType.Multiply:
                 case OperatorType.Power:
                     return Left.CanCalculate() && Right.CanCalculate();
@@ -67,8 +66,6 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                     return Left.Calculate() + Right.Calculate();
                 case OperatorType.Subtract:
                     return Left.Calculate() - Right.Calculate();
-                case OperatorType.Divide:
-                    return Left.Calculate() / Right.Calculate();
                 case OperatorType.Multiply:
                     return Left.Calculate() * Right.Calculate();
                 case OperatorType.Power:

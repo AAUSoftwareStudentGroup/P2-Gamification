@@ -102,6 +102,9 @@
             }
         },
         wrapInDelimiterIfNeccessary: function (expression, parent) {
+            if (!Bridge.hasValue(parent)) {
+                return expression;
+            }
             var operatorExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
             var parentExpression = Bridge.as(parent, ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression);
     
@@ -173,7 +176,7 @@
                             variadicResult.removeAt(0);
                             result = variadicResult;
                         }
-                        identities.add(new ThreeOneSevenBee.Model.Expression.Identity(suggestion, result));
+                        identities.add(new ThreeOneSevenBee.Model.Expression.Identity(suggestion, this.wrapInDelimiterIfNeccessary(result, commonParent.getParent())));
                     }
                 }
             }
@@ -181,7 +184,7 @@
                 $t3 = Bridge.getEnumerator(this.rules);
                 while ($t3.moveNext()) {
                     var rule1 = $t3.getCurrent();
-                    var suggestion1 = rule1(commonParent, selection);
+                    var suggestion1 = this.wrapInDelimiterIfNeccessary(rule1(commonParent, selection), commonParent.getParent());
                     if (Bridge.hasValue(suggestion1)) {
                         identities.add(new ThreeOneSevenBee.Model.Expression.Identity(suggestion1, suggestion1));
                     }
@@ -409,7 +412,7 @@
             this.expression = identity;
         }
         else  {
-            this.getSelected().replace(this.analyzer.wrapInDelimiterIfNeccessary(identity, parent));
+            this.getSelected().replace(identity);
         }
         this.getSelected().setParent(parent);
         this.updateSelection();

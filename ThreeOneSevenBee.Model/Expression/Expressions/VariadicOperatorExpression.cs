@@ -44,7 +44,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 case OperatorType.Multiply:
                     foreach (var expression in this)
                     {
-                        if (!expression.CanCalculate())
+                        if (expression is NumericExpression == false)
                             return false;
                     }
                     return true;

@@ -161,7 +161,7 @@
             return hasReplaced;
         },
         canCalculate: function () {
-            return this.getExpression().canCalculate();
+            return Bridge.is(this.getExpression(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
         },
         calculate: function () {
             return this.getExpression().calculate();
@@ -722,7 +722,6 @@
             switch (this.getType()) {
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add: 
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract: 
-                case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide: 
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply: 
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power: 
                     return this.getLeft().canCalculate() && this.getRight().canCalculate();
@@ -735,8 +734,6 @@
                     return Bridge.Nullable.add(this.getLeft().calculate(), this.getRight().calculate());
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract: 
                     return Bridge.Nullable.sub(this.getLeft().calculate(), this.getRight().calculate());
-                case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide: 
-                    return Bridge.Nullable.div(this.getLeft().calculate(), this.getRight().calculate());
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply: 
                     return Bridge.Nullable.mul(this.getLeft().calculate(), this.getRight().calculate());
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power: 
@@ -901,7 +898,7 @@
                     $t = Bridge.getEnumerator(this);
                     while ($t.moveNext()) {
                         var expression = $t.getCurrent();
-                        if (!expression.canCalculate()) {
+                        if (Bridge.is(expression, ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression) === false) {
                             return false;
                         }
                     }
