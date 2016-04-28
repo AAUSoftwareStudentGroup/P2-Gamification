@@ -20,8 +20,11 @@ namespace ThreeOneSevenBee.Model.UI
         public LabelView BadgeInfoText;
         public ImageView ShowBadges;
         public PlayerListView PlayerView = new PlayerListView(1, 1);
-        public TitleView(CurrentPlayer user, IEnumerable<Player> players) : base(420, 220)
+
+        public void Build(GameModel game)
         {
+            CurrentPlayer user = game.User;
+            IEnumerable<Player> players = game.Players;
             BackgroundColor = new Color(255, 255, 255);
             WelcomeText = new LabelView("Velkommen " + user.PlayerName)
             {
@@ -86,7 +89,7 @@ namespace ThreeOneSevenBee.Model.UI
             PlayButton.BackgroundColor = new Color(39, 174, 97);
             PlayButton.X = 10;
             PlayButton.Y = BadgesView.Y + BadgesView.Height;
-            Console.WriteLine(BadgesView.Y +  "og " + BadgesView.Width );
+            Console.WriteLine(BadgesView.Y + "og " + BadgesView.Width);
             VectorImageView levelIcon1 = new VectorImageView(0, 0, 100, 100)
             {
                 { 20,20 },
@@ -111,7 +114,7 @@ namespace ThreeOneSevenBee.Model.UI
                 { 80,55 },
                 { 80,80 },
             };
-            VectorImageView levelIcon4 = new VectorImageView(0,0, 100, 100)
+            VectorImageView levelIcon4 = new VectorImageView(0, 0, 100, 100)
             {
                 { 20,80 },
                 { 20,55 },
@@ -123,6 +126,7 @@ namespace ThreeOneSevenBee.Model.UI
             levelIcon2.BackgroundColor = new Color(255, 255, 255);
             levelIcon3.BackgroundColor = new Color(255, 255, 255);
             levelIcon4.BackgroundColor = new Color(255, 255, 255);
+
             LevelButton = new CompositeView(100, 100)
             {
                 levelIcon1,
@@ -147,6 +151,11 @@ namespace ThreeOneSevenBee.Model.UI
                 PlayButton,
                 BadgesView
             };
+        }
+
+        public TitleView(GameModel game) : base(420, 220)
+        {
+            Build(game);
         }
     }
 }

@@ -14,9 +14,10 @@ namespace ThreeOneSevenBee.Model.Game
         public static Dictionary<string, BadgeName> CategoryBadges = new Dictionary<string, BadgeName>()
         {
             { "Tutorial", BadgeName.tutorialBadge },
-            { "Potenser", BadgeName.potens },
+            { "Potenser", BadgeName.potensBadge },
             { "Brøker", BadgeName.brokBadge },
             { "Master of Algebra", BadgeName.masterOfAlgebra },
+            { "Parenteser", BadgeName.parenthesisBadge},
         };
         public bool Completed
         {

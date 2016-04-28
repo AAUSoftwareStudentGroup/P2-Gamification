@@ -50,7 +50,7 @@
     
             this.input = input;
             input.type = "text";
-            input.focus();
+            input.value = "A";
             input.oninput = Bridge.fn.bind(this, function (e) {
                 if (input.value === "") {
                     this.keyPressed("Back");

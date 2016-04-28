@@ -12,6 +12,7 @@
                 X: 0,
                 Y: 0,
                 Active: false,
+                Scaling: 0,
                 Baseline: 0,
                 BackgroundColor: null,
                 Visible: false
@@ -876,7 +877,7 @@
     
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
     
-            this.titleView = new ThreeOneSevenBee.Model.UI.TitleView(game.getUser(), game.getPlayers());
+            this.titleView = new ThreeOneSevenBee.Model.UI.TitleView(game);
     
             this.levelView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LevelView(game), {
                 setOnExit: Bridge.fn.bind(this, function () {
@@ -900,14 +901,24 @@
                     this.update$1(game);
                     game.setLevel(level.levelIndex, level.categoryIndex);
                 }),
-                setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1)
+                setOnExit: Bridge.fn.bind(this, function () {
+                    this.titleView = new ThreeOneSevenBee.Model.UI.TitleView(game);
+    
+                    this.titleView.playButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1);
+    
+                    this.titleView.levelButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f2);
+    
+                    this.titleView.onLogout = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f3);
+    
+                    this.setContent(this.titleView);
+                })
             } );
     
-            this.titleView.playButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f2);
+            this.titleView.playButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1);
     
-            this.titleView.levelButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f3);
+            this.titleView.levelButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f2);
     
-            this.titleView.onLogout = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f4);
+            this.titleView.onLogout = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f3);
     
             game.onChanged = Bridge.fn.bind(this, this.update$1);
     
@@ -932,15 +943,12 @@
     
     Bridge.apply($_.ThreeOneSevenBee.Model.UI.GameView, {
         f1: function () {
-            this.setContent(this.titleView);
-        },
-        f2: function () {
             this.setContent(this.levelView);
         },
-        f3: function () {
+        f2: function () {
             this.setContent(this.levelSelectView);
         },
-        f4: function () {
+        f3: function () {
             if (Bridge.hasValue(this.getOnExit())) {
                 this.getOnExit()();
             }
@@ -1508,9 +1516,9 @@
                 this.badgeDictionary = Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Game.BadgeName,String)(), [
         [ThreeOneSevenBee.Model.Game.BadgeName.brokBadge, "brøkbadge.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra, "master_of_algebrabadge.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.potens, "potens_badge.png"],
+        [ThreeOneSevenBee.Model.Game.BadgeName.potensBadge, "potens_badge.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge, "tutorial_badge.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge, "parenthesis_badge.png"]
+        [ThreeOneSevenBee.Model.Game.BadgeName.parenthesisBadge, "parenthesis_badge.png"]
     ] ) || null;
             }
         },
@@ -1640,10 +1648,15 @@
                 this.playerView = new ThreeOneSevenBee.Model.UI.PlayerListView("constructor$1", 1, 1) || null;
             }
         },
-        constructor: function (user, players) {
+        constructor: function (game) {
             ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, 420, 220);
-            var $t;
     
+            this.build(game);
+        },
+        build: function (game) {
+            var $t;
+            var user = game.getUser();
+            var players = game.getPlayers();
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
             this.welcomeText = Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView("Velkommen " + user.getPlayerName()), {
                 setX: 10,
@@ -1728,6 +1741,7 @@
             levelIcon2.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
             levelIcon3.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
             levelIcon4.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
+    
             this.levelButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(100, 100), [
                 [levelIcon1],
                 [levelIcon2],
@@ -1750,7 +1764,7 @@
                 [this.playButton],
                 [this.badgesView]
             ] );
-    }
+        }
     });
     
     Bridge.ns("ThreeOneSevenBee.Model.UI.TitleView", $_)

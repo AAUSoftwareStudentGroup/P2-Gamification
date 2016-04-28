@@ -21,7 +21,7 @@ namespace ThreeOneSevenBee.Frontend
 
             this.input = input;
             input.Type = InputType.Text;
-            input.Focus();
+            input.Value = "A";
             input.OnInput = (e) =>
             {
                 if(input.Value == "")
