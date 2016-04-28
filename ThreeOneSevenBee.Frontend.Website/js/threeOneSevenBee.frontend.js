@@ -9,6 +9,8 @@
                 }
             },
             main: function () {
+                document.addEventListener("touchmove", $_.ThreeOneSevenBee.Frontend.App.f1);
+    
                 var canvas = document.getElementById("canvas");
                 canvas.width = document.documentElement.clientWidth;
                 canvas.height = document.documentElement.clientHeight;
@@ -22,6 +24,16 @@
     
                 game.start();
             }
+        }
+    });
+    
+    var $_ = {};
+    
+    Bridge.ns("ThreeOneSevenBee.Frontend.App", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Frontend.App, {
+        f1: function (e) {
+            e.preventDefault();
         }
     });
     
@@ -161,8 +173,6 @@
             return new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.context.measureText(text).width, minFontSize);
         }
     });
-    
-    var $_ = {};
     
     Bridge.ns("ThreeOneSevenBee.Frontend.CanvasContext", $_)
     

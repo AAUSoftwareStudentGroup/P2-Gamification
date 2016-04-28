@@ -17,6 +17,10 @@ namespace ThreeOneSevenBee.Frontend
         [Ready]
         public static void Main()
         {
+            Document.AddEventListener(EventType.TouchMove, (e) => {
+                e.PreventDefault();
+            });
+
             CanvasElement canvas = Document.GetElementById<CanvasElement>("canvas");
             canvas.Width = Document.DocumentElement.ClientWidth;
             canvas.Height = Document.DocumentElement.ClientHeight;
