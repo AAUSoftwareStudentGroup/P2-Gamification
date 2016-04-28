@@ -58,9 +58,9 @@ namespace ThreeOneSevenBee.Model.UI
                 X = TitelView.X - (TitelView.Width * 0.6) / 2
             };
 
-            StarTextView = new LabelView("5/27")
+            StarTextView = new LabelView("")
             {
-                Width = TitelView.Width * 0.20, 
+                Width = TitelView.Width * 0.15, 
                 Height = 15,
                 X = CategoryName.X + CategoryName.Width + 7.5,
                 Y = CategoryName.Y + ((CategoryName.Height) / 2) - 7.5
@@ -68,12 +68,13 @@ namespace ThreeOneSevenBee.Model.UI
 
             StarView = new ImageView("star_activated.png", TitelView.Width * 0.10, TitelView.Width * 0.10)
             {
-                X = CategoryName.X + CategoryName.Width + StarTextView.Width + 7.5,
+                X = CategoryName.X + CategoryName.Width + StarTextView.Width + 10,
                 Y = CategoryName.Y + 0.5 * (TitelView.Width * 0.10)
             };
 
             BadgeView = new ImageView("tutorialbadge.png", TitelView.Width * 0.15, TitelView.Width * 0.15)
             {
+                // her lasse
                 X = 0 - ((TitelView.Width * 0.10) / 2) + 5,
                 Y = CategoryName.Y + (0.5 * (TitelView.Width * 0.15)) - 10
             };
