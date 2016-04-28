@@ -962,12 +962,12 @@
                     var indexCopy = index;
                     var expressionView = new ThreeOneSevenBee.Model.UI.ExpressionView("constructor");
                     var view = expressionView.buildView(identities.getItem(index).suggestion, model);
-                    view.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230));
-                    var frameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor$3", this.getWidth() / identities.getCount(), this.getHeight(), view, 4), {
-                        setPropagateClick: false
+                    var frameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor$3", (this.getWidth() - 10 * (identities.getCount() - 1)) / identities.getCount(), this.getHeight(), view, 4), {
+                        setPropagateClick: false,
+                        setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230)
                     } );
                     frameView.setX(x);
-                    x += frameView.getWidth();
+                    x += frameView.getWidth() + 20;
                     frameView.onClick = function () {
                         model.applyIdentity(identities.getItem(indexCopy).result);
                     };
