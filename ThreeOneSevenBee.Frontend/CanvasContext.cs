@@ -40,7 +40,7 @@ namespace ThreeOneSevenBee.Frontend
             double canvasLeft = context.Canvas.GetBoundingClientRect().Left;
             double canvasRight = context.Canvas.GetBoundingClientRect().Left;
 
-            context.Canvas.AddEventListener(EventType.Click,
+            context.Canvas.AddEventListener(EventType.MouseDown,
                 (e) =>
                 {
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
