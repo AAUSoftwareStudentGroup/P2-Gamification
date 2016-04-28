@@ -962,7 +962,7 @@
                     var indexCopy = index;
                     var expressionView = new ThreeOneSevenBee.Model.UI.ExpressionView("constructor");
                     var view = expressionView.buildView(identities.getItem(index).suggestion, model);
-                    var frameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor$3", (this.getWidth() - 10 * (identities.getCount() - 1)) / identities.getCount(), this.getHeight(), view, 4), {
+                    var frameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor$3", (this.getWidth() - 20 * (identities.getCount() - 1)) / identities.getCount(), this.getHeight(), view, 4), {
                         setPropagateClick: false,
                         setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 240, 240, 240)
                     } );
