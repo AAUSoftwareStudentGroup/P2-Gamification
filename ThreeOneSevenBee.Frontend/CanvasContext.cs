@@ -45,12 +45,8 @@ namespace ThreeOneSevenBee.Frontend
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
                         e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
                 };
-            context.Canvas.OnTouchStart = (e) => {
-                click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
-                        e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
+            context.Canvas.OnTouchEnd = (e) => {
                 e.PreventDefault();
-
-
             };
             context.Canvas.AddEventListener(EventType.Click,
                 (e) =>
