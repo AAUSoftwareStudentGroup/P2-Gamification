@@ -67,7 +67,7 @@
             var canvasLeft = this.context.canvas.getBoundingClientRect().left;
             var canvasRight = this.context.canvas.getBoundingClientRect().left;
     
-            this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
+            this.context.canvas.addEventListener("touchstart", Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
                 if (this.getContentView$1().getActive() === true) {
                     input.focus();
