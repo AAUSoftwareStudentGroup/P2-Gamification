@@ -11,6 +11,7 @@
             main: function () {
                 document.addEventListener("touchmove", $_.ThreeOneSevenBee.Frontend.App.f1);
     
+    
                 var canvas = document.getElementById("canvas");
                 canvas.width = document.documentElement.clientWidth;
                 canvas.height = document.documentElement.clientHeight;
