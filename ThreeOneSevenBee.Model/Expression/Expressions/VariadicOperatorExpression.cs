@@ -30,7 +30,15 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 foreach (ExpressionBase expression in this)
                 {
                     // Count-1 gets the total number of * signs in the variadic expression
-                    result += expression.Size + (Count - 1);
+                    UnaryMinusExpression minus = expression as UnaryMinusExpression;
+                    if(minus != null)
+                    {
+                        result += minus.Expression.Size + (Count - 1);
+                    }
+                    else
+                    {
+                        result += expression.Size + (Count - 1);
+                    }
                 }
                 return result;
             }
@@ -81,32 +89,19 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         //Removes element from two clones if an element is in both lists. If both lists are 0 at the end, returns true.
         public override bool Equals(ExpressionBase otherBase)
         {
-            var other = (otherBase as VariadicOperatorExpression);
-
-            if (other == null)
-                return false;
-
-            other = (VariadicOperatorExpression)other.Clone();
-            var thisClone = (VariadicOperatorExpression)this.Clone();
-
-            for (int i = 0; i < thisClone.Count; i++)
+            VariadicOperatorExpression other = otherBase as VariadicOperatorExpression;
+            if(other != null && other.Type == Type && other.Count == Count)
             {
-                for (int j = 0; j < other.Count; j++)
+                for (int index = 0; index < other.Count; index++)
                 {
-                    if (thisClone[i].Equals(other[j]))
+                    if(this[index] != other[index])
                     {
-                        thisClone.RemoveAt(i);
-                        i--;
-                        other.RemoveAt(j);
-                        break;
+                        return false;
                     }
                 }
+                return true;
             }
-
-            if (other.Count != 0 && thisClone.Count != 0)
-                return false;
-
-            return true;
+            return false;
         }
 
         public override ExpressionBase Clone()

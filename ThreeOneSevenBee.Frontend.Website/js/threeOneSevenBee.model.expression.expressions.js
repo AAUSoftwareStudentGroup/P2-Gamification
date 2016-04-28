@@ -889,7 +889,13 @@
             while ($t.moveNext()) {
                 var expression = $t.getCurrent();
                 // Count-1 gets the total number of * signs in the variadic expression
-                result += expression.getSize() + (this.getCount() - 1);
+                var minus = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
+                if (Bridge.hasValue(minus)) {
+                    result += minus.getExpression().getSize() + (this.getCount() - 1);
+                }
+                else  {
+                    result += expression.getSize() + (this.getCount() - 1);
+                }
             }
             return result;
         },
@@ -936,31 +942,16 @@
             return result;
         },
         equalsT: function (otherBase) {
-            var other = (Bridge.as(otherBase, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression));
-    
-            if (!Bridge.hasValue(other)) {
-                return false;
-            }
-    
-            other = Bridge.cast(other.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
-            var thisClone = Bridge.cast(this.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
-    
-            for (var i = 0; i < thisClone.getCount(); i++) {
-                for (var j = 0; j < other.getCount(); j++) {
-                    if (thisClone.getItem(i).equalsT(other.getItem(j))) {
-                        thisClone.removeAt(i);
-                        i--;
-                        other.removeAt(j);
-                        break;
+            var other = Bridge.as(otherBase, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+            if (Bridge.hasValue(other) && other.getType() === this.getType() && other.getCount() === this.getCount()) {
+                for (var index = 0; index < other.getCount(); index++) {
+                    if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Inequality(this.getItem(index), other.getItem(index))) {
+                        return false;
                     }
                 }
+                return true;
             }
-    
-            if (other.getCount() !== 0 && thisClone.getCount() !== 0) {
-                return false;
-            }
-    
-            return true;
+            return false;
         },
         clone: function () {
             var $t;

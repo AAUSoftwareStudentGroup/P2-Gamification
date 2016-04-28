@@ -13,7 +13,7 @@ namespace ThreeOneSevenBee.Frontend
 
         CanvasRenderingContext2D context;
         InputElement input;
-        public Vector2 lastClick { get; private set; }
+
 
         public CanvasContext(CanvasElement canvas, InputElement input) : base(canvas.Width, canvas.Height)
         {
@@ -88,10 +88,6 @@ namespace ThreeOneSevenBee.Frontend
         private void click(double x, double y)
         {
             ContentView.Click(x, y, this);
-            Vector2 last = lastClick;
-            last.X = x;
-            last.Y = y;
-            lastClick = last;
             Draw();
         }
 

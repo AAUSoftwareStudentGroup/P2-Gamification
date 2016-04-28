@@ -1,6 +1,7 @@
 ﻿using System;
 #if BRIDGE
 using Bridge.Html5;
+using Bridge;
 #endif
 using System.Collections.Generic;
 using System.Linq;
@@ -208,10 +209,19 @@ namespace ThreeOneSevenBee.Model.Expression
                 }
 
                 toBeReplacedSelection = toBeReplaced.GetNodesRecursive().Where((n) => n.Selected == true).ToList();
-
+                int c = 0;
                 foreach (ExpressionRule rule in rules)
                 {
+                   
+
+                    var start = new Date().GetTime();
+
                     ExpressionBase suggestion = rule(toBeReplaced, toBeReplacedSelection);
+
+                    var end = new Date().GetTime();
+                    var time = end - start;
+                    Console.WriteLine(c++ + " " + time);
+                    
 
                     if (suggestion != null)
                     {
@@ -236,9 +246,14 @@ namespace ThreeOneSevenBee.Model.Expression
             }
             else
             {
+                int c = 0;
                 foreach (ExpressionRule rule in rules)
                 {
+                    var start = new Date().GetTime();
                     ExpressionBase suggestion = WrapInDelimiterIfNeccessary(rule(commonParent, selection), commonParent.Parent);
+                    var end = new Date().GetTime();
+                    var time = end - start;
+                    Console.WriteLine(c++ + " " + time);
                     if (suggestion != null)
                     {
                         identities.Add(new Identity(suggestion, suggestion));

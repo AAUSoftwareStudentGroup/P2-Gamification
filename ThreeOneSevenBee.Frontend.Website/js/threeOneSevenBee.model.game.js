@@ -152,7 +152,7 @@
             this.progressBar = new ThreeOneSevenBee.Model.Game.ProgressbarStar(startValue, endValue, currentValue);
             this.setStarExpressions(new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)());
     
-            $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getItem(this.getUser().currentLevelIndex).starExpressions);
+            $t = Bridge.getEnumerator(this.getUser().getCurrentLevel().starExpressions);
             while ($t.moveNext()) {
                 var starExpression = $t.getCurrent();
                 var starExpressionBase = serializer.deserialize(starExpression);
@@ -218,26 +218,27 @@
         startExpression: null,
         starExpressions: null,
         currentExpression: null,
+        description: null,
         levelID: 0,
         levelIndex: 0,
         categoryIndex: 0,
         stars: 0,
-        constructor$2: function (startExpression, currentExpression, stars, starExpressions) {
-            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, -1, startExpression, stars, currentExpression, starExpressions);
+        constructor$2: function (startExpression, currentExpression, stars, description, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, -1, startExpression, stars, currentExpression, description, starExpressions);
     
         },
-        constructor$1: function (levelID, startExpression, stars, currentExpression, starExpressions) {
-            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, levelID, -1, -1, startExpression, stars, currentExpression, starExpressions);
+        constructor$1: function (levelID, startExpression, stars, currentExpression, description, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, levelID, -1, -1, startExpression, stars, currentExpression, description, starExpressions);
     
         },
-        constructor: function (levelID, levelIndex, categoryIndex, startExpression, stars, currentExpression, starExpressions) {
+        constructor: function (levelID, levelIndex, categoryIndex, startExpression, stars, currentExpression, description, starExpressions) {
             var $t;
-            if (starExpressions === void 0) { starExpressions = []; }
             this.levelID = levelID;
             this.levelIndex = levelIndex;
             this.categoryIndex = categoryIndex;
             this.startExpression = startExpression;
             this.currentExpression = currentExpression;
+            this.description = description;
             this.stars = stars;
             this.starExpressions = new Bridge.List$1(String)();
             $t = Bridge.getEnumerator(starExpressions);
@@ -271,9 +272,7 @@
             return Bridge.cast((value - this.startValue), Number) / (this.endValue - this.startValue);
         },
         add: function (star) {
-            if (!this.stars.contains(star)) {
-                this.stars.add(star);
-            }
+            this.stars.add(star);
         },
         remove: function (star) {
             if (this.stars.contains(star)) {

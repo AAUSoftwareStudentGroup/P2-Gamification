@@ -66,7 +66,7 @@ namespace ThreeOneSevenBee.Model.Game
             ProgressBar = new ProgressbarStar(startValue, endValue, currentValue);
             StarExpressions = new List<ExpressionBase>();
 
-            foreach (string starExpression in User.Categories[User.CurrentCategoryIndex][User.CurrentLevelIndex].StarExpressions)
+            foreach (string starExpression in User.CurrentLevel.StarExpressions)
             {
                 ExpressionBase starExpressionBase = serializer.Deserialize(starExpression);
                 StarExpressions.Add(starExpressionBase);

@@ -458,6 +458,7 @@
                 var fraction = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
                 if (Bridge.hasValue(fraction) && fraction.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                     if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(fraction.getLeft(), fraction.getRight())) {
+                        console.log(fraction);
                         var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1);
                         return suggestion;
                     }

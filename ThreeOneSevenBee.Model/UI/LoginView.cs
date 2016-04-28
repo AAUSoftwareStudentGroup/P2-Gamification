@@ -43,8 +43,8 @@ namespace ThreeOneSevenBee.Model.UI
             submit.BackgroundColor = new Color(40, 175, 100);
 
             Status = new LabelView(" ");
-            Status.X = 300;
-            Status.Y = 250;
+            Status.X = 75;
+            Status.Y = 200;
             Status.Width = 200;
             Status.Height = 30;
 

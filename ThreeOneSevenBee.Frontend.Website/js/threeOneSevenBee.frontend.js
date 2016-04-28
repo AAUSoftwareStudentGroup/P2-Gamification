@@ -30,11 +30,6 @@
         imageCache: null,
         context: null,
         input: null,
-        config: {
-            init: function () {
-                Bridge.property(this, "lastClick", new ThreeOneSevenBee.Model.Euclidean.Vector2() || new ThreeOneSevenBee.Model.Euclidean.Vector2());
-            }
-        },
         constructor: function (canvas, input) {
             ThreeOneSevenBee.Model.UI.Context.prototype.$constructor.call(this, canvas.width, canvas.height);
     
@@ -91,10 +86,6 @@
         },
         click: function (x, y) {
             this.getContentView$1().click(x, y, this);
-            var last = this.getlastClick().$clone();
-            last.x = x;
-            last.y = y;
-            this.setlastClick(last.$clone());
             this.draw();
         },
         keyPressed: function (text) {
@@ -201,7 +192,7 @@
                     $t1 = Bridge.getEnumerator(levelsData);
                     while ($t1.moveNext()) {
                         var levelData = $t1.getCurrent();
-                        var level = new ThreeOneSevenBee.Model.Game.Level("constructor$1", Bridge.Int.parseInt(Bridge.cast(levelData.id, String), -2147483648, 2147483647), Bridge.cast(levelData.initial_expression, String), Bridge.Int.parseInt(($t2 = Bridge.cast(levelData.stars, String), Bridge.hasValue($t2) ? $t2 : "0"), -2147483648, 2147483647), Bridge.cast(levelData.current_expression, String), Bridge.Linq.Enumerable.from((Bridge.as(levelData.star_expressions, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f1).toArray());
+                        var level = new ThreeOneSevenBee.Model.Game.Level("constructor$1", Bridge.Int.parseInt(Bridge.cast(levelData.id, String), -2147483648, 2147483647), Bridge.cast(levelData.initial_expression, String), Bridge.Int.parseInt(($t2 = Bridge.cast(levelData.stars, String), Bridge.hasValue($t2) ? $t2 : "0"), -2147483648, 2147483647), Bridge.cast(levelData.current_expression, String), "Test", Bridge.Linq.Enumerable.from((Bridge.as(levelData.star_expressions, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f1).toArray());
                         levelCategory.add(level);
                     }
                     categories.add(levelCategory);
