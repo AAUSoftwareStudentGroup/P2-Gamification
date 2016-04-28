@@ -74,6 +74,7 @@
     <Content Include="img\tutorialbadge.png" />
     <Content Include="js\bridge.js" />
     <Content Include="js\bridge.min.js" />
+    <Content Include="js\fastclick.js" />
     <Content Include="js\threeOneSevenBee.frontend.js" />
     <Content Include="js\threeOneSevenBee.frontend.min.js" />
     <Content Include="js\threeOneSevenBee.model.collections.js" />

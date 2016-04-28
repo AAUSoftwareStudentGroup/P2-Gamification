@@ -39,15 +39,12 @@ namespace ThreeOneSevenBee.Frontend
 
             double canvasLeft = context.Canvas.GetBoundingClientRect().Left;
             double canvasRight = context.Canvas.GetBoundingClientRect().Left;
-            context.Canvas.OnMouseDown =
+
+            context.Canvas.AddEventListener(EventType.Click,
                 (e) =>
                 {
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
                         e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
-                };
-            context.Canvas.AddEventListener(EventType.Click,
-                (e) =>
-                {
                     if (ContentView.Active == true)
                     {
                         input.Focus();
