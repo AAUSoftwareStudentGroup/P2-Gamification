@@ -39,7 +39,7 @@
             this.gameAPI.isAuthenticated(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f1));
         },
         loadGameData: function () {
-            this.gameAPI.getCurrentPlayer(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f8));
+            this.gameAPI.getCurrentPlayer(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f9));
         }
     });
     
@@ -86,7 +86,10 @@
         f7: function () {
             this.gameAPI.logout(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f6));
         },
-        f8: function (u) {
+        f8: function () {
+            this.loadGameData();
+        },
+        f9: function (u) {
             this.gameAPI.getPlayers(Bridge.fn.bind(this, function (p) {
                 this.gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
                     onSaveLevel: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f3),
@@ -94,9 +97,9 @@
                 } );
     
                 this.gameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.GameView(this.gameModel, this.context.getWidth(), this.context.getHeight()), {
-                    setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f7)
+                    setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f7),
+                    setReloadGame: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f8)
                 } );
-    
                 this.context.setContentView(this.gameView);
             }));
         }

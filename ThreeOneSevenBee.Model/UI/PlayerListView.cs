@@ -23,7 +23,7 @@ namespace ThreeOneSevenBee.Model.UI
             Children = new List<View>();
             int offsetY = 5;
 
-            foreach (Player player in players)
+            foreach (Player player in players.Take(10))
             {
                 int badgesWidth = (badgeDictionary.Count - 1) * 15;
                 double labelWidth = Width - badgesWidth - 25;

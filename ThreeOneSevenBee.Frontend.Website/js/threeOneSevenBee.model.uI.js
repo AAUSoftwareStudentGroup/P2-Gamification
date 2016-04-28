@@ -869,7 +869,8 @@
         levelSelectView: null,
         config: {
             properties: {
-                OnExit: null
+                OnExit: null,
+                ReloadGame: null
             }
         },
         constructor: function (game, width, height) {
@@ -901,24 +902,14 @@
                     this.update$1(game);
                     game.setLevel(level.levelIndex, level.categoryIndex);
                 }),
-                setOnExit: Bridge.fn.bind(this, function () {
-                    this.titleView = new ThreeOneSevenBee.Model.UI.TitleView(game);
-    
-                    this.titleView.playButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1);
-    
-                    this.titleView.levelButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f2);
-    
-                    this.titleView.onLogout = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f3);
-    
-                    this.setContent(this.titleView);
-                })
+                setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1)
             } );
     
-            this.titleView.playButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1);
+            this.titleView.playButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f2);
     
-            this.titleView.levelButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f2);
+            this.titleView.levelButton.onClick = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f3);
     
-            this.titleView.onLogout = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f3);
+            this.titleView.onLogout = Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f4);
     
             game.onChanged = Bridge.fn.bind(this, this.update$1);
     
@@ -943,12 +934,15 @@
     
     Bridge.apply($_.ThreeOneSevenBee.Model.UI.GameView, {
         f1: function () {
-            this.setContent(this.levelView);
+            this.getReloadGame()();
         },
         f2: function () {
-            this.setContent(this.levelSelectView);
+            this.setContent(this.levelView);
         },
         f3: function () {
+            this.setContent(this.levelSelectView);
+        },
+        f4: function () {
             if (Bridge.hasValue(this.getOnExit())) {
                 this.getOnExit()();
             }
@@ -1537,7 +1531,7 @@
             this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
             var offsetY = 5;
     
-            $t = Bridge.getEnumerator(players);
+            $t = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(players).take(10));
             while ($t.moveNext()) {
                 var player = $t.getCurrent();
                 var badgesWidth = (this.badgeDictionary.getCount() - 1) * 15;

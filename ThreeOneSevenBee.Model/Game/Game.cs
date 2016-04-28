@@ -89,9 +89,9 @@ namespace ThreeOneSevenBee.Model.Game
                                 Console.WriteLine(success ? "Logout success" : "Logout failed");
                                 Start();
                             });
-                        }
+                        },
+                        ReloadGame = () => loadGameData()
                     };
-
                     context.SetContentView(gameView);
                 });
             });

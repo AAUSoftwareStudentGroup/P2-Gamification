@@ -17,6 +17,8 @@ namespace ThreeOneSevenBee.Model.UI
 
         public Action OnExit { get; set; }
 
+        public Action ReloadGame { get; set; }
+
         public void Update(GameModel game)
         {
             levelView.Update(game);
@@ -62,21 +64,7 @@ namespace ThreeOneSevenBee.Model.UI
                 },
                 OnExit = () =>
                 {
-                    titleView = new TitleView(game);
-
-                    titleView.PlayButton.OnClick = () => setContent(levelView);
-
-                    titleView.LevelButton.OnClick = () => setContent(levelSelectView);
-
-                    titleView.OnLogout = () =>
-                    {
-                        if (OnExit != null)
-                        {
-                            OnExit();
-                        }
-                    };
-
-                    setContent(titleView);
+                    ReloadGame();
                 }
             };
 
