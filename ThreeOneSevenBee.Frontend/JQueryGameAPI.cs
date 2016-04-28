@@ -66,7 +66,7 @@ namespace ThreeOneSevenBee.Frontend
                 {
                     var jdata = JSON.Parse((string)data);
                     CurrentPlayer currentPlayer = new CurrentPlayer((string)jdata["data"]["name"]);
-                    currentPlayer.Badges = ((string[])jdata["data"]["badges"]).Select((b) => (BadgeName)int.Parse(b)).ToList();
+                    currentPlayer.Badges = ((string[])jdata["data"]["badges"]).Where((b) => b != "").Select((b) => (BadgeName)int.Parse(b)).ToList();
                     getCategories((categories) =>
                     {
                         foreach (LevelCategory category in categories)

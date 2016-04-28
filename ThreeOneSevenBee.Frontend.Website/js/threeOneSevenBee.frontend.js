@@ -215,7 +215,7 @@
             $.post("/api/", { action: "get_current_user", token: this.token }, Bridge.fn.bind(this, function (data, textStatus, request) {
                 var jdata = JSON.parse(Bridge.cast(data, String));
                 var currentPlayer = new ThreeOneSevenBee.Model.Game.CurrentPlayer(Bridge.cast(jdata.data.name, String));
-                currentPlayer.badges = Bridge.Linq.Enumerable.from((Bridge.cast(jdata.data.badges, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f2).toList(ThreeOneSevenBee.Model.Game.BadgeName);
+                currentPlayer.badges = Bridge.Linq.Enumerable.from((Bridge.cast(jdata.data.badges, Array))).where($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f2).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f3).toList(ThreeOneSevenBee.Model.Game.BadgeName);
                 this.getCategories(function (categories) {
                     var $t;
                     $t = Bridge.getEnumerator(categories);
@@ -278,14 +278,14 @@
             return Bridge.cast(o, String);
         },
         f2: function (b) {
-            return Bridge.Int.parseInt(b, -2147483648, 2147483647);
+            return b !== "";
         },
         f3: function (b) {
-            return b !== "";
+            return Bridge.Int.parseInt(b, -2147483648, 2147483647);
         },
         f4: function (s) {
             return Bridge.merge(new ThreeOneSevenBee.Model.Game.Player(Bridge.cast(s.name, String)), {
-                badges: Bridge.Linq.Enumerable.from((Bridge.cast(s.badges, Array))).where($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f3).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f2).toList(ThreeOneSevenBee.Model.Game.BadgeName)
+                badges: Bridge.Linq.Enumerable.from((Bridge.cast(s.badges, Array))).where($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f2).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f3).toList(ThreeOneSevenBee.Model.Game.BadgeName)
             } );
         }
     });
