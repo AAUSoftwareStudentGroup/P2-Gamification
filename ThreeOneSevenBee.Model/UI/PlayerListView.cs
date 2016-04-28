@@ -15,7 +15,7 @@ namespace ThreeOneSevenBee.Model.UI
             {BadgeName.masterOfAlgebra, "master_of_algebrabadge.png"},
             {BadgeName.potens, "potens_badge.png"},
             {BadgeName.tutorialBadge, "tutorialbadge.png" },
-            {BadgeName.spilDoneBadge, "parantes_badge.png"}
+            {BadgeName.spilDoneBadge, "parenthesis_badge.png"}
 
         };
         public void Build(IEnumerable<Player> players)

@@ -65,7 +65,7 @@
     <Content Include="img\brøkbadge.png" />
     <Content Include="img\levelbutton.png" />
     <Content Include="img\master_of_algebrabadge.png" />
-    <Content Include="img\parantes_badge.png" />
+    <Content Include="img\parenthesis_badge.png" />
     <Content Include="img\playbutton.png" />
     <Content Include="img\potens_badge.png" />
     <Content Include="img\restart.png" />
@@ -74,6 +74,7 @@
     <Content Include="img\tutorialbadge.png" />
     <Content Include="js\bridge.js" />
     <Content Include="js\bridge.min.js" />
+    <Content Include="js\fastclick.js" />
     <Content Include="js\threeOneSevenBee.frontend.js" />
     <Content Include="js\threeOneSevenBee.frontend.min.js" />
     <Content Include="js\threeOneSevenBee.model.collections.js" />

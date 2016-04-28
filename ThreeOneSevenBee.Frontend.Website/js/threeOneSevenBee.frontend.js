@@ -11,6 +11,7 @@
             main: function () {
                 document.addEventListener("touchmove", $_.ThreeOneSevenBee.Frontend.App.f1);
     
+    
                 var canvas = document.getElementById("canvas");
                 canvas.width = document.documentElement.clientWidth;
                 canvas.height = document.documentElement.clientHeight;
@@ -65,16 +66,9 @@
     
             var canvasLeft = this.context.canvas.getBoundingClientRect().left;
             var canvasRight = this.context.canvas.getBoundingClientRect().left;
-            this.context.canvas.onmousedown = Bridge.fn.bind(this, function (e) {
-                this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
-            });
-            this.context.canvas.ontouchstart = Bridge.fn.bind(this, function (e) {
-                this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
-                e.preventDefault();
     
-    
-            });
             this.context.canvas.addEventListener("click", Bridge.fn.bind(this, function (e) {
+                this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
                 if (this.getContentView$1().getActive() === true) {
                     input.focus();
                 }

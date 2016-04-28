@@ -21,6 +21,7 @@ namespace ThreeOneSevenBee.Frontend
                 e.PreventDefault();
             });
 
+
             CanvasElement canvas = Document.GetElementById<CanvasElement>("canvas");
             canvas.Width = Document.DocumentElement.ClientWidth;
             canvas.Height = Document.DocumentElement.ClientHeight;
