@@ -62,8 +62,9 @@ namespace ThreeOneSevenBee.Model.UI
 			return string.Compare (Text, placeholder) == 0;
 		}
 
-        public override void KeyPressed(string key, IContext context)
+		public override void KeyPressed(string key, IContext context)
         {
+			base.KeyPressed(key, context);
 			if(Active) {
 				switch (key) {
 				case "Back":

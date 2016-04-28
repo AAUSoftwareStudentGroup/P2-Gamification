@@ -1,4 +1,6 @@
-﻿using Bridge.Html5;
+﻿#if BRIDGE
+using Bridge.Html5;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,12 +54,12 @@ namespace ThreeOneSevenBee.Model.UI
                 {
                     if (PlayerView.badgeDictionary.ContainsKey(badge))
                     {
-                        BadgesView.Add(new ImageView(PlayerView.badgeDictionary[badge], 20, 20)
+                        BadgesView.Add(new ImageView(PlayerView.badgeDictionary[badge], 25, 25)
                         {
                             X = BadgeInfoText.X + BadgeInfoText.Width + spacing,
                         });
                     }
-                    spacing += 25;
+                    spacing += 30;
                 }
             }
 

@@ -138,6 +138,10 @@ namespace ThreeOneSevenBee.Model.Game
         {
             User = user;
             Players = players;
+			players.Sort(delegate(Player p1, Player p2) {
+				return p2.Badges.Count.CompareTo(p1.Badges.Count);
+			});
+
             SetLevel(User.CurrentLevelIndex, User.CurrentCategoryIndex);
 
         }

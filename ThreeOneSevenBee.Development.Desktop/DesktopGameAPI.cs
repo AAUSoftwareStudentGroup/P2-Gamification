@@ -75,7 +75,10 @@ namespace ThreeOneSevenBee.Development.Desktop
 			JArray data = response.SelectToken ("data") as JArray;
 
 			for (int i = 0; i < data.Count; i++) {
-				players.Add (new Player (data[i].Value<string>("name")));
+				Player player = new Player (data[i].Value<string>("name"));
+				if(player.PlayerName == "TannerHelland")
+					player.Badges.Add(BadgeName.tutorialBadge);
+				players.Add (player);
 			}
 
 			callback(players);
@@ -117,7 +120,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 						starExpressions.Add(starArray[j].ToString());
 					}
 					Level level = new Level(
-						int.Parse(levelsData[i].SelectToken("id").Value<string>()),
+						levelsData[i].SelectToken("id").Value<string>(),
 						levelsData[i].SelectToken("initial_expression").Value<string>(),
 						int.Parse(levelsData[i].SelectToken("stars").Value<string>()),
 						levelsData[i].SelectToken("initial_expression").Value<string>(),
