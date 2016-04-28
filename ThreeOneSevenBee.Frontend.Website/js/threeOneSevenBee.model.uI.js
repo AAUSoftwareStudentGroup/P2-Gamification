@@ -1450,7 +1450,7 @@
             password.setHeight(36);
             password.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
-            var submit = new ThreeOneSevenBee.Model.UI.ButtonView("Log in", Bridge.fn.bind(this, function () {
+            var submit = new ThreeOneSevenBee.Model.UI.ButtonView("Log ind", Bridge.fn.bind(this, function () {
                 if (Bridge.hasValue(this.onLogin)) {
                     this.onLogin(username.getText(), password.getText());
                 }
