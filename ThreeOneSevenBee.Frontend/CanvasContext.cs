@@ -40,7 +40,7 @@ namespace ThreeOneSevenBee.Frontend
             double canvasLeft = context.Canvas.GetBoundingClientRect().Left;
             double canvasRight = context.Canvas.GetBoundingClientRect().Left;
 
-            context.Canvas.OnMouseDown =
+            context.Canvas.AddEventListener(EventType.Click,
                 (e) =>
                 {
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
@@ -49,7 +49,7 @@ namespace ThreeOneSevenBee.Frontend
                     {
                         input.Focus();
                     }
-                };
+                });
 
             Window.OnResize = (e) => ResizeContent();
         }
