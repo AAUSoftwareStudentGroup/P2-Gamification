@@ -213,15 +213,18 @@ namespace ThreeOneSevenBee.Model.Expression
                 foreach (ExpressionRule rule in rules)
                 {
                    
-
-                    var start = new Date().GetTime();
-
+					#if BRIDGE
+					var start = new Date().GetTime();
+					#endif
+                    
                     ExpressionBase suggestion = rule(toBeReplaced, toBeReplacedSelection);
 
-                    var end = new Date().GetTime();
+					#if BRIDGE
+					var end = new Date().GetTime();
                     var time = end - start;
                     Console.WriteLine(c++ + " " + time);
-                    
+					#endif
+
 
                     if (suggestion != null)
                     {
@@ -249,11 +252,15 @@ namespace ThreeOneSevenBee.Model.Expression
                 int c = 0;
                 foreach (ExpressionRule rule in rules)
                 {
-                    var start = new Date().GetTime();
-                    ExpressionBase suggestion = WrapInDelimiterIfNeccessary(rule(commonParent, selection), commonParent.Parent);
-                    var end = new Date().GetTime();
+					#if BRIDGE
+					var start = new Date().GetTime();
+					#endif
+					ExpressionBase suggestion = WrapInDelimiterIfNeccessary(rule(commonParent, selection), commonParent.Parent);
+					#if BRIDGE
+					var end = new Date().GetTime();
                     var time = end - start;
-                    Console.WriteLine(c++ + " " + time);
+					Console.WriteLine(c++ + " " + time);
+					#endif
                     if (suggestion != null)
                     {
                         identities.Add(new Identity(suggestion, suggestion));

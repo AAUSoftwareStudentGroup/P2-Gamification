@@ -1,4 +1,6 @@
-﻿using Bridge.Html5;
+﻿#if BRIDGE
+using Bridge.Html5;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Linq;

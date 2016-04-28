@@ -117,7 +117,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 						starExpressions.Add(starArray[j].ToString());
 					}
 					Level level = new Level(
-						int.Parse(levelsData[i].SelectToken("id").Value<string>()),
+						levelsData[i].SelectToken("id").Value<string>(),
 						levelsData[i].SelectToken("initial_expression").Value<string>(),
 						int.Parse(levelsData[i].SelectToken("stars").Value<string>()),
 						levelsData[i].SelectToken("initial_expression").Value<string>(),
