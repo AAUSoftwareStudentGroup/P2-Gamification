@@ -161,7 +161,6 @@
                 while ($t2.moveNext()) {
                     var rule = $t2.getCurrent();
     
-    
                     var start = new Date().getTime();
     
                     var suggestion = rule(toBeReplaced, toBeReplacedSelection);

@@ -20,13 +20,13 @@ namespace ThreeOneSevenBee.Model.UI
         public LabelView BadgeInfoText;
         public ImageView ShowBadges;
         public PlayerListView PlayerView = new PlayerListView(1, 1);
-        public TitleView(CurrentPlayer user, IEnumerable<Player> players) : base(600, 300)
+        public TitleView(CurrentPlayer user, IEnumerable<Player> players) : base(420, 220)
         {
             BackgroundColor = new Color(255, 255, 255);
             WelcomeText = new LabelView("Velkommen " + user.PlayerName)
             {
-                X = 100,
-                Y = 50,
+                X = 10,
+                Y = 10,
                 Height = 50,
                 Width = 220
             };
@@ -84,7 +84,7 @@ namespace ThreeOneSevenBee.Model.UI
                 playIcon,
             };
             PlayButton.BackgroundColor = new Color(39, 174, 97);
-            PlayButton.X = 100;
+            PlayButton.X = 10;
             PlayButton.Y = BadgesView.Y + BadgesView.Height;
             Console.WriteLine(BadgesView.Y +  "og " + BadgesView.Width );
             VectorImageView levelIcon1 = new VectorImageView(0, 0, 100, 100)
@@ -131,13 +131,13 @@ namespace ThreeOneSevenBee.Model.UI
                 levelIcon4,
             };
             LevelButton.BackgroundColor = new Color(42, 128, 185);
-            LevelButton.X = 220;
+            LevelButton.X = PlayButton.X + PlayButton.Width + 20;
             LevelButton.Y = BadgesView.Y + BadgesView.Height;
 
             PlayerList = new PlayerListView(players, 160, 200)
             {
-                X = 340,
-                Y = 65
+                X = LevelButton.X + LevelButton.Width + 20,
+                Y = WelcomeText.Y
             };
 
             Children = new List<View>(){
