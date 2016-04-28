@@ -1454,6 +1454,7 @@
     
     
             var username = new ThreeOneSevenBee.Model.UI.Inputbox("constructor", "Username");
+            username.setText("TannerHelland");
             username.setX(75);
             username.setY(100);
             username.setWidth(450);
@@ -1461,6 +1462,7 @@
             username.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var password = new ThreeOneSevenBee.Model.UI.Inputbox("constructor$1", "Password", true);
+            password.setText("adminadmin");
             password.setX(75);
             password.setY(160);
             password.setWidth(450);
@@ -1731,7 +1733,7 @@
     
             this.playerList = Bridge.merge(new ThreeOneSevenBee.Model.UI.PlayerListView("constructor", players, 160, 200), {
                 setX: 340,
-                setY: 50
+                setY: 65
             } );
     
             this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [

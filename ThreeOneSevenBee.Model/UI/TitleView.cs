@@ -135,7 +135,7 @@ namespace ThreeOneSevenBee.Model.UI
             PlayerList = new PlayerListView(players, 160, 200)
             {
                 X = 340,
-                Y = 50
+                Y = 65
             };
 
             Children = new List<View>(){

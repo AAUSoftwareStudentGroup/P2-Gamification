@@ -19,6 +19,7 @@ namespace ThreeOneSevenBee.Model.UI
         {
 
             Inputbox username = new Inputbox("Username");
+            username.Text = "TannerHelland";
             username.X = 75;
             username.Y = 100;
             username.Width = 450;
@@ -26,6 +27,7 @@ namespace ThreeOneSevenBee.Model.UI
             username.Align = TextAlignment.Left;
 
             Inputbox password = new Inputbox("Password", true);
+            password.Text = "adminadmin";
             password.X = 75;
             password.Y = 160;
             password.Width = 450;
