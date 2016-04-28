@@ -1271,16 +1271,16 @@
                             this.getBadgeView().setImage("tutorialbadge.png");
                             break;
                         case "Potenser": 
-                            this.getBadgeView().setImage("potensbadge.png");
+                            this.getBadgeView().setImage("potens_badge.png");
                             break;
                         case "Brøker": 
                             this.getBadgeView().setImage("brøkbadge.png");
                             break;
                         case "Parenteser": 
-                            this.getBadgeView().setImage("parantesbadge.png");
+                            this.getBadgeView().setImage("parantes_badge.png");
                             break;
                         case "Master of Algebra": 
-                            this.getBadgeView().setImage("masterofalgebrabadge.png");
+                            this.getBadgeView().setImage("master_of_algebrabadge.png");
                             break;
                         default: 
                             break;
@@ -1508,10 +1508,10 @@
             init: function () {
                 this.badgeDictionary = Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Game.BadgeName,String)(), [
         [ThreeOneSevenBee.Model.Game.BadgeName.brokBadge, "brøkbadge.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra, "masterofalgebrabadge.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.potens, "potensbadge.png"],
+        [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra, "master_of_algebrabadge.png"],
+        [ThreeOneSevenBee.Model.Game.BadgeName.potens, "potens_badge.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge, "tutorialbadge.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge, "parantesbadge.png"]
+        [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge, "parantes_badge.png"]
     ] ) || null;
             }
         },
