@@ -67,7 +67,7 @@
             var canvasLeft = this.context.canvas.getBoundingClientRect().left;
             var canvasRight = this.context.canvas.getBoundingClientRect().left;
     
-            this.context.canvas.addEventListener("mousedown", Bridge.fn.bind(this, function (e) {
+            this.context.canvas.addEventListener("click", Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
                 if (this.getContentView$1().getActive() === true) {
                     input.focus();
@@ -207,7 +207,9 @@
                     }
                     categories.add(levelCategory);
                 }
-    
+                categories.add(Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("Test"), [
+                    [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "{a/b}*{c/d}*{e/f}", "{a/b}*{c/d}*{e/f}", 1, "testDescription", ["{a*c*e}/{b*d*f}"])]
+                ] ));
                 callback(categories);
             });
         },
