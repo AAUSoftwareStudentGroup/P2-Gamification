@@ -75,7 +75,10 @@ namespace ThreeOneSevenBee.Development.Desktop
 			JArray data = response.SelectToken ("data") as JArray;
 
 			for (int i = 0; i < data.Count; i++) {
-				players.Add (new Player (data[i].Value<string>("name")));
+				Player player = new Player (data[i].Value<string>("name"));
+				if(player.PlayerName == "TannerHelland")
+					player.Badges.Add(BadgeName.tutorialBadge);
+				players.Add (player);
 			}
 
 			callback(players);
