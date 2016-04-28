@@ -89,7 +89,6 @@ namespace ThreeOneSevenBee.Model.UI
             PlayButton.BackgroundColor = new Color(39, 174, 97);
             PlayButton.X = 10;
             PlayButton.Y = BadgesView.Y + BadgesView.Height;
-            Console.WriteLine(BadgesView.Y + "og " + BadgesView.Width);
             VectorImageView levelIcon1 = new VectorImageView(0, 0, 100, 100)
             {
                 { 20,20 },

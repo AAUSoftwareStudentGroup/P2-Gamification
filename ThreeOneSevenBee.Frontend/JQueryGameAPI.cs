@@ -94,7 +94,6 @@ namespace ThreeOneSevenBee.Frontend
                 (data, textStatus, request) =>
                 {
                     var jdata = JSON.Parse((string)data);
-                    Console.WriteLine(jdata);
                     List<Player> result = (jdata["data"] as object[]).Select((s) =>
                         new Player((string)s["name"])
                         {

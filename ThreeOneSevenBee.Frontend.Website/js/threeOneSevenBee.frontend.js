@@ -232,7 +232,6 @@
         getPlayers: function (callback) {
             $.post("/api/", { action: "get_users", token: this.token }, function (data, textStatus, request) {
                 var jdata = JSON.parse(Bridge.cast(data, String));
-                console.log(jdata);
                 var result = Bridge.Linq.Enumerable.from((Bridge.as(jdata.data, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f4).toList(ThreeOneSevenBee.Model.Game.Player);
                 callback(result);
             });

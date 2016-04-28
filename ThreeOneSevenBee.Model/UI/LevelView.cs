@@ -139,7 +139,6 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 OnChanged();
             }
-            Console.WriteLine(game.User.CurrentLevel);
         }
 
         public LevelView(GameModel game) : base(700, 400)

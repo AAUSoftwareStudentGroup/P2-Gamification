@@ -100,7 +100,7 @@ namespace ThreeOneSevenBee.Model.UI
         public override void setContent(View content)
         {
             base.setContent(content);
-            if(OnChanged != null)
+            if (OnChanged != null)
             {
                 OnChanged();
             }

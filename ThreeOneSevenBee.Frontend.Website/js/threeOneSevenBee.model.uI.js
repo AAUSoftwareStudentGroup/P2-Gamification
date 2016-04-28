@@ -1433,7 +1433,6 @@
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged();
             }
-            console.log(game.getUser().getCurrentLevel());
         }
     });
     
@@ -1708,7 +1707,6 @@
             this.playButton.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 39, 174, 97));
             this.playButton.setX(10);
             this.playButton.setY(this.badgesView.getY() + this.badgesView.getHeight());
-            console.log(this.badgesView.getY() + "og " + this.badgesView.getWidth());
             var levelIcon1 = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 100, 100), [
                 [20, 20],
                 [45, 20],

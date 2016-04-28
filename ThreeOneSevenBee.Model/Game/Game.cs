@@ -70,7 +70,6 @@ namespace ThreeOneSevenBee.Model.Game
                                 (IsSaved) => 
                                 {
                                     Console.WriteLine(IsSaved ? "Level saved" : "Could not save");
-                                    gameAPI.GetPlayers((players) => gameModel.Players = players);
                                 }
                             );
                         },

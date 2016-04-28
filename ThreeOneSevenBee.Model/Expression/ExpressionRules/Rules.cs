@@ -584,7 +584,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 if (fraction.Left == fraction.Right)
                 {
-                    Console.WriteLine(fraction);
                     NumericExpression suggestion = new NumericExpression(1);
                     return suggestion;
                 }
