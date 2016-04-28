@@ -1150,11 +1150,12 @@
             } ));
             this.setCategoryName(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(user.categories.getItem(this.getCategory()).name), {
                 setWidth: this.getTitelView().getWidth() * 0.6,
-                setHeight: this.getTitelView().getHeight()
+                setHeight: this.getTitelView().getHeight(),
+                setX: this.getTitelView().getX() - (this.getTitelView().getWidth() * 0.6) / 2
             } ));
     
             this.setStarTextView(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView("5/27"), {
-                setWidth: this.getTitelView().getWidth() * 0.25,
+                setWidth: this.getTitelView().getWidth() * 0.2,
                 setHeight: 15,
                 setX: this.getCategoryName().getX() + this.getCategoryName().getWidth() + 7.5,
                 setY: this.getCategoryName().getY() + ((this.getCategoryName().getHeight()) / 2) - 7.5
@@ -1165,9 +1166,9 @@
                 setY: this.getCategoryName().getY() + 0.5 * (this.getTitelView().getWidth() * 0.1)
             } ));
     
-            this.setBadgeView(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("tutorialbadge.png", this.getTitelView().getWidth() * 0.1, this.getTitelView().getWidth() * 0.1), {
-                setX: this.getCategoryName().getX() + this.getCategoryName().getWidth() + this.getStarTextView().getWidth() + this.getStarView().getWidth() + 7.5,
-                setY: this.getCategoryName().getY() + 0.5 * (this.getTitelView().getWidth() * 0.1)
+            this.setBadgeView(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("tutorialbadge.png", this.getTitelView().getWidth() * 0.15, this.getTitelView().getWidth() * 0.15), {
+                setX: 0 - ((this.getTitelView().getWidth() * 0.1) / 2) + 5,
+                setY: this.getCategoryName().getY() + (0.5 * (this.getTitelView().getWidth() * 0.15)) - 10
             } ));
     
             this.getTitelView().add(this.getStarTextView());
@@ -1269,16 +1270,16 @@
                             this.getBadgeView().setImage("tutorialbadge.png");
                             break;
                         case "Potenser": 
-                            this.getBadgeView().setImage("potens.png");
+                            this.getBadgeView().setImage("potensbadge.png");
                             break;
                         case "Brøker": 
                             this.getBadgeView().setImage("brøkbadge.png");
                             break;
                         case "Parenteser": 
-                            this.getBadgeView().setImage("parantes.png");
+                            this.getBadgeView().setImage("parantesbadge.png");
                             break;
                         case "Master of Algebra": 
-                            this.getBadgeView().setImage("masterofalgebra.png");
+                            this.getBadgeView().setImage("masterofalgebrabadge.png");
                             break;
                         default: 
                             break;
@@ -1504,10 +1505,10 @@
             init: function () {
                 this.badgeDictionary = Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Game.BadgeName,String)(), [
         [ThreeOneSevenBee.Model.Game.BadgeName.brokBadge, "brøkbadge.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra, "masterofalgebra.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.potens, "potens.png"],
+        [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra, "masterofalgebrabadge.png"],
+        [ThreeOneSevenBee.Model.Game.BadgeName.potens, "potensbadge.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge, "tutorialbadge.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge, "parantes.png"]
+        [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge, "parantesbadge.png"]
     ] ) || null;
             }
         },
@@ -1663,11 +1664,11 @@
                 while ($t.moveNext()) {
                     var badge = $t.getCurrent();
                     if (this.playerView.badgeDictionary.containsKey(badge)) {
-                        this.badgesView.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(this.playerView.badgeDictionary.get(badge), 20, 20), {
+                        this.badgesView.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(this.playerView.badgeDictionary.get(badge), 25, 25), {
                             setX: this.badgeInfoText.getX() + this.badgeInfoText.getWidth() + spacing
                         } ));
                     }
-                    spacing += 25;
+                    spacing += 30;
                 }
             }
     

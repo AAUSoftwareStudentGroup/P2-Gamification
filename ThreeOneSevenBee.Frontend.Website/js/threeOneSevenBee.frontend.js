@@ -205,6 +205,7 @@
             $.post("/api/", { action: "get_current_user", token: this.token }, Bridge.fn.bind(this, function (data, textStatus, request) {
                 var jdata = JSON.parse(Bridge.cast(data, String));
                 var currentPlayer = new ThreeOneSevenBee.Model.Game.CurrentPlayer(Bridge.cast(jdata.data.name, String));
+                currentPlayer.badges = Bridge.Linq.Enumerable.from((Bridge.cast(jdata.data.badges, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f2).toList(ThreeOneSevenBee.Model.Game.BadgeName);
                 this.getCategories(function (categories) {
                     var $t;
                     $t = Bridge.getEnumerator(categories);
@@ -219,7 +220,8 @@
         getPlayers: function (callback) {
             $.post("/api/", { action: "get_users", token: this.token }, function (data, textStatus, request) {
                 var jdata = JSON.parse(Bridge.cast(data, String));
-                var result = Bridge.Linq.Enumerable.from((Bridge.as(jdata.data, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f2).toList(ThreeOneSevenBee.Model.Game.Player);
+                console.log(jdata);
+                var result = Bridge.Linq.Enumerable.from((Bridge.as(jdata.data, Array))).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f4).toList(ThreeOneSevenBee.Model.Game.Player);
                 callback(result);
             });
         },
@@ -265,8 +267,16 @@
         f1: function (o) {
             return Bridge.cast(o, String);
         },
-        f2: function (s) {
-            return new ThreeOneSevenBee.Model.Game.Player(Bridge.cast(s.name, String));
+        f2: function (b) {
+            return Bridge.Int.parseInt(b, -2147483648, 2147483647);
+        },
+        f3: function (b) {
+            return b !== "";
+        },
+        f4: function (s) {
+            return Bridge.merge(new ThreeOneSevenBee.Model.Game.Player(Bridge.cast(s.name, String)), {
+                badges: Bridge.Linq.Enumerable.from((Bridge.cast(s.badges, Array))).where($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f3).select($_.ThreeOneSevenBee.Frontend.JQueryGameAPI.f2).toList(ThreeOneSevenBee.Model.Game.BadgeName)
+            } );
         }
     });
     

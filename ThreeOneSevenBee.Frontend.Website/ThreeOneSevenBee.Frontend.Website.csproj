@@ -64,11 +64,11 @@
     <Content Include="img\arrow_right.png" />
     <Content Include="img\brøkbadge.png" />
     <Content Include="img\levelbutton.png" />
-    <Content Include="img\masterofalgebra.png" />
+    <Content Include="img\masterofalgebrabadge.png" />
     <Content Include="img\playbutton.png" />
-    <Content Include="img\potens.png" />
+    <Content Include="img\potensbadge.png" />
     <Content Include="img\restart.png" />
-    <Content Include="img\parantes.png" />
+    <Content Include="img\parantesbadge.png" />
     <Content Include="img\star.png" />
     <Content Include="img\star_activated.png" />
     <Content Include="img\tutorialbadge.png" />
