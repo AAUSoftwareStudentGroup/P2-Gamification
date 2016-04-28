@@ -986,13 +986,19 @@
         placeholder: null,
         cursorPos: 0,
         hidden: false,
-        constructor$1: function (placeholder, hidden) {
+        placeholderColor: null,
+        constructor$2: function (placeholder, hidden, placeholderColor) {
             ThreeOneSevenBee.Model.UI.LabelView.prototype.$constructor.call(this, placeholder);
     
+            this.placeholderColor = placeholderColor;
             this.placeholder = placeholder;
             this.hidden = hidden;
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 200, 200, 200));
             this.cursorPos = 0;
+        },
+        constructor$1: function (placeholder, hidden) {
+            ThreeOneSevenBee.Model.UI.Inputbox.prototype.constructor$2.call(this, placeholder, hidden, new ThreeOneSevenBee.Model.UI.Color("constructor$1", 100, 100, 100));
+    
         },
         constructor: function (placeholder) {
             ThreeOneSevenBee.Model.UI.Inputbox.prototype.constructor$1.call(this, placeholder, false);
@@ -1025,6 +1031,9 @@
                     }
                 }
             }
+        },
+        isDefault: function () {
+            return Bridge.String.compare(this.getText(), this.placeholder) === 0;
         },
         keyPressed: function (key, context) {
             if (this.getActive()) {
@@ -1068,17 +1077,24 @@
             return hiddenText;
         },
         drawWithContext: function (context, offsetX, offsetY) {
+            var backupColor = this.getTextColor();
+            if (this.isDefault()) {
+                this.setTextColor(this.placeholderColor);
+            }
+    
             if (!this.hidden) {
                 ThreeOneSevenBee.Model.UI.LabelView.prototype.drawWithContext.call(this, context, offsetX, offsetY);
             }
             else  {
                 var TextBackup = this.getText();
+    
                 if (this.getText() === this.placeholder) {
                     this.setText(this.placeholder);
                 }
                 else  {
                     this.setText(this.getHiddenText());
                 }
+    
                 ThreeOneSevenBee.Model.UI.LabelView.prototype.drawWithContext.call(this, context, offsetX, offsetY);
                 this.setText(TextBackup);
             }
@@ -1088,6 +1104,9 @@
                     textWidth = context.getTextDimensions(this.hidden ? this.getHiddenText().substr(0, this.cursorPos) : this.getText().substr(0, this.cursorPos), this.getWidth(), this.getHeight()).x;
                 }
                 context.drawLine(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", textWidth + offsetX + this.getX() + 1, this.getY() + offsetY), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", textWidth + offsetX + this.getX() + 1, offsetY + this.getY() + this.getHeight()), new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0), 1);
+            }
+            if (this.isDefault()) {
+                this.setTextColor(backupColor);
             }
         }
     });
@@ -1460,8 +1479,8 @@
             submit.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 175, 100));
     
             this.status = new ThreeOneSevenBee.Model.UI.LabelView(" ");
-            this.status.setX(300);
-            this.status.setY(250);
+            this.status.setX(75);
+            this.status.setY(200);
             this.status.setWidth(200);
             this.status.setHeight(30);
     

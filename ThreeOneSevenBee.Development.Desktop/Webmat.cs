@@ -105,7 +105,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 			oldMouseState = currentMouseState;
 			currentMouseState = Mouse.GetState();
 			if (currentMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton == ButtonState.Released) {
-				context.contentView.Click (currentMouseState.Position.X, currentMouseState.Position.Y, context);
+				context.ContentView.Click (currentMouseState.Position.X, currentMouseState.Position.Y, context);
 			}
 			KeyboardState state = Keyboard.GetState();
 			foreach(Keys key in state.GetPressedKeys () ) {
@@ -129,7 +129,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 							keys = key.ToString ().ToLower ();
 					} else
 						keys = key.ToString ();
-					context.contentView.KeyPressed (keys, context);
+					context.ContentView.KeyPressed (keys, context);
 
 				}
 			}

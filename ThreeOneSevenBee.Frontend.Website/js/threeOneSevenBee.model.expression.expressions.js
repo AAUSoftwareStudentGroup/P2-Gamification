@@ -889,7 +889,13 @@
             while ($t.moveNext()) {
                 var expression = $t.getCurrent();
                 // Count-1 gets the total number of * signs in the variadic expression
-                result += expression.getSize() + (this.getCount() - 1);
+                var minus = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
+                if (Bridge.hasValue(minus)) {
+                    result += minus.getExpression().getSize() + (this.getCount() - 1);
+                }
+                else  {
+                    result += expression.getSize() + (this.getCount() - 1);
+                }
             }
             return result;
         },
