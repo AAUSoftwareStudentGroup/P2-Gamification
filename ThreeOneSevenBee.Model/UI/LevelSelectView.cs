@@ -188,7 +188,7 @@ namespace ThreeOneSevenBee.Model.UI
                 switch (user.Categories[Category].Name)
                 {
                     case "Tutorial":
-                        BadgeView.Image = "tutorialbadge.png";
+                        BadgeView.Image = "tutorial_badge.png";
                         break;
 
                     case "Potenser":
