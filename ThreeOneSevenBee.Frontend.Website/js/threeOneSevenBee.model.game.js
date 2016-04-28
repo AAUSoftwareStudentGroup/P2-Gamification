@@ -22,11 +22,7 @@
         },
         constructor: function (playername) {
             this.setPlayerName(playername);
-            this.badges = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.Game.BadgeName)(), [
-                [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra],
-                [ThreeOneSevenBee.Model.Game.BadgeName.potens],
-                [ThreeOneSevenBee.Model.Game.BadgeName.brokBadge]
-            ] );
+            this.badges = new Bridge.List$1(ThreeOneSevenBee.Model.Game.BadgeName)();
         }
     });
     
