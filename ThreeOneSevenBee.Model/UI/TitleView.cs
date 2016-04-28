@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bridge.Html5;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,10 @@ namespace ThreeOneSevenBee.Model.UI
         public PlayerListView PlayerList;
         public ButtonView LogoutButton;
         public Action OnLogout;
+        public CompositeView BadgesView;
+        public LabelView BadgeInfoText;
+        public ImageView ShowBadges;
+        public PlayerListView PlayerView = new PlayerListView(1, 1);
         public TitleView(CurrentPlayer user, IEnumerable<Player> players) : base(600, 300)
         {
             BackgroundColor = new Color(255, 255, 255);
@@ -23,6 +28,38 @@ namespace ThreeOneSevenBee.Model.UI
                 Height = 50,
                 Width = 220
             };
+
+            BadgesView = new CompositeView(220, 40)
+            {
+                X = WelcomeText.X,
+                Y = WelcomeText.Y + WelcomeText.Height
+            };
+
+            BadgeInfoText = new LabelView("Badges: ")
+            {
+                Width = 100,
+                Height = 20,
+                X = -10
+            };
+
+            BadgesView.Add(BadgeInfoText);
+
+            if (user.Badges != null)
+            {
+                // start spacing half the width of a badge
+                int spacing = -10;
+                foreach (BadgeName badge in user.Badges)
+                {
+                    if (PlayerView.badgeDictionary.ContainsKey(badge))
+                    {
+                        BadgesView.Add(new ImageView(PlayerView.badgeDictionary[badge], 20, 20)
+                        {
+                            X = BadgeInfoText.X + BadgeInfoText.Width + spacing,
+                        });
+                    }
+                    spacing += 25;
+                }
+            }
 
             VectorImageView playIcon = new VectorImageView(0, 0, 100, 100)
             {
@@ -46,8 +83,8 @@ namespace ThreeOneSevenBee.Model.UI
             };
             PlayButton.BackgroundColor = new Color(39, 174, 97);
             PlayButton.X = 100;
-            PlayButton.Y = 100;
-
+            PlayButton.Y = BadgesView.Y + BadgesView.Height;
+            Console.WriteLine(BadgesView.Y +  "og " + BadgesView.Width );
             VectorImageView levelIcon1 = new VectorImageView(0, 0, 100, 100)
             {
                 { 20,20 },
@@ -93,7 +130,7 @@ namespace ThreeOneSevenBee.Model.UI
             };
             LevelButton.BackgroundColor = new Color(42, 128, 185);
             LevelButton.X = 220;
-            LevelButton.Y = 100;
+            LevelButton.Y = BadgesView.Y + BadgesView.Height;
 
             PlayerList = new PlayerListView(players, 160, 200)
             {
@@ -105,7 +142,8 @@ namespace ThreeOneSevenBee.Model.UI
                 WelcomeText,
                 LevelButton,
                 PlayerList,
-                PlayButton
+                PlayButton,
+                BadgesView
             };
         }
     }

@@ -9,7 +9,7 @@ namespace ThreeOneSevenBee.Model.UI
     public class PlayerListView : CompositeView
     {
 
-        Dictionary<BadgeName, string> badgeDictionary = new Dictionary<BadgeName, string>()
+        public Dictionary<BadgeName, string> badgeDictionary = new Dictionary<BadgeName, string>()
         {
             {BadgeName.brokBadge, "brøkbadge.png"},
             {BadgeName.masterOfAlgebra, "masterofalgebra.png"},
@@ -62,6 +62,11 @@ namespace ThreeOneSevenBee.Model.UI
         {
             Build(players);
             BackgroundColor = new Color(209, 209, 209);
+        }
+
+        public PlayerListView(double width, double height) : base(width, height)
+        {
+
         }
     }
 }
