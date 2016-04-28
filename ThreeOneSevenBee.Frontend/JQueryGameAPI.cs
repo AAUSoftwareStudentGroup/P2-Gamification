@@ -49,7 +49,7 @@ namespace ThreeOneSevenBee.Frontend
                     }
                     categories.Add(new LevelCategory("Test")
                     {
-                        new Level("{a/b}*{c/d}*{e/f}", "{a/b}*{c/d}*{e/f}", 1, "testDescription", new string[] { "{a*c*e}/{b*d*f}" })
+                        new Level("2^-1", "2^-1", 1, "testDescription", new string[] { "{a*c*e}/{b*d*f}" })
                     });
                     callback(categories);
                 }

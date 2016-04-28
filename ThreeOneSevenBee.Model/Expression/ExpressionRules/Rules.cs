@@ -707,12 +707,19 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
                     if (binary.Type == OperatorType.Power)
                     {
-                        int sum = 1;
-                        for (int n = 0; n < (int)rightNumber; n++)
+                        if ((int)rightNumber > 0)
                         {
-                            sum *= (int)leftNumber;
+                            int sum = 1;
+                            for (int n = 0; n < (int)rightNumber; n++)
+                            {
+                                sum *= (int)leftNumber;
+                            }
+                            return ToNumeric(sum);
                         }
-                        return ToNumeric(sum);
+                        else
+                        {
+                            return null;
+                        }
                     }
                     else if (binary.Type == OperatorType.Divide && (int)leftNumber % (int)rightNumber == 0)
                     {
@@ -821,6 +828,19 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 {
                     return new NumericExpression(0);
                 }
+            }
+            return null;
+        }
+
+        //a*b = b*a
+        //a+b = b+a
+        public static ExpressionBase CommutativeRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
+
+            if(variadicExpression != null && variadicExpression.Count == 2)
+            {
+                return new VariadicOperatorExpression(variadicExpression.Type, variadicExpression[1].Clone(), variadicExpression[0].Clone());
             }
             return null;
         }

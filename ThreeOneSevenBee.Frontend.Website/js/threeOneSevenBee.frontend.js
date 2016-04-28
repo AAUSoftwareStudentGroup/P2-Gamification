@@ -208,7 +208,7 @@
                     categories.add(levelCategory);
                 }
                 categories.add(Bridge.merge(new ThreeOneSevenBee.Model.Game.LevelCategory("Test"), [
-                    [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "{a/b}*{c/d}*{e/f}", "{a/b}*{c/d}*{e/f}", 1, "testDescription", ["{a*c*e}/{b*d*f}"])]
+                    [new ThreeOneSevenBee.Model.Game.Level("constructor$2", "2^-1", "2^-1", 1, "testDescription", ["{a*c*e}/{b*d*f}"])]
                 ] ));
                 callback(categories);
             });
