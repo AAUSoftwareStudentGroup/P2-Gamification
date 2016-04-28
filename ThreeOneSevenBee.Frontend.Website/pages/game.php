@@ -13,6 +13,6 @@ $_scripts[] = "js/threeOneSevenBee.model.geometry.js";
 $_scripts[] = "js/threeOneSevenBee.model.polygon.js";
 ?>
 <? require('header.php'); ?>
-    <canvas id="canvas" width="600" height="400" style="-webkit-tap-highlight-color:rgba(0,0,0,0);"></canvas>
-    <input id="input" style="position: fixed; left: -500px; height: -500px" type="text" />
+    <canvas id="canvas" width="600" height="400" style="-webkit-tap-highlight-color:rgba(0,0,0,0); z-index: 1"></canvas>
+    <input id="input" style="position: fixed; left: -500px; height: -500px; z-index: 0" type="text" />
 <? require('footer.php'); ?>
