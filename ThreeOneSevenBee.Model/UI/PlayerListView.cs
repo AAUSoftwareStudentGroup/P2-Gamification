@@ -12,10 +12,10 @@ namespace ThreeOneSevenBee.Model.UI
         public Dictionary<BadgeName, string> badgeDictionary = new Dictionary<BadgeName, string>()
         {
             {BadgeName.brokBadge, "brøkbadge.png"},
-            {BadgeName.masterOfAlgebra, "masterofalgebrabadge.png"},
-            {BadgeName.potens, "potensbadge.png"},
+            {BadgeName.masterOfAlgebra, "master_of_algebrabadge.png"},
+            {BadgeName.potens, "potens_badge.png"},
             {BadgeName.tutorialBadge, "tutorialbadge.png" },
-            {BadgeName.spilDoneBadge, "parantesbadge.png"}
+            {BadgeName.spilDoneBadge, "parantes_badge.png"}
 
         };
         public void Build(IEnumerable<Player> players)

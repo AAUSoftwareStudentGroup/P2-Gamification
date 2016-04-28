@@ -193,7 +193,7 @@ namespace ThreeOneSevenBee.Model.UI
                         break;
 
                     case "Potenser":
-                        BadgeView.Image = "potensbadge.png";
+                        BadgeView.Image = "potens_badge.png";
                         break;
 
                     case "Brøker":
@@ -201,11 +201,11 @@ namespace ThreeOneSevenBee.Model.UI
                         break;
 
                     case "Parenteser":
-                        BadgeView.Image = "parantesbadge.png";
+                        BadgeView.Image = "parantes_badge.png";
                         break;
 
                     case "Master of Algebra":
-                        BadgeView.Image = "masterofalgebrabadge.png";
+                        BadgeView.Image = "master_of_algebrabadge.png";
                         break;
                     default:
                         break;
