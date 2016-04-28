@@ -21,8 +21,15 @@ namespace ThreeOneSevenBee.Model.UI
         public void Build(IEnumerable<Player> players)
         {
             Children = new List<View>();
-            int offsetY = 5;
-            foreach (Player player in players)
+			int offsetY = 5;
+
+			List<Player> sortedPlayers = new List<Player> (players);
+
+			sortedPlayers.Sort(delegate(Player p1, Player p2) {
+				return p1.Badges.Count.CompareTo(p2.Badges.Count);
+			});
+
+            foreach (Player player in sortedPlayers)
             {
                 int badgesWidth = (badgeDictionary.Count-1) * 10;
                 CompositeView row = new CompositeView(Width, 20)

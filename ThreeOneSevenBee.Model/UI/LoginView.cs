@@ -32,7 +32,7 @@ namespace ThreeOneSevenBee.Model.UI
             password.Height = 36;
             password.Align = TextAlignment.Left;
 
-            ButtonView submit = new ButtonView("Log in", () => {
+            ButtonView submit = new ButtonView("Log ind", () => {
                 if (OnLogin != null)
                     OnLogin(username.Text, password.Text);
             });
