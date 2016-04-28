@@ -9,6 +9,8 @@
                 }
             },
             main: function () {
+                document.addEventListener("touchmove", $_.ThreeOneSevenBee.Frontend.App.f1);
+    
                 var canvas = document.getElementById("canvas");
                 canvas.width = document.documentElement.clientWidth;
                 canvas.height = document.documentElement.clientHeight;
@@ -22,6 +24,16 @@
     
                 game.start();
             }
+        }
+    });
+    
+    var $_ = {};
+    
+    Bridge.ns("ThreeOneSevenBee.Frontend.App", $_)
+    
+    Bridge.apply($_.ThreeOneSevenBee.Frontend.App, {
+        f1: function (e) {
+            e.preventDefault();
         }
     });
     
@@ -55,6 +67,12 @@
             var canvasRight = this.context.canvas.getBoundingClientRect().left;
             this.context.canvas.onmousedown = Bridge.fn.bind(this, function (e) {
                 this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
+            });
+            this.context.canvas.ontouchstart = Bridge.fn.bind(this, function (e) {
+                this.click(e.clientX + document.body.scrollLeft - Bridge.Int.trunc(canvasLeft), e.clientY + document.body.scrollTop - Bridge.Int.trunc(canvasRight));
+                e.preventDefault();
+    
+    
             });
             this.context.canvas.addEventListener("click", Bridge.fn.bind(this, function (e) {
                 if (this.getContentView$1().getActive() === true) {
@@ -161,8 +179,6 @@
             return new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", this.context.measureText(text).width, minFontSize);
         }
     });
-    
-    var $_ = {};
     
     Bridge.ns("ThreeOneSevenBee.Frontend.CanvasContext", $_)
     

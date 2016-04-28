@@ -1036,6 +1036,7 @@
             return Bridge.String.compare(this.getText(), this.placeholder) === 0;
         },
         keyPressed: function (key, context) {
+            ThreeOneSevenBee.Model.UI.LabelView.prototype.keyPressed.call(this, key, context);
             if (this.getActive()) {
                 switch (key) {
                     case "Back": 
@@ -1154,15 +1155,15 @@
                 setX: this.getTitelView().getX() - (this.getTitelView().getWidth() * 0.6) / 2
             } ));
     
-            this.setStarTextView(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView("5/27"), {
-                setWidth: this.getTitelView().getWidth() * 0.2,
+            this.setStarTextView(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(""), {
+                setWidth: this.getTitelView().getWidth() * 0.15,
                 setHeight: 15,
                 setX: this.getCategoryName().getX() + this.getCategoryName().getWidth() + 7.5,
                 setY: this.getCategoryName().getY() + ((this.getCategoryName().getHeight()) / 2) - 7.5
             } ));
     
             this.setStarView(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("star_activated.png", this.getTitelView().getWidth() * 0.1, this.getTitelView().getWidth() * 0.1), {
-                setX: this.getCategoryName().getX() + this.getCategoryName().getWidth() + this.getStarTextView().getWidth() + 7.5,
+                setX: this.getCategoryName().getX() + this.getCategoryName().getWidth() + this.getStarTextView().getWidth() + 10,
                 setY: this.getCategoryName().getY() + 0.5 * (this.getTitelView().getWidth() * 0.1)
             } ));
     
@@ -1455,6 +1456,7 @@
     
     
             var username = new ThreeOneSevenBee.Model.UI.Inputbox("constructor", "Username");
+            username.setText("TannerHelland");
             username.setX(75);
             username.setY(100);
             username.setWidth(450);
@@ -1462,13 +1464,14 @@
             username.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var password = new ThreeOneSevenBee.Model.UI.Inputbox("constructor$1", "Password", true);
+            password.setText("adminadmin");
             password.setX(75);
             password.setY(160);
             password.setWidth(450);
             password.setHeight(36);
             password.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
-            var submit = new ThreeOneSevenBee.Model.UI.ButtonView("Log ind", Bridge.fn.bind(this, function () {
+            var submit = new ThreeOneSevenBee.Model.UI.ButtonView("Log in", Bridge.fn.bind(this, function () {
                 if (Bridge.hasValue(this.onLogin)) {
                     this.onLogin(username.getText(), password.getText());
                 }
@@ -1527,6 +1530,7 @@
             var $t, $t1;
             this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
             var offsetY = 5;
+    
             $t = Bridge.getEnumerator(players);
             while ($t.moveNext()) {
                 var player = $t.getCurrent();
@@ -1633,13 +1637,13 @@
             }
         },
         constructor: function (user, players) {
-            ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, 600, 300);
+            ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, 420, 220);
             var $t;
     
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
             this.welcomeText = Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView("Velkommen " + user.getPlayerName()), {
-                setX: 100,
-                setY: 50,
+                setX: 10,
+                setY: 10,
                 setHeight: 50,
                 setWidth: 220
             } );
@@ -1685,7 +1689,7 @@
                 [playIcon]
             ] );
             this.playButton.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 39, 174, 97));
-            this.playButton.setX(100);
+            this.playButton.setX(10);
             this.playButton.setY(this.badgesView.getY() + this.badgesView.getHeight());
             console.log(this.badgesView.getY() + "og " + this.badgesView.getWidth());
             var levelIcon1 = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 100, 100), [
@@ -1727,12 +1731,12 @@
                 [levelIcon4]
             ] );
             this.levelButton.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 42, 128, 185));
-            this.levelButton.setX(220);
+            this.levelButton.setX(this.playButton.getX() + this.playButton.getWidth() + 20);
             this.levelButton.setY(this.badgesView.getY() + this.badgesView.getHeight());
     
             this.playerList = Bridge.merge(new ThreeOneSevenBee.Model.UI.PlayerListView("constructor", players, 160, 200), {
-                setX: 340,
-                setY: 50
+                setX: this.levelButton.getX() + this.levelButton.getWidth() + 20,
+                setY: this.welcomeText.getY()
             } );
     
             this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
