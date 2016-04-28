@@ -160,15 +160,7 @@
                 $t2 = Bridge.getEnumerator(this.rules);
                 while ($t2.moveNext()) {
                     var rule = $t2.getCurrent();
-    
-                    var start = new Date().getTime();
-    
                     var suggestion = rule(toBeReplaced, toBeReplacedSelection);
-    
-                    var end = new Date().getTime();
-                    var time = end - start;
-                    console.log(c++ + " " + time);
-    
     
                     if (Bridge.hasValue(suggestion)) {
                         var result;
@@ -193,11 +185,7 @@
                 $t3 = Bridge.getEnumerator(this.rules);
                 while ($t3.moveNext()) {
                     var rule1 = $t3.getCurrent();
-                    var start1 = new Date().getTime();
                     var suggestion1 = this.wrapInDelimiterIfNeccessary(rule1(commonParent, selection), commonParent.getParent());
-                    var end1 = new Date().getTime();
-                    var time1 = end1 - start1;
-                    console.log(c1++ + " " + time1);
                     if (Bridge.hasValue(suggestion1)) {
                         identities.add(new ThreeOneSevenBee.Model.Expression.Identity(suggestion1, suggestion1));
                     }

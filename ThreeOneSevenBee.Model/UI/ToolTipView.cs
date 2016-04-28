@@ -124,9 +124,9 @@ namespace ThreeOneSevenBee.Model.UI
                     case Direction.Top:
                         arrow = new VectorImageView(0, 0, 20, 10)
                         {
-                            { 0, 10 },
+                            { 0, 11 },
                             { 10, 0 },
-                            { 20, 10 }
+                            { 20, 11 }
                         };
                         
                         labelView.Y = 10;
@@ -135,18 +135,18 @@ namespace ThreeOneSevenBee.Model.UI
                     case Direction.right:
                         arrow = new VectorImageView(Width - 10, 0, 10, 20)
                         {
-                            { 0, 0 },
+                            { -1, 0 },
                             { 10, 10 },
-                            { 0, 20 }
+                            { -1, 20 }
                         };
                         labelView.Width = Width - 10;
                         break;
                     case Direction.Left:
                         arrow = new VectorImageView(0, 0, 10, 20)
                         {
-                            { 10, 0 },
+                            { 11, 0 },
                             { 0, 10  },
-                            { 10, 20 }
+                            { 11, 20 }
                         };
                         labelView.X = 10;
                         labelView.Width = Width - 10;
@@ -154,8 +154,8 @@ namespace ThreeOneSevenBee.Model.UI
                     case Direction.Bottom:
                         arrow = new VectorImageView(0, Height - 10, 20, 10)
                         {
-                            { 0, 0 },
-                            { 20, 0 },
+                            { 0, -1 },
+                            { 20, -1 },
                             { 10, 10 }
                         };
                         labelView.Height = Height - 10;

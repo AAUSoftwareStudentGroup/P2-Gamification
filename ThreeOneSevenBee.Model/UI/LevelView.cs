@@ -42,11 +42,11 @@ namespace ThreeOneSevenBee.Model.UI
                 TextColor = new Color(255, 255, 255),
             };
 
-            restartButton = new ImageView("restart.png", 30, 30)
+            restartButton = new ImageView("restart.png", 50, 50)
             {
                 OnClick = () => game.RestartLevel(),
                 X = 110,
-                Y = 10,
+                Y = 0,
                 BackgroundColor = new Color(192, 57, 43)
             };
 
@@ -63,7 +63,7 @@ namespace ThreeOneSevenBee.Model.UI
                     }
                 }
             };
-            toolTipView.ArrowPosition = 165;
+            toolTipView.ArrowPosition = 155;
 
             helpButton = new ButtonView(
                 "?",
@@ -75,29 +75,27 @@ namespace ThreeOneSevenBee.Model.UI
                         {
                             helpButton.Text = "?";
                             toolTipView.Visible = false;
-                            helpButton.BackgroundColor = new Color(40, 120, 130);
                         }
                         else
                         {
-                            helpButton.Text = "x";
+                            helpButton.Text = " Luk ";
                             toolTipView.Visible = true;
-                            helpButton.BackgroundColor = new Color(192, 57, 43);
                         }
                     }
                 }
             )
             {
-                X = Width - 140,
-                Y = 10,
-                Width = 30,
-                Height = 30,
+                X = Width - 160,
+                Y = 0,
+                Width = 50,
+                Height = 50,
                 BackgroundColor = game.User.CurrentLevel.Description == "" ? new Color(190, 190, 190) : new Color(40, 120, 130),
                 TextColor = new Color(255, 255, 255),
             };
 
-            progressbar = new ProgressbarStarView(game.ProgressBar, Width - 300, 30)
+            progressbar = new ProgressbarStarView(game.ProgressBar, Width - 340, 30)
             {
-                X = 150,
+                X = 170,
                 Y = 10
             };
 
