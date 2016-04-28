@@ -55,11 +55,12 @@ namespace ThreeOneSevenBee.Model.UI
             {
                 Width = TitelView.Width * 0.6,
                 Height = TitelView.Height,
+                X = TitelView.X - (TitelView.Width * 0.6) / 2
             };
 
             StarTextView = new LabelView("5/27")
             {
-                Width = TitelView.Width * 0.25, 
+                Width = TitelView.Width * 0.20, 
                 Height = 15,
                 X = CategoryName.X + CategoryName.Width + 7.5,
                 Y = CategoryName.Y + ((CategoryName.Height) / 2) - 7.5
@@ -71,10 +72,10 @@ namespace ThreeOneSevenBee.Model.UI
                 Y = CategoryName.Y + 0.5 * (TitelView.Width * 0.10)
             };
 
-            BadgeView = new ImageView("tutorialbadge.png", TitelView.Width * 0.10, TitelView.Width * 0.10)
+            BadgeView = new ImageView("tutorialbadge.png", TitelView.Width * 0.15, TitelView.Width * 0.15)
             {
-                X = CategoryName.X + CategoryName.Width + StarTextView.Width + StarView.Width + 7.5,
-                Y = CategoryName.Y + 0.5 * (TitelView.Width * 0.10)
+                X = 0 - ((TitelView.Width * 0.10) / 2) + 5,
+                Y = CategoryName.Y + (0.5 * (TitelView.Width * 0.15)) - 10
             };
 
             TitelView.Add(StarTextView);
@@ -191,7 +192,7 @@ namespace ThreeOneSevenBee.Model.UI
                         break;
 
                     case "Potenser":
-                        BadgeView.Image = "potens.png";
+                        BadgeView.Image = "potensbadge.png";
                         break;
 
                     case "Brøker":
@@ -199,11 +200,11 @@ namespace ThreeOneSevenBee.Model.UI
                         break;
 
                     case "Parenteser":
-                        BadgeView.Image = "parantes.png";
+                        BadgeView.Image = "parantesbadge.png";
                         break;
 
                     case "Master of Algebra":
-                        BadgeView.Image = "masterofalgebra.png";
+                        BadgeView.Image = "masterofalgebrabadge.png";
                         break;
                     default:
                         break;
