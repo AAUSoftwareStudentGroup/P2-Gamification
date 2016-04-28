@@ -66,6 +66,7 @@ namespace ThreeOneSevenBee.Frontend
                 {
                     var jdata = JSON.Parse((string)data);
                     CurrentPlayer currentPlayer = new CurrentPlayer((string)jdata["data"]["name"]);
+                    currentPlayer.Badges = ((string[])jdata["data"]["badges"]).Select((b) => (BadgeName)int.Parse(b)).ToList();
                     getCategories((categories) =>
                     {
                         foreach (LevelCategory category in categories)
@@ -90,7 +91,12 @@ namespace ThreeOneSevenBee.Frontend
                 (data, textStatus, request) =>
                 {
                     var jdata = JSON.Parse((string)data);
-                    List<Player> result = (jdata["data"] as object[]).Select((s) => new Player((string)s["name"])).ToList();
+                    Console.WriteLine(jdata);
+                    List<Player> result = (jdata["data"] as object[]).Select((s) =>
+                        new Player((string)s["name"])
+                        {
+                            Badges = ((string[])s["badges"]).Where((b) => b != "").Select((b) => (BadgeName)int.Parse(b)).ToList()
+                        }).ToList();
                     callback(result);
                 }
             );
