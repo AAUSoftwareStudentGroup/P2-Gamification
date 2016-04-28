@@ -30,7 +30,15 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 foreach (ExpressionBase expression in this)
                 {
                     // Count-1 gets the total number of * signs in the variadic expression
-                    result += expression.Size + (Count - 1);
+                    UnaryMinusExpression minus = expression as UnaryMinusExpression;
+                    if(minus != null)
+                    {
+                        result += minus.Expression.Size + (Count - 1);
+                    }
+                    else
+                    {
+                        result += expression.Size + (Count - 1);
+                    }
                 }
                 return result;
             }
