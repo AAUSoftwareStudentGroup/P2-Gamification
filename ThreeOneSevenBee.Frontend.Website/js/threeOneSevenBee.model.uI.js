@@ -1268,7 +1268,7 @@
     
                     switch (user.categories.getItem(this.getCategory()).name) {
                         case "Tutorial": 
-                            this.getBadgeView().setImage("tutorialbadge.png");
+                            this.getBadgeView().setImage("tutorial_badge.png");
                             break;
                         case "Potenser": 
                             this.getBadgeView().setImage("potens_badge.png");
@@ -1511,7 +1511,7 @@
         [ThreeOneSevenBee.Model.Game.BadgeName.brokBadge, "brøkbadge.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra, "master_of_algebrabadge.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.potens, "potens_badge.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge, "tutorialbadge.png"],
+        [ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge, "tutorial_badge.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge, "parenthesis_badge.png"]
     ] ) || null;
             }
