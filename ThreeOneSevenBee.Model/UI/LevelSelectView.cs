@@ -74,7 +74,6 @@ namespace ThreeOneSevenBee.Model.UI
 
             BadgeView = new ImageView("tutorialbadge.png", TitelView.Width * 0.15, TitelView.Width * 0.15)
             {
-                // her lasse
                 X = 0 - ((TitelView.Width * 0.10) / 2) + 5,
                 Y = CategoryName.Y + (0.5 * (TitelView.Width * 0.15)) - 10
             };
@@ -189,7 +188,7 @@ namespace ThreeOneSevenBee.Model.UI
                 switch (user.Categories[Category].Name)
                 {
                     case "Tutorial":
-                        BadgeView.Image = "tutorialbadge.png";
+                        BadgeView.Image = "tutorial_badge.png";
                         break;
 
                     case "Potenser":

@@ -645,6 +645,49 @@
                     }
                 }
                 return null;
+            },
+            productOfFractions: function (expression, selection) {
+                var $t, $t1, $t2;
+                var variadicExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+    
+                if (!Bridge.hasValue(variadicExpression) || variadicExpression.getType() !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply || variadicExpression.getCount() < 2) {
+                    return null;
+                }
+    
+                var listOfNumerators = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
+                var listOfDenominators = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
+    
+                $t = Bridge.getEnumerator(variadicExpression);
+                while ($t.moveNext()) {
+                    var operand = $t.getCurrent();
+                    var binaryExpression = Bridge.as(operand, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
+                    if (!Bridge.hasValue(binaryExpression)) {
+                        return null;
+                    }
+                    else  {
+                        if (binaryExpression.getType() !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
+                            return null;
+                        }
+                    }
+    
+                    listOfNumerators.add(binaryExpression.getLeft().clone());
+                    listOfDenominators.add(binaryExpression.getRight().clone());
+                }
+    
+                var suggestionNumerator = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, listOfNumerators.getItem(0), listOfNumerators.getItem(1));
+                $t1 = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(listOfNumerators).skip(2));
+                while ($t1.moveNext()) {
+                    var item = $t1.getCurrent();
+                    suggestionNumerator.add(item);
+                }
+                var suggestionDenominator = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, listOfDenominators.getItem(0), listOfDenominators.getItem(1));
+                $t2 = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(listOfDenominators).skip(2));
+                while ($t2.moveNext()) {
+                    var item1 = $t2.getCurrent();
+                    suggestionDenominator.add(item1);
+                }
+    
+                return new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(suggestionNumerator, suggestionDenominator, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
             }
         }
     });

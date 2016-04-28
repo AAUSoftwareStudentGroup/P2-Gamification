@@ -71,7 +71,7 @@
     <Content Include="img\restart.png" />
     <Content Include="img\star.png" />
     <Content Include="img\star_activated.png" />
-    <Content Include="img\tutorialbadge.png" />
+    <Content Include="img\tutorial_badge.png" />
     <Content Include="js\bridge.js" />
     <Content Include="js\bridge.min.js" />
     <Content Include="js\fastclick.js" />

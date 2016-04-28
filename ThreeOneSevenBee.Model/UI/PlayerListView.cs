@@ -8,41 +8,46 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class PlayerListView : CompositeView
     {
-
+        public FrameView frameView;
         public Dictionary<BadgeName, string> badgeDictionary = new Dictionary<BadgeName, string>()
         {
             {BadgeName.brokBadge, "brøkbadge.png"},
             {BadgeName.masterOfAlgebra, "master_of_algebrabadge.png"},
             {BadgeName.potens, "potens_badge.png"},
-            {BadgeName.tutorialBadge, "tutorialbadge.png" },
+            {BadgeName.tutorialBadge, "tutorial_badge.png" },
             {BadgeName.spilDoneBadge, "parenthesis_badge.png"}
 
         };
         public void Build(IEnumerable<Player> players)
         {
             Children = new List<View>();
-			int offsetY = 5;
+            int offsetY = 5;
 
             foreach (Player player in players)
             {
-                int badgesWidth = (badgeDictionary.Count-1) * 10;
+                int badgesWidth = (badgeDictionary.Count - 1) * 15;
+                double labelWidth = Width - badgesWidth - 25;
                 CompositeView row = new CompositeView(Width, 20)
                     {
                         new LabelView(" " + player.PlayerName + " ")
                         {
-                            Width = Width - badgesWidth - 20,
-                            Height = 20,
+                            Width = labelWidth,
+                            Height = 10,
+                            Align = TextAlignment.Left,
+                            Y = 5
                         },
                     };
+                double spacing = 0;
                 foreach (var badge in player.Badges)
                 {
-                    row.Add(new ImageView(badgeDictionary[badge], 10, 10)
+                    row.Add(new ImageView(badgeDictionary[badge], 15, 15)
                     {
-                        X = Width - badgesWidth + 20,
-                        Y = 5
+                        X = labelWidth + spacing,
+                        Y = 2.5
                     });
-                    badgesWidth += 10;
+                    spacing += 15;
                 }
+                frameView = new FrameView(Width, 20, row);
 
                 row.X = 5;
                 row.Y = offsetY;
