@@ -1504,6 +1504,7 @@
     
     Bridge.define('ThreeOneSevenBee.Model.UI.PlayerListView', {
         inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
+        frameView: null,
         config: {
             init: function () {
                 this.badgeDictionary = Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Game.BadgeName,String)(), [
@@ -1534,22 +1535,27 @@
             $t = Bridge.getEnumerator(players);
             while ($t.moveNext()) {
                 var player = $t.getCurrent();
-                var badgesWidth = (this.badgeDictionary.getCount() - 1) * 10;
+                var badgesWidth = (this.badgeDictionary.getCount() - 1) * 15;
+                var labelWidth = this.getWidth() - badgesWidth - 25;
                 var row = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(this.getWidth(), 20), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(" " + player.getPlayerName() + " "), {
-                        setWidth: this.getWidth() - badgesWidth - 20,
-                        setHeight: 20
+                        setWidth: labelWidth,
+                        setHeight: 10,
+                        setAlign: ThreeOneSevenBee.Model.UI.TextAlignment.left,
+                        setY: 5
                     } )]
                 ] );
+                var spacing = 0;
                 $t1 = Bridge.getEnumerator(player.badges);
                 while ($t1.moveNext()) {
                     var badge = $t1.getCurrent();
-                    row.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(this.badgeDictionary.get(badge), 10, 10), {
-                        setX: this.getWidth() - badgesWidth + 20,
-                        setY: 5
+                    row.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(this.badgeDictionary.get(badge), 15, 15), {
+                        setX: labelWidth + spacing,
+                        setY: 2.5
                     } ));
-                    badgesWidth += 10;
+                    spacing += 15;
                 }
+                this.frameView = new ThreeOneSevenBee.Model.UI.FrameView("constructor$1", this.getWidth(), 20, row);
     
                 row.setX(5);
                 row.setY(offsetY);
