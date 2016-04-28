@@ -9,28 +9,45 @@ namespace ThreeOneSevenBee.Model.UI
     {
         public Action<string, string> OnLogin;
 
+		Inputbox password;
+		Inputbox username;
+
 		protected LabelView Status;
         public void ShowLoginError()
         {
 			Status.Text = "Forkert brugernavn eller kode";
         }
 
+		public override void KeyPressed (string key, IContext context)
+		{
+			base.KeyPressed (key, context);
+			if (key == "Enter")
+				OnLogin (username.Text, password.Text);
+		}
+
         public LoginView(double width, double height) : base(width, height)
         {
 
-            Inputbox username = new Inputbox("Username");
-            username.X = 75;
+			password = new Inputbox("Password", true);
+            username = new Inputbox("Username");
+            
+			username.X = 75;
             username.Y = 100;
             username.Width = 450;
             username.Height = 36;
             username.Align = TextAlignment.Left;
+			username.OnKeyPressed += (string key, IContext context) => {
+				if(key == "Tab") {
+					username.Click(password.X, password.Y, context);
+					password.Click(password.X, password.Y, context);
+				}
+			};
 
-            Inputbox password = new Inputbox("Password", true);
             password.X = 75;
             password.Y = 160;
             password.Width = 450;
             password.Height = 36;
-            password.Align = TextAlignment.Left;
+			password.Align = TextAlignment.Left;
 
             ButtonView submit = new ButtonView("Log ind", () => {
                 if (OnLogin != null)
@@ -48,15 +65,15 @@ namespace ThreeOneSevenBee.Model.UI
             Status.Width = 200;
             Status.Height = 30;
 
-            setContent(new CompositeView(600, 400)
-            {
-                Children = new List<View>() {
-                    username,
-                    password,
-                    submit,
-                    Status
-                }
-            });
+			setContent(new CompositeView(600, 400)
+				{
+					Children = new List<View>() {
+						password,
+						username,
+						submit,
+						Status
+					}
+				});
         }
     }
 }
