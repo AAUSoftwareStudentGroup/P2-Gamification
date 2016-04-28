@@ -35,10 +35,7 @@ namespace ThreeOneSevenBee.Model.Game
 
         public void Add(int star)
         {
-            if (!stars.Contains(star))
-            {
-                stars.Add(star);
-            }
+            stars.Add(star);
         }
 
         public void Remove(int star)

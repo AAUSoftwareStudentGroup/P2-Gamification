@@ -1301,8 +1301,6 @@
         identityMenu: null,
         expression: null,
         toolTipView: null,
-        toolTipView2: null,
-        toolTipView3: null,
         config: {
             properties: {
                 OnExit: null,
@@ -1340,12 +1338,33 @@
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 192, 57, 43)
             } );
     
-            this.helpButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("?", $_.ThreeOneSevenBee.Model.UI.LevelView.f3), {
+            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView(game.getUser().getCurrentLevel().description, 300, 300), {
+                setX: this.getWidth() - 300,
+                setY: 50,
+                setVisible: false,
+                onClick: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.LevelView.f3)
+            } );
+            this.toolTipView.setArrowPosition(165);
+    
+            this.helpButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("?", Bridge.fn.bind(this, function () {
+                if (game.getUser().getCurrentLevel().description !== "") {
+                    if (this.toolTipView.getVisible() === true) {
+                        this.helpButton.setText("?");
+                        this.toolTipView.setVisible(false);
+                        this.helpButton.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130));
+                    }
+                    else  {
+                        this.helpButton.setText("x");
+                        this.toolTipView.setVisible(true);
+                        this.helpButton.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 192, 57, 43));
+                    }
+                }
+            })), {
                 setX: this.getWidth() - 140,
                 setY: 10,
                 setWidth: 30,
                 setHeight: 30,
-                setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130),
+                setBackgroundColor: game.getUser().getCurrentLevel().description === "" ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 190, 190, 190) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130),
                 setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255)
             } );
     
@@ -1363,26 +1382,6 @@
                 setY: 100
             } );
     
-            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Denne bar viser hvor langt du er nået.", 300, 75), {
-                setVisible: game.getIsFirstLevel(),
-                setX: this.progressbar.getX(),
-                setY: this.progressbar.getY() + this.progressbar.getHeight() + 10
-            } );
-    
-            this.toolTipView2 = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Når knappen bliver grøn kan du gå videre til næste bane", 400, 75), {
-                setVisible: game.getIsFirstLevel(),
-                setX: this.nextButton.getX() - 380,
-                setY: this.nextButton.getY() + this.nextButton.getHeight() + 10,
-                setArrowPosition: 380
-            } );
-    
-            this.toolTipView3 = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Dit mål er at reducere ovenstående udtryk. Dette gøres ved at markere de dele i udtrykket som skal reduceres.\nMarkér [a] og [a]. Klik derefter på den ønskede omskrivning nedenfor for at reducere udtrykket", 800, 90), {
-                setVisible: game.getIsFirstLevel(),
-                setX: this.getWidth() / 2 - 400,
-                setY: this.getHeight() / 2 + 30,
-                setArrowPosition: 390
-            } );
-    
             this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
                 [this.menuButton],
                 [this.nextButton],
@@ -1391,9 +1390,7 @@
                 [this.progressbar],
                 [this.identityMenu],
                 [this.expression],
-                [this.toolTipView],
-                [this.toolTipView2],
-                [this.toolTipView3]
+                [this.toolTipView]
             ] );
     
             if (Bridge.hasValue(this.onChanged)) {
@@ -1405,12 +1402,11 @@
             this.identityMenu.update(game.getExprModel().getIdentities(), game.getExprModel());
             this.expression.update$1(game.getExprModel());
             this.nextButton.setBackgroundColor(game.getIsLevelCompleted() ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 190, 190, 190));
-            this.toolTipView.setVisible(game.getIsFirstLevel());
-            this.toolTipView2.setVisible(game.getIsFirstLevel());
-            this.toolTipView3.setVisible(game.getIsFirstLevel());
+            this.toolTipView.setText(game.getUser().getCurrentLevel().description);
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged();
             }
+            console.log(game.getUser().getCurrentLevel());
         }
     });
     
@@ -1424,7 +1420,9 @@
             this.getOnNextLevel()();
         },
         f3: function () {
-            console.log("Show help");
+            if (Bridge.hasValue(this.helpButton.onClick) && this.toolTipView.getVisible() === true) {
+                this.helpButton.onClick();
+            }
         }
     });
     
@@ -1550,12 +1548,25 @@
             this.build(progressbar);
         },
         build: function (progressbar) {
+            var $t;
             this.progress = Bridge.merge(new ThreeOneSevenBee.Model.UI.View(0, 0, Math.min(this.getWidth(), Math.max(0, this.getWidth() * progressbar.getPercentage())), this.getHeight()), {
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 175, 100)
             } );
             this.stars = new Bridge.List$1(ThreeOneSevenBee.Model.UI.ImageView)();
             this.stars.addRange(Bridge.Linq.Enumerable.from(progressbar.activatedStarPercentages()).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.ProgressbarStarView.f1)));
             this.stars.addRange(Bridge.Linq.Enumerable.from(progressbar.deactivatedStarPercentages()).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.ProgressbarStarView.f2)));
+            var lastX = null;
+            var numberOfEqualX = 1;
+            for (var index = 0; index < this.stars.getCount(); index++) {
+                if (Bridge.Nullable.lt(Bridge.Nullable.sub(this.stars.getItem(index).getX(), lastX), 4.94065645841247E-324)) {
+                    $t = this.stars.getItem(index);
+                    $t.setX($t.getX()-numberOfEqualX * (this.stars.getItem(index).getWidth() / 2));
+                    numberOfEqualX++;
+                }
+                else  {
+                    lastX = this.stars.getItem(index).getX();
+                }
+            }
             this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
             this.children.add(this.progress);
             this.children.addRange(this.stars);
