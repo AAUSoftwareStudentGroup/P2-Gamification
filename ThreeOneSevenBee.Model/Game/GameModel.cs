@@ -13,7 +13,7 @@ namespace ThreeOneSevenBee.Model.Game
     public class GameModel
     {
         public CurrentPlayer User { get; }
-        public IEnumerable<Player> Players { get; private set; }
+        public IEnumerable<Player> Players { get; set; }
         public ExpressionModel ExprModel { get; private set; }
         public ExpressionBase CurrentExpression { get { return ExprModel.Expression; } }
         public ExpressionBase StartExpression { get; private set; }
