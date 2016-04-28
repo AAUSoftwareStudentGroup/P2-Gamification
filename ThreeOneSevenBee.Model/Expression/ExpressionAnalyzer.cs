@@ -71,19 +71,17 @@ namespace ThreeOneSevenBee.Model.Expression
                 ReferenceEquals(expr, second[secondIndex++])).ToList();
         }
 
-        public ExpressionBase WrapInDelimiterIfNeccessary(ExpressionBase expression, ExpressionBase parent)
-        {
-            Dictionary<OperatorType, Dictionary<OperatorType, bool>> table = new Dictionary<OperatorType, Dictionary<OperatorType, bool>>()
+        public Dictionary<OperatorType, Dictionary<OperatorType, bool>> WrapInParenthesis = new Dictionary<OperatorType, Dictionary<OperatorType, bool>>()
             {
                 {
                     OperatorType.Minus,
                     new Dictionary<OperatorType, bool>()
                     {
                         { OperatorType.Minus, true },
-                        { OperatorType.Add, true }, //problem, therefore true as a precaution
+                        { OperatorType.Add, false }, //problem, therefore true as a precaution
                         { OperatorType.Divide, false },
                         { OperatorType.Multiply, true },
-                        { OperatorType.Power, true } //problem, therefore true as a precaution
+                        { OperatorType.Power, false } //problem, therefore true as a precaution
                     }
                 },
                 {
@@ -112,7 +110,7 @@ namespace ThreeOneSevenBee.Model.Expression
                     OperatorType.Multiply,
                     new Dictionary<OperatorType, bool>()
                     {
-                        { OperatorType.Minus, true },
+                        { OperatorType.Minus, false },
                         { OperatorType.Add, false },
                         { OperatorType.Divide, false },
                         { OperatorType.Multiply, false },
@@ -132,19 +130,9 @@ namespace ThreeOneSevenBee.Model.Expression
                 }
             };
 
-            OperatorExpression operatorExpression = expression as OperatorExpression;
-            OperatorExpression parentExpression = parent as OperatorExpression;
-
-            bool isNeccessary = true;
-
-            if (operatorExpression == null || parentExpression == null)
-            {
-                isNeccessary = false;
-            }
-            else
-            {
-                isNeccessary = table[operatorExpression.Type][parentExpression.Type];
-            }
+        public ExpressionBase WrapInDelimiterIfNeccessary(OperatorExpression expression, OperatorType parentType)
+        {
+            bool isNeccessary = WrapInParenthesis[expression.Type][parentType];
 
             if (isNeccessary)
             {
@@ -153,6 +141,25 @@ namespace ThreeOneSevenBee.Model.Expression
             else
             {
                 return expression;
+            }
+        }
+
+        public ExpressionBase WrapInDelimiterIfNeccessary(ExpressionBase expression, ExpressionBase parent)
+        {
+            if(parent == null)
+            {
+                return expression;
+            }
+            OperatorExpression operatorExpression = expression as OperatorExpression;
+            OperatorExpression parentExpression = parent as OperatorExpression;
+
+            if (operatorExpression == null || parentExpression == null)
+            {
+                return expression;
+            }
+            else
+            {
+                return WrapInDelimiterIfNeccessary(operatorExpression, parentExpression.Type);
             }
         }
 
@@ -168,13 +175,13 @@ namespace ThreeOneSevenBee.Model.Expression
             ExpressionBase commonParent = GetCommonParent(selection);
             if (commonParent is VariadicOperatorExpression)
             {
-                VariadicOperatorExpression clone = commonParent.Clone() as VariadicOperatorExpression;
+                VariadicOperatorExpression variadicParent = commonParent as VariadicOperatorExpression;
 
                 List<ExpressionBase> operandsLeftOfSelection = new List<ExpressionBase>();
                 List<ExpressionBase> operandsRightOfSelection = new List<ExpressionBase>();
                 List<ExpressionBase> selectedOperands = new List<ExpressionBase>();
 
-                foreach (ExpressionBase operand in clone)
+                foreach (ExpressionBase operand in variadicParent)
                 {
                     if (operand.Selected == false && operand.GetNodesRecursive().Any((n) => n.Selected == true) == false)
                     {
@@ -193,7 +200,7 @@ namespace ThreeOneSevenBee.Model.Expression
                     }
                 }
 
-                VariadicOperatorExpression toBeReplaced = new VariadicOperatorExpression(clone.Type, selectedOperands[0].Clone(), selectedOperands[1].Clone());
+                VariadicOperatorExpression toBeReplaced = new VariadicOperatorExpression(variadicParent.Type, selectedOperands[0].Clone(), selectedOperands[1].Clone());
                 List<ExpressionBase> toBeReplacedSelection = new List<ExpressionBase>();
                 foreach (ExpressionBase operand in selectedOperands.Skip(2))
                 {
@@ -209,13 +216,13 @@ namespace ThreeOneSevenBee.Model.Expression
                     if (suggestion != null)
                     {
                         ExpressionBase result;
-                        if (clone.Count == selectedOperands.Count)
+                        if (variadicParent.Count == selectedOperands.Count)
                         {
                             result = suggestion;
                         }
                         else
                         {
-                            VariadicOperatorExpression variadicResult = new VariadicOperatorExpression(clone.Type, new NumericExpression(-1), new NumericExpression(-1));
+                            VariadicOperatorExpression variadicResult = new VariadicOperatorExpression(variadicParent.Type, new NumericExpression(-1), new NumericExpression(-1));
                             variadicResult.Add(operandsLeftOfSelection.Select((o) => o.Clone()).ToList());
                             variadicResult.Add(WrapInDelimiterIfNeccessary(suggestion.Clone(), variadicResult));
                             variadicResult.Add(operandsRightOfSelection.Select((o) => o.Clone()).ToList());
@@ -223,7 +230,7 @@ namespace ThreeOneSevenBee.Model.Expression
                             variadicResult.RemoveAt(0);
                             result = variadicResult;
                         }
-                        identities.Add(new Identity(suggestion, result));
+                        identities.Add(new Identity(suggestion, WrapInDelimiterIfNeccessary(result, commonParent.Parent)));
                     }
                 }
             }
@@ -231,7 +238,7 @@ namespace ThreeOneSevenBee.Model.Expression
             {
                 foreach (ExpressionRule rule in rules)
                 {
-                    ExpressionBase suggestion = rule(commonParent, selection);
+                    ExpressionBase suggestion = WrapInDelimiterIfNeccessary(rule(commonParent, selection), commonParent.Parent);
                     if (suggestion != null)
                     {
                         identities.Add(new Identity(suggestion, suggestion));

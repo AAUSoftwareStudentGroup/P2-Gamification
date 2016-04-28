@@ -15,7 +15,6 @@ namespace ThreeOneSevenBee.Frontend
 
         private void getCategories(Action<List<LevelCategory>> callback)
         {
-            Console.WriteLine(token);
             jQuery.Post(
                 "/api/",
                 new
@@ -26,7 +25,6 @@ namespace ThreeOneSevenBee.Frontend
                 (data, textStatus, request) =>
                 {
                     var jdata = JSON.Parse((string)data);
-                    Console.WriteLine(jdata["data"]);
                     List<LevelCategory> categories = new List<LevelCategory>();
                     var categoriesData = jdata["data"] as object[];
                     foreach (var categoryData in categoriesData)
@@ -161,6 +159,23 @@ namespace ThreeOneSevenBee.Frontend
                     action = "user_add_badge",
                     token = token,
                     badge_id = (int)badge
+                },
+                (data, textStatus, request) =>
+                {
+                    var jdata = JSON.Parse((string)data);
+                    callback((string)jdata["success"] == "true");
+                }
+            );
+        }
+
+        public void logout(Action<bool> callback)
+        {
+            jQuery.Post(
+                "/api/",
+                new
+                {
+                    action = "user_logout",
+                    token = token
                 },
                 (data, textStatus, request) =>
                 {

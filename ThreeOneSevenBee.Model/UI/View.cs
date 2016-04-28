@@ -21,6 +21,7 @@ namespace ThreeOneSevenBee.Model.UI
         {
             X = x;
             Y = y;
+            Active = false;
             Width = width;
             Height = height;
             Baseline = height / 2;
@@ -33,7 +34,7 @@ namespace ThreeOneSevenBee.Model.UI
 			context.DrawRectangle(X + offsetX, Y + offsetY, Width, Height, BackgroundColor);
         }
 
-        public virtual void Click(double x, double y)
+		public virtual void Click(double x, double y, IContext context)
         {
             if (ContainsPoint(x, y))
             {
@@ -41,20 +42,16 @@ namespace ThreeOneSevenBee.Model.UI
                 {
                     OnClick();
                 }
-                Active = true;
-            } else
-            {
-                Active = false;
             }
         }
-        public virtual void KeyPressed(int key)
+        public virtual void KeyPressed(string key, IContext context)
         {
             if(OnKeyPressed != null && Active)
-                OnKeyPressed(key);
+				OnKeyPressed(key, context);
         }
 
         public Action OnClick;
-        public Action<int> OnKeyPressed;
+        public Action<string, IContext> OnKeyPressed;
         public Action OnChanged;
         
         public virtual View Scale(double factor)

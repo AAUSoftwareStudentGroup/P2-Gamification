@@ -48,7 +48,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             var hasReplaced = false;
 
-            var expressionArray = expressions.ToArray();
+            ExpressionBase[] expressionArray = expressions.ToArray();
 
             for (int i = 0; i < expressionArray.Length; i++)
             {
@@ -65,7 +65,13 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             }
 
             if (hasReplaced)
-                expressions = new List<ExpressionBase>(expressionArray);
+            {
+                expressions.Clear();
+                foreach(ExpressionBase expr in expressionArray)
+                {
+                    Add(expr);
+                }
+            }
 
             return hasReplaced;
         }
@@ -105,8 +111,9 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             }
             else
             {
-                expressions.Add(item);
-                item.Parent = this;
+                ExpressionBase wrapped = new ExpressionAnalyzer().WrapInDelimiterIfNeccessary(item, this);
+                expressions.Add(wrapped);
+                wrapped.Parent = this;
             }
         }
 
@@ -118,8 +125,9 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             }
             else
             {
-                expressions.Add(item);
-                item.Parent = this;
+                ExpressionBase wrapped = new ExpressionAnalyzer().WrapInDelimiterIfNeccessary(item, this);
+                expressions.Add(wrapped);
+                wrapped.Parent = this;
             }
         }
 
@@ -165,16 +173,18 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             VariadicOperatorExpression variadicExpression = item as VariadicOperatorExpression;
             if(variadicExpression == null || variadicExpression.Type != Type)
             {
-                expressions.Insert(index, item);
-                item.Parent = this;
+                ExpressionBase wrapped = new ExpressionAnalyzer().WrapInDelimiterIfNeccessary(item, this);
+                expressions.Insert(index, wrapped);
+                wrapped.Parent = this;
             }
             else
             {
                 int offset = 0;
                 foreach (ExpressionBase operand in variadicExpression)
                 {
-                    expressions.Insert(index + offset++, operand);
-                    operand.Parent = this;
+                    ExpressionBase wrapped = new ExpressionAnalyzer().WrapInDelimiterIfNeccessary(item, this);
+                    expressions.Insert(index + offset++, wrapped);
+                    wrapped.Parent = this;
                 }
             }
         }

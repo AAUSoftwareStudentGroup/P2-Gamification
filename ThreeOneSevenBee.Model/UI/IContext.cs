@@ -12,7 +12,7 @@ namespace ThreeOneSevenBee.Model.UI
         double Height { get; }
         Action<double, double> OnResize { get; set; }
         void Clear();
-        void SetContentView(View view);
+        void SetContentView(FrameView view);
         void Draw();
 
         void DrawPNGImage(string fileName, double x, double y, double width, double height);
@@ -21,6 +21,8 @@ namespace ThreeOneSevenBee.Model.UI
         void DrawRectangle(double x, double y, double width, double height, Color fillColor, Color lineColor, double lineWidth);
         void DrawPolygon(Vector2[] path, Color fillColor);
         void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth);
-        void DrawText(double x, double y, double width, double height, string text, Color textColor);
+		void DrawText(double x, double y, double width, double height, string text, Color textColor, TextAlignment alignment);
+
+		Vector2 GetTextDimensions(string text, double maxWidth, double maxHeight);
     }
 }

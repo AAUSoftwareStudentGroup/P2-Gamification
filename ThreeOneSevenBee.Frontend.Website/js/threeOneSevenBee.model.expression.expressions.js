@@ -124,16 +124,19 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression', {
         inherits: [ThreeOneSevenBee.Model.Expression.ExpressionBase],
-        config: {
-            properties: {
-                Expression: null
-            }
-        },
+        expression: null,
         constructor: function (expression) {
             ThreeOneSevenBee.Model.Expression.ExpressionBase.prototype.$constructor.call(this);
     
             this.setExpression(expression);
             this.getExpression().setParent(this);
+        },
+        getExpression: function () {
+            return this.expression;
+        },
+        setExpression: function (value) {
+            this.expression = value;
+            this.expression.setParent(this);
         },
         getValue: function () {
             return "(" + this.getExpression().toString() + ")";
@@ -214,9 +217,9 @@
                 }
             }
         },
+        expression: null,
         config: {
             properties: {
-                Expression: null,
                 Function: null
             }
         },
@@ -226,6 +229,13 @@
             this.setExpression(expression);
             this.getExpression().setParent(this);
             this.setFunction($function.toLowerCase());
+        },
+        getExpression: function () {
+            return this.expression;
+        },
+        setExpression: function (value) {
+            this.expression = value;
+            this.expression.setParent(this);
         },
         getValue: function () {
             return this.getFunction() + this.getExpression();
@@ -406,12 +416,8 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Expression.Expressions.BinaryExpression', {
         inherits: [ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression],
-        config: {
-            properties: {
-                Left: null,
-                Right: null
-            }
-        },
+        left: null,
+        right: null,
         constructor: function (left, right, type) {
             ThreeOneSevenBee.Model.Expression.Expressions.OperatorExpression.prototype.$constructor.call(this, type);
     
@@ -423,9 +429,22 @@
             }
     
             this.setLeft(left);
-            this.getLeft().setParent(this);
             this.setRight(right);
-            this.getRight().setParent(this);
+        },
+        getLeft: function () {
+            return this.left;
+        },
+        setLeft: function (value) {
+            var wrapped = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer().wrapInDelimiterIfNeccessary(value, this);
+            this.left = wrapped;
+            this.left.setParent(this);
+        },
+        getRight: function () {
+            return this.right;
+        },
+        setRight: function (value) {
+            this.right = value;
+            this.right.setParent(this);
         },
         replace$1: function (old, replacement, doRecursively) {
             var hasReplaced = false;
@@ -558,6 +577,7 @@
         this.insert(index, value);
     },
     replace$1: function (old, replacement, doRecursively) {
+        var $t;
         var hasReplaced = false;
     
         var expressionArray = this.expressions.toArray();
@@ -576,7 +596,12 @@
         }
     
         if (hasReplaced) {
-            this.expressions = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)(expressionArray);
+            this.expressions.clear();
+            $t = Bridge.getEnumerator(expressionArray);
+            while ($t.moveNext()) {
+                var expr = $t.getCurrent();
+                this.add(expr);
+            }
         }
     
         return hasReplaced;
@@ -599,8 +624,9 @@
             }
         }
         else  {
-            this.expressions.add(item);
-            item.setParent(this);
+            var wrapped = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer().wrapInDelimiterIfNeccessary(item, this);
+            this.expressions.add(wrapped);
+            wrapped.setParent(this);
         }
     },
     add: function (item) {
@@ -608,8 +634,9 @@
             this.add$2(Bridge.cast(item, ThreeOneSevenBee.Model.Expression.Expressions.VariadicExpression));
         }
         else  {
-            this.expressions.add(item);
-            item.setParent(this);
+            var wrapped = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer().wrapInDelimiterIfNeccessary(item, this);
+            this.expressions.add(wrapped);
+            wrapped.setParent(this);
         }
     },
     remove: function (item) {
@@ -634,16 +661,18 @@
         var $t;
         var variadicExpression = Bridge.as(item, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
         if (!Bridge.hasValue(variadicExpression) || variadicExpression.getType() !== this.getType()) {
-            this.expressions.insert(index, item);
-            item.setParent(this);
+            var wrapped = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer().wrapInDelimiterIfNeccessary(item, this);
+            this.expressions.insert(index, wrapped);
+            wrapped.setParent(this);
         }
         else  {
             var offset = 0;
             $t = Bridge.getEnumerator(variadicExpression);
             while ($t.moveNext()) {
                 var operand = $t.getCurrent();
-                this.expressions.insert(index + offset++, operand);
-                operand.setParent(this);
+                var wrapped1 = new ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer().wrapInDelimiterIfNeccessary(item, this);
+                this.expressions.insert(index + offset++, wrapped1);
+                wrapped1.setParent(this);
             }
         }
     },
@@ -675,7 +704,12 @@
         getSize: function () {
             var result = 0;
             if (this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
-                result = 1 + this.getLeft().getSize() + this.getRight().getSize();
+                if (Bridge.is(this.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression)) {
+                    result = 1 + (Bridge.Int.div(this.getLeft().getSize(), 2)) + this.getRight().getSize();
+                }
+                else  {
+                    result = 1 + this.getLeft().getSize() + this.getRight().getSize();
+                }
             }
             else  {
                 if (this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
@@ -867,7 +901,7 @@
                     $t = Bridge.getEnumerator(this);
                     while ($t.moveNext()) {
                         var expression = $t.getCurrent();
-                        if (!expression.canCalculate()) {
+                        if (expression.canCalculate() === false) {
                             return false;
                         }
                     }

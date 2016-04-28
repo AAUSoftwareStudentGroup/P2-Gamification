@@ -14,7 +14,20 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
             Expression.Parent = this;
         }
 
-        public ExpressionBase Expression { get; set; }
+        ExpressionBase expression;
+        public ExpressionBase Expression
+        {
+            get
+            {
+                return expression;
+            }
+
+            set
+            {
+                expression = value;
+                expression.Parent = this;
+            }
+        }
 
         public override string Value
         {

@@ -12,11 +12,25 @@ namespace ThreeOneSevenBee.Frontend
         private Dictionary<string, ImageElement> imageCache;
 
         CanvasRenderingContext2D context;
+        InputElement input;
         public Vector2 lastClick { get; private set; }
 
-        public CanvasContext(CanvasElement canvas) : base(canvas.Width, canvas.Height)
+        public CanvasContext(CanvasElement canvas, InputElement input) : base(canvas.Width, canvas.Height)
         {
             imageCache = new Dictionary<string, ImageElement>();
+
+            this.input = input;
+            input.Type = InputType.Text;
+            input.Focus();
+            input.OnInput = (e) =>
+            {
+                if(input.Value == "")
+                {
+                    KeyPressed("Back");
+                }
+                KeyPressed(input.Value.Substr(Math.Max(0, input.Value.Length - 1), input.Value.Length));
+                input.Value = "A";
+            };
 
             context = canvas.GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D);
             context.FillStyle = "#000000";
@@ -25,14 +39,22 @@ namespace ThreeOneSevenBee.Frontend
 
             double canvasLeft = context.Canvas.GetBoundingClientRect().Left;
             double canvasRight = context.Canvas.GetBoundingClientRect().Left;
-            context.Canvas.AddEventListener(EventType.MouseDown,
+            context.Canvas.OnMouseDown =
                 (e) =>
                 {
                     click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
                         e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
+                };
+            context.Canvas.AddEventListener(EventType.Click,
+                (e) =>
+                {
+                    if (ContentView.Active == true)
+                    {
+                        input.Focus();
+                    }
                 });
+
             Window.OnResize = (e) => ResizeContent();
-            context.Canvas.OnKeyDown += KeyPressed;
         }
 
         public void ResizeContent()
@@ -41,12 +63,9 @@ namespace ThreeOneSevenBee.Frontend
             context.Canvas.Height = Document.DocumentElement.ClientHeight;
             Width = context.Canvas.Width;
             Height = context.Canvas.Height;
-            contentView.Width = Width;
-            contentView.Height = Height;
-            if(OnResize != null)
-            {
-                OnResize(Width, Height);
-            }
+            ContentView.Width = Width;
+            ContentView.Height = Height;
+            ContentView.Update();
             Draw();
         }
 
@@ -55,7 +74,7 @@ namespace ThreeOneSevenBee.Frontend
             return string.Format("rgba({0},{1},{2},{3})", color.Red.ToString(), color.Green.ToString(), color.Blue.ToString(), color.Alpha.ToString());
         }
 
-        public override void SetContentView(View view)
+        public override void SetContentView(FrameView view)
         {
             base.SetContentView(view);
             Draw();
@@ -68,7 +87,7 @@ namespace ThreeOneSevenBee.Frontend
 
         private void click(double x, double y)
         {
-            contentView.Click(x, y);
+            ContentView.Click(x, y, this);
             Vector2 last = lastClick;
             last.X = x;
             last.Y = y;
@@ -76,9 +95,10 @@ namespace ThreeOneSevenBee.Frontend
             Draw();
         }
 
-        private void KeyPressed(KeyboardEvent<CanvasElement> e)
+        private void KeyPressed(string text)
         {
-            contentView.KeyPressed(e.As<KeyboardEvent>().KeyCode);
+            ContentView.KeyPressed(text, this);
+            Draw();
         }
 
         public override void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth)
@@ -98,10 +118,9 @@ namespace ThreeOneSevenBee.Frontend
             context.Stroke();
         }
 
-        public override void DrawText(double x, double y, double width, double height, string text, Color textColor)
+        public override void DrawText(double x, double y, double width, double height, string text, Color textColor, TextAlignment alignment)
         {
             string[] lines = text.Split('\n');
-
             context.TextBaseline = CanvasTypes.CanvasTextBaselineAlign.Middle;
             context.FillStyle = ColorToString(textColor);
             double minFontSize = height;
@@ -109,7 +128,8 @@ namespace ThreeOneSevenBee.Frontend
             foreach (string line in lines)
             {
                 context.Font = height / lines.Length + "px Arial";
-                context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
+                context.TextAlign = alignment == TextAlignment.Centered ? CanvasTypes.CanvasTextAlign.Center :
+                                    alignment == TextAlignment.Left ? CanvasTypes.CanvasTextAlign.Left : CanvasTypes.CanvasTextAlign.Right;
                 if (context.MeasureText(line).Width > width)
                 {
                     minFontSize = Math.Min(minFontSize, width / context.MeasureText(line).Width * (height / lines.Length));
@@ -119,8 +139,9 @@ namespace ThreeOneSevenBee.Frontend
             for (int index = 0; index < lines.Length; index++)
             {
                 context.Font = minFontSize + "px Arial";
-                context.TextAlign = CanvasTypes.CanvasTextAlign.Center;
-                context.FillText(lines[index], (int)(x + width / 2), (int)(y + (index + 0.5) * (height / lines.Length)));
+                context.TextAlign = alignment == TextAlignment.Centered ? CanvasTypes.CanvasTextAlign.Center :
+                                    alignment == TextAlignment.Left ? CanvasTypes.CanvasTextAlign.Left : CanvasTypes.CanvasTextAlign.Right;
+                context.FillText(lines[index], (int)(x + (alignment == TextAlignment.Centered ? width / 2 : 0)), (int)(y + (index + 0.5) * (height / lines.Length)));
             }
         }
 
@@ -142,9 +163,22 @@ namespace ThreeOneSevenBee.Frontend
                     context.FillStyle = "transparent";
                     context.DrawImage(img, x, y, width, height);
                     context.FillStyle = "#000000";
-                    imageCache.Add(fileName, img);
+                    imageCache[fileName] = img;
                 };
             }
+        }
+
+        public override Vector2 GetTextDimensions(string text, double maxWidth, double maxHeight)
+        {
+            double minFontSize = maxHeight;
+            context.Font = maxHeight + "px Arial";
+            context.TextAlign = CanvasTypes.CanvasTextAlign.Left;
+            context.Font = minFontSize + "px Arial";
+            if (context.MeasureText(text).Width > maxWidth)
+            {
+                minFontSize = Math.Min(minFontSize, maxWidth / context.MeasureText(text).Width * maxHeight);
+            }
+            return new Vector2(context.MeasureText(text).Width, minFontSize);
         }
     }
 }

@@ -89,7 +89,7 @@ namespace ThreeOneSevenBee.Model.Expression
             UpdateSelection();
             selectionParent = analyzer.GetCommonParent(selection);
             identities = analyzer.GetIdentities(selection);
-
+            Console.WriteLine("Identities updated");
             if (OnChanged != null)
                 OnChanged(this);
         }
@@ -115,7 +115,7 @@ namespace ThreeOneSevenBee.Model.Expression
             }
             else
             {
-                Selected.Replace(analyzer.WrapInDelimiterIfNeccessary(identity, parent));
+                Selected.Replace(identity);
             }
             Selected.Parent = parent;
             UpdateSelection();

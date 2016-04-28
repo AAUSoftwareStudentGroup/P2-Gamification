@@ -24,12 +24,20 @@ namespace ThreeOneSevenBee.Model.UI
         {
             get
             {
-                return base.Active; 
+                if (Children != null)
+                {
+                    foreach (View child in Children)
+                    {
+                        if (child.Active)
+                            return true;
+                    }
+                }
+				return false;
             }
 
             set
             {
-                if (value == false)
+                if (value == false && Children != null)
                 {
                     foreach (View child in Children)
                     {
@@ -52,7 +60,7 @@ namespace ThreeOneSevenBee.Model.UI
             }
         }
 
-        public override void Click(double x, double y)
+		public override void Click(double x, double y, IContext context)
         {
             if (base.ContainsPoint(x, y))
             {
@@ -61,7 +69,7 @@ namespace ThreeOneSevenBee.Model.UI
                 {
                     foreach (View child in Children)
                     {
-                        child.Click(x - X, y - Y);
+						child.Click(x - X, y - Y, context);
                     }
                 }
                 
@@ -75,13 +83,13 @@ namespace ThreeOneSevenBee.Model.UI
             }
         }
 
-        public override void KeyPressed(int key)
+        public override void KeyPressed(string key, IContext context)
         {
             if (PropagateKeypress)
             {
                 foreach (View child in Children)
                 {
-                    child.KeyPressed(key);
+					child.KeyPressed(key, context);
                 }
             }
         }

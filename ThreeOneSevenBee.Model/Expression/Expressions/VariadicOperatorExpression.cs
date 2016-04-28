@@ -52,7 +52,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 case OperatorType.Multiply:
                     foreach (var expression in this)
                     {
-                        if (!expression.CanCalculate())
+                        if (expression.CanCalculate() == false)
                             return false;
                     }
                     return true;

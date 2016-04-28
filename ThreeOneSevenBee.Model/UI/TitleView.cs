@@ -11,6 +11,8 @@ namespace ThreeOneSevenBee.Model.UI
         public CompositeView LevelButton;
         public CompositeView PlayButton;
         public PlayerListView PlayerList;
+        public ButtonView LogoutButton;
+        public Action OnLogout;
         public TitleView(CurrentPlayer user, IEnumerable<Player> players) : base(600, 300)
         {
             BackgroundColor = new Color(255, 255, 255);
@@ -28,6 +30,15 @@ namespace ThreeOneSevenBee.Model.UI
                 { 75,50 },
                 { 25,75 }
             };
+
+            LogoutButton = new ButtonView("Log ud", () =>
+            {
+                if (OnLogout != null)
+                {
+                    OnLogout();
+                }
+            });
+
             playIcon.BackgroundColor = new Color(255, 255, 255);
             PlayButton = new CompositeView(100, 100)
             {

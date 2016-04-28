@@ -13,9 +13,45 @@ namespace ThreeOneSevenBee.Development.Desktop
 {
 	class DesktopGameAPI : IGameAPI
 	{
+		private string token = null;
+
+		public void logout(Action<bool> callback) {
+			callback (true);
+		}
+
+		public void IsAuthenticated(Action<bool> callback)
+		{
+			JObject response = MakeRequest ("http://webmat.cs.aau.dk/api/?action=is_authenticated", true);
+			if (string.Compare (response.Value<string> ("success"), "true") == 0) {
+				token = response.SelectToken ("data").Value<string>("token");
+				callback (true);
+			}
+			else
+				callback (false);
+		}
+
+		public void Authenticate(string username, string password, Action<bool> callback)
+		{
+			JObject response = MakeRequest (
+				string.Format (
+					"http://webmat.cs.aau.dk/api/?action={0}&username={1}&password={2}",
+					"user_login",
+					username,
+					password
+				),
+				false
+			);
+			if (string.Compare (response.Value<string> ("success"), "true") == 0) {
+				token = response.SelectToken ("data").Value<string>("token");
+				callback (true);
+			}
+			else
+				callback (false);
+		}
+
 		public void GetCurrentPlayer(Action<CurrentPlayer> callback)
 		{
-			JObject response = MakeRequest ("http://webmat.cs.aau.dk/api/?action=get_current_user");
+			JObject response = MakeRequest ("http://webmat.cs.aau.dk/api/?action=get_current_user", true);
 			JToken data = response.SelectToken ("data");
 
 			CurrentPlayer currentPlayer = new CurrentPlayer(data.Value<string>("name"));
@@ -32,7 +68,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 		public void GetPlayers(Action<List<Player>> callback)
 		{
-			JObject response = MakeRequest ("http://webmat.cs.aau.dk/api/?action=get_users");
+			JObject response = MakeRequest ("http://webmat.cs.aau.dk/api/?action=get_users", false);
 
 			List<Player> players = new List<Player>();
 
@@ -54,7 +90,8 @@ namespace ThreeOneSevenBee.Development.Desktop
 					levelID,
 					currentExpression,
 					stars
-				)
+				),
+				true
 			);
 
 			callback(string.Compare ("true", response.Value<string> ("success")) == 0);
@@ -62,7 +99,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 		private void GetCategories(Action<List<LevelCategory>> callback)
 		{
-			JObject response = MakeRequest ("http://webmat.cs.aau.dk/api/?action=get_levels");
+			JObject response = MakeRequest ("http://webmat.cs.aau.dk/api/?action=get_levels", true);
 
 			List<LevelCategory> categories = new List<LevelCategory>();
 
@@ -92,9 +129,22 @@ namespace ThreeOneSevenBee.Development.Desktop
 			callback(categories);
 		}
 
-		private JObject MakeRequest(string URL)
+		public void UserAddBadge(BadgeName badge, Action<bool> callback) {
+			JObject response = MakeRequest (
+				string.Format (
+					"http://webmat.cs.aau.dk/api/?action={0}&token={1}&badge_id={2}",
+					"user_add_badge",
+					token,
+					badge
+				),
+				true
+			);
+			callback (string.Compare (response.Value<string> ("success"), "true") == 0);
+		}
+
+		private JObject MakeRequest(string URL, bool authed)
 		{
-			WebRequest request = HttpWebRequest.Create(URL+"&debug=1");
+			WebRequest request = HttpWebRequest.Create(URL+(authed == true ? "&token="+token : ""));
 			request.ContentType = "application/json";
 			request.Method = "GET";
 

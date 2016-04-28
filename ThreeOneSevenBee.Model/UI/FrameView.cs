@@ -41,6 +41,7 @@ namespace ThreeOneSevenBee.Model.UI
         public double InnerY { get { return Y - Padding; } }
         public double InnerWidth { get { return Width - Padding; } }
         public double InnerHeight { get { return Height - Padding; } }
+
         public override bool Active
         {
             get
@@ -62,19 +63,19 @@ namespace ThreeOneSevenBee.Model.UI
             Content = Align(Fit(content));
         }
 
-        public virtual void updateContent()
+        public virtual void Update()
         {
             Content = Align(Fit(Content));
         }
 
-        public override void Click(double x, double y)
+		public override void Click(double x, double y, IContext context)
         {
 
             if (base.ContainsPoint(x, y))
             {
                 if (PropagateClick)
                 {
-                    Content.Click(x - X, y - Y);
+					Content.Click(x - X, y - Y, context);
                 }
 
                 if (OnClick != null)
@@ -86,16 +87,17 @@ namespace ThreeOneSevenBee.Model.UI
                 Active = false;
             }
         }
-        public override void KeyPressed(int key)
+        public override void KeyPressed(string key, IContext context)
         {
             if (PropagateKeypress)
             {
-                Content.KeyPressed(key);
+                Content.KeyPressed(key, context);
             }
         }
 
         public override void DrawWithContext(IContext context, double offsetX, double offsetY)
         {
+            Update();
             base.DrawWithContext(context, offsetX, offsetY);
             Content.DrawWithContext(context, offsetX + InnerX, offsetY + InnerY);
         }

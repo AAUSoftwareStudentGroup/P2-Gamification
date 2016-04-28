@@ -14,14 +14,39 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 throw new ArgumentNullException("right");
 
             Left = left;
-            Left.Parent = this;
             Right = right;
-            Right.Parent = this;
         }
 
-        public ExpressionBase Left { get; set; }
+        ExpressionBase left;
+        public ExpressionBase Left
+        {
+            get
+            {
+                return left;
+            }
 
-        public ExpressionBase Right { get; set; }
+            set
+            {
+                ExpressionBase wrapped = new ExpressionAnalyzer().WrapInDelimiterIfNeccessary(value, this);
+                left = wrapped;
+                left.Parent = this;
+            }
+        }
+
+        ExpressionBase right;
+        public ExpressionBase Right
+        {
+            get
+            {
+                return right;
+            }
+
+            set
+            {
+                right = value;
+                right.Parent = this;
+            }
+        }
 
         public override Boolean Replace(ExpressionBase old, ExpressionBase replacement, bool doRecursively)
         {

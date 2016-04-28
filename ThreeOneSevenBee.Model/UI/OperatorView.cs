@@ -27,13 +27,13 @@ namespace ThreeOneSevenBee.Model.UI
             switch (Type)
             {
                 case OperatorType.Add:
-                    context.DrawText(X + offsetX, Y + offsetY, Width, Height, "+", LineColor);
+				context.DrawText(X + offsetX, Y + offsetY, Width, Height, "+", LineColor, TextAlignment.Centered);
                     break;
                 case OperatorType.Subtract:
-                    context.DrawText(X + offsetX, Y + offsetY, Width, Height, "-", LineColor);
+				context.DrawText(X + offsetX, Y + offsetY, Width, Height, "-", LineColor, TextAlignment.Centered);
                     break;
                 case OperatorType.Minus:
-                    context.DrawText(X + offsetX, Y + offsetY, Width, Height, "-", LineColor);
+				context.DrawText(X + offsetX, Y + offsetY, Width, Height, "-", LineColor, TextAlignment.Centered);
                     break;
                 case OperatorType.Divide:
                     context.DrawLine(
@@ -44,7 +44,7 @@ namespace ThreeOneSevenBee.Model.UI
                     );
                     break;
                 case OperatorType.Multiply:
-                    context.DrawText(X + offsetX, Y + offsetY, Width, Height, "·", LineColor);
+				context.DrawText(X + offsetX, Y + offsetY, Width, Height, "·", LineColor, TextAlignment.Centered);
                     break;
                 case OperatorType.Power:
                     break;

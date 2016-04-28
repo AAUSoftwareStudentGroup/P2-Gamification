@@ -20,6 +20,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 	public class DesktopContext : Context
 	{
 		double width, height;
+		public Dictionary<string, Texture2D> imageCache;
 
 		SpriteBatch spriteBatch;
 		SpriteFont font;
@@ -32,14 +33,21 @@ namespace ThreeOneSevenBee.Development.Desktop
 			spriteBatch = sb;
 			font = vf;
 			graphicsDeviceManager = gdm;
+			imageCache = new Dictionary<string, Texture2D> ();
 		}
 
 		public override void Clear()
 		{
-			graphicsDeviceManager.GraphicsDevice.Clear(XNA.Color.TransparentBlack);
+			graphicsDeviceManager.GraphicsDevice.Clear(XNA.Color.White);
 		}
 
 		public override void DrawPNGImage(string fileName, double x, double y, double width, double height) {
+			if (imageCache.ContainsKey (fileName)) {
+				spriteBatch.Begin ();
+				spriteBatch.Draw (imageCache [fileName], new XNA.Rectangle ((int)x, (int)y, (int)width, (int)height), XNA.Color.White);
+				spriteBatch.End ();
+			} else
+				Console.WriteLine (fileName);
 		}
 
 		public override void DrawLine(Vector2 first, Vector2 second, Color lineColor, double lineWidth)
@@ -59,6 +67,10 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 		public override void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth)
 		{
+			for (int i = 0; i < path.Length-1; i++) {
+				this.DrawLine (path [i], path [i + 1], fillColor, lineWidth);
+			}
+
 			VertexPositionColor[] _vertices = new VertexPositionColor[path.Length];
 			int[] indicies = new int[_vertices.Length];
 
@@ -73,20 +85,40 @@ namespace ThreeOneSevenBee.Development.Desktop
 				_vertices, 0, _vertices.Length,
 				indicies,  0, _vertices.Length-2
 			);
-
-			for (int i = 0; i < path.Length-1; i++) {
-				this.DrawLine (path [i], path [i + 1], fillColor, lineWidth);
-			}
 		}
-		public override void DrawText(double x, double y, double width, double height, string text, Color textColor)
+		public override void DrawText(double x, double y, double width, double height, string text, Color textColor, TextAlignment alignment)
 		{
 			XNA.Vector2 stringSize = font.MeasureString (text);
 			float widthScale = (float)width / stringSize.X;
 			float heightScale = (float)height / stringSize.Y;
 			float scale = Math.Min (widthScale, heightScale);
+
+			double xAlignmentOffset = 0;
+
+			switch (alignment) {
+			case TextAlignment.Left:
+				xAlignmentOffset = 0;
+				break;
+			case TextAlignment.Right:
+				xAlignmentOffset = width - (stringSize.X * scale);
+				break;
+			case TextAlignment.Centered:
+				xAlignmentOffset = (width - (stringSize.X * scale))/2;
+				break;
+			}
+
 			spriteBatch.Begin ();
-			spriteBatch.DrawString (font, text, new XNA.Vector2 ((float)x, (float)y), ConvertColor (textColor), 0, new XNA.Vector2 (0, 0), scale, SpriteEffects.None, 0.5f); 
+			spriteBatch.DrawString (font, text, new XNA.Vector2 ((float)(x + xAlignmentOffset), (float)y), ConvertColor (textColor), 0, new XNA.Vector2 (0, 0), scale, SpriteEffects.None, 0.5f); 
 			spriteBatch.End ();
+		}
+
+		public override Vector2 GetTextDimensions(string text, double maxWidth, double maxHeight) {
+			XNA.Vector2 stringSize = font.MeasureString (text);
+			double widthScale = maxWidth / stringSize.X;
+			double heightScale = maxHeight / stringSize.Y;
+			double scale = Math.Min (widthScale, heightScale);
+
+			return new Vector2 (stringSize.X * scale, stringSize.Y * scale);
 		}
 
 		private XNA.Color ConvertColor(Color c)

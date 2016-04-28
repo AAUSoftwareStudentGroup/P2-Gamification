@@ -20,8 +20,9 @@ namespace ThreeOneSevenBee.Frontend
             CanvasElement canvas = Document.GetElementById<CanvasElement>("canvas");
             canvas.Width = Document.DocumentElement.ClientWidth;
             canvas.Height = Document.DocumentElement.ClientHeight;
+            InputElement input = Document.GetElementById<InputElement>("input");
 
-            IContext context = new CanvasContext(canvas);
+            IContext context = new CanvasContext(canvas, input);
 
             IGameAPI gameAPI = new JQueryGameAPI();
 

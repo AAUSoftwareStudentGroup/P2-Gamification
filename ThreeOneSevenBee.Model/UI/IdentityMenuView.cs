@@ -20,6 +20,7 @@ namespace ThreeOneSevenBee.Model.UI
                 int indexCopy = index;
                 ExpressionView expressionView = new ExpressionView();
                 View view = expressionView.BuildView(identities[index].Suggestion, model);
+                view.BackgroundColor = new Color(230, 230, 230);
                 FrameView frameView = new FrameView(Width / identities.Count, Height, view, 4)
                 {
                     PropagateClick = false
@@ -37,9 +38,9 @@ namespace ThreeOneSevenBee.Model.UI
             Update(model.Identities, model);
         }
 
-        public override void Click(double x, double y)
+		public override void Click(double x, double y, IContext context)
         {
-            base.Click(x, y);
+			base.Click(x, y, context);
         }
     }
 }
