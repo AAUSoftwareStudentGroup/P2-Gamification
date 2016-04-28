@@ -986,13 +986,19 @@
         placeholder: null,
         cursorPos: 0,
         hidden: false,
-        constructor$1: function (placeholder, hidden) {
+        placeholderColor: null,
+        constructor$2: function (placeholder, hidden, placeholderColor) {
             ThreeOneSevenBee.Model.UI.LabelView.prototype.$constructor.call(this, placeholder);
     
+            this.placeholderColor = placeholderColor;
             this.placeholder = placeholder;
             this.hidden = hidden;
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 200, 200, 200));
             this.cursorPos = 0;
+        },
+        constructor$1: function (placeholder, hidden) {
+            ThreeOneSevenBee.Model.UI.Inputbox.prototype.constructor$2.call(this, placeholder, hidden, new ThreeOneSevenBee.Model.UI.Color("constructor$1", 100, 100, 100));
+    
         },
         constructor: function (placeholder) {
             ThreeOneSevenBee.Model.UI.Inputbox.prototype.constructor$1.call(this, placeholder, false);
@@ -1025,6 +1031,9 @@
                     }
                 }
             }
+        },
+        isDefault: function () {
+            return Bridge.String.compare(this.getText(), this.placeholder) === 0;
         },
         keyPressed: function (key, context) {
             if (this.getActive()) {
@@ -1068,17 +1077,24 @@
             return hiddenText;
         },
         drawWithContext: function (context, offsetX, offsetY) {
+            var backupColor = this.getTextColor();
+            if (this.isDefault()) {
+                this.setTextColor(this.placeholderColor);
+            }
+    
             if (!this.hidden) {
                 ThreeOneSevenBee.Model.UI.LabelView.prototype.drawWithContext.call(this, context, offsetX, offsetY);
             }
             else  {
                 var TextBackup = this.getText();
+    
                 if (this.getText() === this.placeholder) {
                     this.setText(this.placeholder);
                 }
                 else  {
                     this.setText(this.getHiddenText());
                 }
+    
                 ThreeOneSevenBee.Model.UI.LabelView.prototype.drawWithContext.call(this, context, offsetX, offsetY);
                 this.setText(TextBackup);
             }
@@ -1088,6 +1104,9 @@
                     textWidth = context.getTextDimensions(this.hidden ? this.getHiddenText().substr(0, this.cursorPos) : this.getText().substr(0, this.cursorPos), this.getWidth(), this.getHeight()).x;
                 }
                 context.drawLine(new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", textWidth + offsetX + this.getX() + 1, this.getY() + offsetY), new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", textWidth + offsetX + this.getX() + 1, offsetY + this.getY() + this.getHeight()), new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0), 1);
+            }
+            if (this.isDefault()) {
+                this.setTextColor(backupColor);
             }
         }
     });
@@ -1301,8 +1320,6 @@
         identityMenu: null,
         expression: null,
         toolTipView: null,
-        toolTipView2: null,
-        toolTipView3: null,
         config: {
             properties: {
                 OnExit: null,
@@ -1340,12 +1357,33 @@
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 192, 57, 43)
             } );
     
-            this.helpButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("?", $_.ThreeOneSevenBee.Model.UI.LevelView.f3), {
+            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView(game.getUser().getCurrentLevel().description, 300, 300), {
+                setX: this.getWidth() - 300,
+                setY: 50,
+                setVisible: false,
+                onClick: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.LevelView.f3)
+            } );
+            this.toolTipView.setArrowPosition(165);
+    
+            this.helpButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("?", Bridge.fn.bind(this, function () {
+                if (game.getUser().getCurrentLevel().description !== "") {
+                    if (this.toolTipView.getVisible() === true) {
+                        this.helpButton.setText("?");
+                        this.toolTipView.setVisible(false);
+                        this.helpButton.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130));
+                    }
+                    else  {
+                        this.helpButton.setText("x");
+                        this.toolTipView.setVisible(true);
+                        this.helpButton.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 192, 57, 43));
+                    }
+                }
+            })), {
                 setX: this.getWidth() - 140,
                 setY: 10,
                 setWidth: 30,
                 setHeight: 30,
-                setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130),
+                setBackgroundColor: game.getUser().getCurrentLevel().description === "" ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 190, 190, 190) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130),
                 setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255)
             } );
     
@@ -1363,26 +1401,6 @@
                 setY: 100
             } );
     
-            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Denne bar viser hvor langt du er nået.", 300, 75), {
-                setVisible: game.getIsFirstLevel(),
-                setX: this.progressbar.getX(),
-                setY: this.progressbar.getY() + this.progressbar.getHeight() + 10
-            } );
-    
-            this.toolTipView2 = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Når knappen bliver grøn kan du gå videre til næste bane", 400, 75), {
-                setVisible: game.getIsFirstLevel(),
-                setX: this.nextButton.getX() - 380,
-                setY: this.nextButton.getY() + this.nextButton.getHeight() + 10,
-                setArrowPosition: 380
-            } );
-    
-            this.toolTipView3 = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView("Dit mål er at reducere ovenstående udtryk. Dette gøres ved at markere de dele i udtrykket som skal reduceres.\nMarkér [a] og [a]. Klik derefter på den ønskede omskrivning nedenfor for at reducere udtrykket", 800, 90), {
-                setVisible: game.getIsFirstLevel(),
-                setX: this.getWidth() / 2 - 400,
-                setY: this.getHeight() / 2 + 30,
-                setArrowPosition: 390
-            } );
-    
             this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
                 [this.menuButton],
                 [this.nextButton],
@@ -1391,9 +1409,7 @@
                 [this.progressbar],
                 [this.identityMenu],
                 [this.expression],
-                [this.toolTipView],
-                [this.toolTipView2],
-                [this.toolTipView3]
+                [this.toolTipView]
             ] );
     
             if (Bridge.hasValue(this.onChanged)) {
@@ -1405,12 +1421,11 @@
             this.identityMenu.update(game.getExprModel().getIdentities(), game.getExprModel());
             this.expression.update$1(game.getExprModel());
             this.nextButton.setBackgroundColor(game.getIsLevelCompleted() ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 190, 190, 190));
-            this.toolTipView.setVisible(game.getIsFirstLevel());
-            this.toolTipView2.setVisible(game.getIsFirstLevel());
-            this.toolTipView3.setVisible(game.getIsFirstLevel());
+            this.toolTipView.setText(game.getUser().getCurrentLevel().description);
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged();
             }
+            console.log(game.getUser().getCurrentLevel());
         }
     });
     
@@ -1424,7 +1439,9 @@
             this.getOnNextLevel()();
         },
         f3: function () {
-            console.log("Show help");
+            if (Bridge.hasValue(this.helpButton.onClick) && this.toolTipView.getVisible() === true) {
+                this.helpButton.onClick();
+            }
         }
     });
     
@@ -1437,17 +1454,17 @@
     
     
             var username = new ThreeOneSevenBee.Model.UI.Inputbox("constructor", "Username");
-            username.setX(150);
+            username.setX(75);
             username.setY(100);
-            username.setWidth(300);
-            username.setHeight(24);
+            username.setWidth(450);
+            username.setHeight(36);
             username.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var password = new ThreeOneSevenBee.Model.UI.Inputbox("constructor$1", "Password", true);
-            password.setX(150);
-            password.setY(150);
-            password.setWidth(300);
-            password.setHeight(24);
+            password.setX(75);
+            password.setY(160);
+            password.setWidth(450);
+            password.setHeight(36);
             password.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var submit = new ThreeOneSevenBee.Model.UI.ButtonView("Log in", Bridge.fn.bind(this, function () {
@@ -1455,15 +1472,15 @@
                     this.onLogin(username.getText(), password.getText());
                 }
             }));
-            submit.setX(260);
-            submit.setY(200);
-            submit.setWidth(80);
-            submit.setHeight(30);
+            submit.setX(220);
+            submit.setY(220);
+            submit.setWidth(160);
+            submit.setHeight(60);
             submit.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 175, 100));
     
             this.status = new ThreeOneSevenBee.Model.UI.LabelView(" ");
-            this.status.setX(300);
-            this.status.setY(250);
+            this.status.setX(75);
+            this.status.setY(200);
             this.status.setWidth(200);
             this.status.setHeight(30);
     
@@ -1550,12 +1567,25 @@
             this.build(progressbar);
         },
         build: function (progressbar) {
+            var $t;
             this.progress = Bridge.merge(new ThreeOneSevenBee.Model.UI.View(0, 0, Math.min(this.getWidth(), Math.max(0, this.getWidth() * progressbar.getPercentage())), this.getHeight()), {
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 175, 100)
             } );
             this.stars = new Bridge.List$1(ThreeOneSevenBee.Model.UI.ImageView)();
             this.stars.addRange(Bridge.Linq.Enumerable.from(progressbar.activatedStarPercentages()).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.ProgressbarStarView.f1)));
             this.stars.addRange(Bridge.Linq.Enumerable.from(progressbar.deactivatedStarPercentages()).select(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.ProgressbarStarView.f2)));
+            var lastX = null;
+            var numberOfEqualX = 1;
+            for (var index = 0; index < this.stars.getCount(); index++) {
+                if (Bridge.Nullable.lt(Bridge.Nullable.sub(this.stars.getItem(index).getX(), lastX), 4.94065645841247E-324)) {
+                    $t = this.stars.getItem(index);
+                    $t.setX($t.getX()-numberOfEqualX * (this.stars.getItem(index).getWidth() / 2));
+                    numberOfEqualX++;
+                }
+                else  {
+                    lastX = this.stars.getItem(index).getX();
+                }
+            }
             this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
             this.children.add(this.progress);
             this.children.addRange(this.stars);

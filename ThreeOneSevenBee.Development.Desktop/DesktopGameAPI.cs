@@ -15,6 +15,10 @@ namespace ThreeOneSevenBee.Development.Desktop
 	{
 		private string token = null;
 
+		public void logout(Action<bool> callback) {
+			callback (true);
+		}
+
 		public void IsAuthenticated(Action<bool> callback)
 		{
 			JObject response = MakeRequest ("http://webmat.cs.aau.dk/api/?action=is_authenticated", true);

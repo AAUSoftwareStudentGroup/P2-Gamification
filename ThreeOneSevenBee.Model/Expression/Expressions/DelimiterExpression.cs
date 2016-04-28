@@ -65,7 +65,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
 
         public override bool CanCalculate()
         {
-            return Expression is NumericExpression;
+            return Expression.CanCalculate();
         }
 
         public override double? Calculate()

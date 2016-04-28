@@ -34,6 +34,20 @@ namespace ThreeOneSevenBee.Model.UI
                     };
                 }
                 ));
+            double? lastX = null;
+            int numberOfEqualX = 1;
+            for (int index = 0; index < stars.Count; index++)
+            {
+                if (stars[index].X - lastX < double.Epsilon)
+                {
+                    stars[index].X -= numberOfEqualX * (stars[index].Width / 2);
+                    numberOfEqualX++;
+                }
+                else
+                {
+                    lastX = stars[index].X;
+                }
+            }
             Children = new List<View>();
             Children.Add(progress);
             Children.AddRange(stars);

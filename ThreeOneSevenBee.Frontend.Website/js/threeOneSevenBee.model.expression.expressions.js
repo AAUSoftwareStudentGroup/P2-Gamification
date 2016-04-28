@@ -161,7 +161,7 @@
             return hasReplaced;
         },
         canCalculate: function () {
-            return Bridge.is(this.getExpression(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
+            return this.getExpression().canCalculate();
         },
         calculate: function () {
             return this.getExpression().calculate();
@@ -722,6 +722,7 @@
             switch (this.getType()) {
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add: 
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract: 
+                case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide: 
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply: 
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power: 
                     return this.getLeft().canCalculate() && this.getRight().canCalculate();
@@ -734,6 +735,8 @@
                     return Bridge.Nullable.add(this.getLeft().calculate(), this.getRight().calculate());
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract: 
                     return Bridge.Nullable.sub(this.getLeft().calculate(), this.getRight().calculate());
+                case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide: 
+                    return Bridge.Nullable.div(this.getLeft().calculate(), this.getRight().calculate());
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply: 
                     return Bridge.Nullable.mul(this.getLeft().calculate(), this.getRight().calculate());
                 case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power: 
@@ -886,7 +889,13 @@
             while ($t.moveNext()) {
                 var expression = $t.getCurrent();
                 // Count-1 gets the total number of * signs in the variadic expression
-                result += expression.getSize() + (this.getCount() - 1);
+                var minus = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
+                if (Bridge.hasValue(minus)) {
+                    result += minus.getExpression().getSize() + (this.getCount() - 1);
+                }
+                else  {
+                    result += expression.getSize() + (this.getCount() - 1);
+                }
             }
             return result;
         },
@@ -898,7 +907,7 @@
                     $t = Bridge.getEnumerator(this);
                     while ($t.moveNext()) {
                         var expression = $t.getCurrent();
-                        if (Bridge.is(expression, ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression) === false) {
+                        if (expression.canCalculate() === false) {
                             return false;
                         }
                     }

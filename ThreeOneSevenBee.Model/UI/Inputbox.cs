@@ -12,17 +12,20 @@ namespace ThreeOneSevenBee.Model.UI
     public class Inputbox : LabelView
     {
         private string placeholder;
-		int cursorPos;
-		bool hidden;
+		private int cursorPos;
+		private bool hidden;
+		private Color placeholderColor;
 
-		public Inputbox(string placeholder, bool hidden) : base(placeholder)
+		public Inputbox(string placeholder, bool hidden, Color placeholderColor) : base(placeholder)
 		{
+			this.placeholderColor = placeholderColor;
 			this.placeholder = placeholder;
 			this.hidden = hidden;
-			BackgroundColor = new Color(200, 200, 200);
+			this.BackgroundColor = new Color(200, 200, 200);
 			cursorPos = 0;
 		}
 
+		public Inputbox(string placeholder, bool hidden) : this(placeholder, hidden, new Color(100,100,100)) {}
 		public Inputbox (string placeholder) : this (placeholder, false) {}
 
 		public override void Click (double x, double y, IContext context)
@@ -53,6 +56,10 @@ namespace ThreeOneSevenBee.Model.UI
 						cursorPos = i;
 				}
 			}
+		}
+
+		public bool IsDefault() {
+			return string.Compare (Text, placeholder) == 0;
 		}
 
         public override void KeyPressed(string key, IContext context)
@@ -98,14 +105,20 @@ namespace ThreeOneSevenBee.Model.UI
 
 		public override void DrawWithContext(IContext context, double offsetX, double offsetY)
 		{
+			Color backupColor = TextColor;
+			if (IsDefault ())
+				TextColor = placeholderColor;
+			
 			if (!hidden)
 				base.DrawWithContext (context, offsetX, offsetY);
 			else {
 				string TextBackup = Text;
+
 				if (Text == placeholder)
 					Text = placeholder;
 				else
 					Text = GetHiddenText ();
+				
 				base.DrawWithContext (context, offsetX, offsetY);
 				Text = TextBackup;
 			}
@@ -116,6 +129,8 @@ namespace ThreeOneSevenBee.Model.UI
 				}
 				context.DrawLine (new Vector2 (textWidth + offsetX + X + 1, Y + offsetY), new Vector2 (textWidth + offsetX + X + 1, offsetY + Y + Height), new Color (0, 0, 0), 1);
 			}
+			if (IsDefault ())
+				TextColor = backupColor;
 		}
     }
 }

@@ -22,9 +22,7 @@ namespace ThreeOneSevenBee.Model.UI
         IdentityMenuView identityMenu;
         ExpressionView expression;
         ToolTipView toolTipView;
-        ToolTipView toolTipView2;
-        ToolTipView toolTipView3;
-        
+
         public virtual void Build(GameModel game)
         {
             menuButton = new ButtonView("Menu", () => OnExit())
@@ -52,13 +50,48 @@ namespace ThreeOneSevenBee.Model.UI
                 BackgroundColor = new Color(192, 57, 43)
             };
 
-            helpButton = new ButtonView("?", () => Console.WriteLine("Show help"))
+            toolTipView = new ToolTipView(game.User.CurrentLevel.Description, 300, 300)
+            {
+                X = Width - 300,
+                Y = 50,
+                Visible = false,
+                OnClick = () =>
+                {
+                    if (helpButton.OnClick != null && toolTipView.Visible == true)
+                    {
+                        helpButton.OnClick();
+                    }
+                }
+            };
+            toolTipView.ArrowPosition = 165;
+
+            helpButton = new ButtonView(
+                "?",
+                () =>
+                {
+                    if(game.User.CurrentLevel.Description != "")
+                    {
+                        if(toolTipView.Visible == true)
+                        {
+                            helpButton.Text = "?";
+                            toolTipView.Visible = false;
+                            helpButton.BackgroundColor = new Color(40, 120, 130);
+                        }
+                        else
+                        {
+                            helpButton.Text = "x";
+                            toolTipView.Visible = true;
+                            helpButton.BackgroundColor = new Color(192, 57, 43);
+                        }
+                    }
+                }
+            )
             {
                 X = Width - 140,
                 Y = 10,
                 Width = 30,
                 Height = 30,
-                BackgroundColor = new Color(40, 120, 130),
+                BackgroundColor = game.User.CurrentLevel.Description == "" ? new Color(190, 190, 190) : new Color(40, 120, 130),
                 TextColor = new Color(255, 255, 255),
             };
 
@@ -79,37 +112,6 @@ namespace ThreeOneSevenBee.Model.UI
                 Y = 100,
             };
 
-            toolTipView = new ToolTipView("Denne bar viser hvor langt du er nået.", 300, 75)
-            {
-                Visible = game.IsFirstLevel,
-                X = progressbar.X,
-                Y = progressbar.Y + progressbar.Height + 10,
-            };
-
-            toolTipView2 = new ToolTipView("Når knappen bliver grøn kan du gå videre til næste bane", 400, 75)
-            {
-                //FontSize = 15,
-                Visible = game.IsFirstLevel,
-                X = nextButton.X - 380,
-                Y = nextButton.Y + nextButton.Height + 10,
-                ArrowPosition = 380
-            };
-
-            toolTipView3 = 
-            new ToolTipView
-            (
-                "Dit mål er at reducere ovenstående udtryk. Dette gøres ved at markere de dele i udtrykket som skal reduceres.\n"
-                + "Markér [a] og [a]. Klik derefter på den ønskede omskrivning nedenfor for at reducere udtrykket",
-                800,
-                90
-            )
-            {
-                Visible = game.IsFirstLevel,
-                X = Width / 2 - 400,
-                Y = Height / 2 + 30,
-                ArrowPosition = 390,
-            };
-
             Children = new List<View>()
             {
                 menuButton,
@@ -120,8 +122,6 @@ namespace ThreeOneSevenBee.Model.UI
                 identityMenu,
                 expression,
                 toolTipView,
-                toolTipView2,
-                toolTipView3
             };
 
             if(OnChanged != null)
@@ -136,13 +136,12 @@ namespace ThreeOneSevenBee.Model.UI
             identityMenu.Update(game.ExprModel.Identities, game.ExprModel);
             expression.Update(game.ExprModel);
             nextButton.BackgroundColor = game.IsLevelCompleted ? new Color(40, 120, 130) : new Color(190, 190, 190);
-            toolTipView.Visible = game.IsFirstLevel;
-            toolTipView2.Visible = game.IsFirstLevel;
-            toolTipView3.Visible = game.IsFirstLevel;
+            toolTipView.Text = game.User.CurrentLevel.Description;
             if (OnChanged != null)
             {
                 OnChanged();
             }
+            Console.WriteLine(game.User.CurrentLevel);
         }
 
         public LevelView(GameModel game) : base(700, 400)
