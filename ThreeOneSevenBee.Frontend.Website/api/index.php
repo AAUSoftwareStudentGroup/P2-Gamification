@@ -287,10 +287,14 @@ class API {
                     $_SESSION['authorized']
                 );
         if($row = $db->fetch()) {
-            $badges = explode(',', $row['badges']);
-            $badges[] = $IN['badge_id'];
-            if(empty($badges[0]))
-                array_shift($badges);
+            $tmp_badges = explode(',', $row['badges']);
+            $tmp_badges[] = $IN['badge_id'];
+            $badges = array();
+
+            foreach ($tmp_badges as $index => $badge) {
+                if(is_numeric($badge) && is_int((int)$badge))
+                    $badges[] = $badge;
+            }
             $badges = array_unique($badges, SORT_NUMERIC);
 
             $badges = implode(',', $badges);
