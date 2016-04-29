@@ -19,7 +19,7 @@ namespace ThreeOneSevenBee.Model.Game
         public ExpressionBase StartExpression { get; private set; }
         public List<ExpressionBase> StarExpressions { get; private set; }
         public Action<GameModel> OnChanged;
-        public Action<BadgeName> OnBadgeAchieved;
+        public Action<LevelCategory> OnCategoryCompleted;
         public Action<Level> OnSaveLevel;
         public ProgressbarStar ProgressBar;
 
@@ -79,7 +79,7 @@ namespace ThreeOneSevenBee.Model.Game
                 Rules.ReverseProductParenthesis, Rules.ParenthesisPowerRule, Rules.FractionToProductRule, Rules.SquareRootRule,
                 Rules.RemoveParenthesisRule, Rules.ProductOfConstantAndFraction, Rules.FactorizeUnaryMinus, Rules.FactorizationRule,
                 Rules.MultiplyOneRule, Rules.AddFractionWithCommonDenominatorRule, Rules.RemoveNull, Rules.MultiplyByNull,
-                Rules.CalculateVariadicRule, Rules.CalculateBinaryRule, Rules.MultiplyMinusRule, Rules.DivisionEqualsOneRule, Rules.ProductOfFractions);
+                Rules.CalculateVariadicRule, Rules.CalculateBinaryRule, Rules.MultiplyMinusRule, Rules.DivisionEqualsOneRule, Rules.ProductOfFractions, Rules.VariablesEqualNull);
             updateBadges();
             onExpressionChanged(ExprModel);
         }
@@ -94,10 +94,7 @@ namespace ThreeOneSevenBee.Model.Game
         {
             ProgressBar.CurrentValue = model.Expression.Size;
             User.CurrentLevel.CurrentExpression = model.Expression.ToString();
-            if (ProgressBar.ActivatedStarPercentages().Count() > User.CurrentLevel.Stars)
-            {
                 updateBadges();
-            }
             if (OnChanged != null)
             {
                 OnChanged(this);
@@ -106,6 +103,8 @@ namespace ThreeOneSevenBee.Model.Game
 
         private void updateBadges()
         {
+            if (ProgressBar.ActivatedStarPercentages().Count() > User.CurrentLevel.Stars)
+            {
             User.CurrentLevel.Stars = ProgressBar.ActivatedStarPercentages().Count();
             if (User.CurrentLevel.Stars == 3)
             {
@@ -116,18 +115,21 @@ namespace ThreeOneSevenBee.Model.Game
                 }
                 if (numberOfStars == User.Categories[User.CurrentCategoryIndex].Count * 3)
                 {
-                    if (OnBadgeAchieved != null)
+                        if (OnCategoryCompleted != null)
                     {
                         BadgeName achievedBadge = User.Categories[User.CurrentCategoryIndex].Badge;
                         if (User.Badges.Contains(achievedBadge) == false)
                         {
                             User.Badges.Add(achievedBadge);
                             Players.First((p) => p.PlayerName == User.PlayerName).Badges.Add(achievedBadge);
-                            OnBadgeAchieved(achievedBadge);
+                                OnSaveLevel(User.CurrentLevel);
+                                OnCategoryCompleted(User.Categories[User.CurrentCategoryIndex]);
+                            }
                         }
                     }
                 }
             }
+            
         }
 
         public void NextLevel()

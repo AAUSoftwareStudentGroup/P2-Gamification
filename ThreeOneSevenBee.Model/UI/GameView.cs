@@ -23,7 +23,7 @@ namespace ThreeOneSevenBee.Model.UI
         {
             levelView.Update(game);
             levelSelectView.Update(game.User);
-            if (OnChanged != null)
+            if(OnChanged != null)
             {
                 OnChanged();
             }
@@ -31,6 +31,15 @@ namespace ThreeOneSevenBee.Model.UI
 
         public GameView(GameModel game, double width, double height) : base(width, height)
         {
+            game.OnCategoryCompleted += (c) => 
+            setContent(
+                new CategoryCompletionView(c)
+                {
+                    OnNext = () => game.SetLevel(0, c.categoryIndex + 1),
+                    OnExit = () => ReloadGame(),
+                }
+            );
+
             BackgroundColor = new Color(255, 255, 255);
 
             titleView = new TitleView(game);
@@ -62,10 +71,7 @@ namespace ThreeOneSevenBee.Model.UI
                     Update(game);
                     game.SetLevel(level.LevelIndex, level.CategoryIndex);
                 },
-                OnExit = () =>
-                {
-                    ReloadGame();
-                }
+                OnExit = () => ReloadGame()
             };
 
             titleView.PlayButton.OnClick = () => setContent(levelView);
@@ -88,7 +94,7 @@ namespace ThreeOneSevenBee.Model.UI
         public override void setContent(View content)
         {
             base.setContent(content);
-            if (OnChanged != null)
+            if(OnChanged != null)
             {
                 OnChanged();
             }

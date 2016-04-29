@@ -71,7 +71,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
-
         public static ExpressionBase FractionToProductRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             BinaryExpression fraction = expression as BinaryExpression;
@@ -647,7 +646,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
         }
 
-
         // 4+5=9
         // 4*5=20
         public static ExpressionBase CalculateVariadicRule(ExpressionBase expression, List<ExpressionBase> selection)
@@ -844,7 +842,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
-        //a/b * c/d = a*c/b*d
+        // a/b * c/d = a*c/b*d
         public static ExpressionBase ProductOfFractions(ExpressionBase expression, List<ExpressionBase> selection)
         {
             VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
@@ -885,6 +883,39 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             }
            
             return new BinaryOperatorExpression(suggestionNumerator, suggestionDenominator, OperatorType.Divide);
+        }
+
+        // y - y = 0
+        public static ExpressionBase VariablesEqualNull(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
+
+            if (variadicExpression == null || variadicExpression.Type != OperatorType.Add || variadicExpression.Count != 2)
+            {
+                return null;
+            }
+
+            UnaryMinusExpression minusExpression;
+
+            if(variadicExpression[0] is UnaryMinusExpression)
+            {
+                minusExpression = variadicExpression[0] as UnaryMinusExpression;
+
+                if(minusExpression.Expression == variadicExpression[1])
+                {
+                    return new NumericExpression(0);
+                }
+            }
+            else if(variadicExpression[1] is UnaryMinusExpression)
+            {
+                minusExpression = variadicExpression[1] as UnaryMinusExpression;
+
+                if(minusExpression.Expression == variadicExpression[0])
+                {
+                    return new NumericExpression(0);
+                }
+            }
+            return null;
         }
     }
 }
