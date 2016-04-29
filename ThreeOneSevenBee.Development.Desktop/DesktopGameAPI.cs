@@ -55,6 +55,12 @@ namespace ThreeOneSevenBee.Development.Desktop
 			JToken data = response.SelectToken ("data");
 
 			CurrentPlayer currentPlayer = new CurrentPlayer(data.Value<string>("name"));
+
+			JArray badges = data.SelectToken ("badges") as JArray;
+			for (int j = 0; j < badges.Count; j++) {
+				if (badges[j].Value<string>() != "")
+					currentPlayer.Badges.Add ((BadgeName)int.Parse (badges[j].Value<string>()));
+			}
 			GetCategories((categories) =>
 			{
 				foreach (LevelCategory category in categories)
@@ -68,7 +74,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 		public void GetPlayers(Action<List<Player>> callback)
 		{
-			JObject response = MakeRequest ("http://webmat.cs.aau.dk/api/?action=get_users", false);
+			JObject response = MakeRequest ("http://webmat.cs.aau.dk/api/?action=get_users", true);
 
 			List<Player> players = new List<Player>();
 
@@ -76,11 +82,13 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 			for (int i = 0; i < data.Count; i++) {
 				Player player = new Player (data[i].Value<string>("name"));
-				if(player.PlayerName == "TannerHelland")
-					player.Badges.Add(BadgeName.tutorialBadge);
+				JArray badges = data [i].SelectToken ("badges") as JArray;
+				for (int j = 0; j < badges.Count; j++) {
+					if (badges[j].Value<string>() != "")
+						player.Badges.Add ((BadgeName)int.Parse (badges[j].Value<string>()));
+				}
 				players.Add (player);
 			}
-
 			callback(players);
 		}
 
@@ -135,9 +143,8 @@ namespace ThreeOneSevenBee.Development.Desktop
 		public void UserAddBadge(BadgeName badge, Action<bool> callback) {
 			JObject response = MakeRequest (
 				string.Format (
-					"http://webmat.cs.aau.dk/api/?action={0}&token={1}&badge_id={2}",
+					"http://webmat.cs.aau.dk/api/?action={0}&badge_id={1}",
 					"user_add_badge",
-					token,
 					badge
 				),
 				true

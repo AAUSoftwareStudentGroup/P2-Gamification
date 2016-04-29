@@ -1,6 +1,6 @@
 <?
-$_DEBUG = false;
-// $_DEBUG = true;
+// $_DEBUG = false;
+$_DEBUG = true;
 if($_SERVER['HTTP_HOST'] == "webmat.cs.aau.dk" || $_DEBUG == false) {
     error_reporting(0);
 }
@@ -85,21 +85,38 @@ class API {
             unset($_SESSION['authorized']);
             API::respond();
         }
-        API::respond(false);
+        API::respond(false, null, "Not authorized");
     }
 
     static function get_users($IN, $db) {
-        $result = array();
-        $db->query("SELECT 
-        				user.name,
-        				user.badges
-        			FROM gamedb.user AS user 
-        			WHERE user.deleted_at IS NULL");
-        while($row = $db->fetch()) {
-            $row['badges'] = explode(',', $row['badges']);
-            $result[] = $row;
+        if(isset($_SESSION['authorized']) && $_SESSION['authorized'] > 0) {
+
+            $result = array();
+            $user_class_id = 0;
+            $db->query("SELECT user.class_id FROM user WHERE user.id=?",
+                        (int)$_SESSION['authorized']);
+            
+
+            if($row = $db->fetch())
+                $user_class_id = $row['class_id'];
+            else
+                API::respond(false, null, "Invalid user");
+
+            
+            $db->query("SELECT 
+                            user.name,
+                            user.badges
+                        FROM gamedb.user AS user 
+                        WHERE user.deleted_at IS NULL
+                        AND user.class_id=?",
+                        $user_class_id);
+            while($row = $db->fetch()) {
+                $row['badges'] = explode(',', $row['badges']);
+                $result[] = $row;
+            }
+            API::respond(true, $result);
         }
-        API::respond(true, $result);
+        API::respond(false, null, "Not authorized");
     }
 
     static function delete_user_by_id($IN, $db) {
@@ -270,10 +287,14 @@ class API {
                     $_SESSION['authorized']
                 );
         if($row = $db->fetch()) {
-            $badges = explode(',', $row['badges']);
-            $badges[] = $IN['badge_id'];
-            if(empty($badges[0]))
-                array_shift($badges);
+            $tmp_badges = explode(',', $row['badges']);
+            $tmp_badges[] = $IN['badge_id'];
+            $badges = array();
+
+            foreach ($tmp_badges as $index => $badge) {
+                if(is_numeric($badge) && is_int((int)$badge))
+                    $badges[] = $badge;
+            }
             $badges = array_unique($badges, SORT_NUMERIC);
 
             $badges = implode(',', $badges);
