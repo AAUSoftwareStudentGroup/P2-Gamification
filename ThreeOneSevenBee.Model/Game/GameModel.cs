@@ -80,6 +80,7 @@ namespace ThreeOneSevenBee.Model.Game
                 Rules.RemoveParenthesisRule, Rules.ProductOfConstantAndFraction, Rules.FactorizeUnaryMinus, Rules.FactorizationRule,
                 Rules.MultiplyOneRule, Rules.AddFractionWithCommonDenominatorRule, Rules.RemoveNull, Rules.MultiplyByNull,
                 Rules.CalculateVariadicRule, Rules.CalculateBinaryRule, Rules.MultiplyMinusRule, Rules.DivisionEqualsOneRule, Rules.ProductOfFractions);
+            updateBadges();
             onExpressionChanged(ExprModel);
         }
 
@@ -95,15 +96,27 @@ namespace ThreeOneSevenBee.Model.Game
             User.CurrentLevel.CurrentExpression = model.Expression.ToString();
             if (ProgressBar.ActivatedStarPercentages().Count() > User.CurrentLevel.Stars)
             {
-                User.CurrentLevel.Stars = ProgressBar.ActivatedStarPercentages().Count();
+                updateBadges();
+            }
+            if (OnChanged != null)
+            {
+                OnChanged(this);
+            }
+        }
+
+        private void updateBadges()
+        {
+            User.CurrentLevel.Stars = ProgressBar.ActivatedStarPercentages().Count();
+            if (User.CurrentLevel.Stars == 3)
+            {
                 int numberOfStars = 0;
-                foreach(Level level in User.Categories[User.CurrentCategoryIndex])
+                foreach (Level level in User.Categories[User.CurrentCategoryIndex])
                 {
                     numberOfStars += level.Stars;
                 }
                 if (numberOfStars == User.Categories[User.CurrentCategoryIndex].Count * 3)
                 {
-                    if(OnBadgeAchieved != null)
+                    if (OnBadgeAchieved != null)
                     {
                         BadgeName achievedBadge = User.Categories[User.CurrentCategoryIndex].Badge;
                         if (User.Badges.Contains(achievedBadge) == false)
@@ -114,10 +127,6 @@ namespace ThreeOneSevenBee.Model.Game
                         }
                     }
                 }
-            }
-            if (OnChanged != null)
-            {
-                OnChanged(this);
             }
         }
 

@@ -120,17 +120,35 @@ namespace ThreeOneSevenBee.Development.Desktop
 					}
 				}
 				if(!brk) {
-					string keys;
+					string keys = null;
+					int a;
+					if (keys == null && key.ToString ().StartsWith ("D")) {
+						try {
+							if (Int32.TryParse (key.ToString ().Substring (1), out a)) {
+								keys = key.ToString ().Substring (1);
+							}
+						} catch (FormatException) {
+							// Nope.
+						}
+					}
+					if(keys == null && key.ToString().StartsWith("NumPad")) {
+						try {
+							if (Int32.TryParse (key.ToString ().Substring (6), out a))
+								keys = key.ToString ().Substring (6);
+						} catch (FormatException) {
+							// Also nope.
+						}
+					}
 					// Add special keys here
-					if (key.ToString ().Length == 1) {
+					if (keys == null && key.ToString ().Length == 1) {
 						if (upperCase)
 							keys = key.ToString ().ToUpper ();
 						else
 							keys = key.ToString ().ToLower ();
-					} else
+					} else if(keys == null)
 						keys = key.ToString ();
+					
 					context.ContentView.KeyPressed (keys, context);
-
 				}
 			}
 			lastKeys = state.GetPressedKeys ();

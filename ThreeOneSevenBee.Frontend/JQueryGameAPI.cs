@@ -41,16 +41,12 @@ namespace ThreeOneSevenBee.Frontend
                                 (string)levelData["initial_expression"],
                                 int.Parse((string)levelData["stars"] ?? "0"),
                                 (string)levelData["current_expression"],
-                                "Test",
                                 (levelData["star_expressions"] as object[]).Select((o) => (string)o).ToArray());
                             levelCategory.Add(level);
                         }
                         categories.Add(levelCategory);
                     }
-                    categories.Add(new LevelCategory("Test")
-                    {
-                        new Level("2^-1", "2^-1", 1, "testDescription", new string[] { "{a*c*e}/{b*d*f}" })
-                    });
+
                     callback(categories);
                 }
             );

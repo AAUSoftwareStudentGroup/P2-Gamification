@@ -90,6 +90,8 @@ namespace ThreeOneSevenBee.Model.UI
 						if (context.GetTextDimensions (hidden ? GetHiddenText () : Text, Width, Height).X > Width - 5) {
 							KeyPressed ("Back", context);
 						}
+					} else {
+						Console.WriteLine ("Unknown key: " + key);
 					}
 					break;
 				}

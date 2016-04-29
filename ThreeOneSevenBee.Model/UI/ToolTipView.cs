@@ -42,7 +42,7 @@ namespace ThreeOneSevenBee.Model.UI
             }
             set
             {
-                labelView.Text = value;
+                labelView.Text = " " + string.Join(" \n ", value.Split('\n')) + " ";
             }
         }
 

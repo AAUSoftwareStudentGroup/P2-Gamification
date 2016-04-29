@@ -178,7 +178,7 @@ namespace ThreeOneSevenBee.Model.UI
                     levelButton.Add(new ImageView("star_activated.png", starsize, starsize)
                     {
                         Y = levelButton.Height - starsize,     
-                        X = startPostition             
+                        X = startPostition
                     });
                     startPostition += starsize;
                 }

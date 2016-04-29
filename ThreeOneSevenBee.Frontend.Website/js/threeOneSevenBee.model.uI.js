@@ -1361,7 +1361,7 @@
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 192, 57, 43)
             } );
     
-            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView(game.getUser().getCurrentLevel().description, 300, 300), {
+            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView(game.getUser().getCurrentLevel().description, 300, 50), {
                 setX: this.getWidth() - 300,
                 setY: 50,
                 setVisible: false,
@@ -1817,7 +1817,7 @@
             return this.getlabelView().getText();
         },
         setText: function (value) {
-            this.getlabelView().setText(value);
+            this.getlabelView().setText(" " + value.split(String.fromCharCode(10)).join(" \n ") + " ");
         },
         getArrowPosition: function () {
             return this.arrowPosition;
