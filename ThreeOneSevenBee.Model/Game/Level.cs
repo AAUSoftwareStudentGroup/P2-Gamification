@@ -30,13 +30,13 @@ namespace ThreeOneSevenBee.Model.Game
             { 60, "For at lægge to, eller flere, brøker sammen, \n trykkes der på begge (alle) brøkstreger. \n For at splitte dem igen, trykkes der igen på brøkstregen." },
             { 147, "For at gange et udtryk med en parentes, \n trykkes på udtrykket og paretesen." },
             { 112, "Hvis to, eller flere, potensudtryk har samme eksponent, \n og er ganget sammen, kan der enten trykkes på eksponenterne eller på grundtallene." },
-            { 56, "Hvis der er ens udtryk i flere led, \n kan man markere de ens variable/tal, for at trække dem uden for en parentes." },
+            { 56, "Hvis der er ens udtryk i flere led, kan man markere de ens variable/tal, \n for at trække dem uden for en parentes." },
 
             //Parentes
             { 95, "Parentesen udregnes først, derefter ganges resultatet." },
             { 113, "Parentesen udregnes først, derefter ganges resultatet." },
             { 136, "Når der kun er gangetegn i en parentes, kan den ophæves." },
-            { 118, "Minusparentes skal ophæves, derefter ganges parenteserne. Til sidst udregnes udtrykket." },
+            { 118, "Minusparentes skal ophæves, derefter ganges parenteserne. \n Til sidst udregnes udtrykket." },
 
             //Potenser
             { 89, "Et grundtal opløftet i 1., er altid grundtallet selv: n^1 = n." },
