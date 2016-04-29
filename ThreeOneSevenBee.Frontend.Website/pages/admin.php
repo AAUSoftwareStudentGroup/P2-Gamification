@@ -264,7 +264,7 @@ while($row = $db->fetch())
     <hr />
     <br>
     <div class="r2_4">
-        <h2>Classes</h2>
+        <h2>Categories</h2>
         <table class="r1_1 category_table">
             <thead>
                 <tr>
@@ -297,7 +297,7 @@ while($row = $db->fetch())
 </div>
 <div class="row">
     <div class="r2_4">
-        <h2>Classes</h2>
+        <h2>Levels</h2>
         <table class="r1_1 level_table">
             <thead>
                 <tr>
