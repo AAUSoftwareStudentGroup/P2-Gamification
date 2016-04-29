@@ -19,7 +19,7 @@ namespace ThreeOneSevenBee.Model.Game
         public ExpressionBase StartExpression { get; private set; }
         public List<ExpressionBase> StarExpressions { get; private set; }
         public Action<GameModel> OnChanged;
-        public Action<BadgeName> OnBadgeAchieved;
+        public Action<LevelCategory> OnCategoryCompleted;
         public Action<Level> OnSaveLevel;
         public ProgressbarStar ProgressBar;
 
@@ -80,7 +80,6 @@ namespace ThreeOneSevenBee.Model.Game
                 Rules.RemoveParenthesisRule, Rules.ProductOfConstantAndFraction, Rules.FactorizeUnaryMinus, Rules.FactorizationRule,
                 Rules.MultiplyOneRule, Rules.AddFractionWithCommonDenominatorRule, Rules.RemoveNull, Rules.MultiplyByNull,
                 Rules.CalculateVariadicRule, Rules.CalculateBinaryRule, Rules.MultiplyMinusRule, Rules.DivisionEqualsOneRule, Rules.ProductOfFractions);
-            updateBadges();
             onExpressionChanged(ExprModel);
         }
 
@@ -94,10 +93,7 @@ namespace ThreeOneSevenBee.Model.Game
         {
             ProgressBar.CurrentValue = model.Expression.Size;
             User.CurrentLevel.CurrentExpression = model.Expression.ToString();
-            if (ProgressBar.ActivatedStarPercentages().Count() > User.CurrentLevel.Stars)
-            {
-                updateBadges();
-            }
+            updateBadges();
             if (OnChanged != null)
             {
                 OnChanged(this);
@@ -106,28 +102,33 @@ namespace ThreeOneSevenBee.Model.Game
 
         private void updateBadges()
         {
-            User.CurrentLevel.Stars = ProgressBar.ActivatedStarPercentages().Count();
-            if (User.CurrentLevel.Stars == 3)
+            if (ProgressBar.ActivatedStarPercentages().Count() > User.CurrentLevel.Stars)
             {
-                int numberOfStars = 0;
-                foreach (Level level in User.Categories[User.CurrentCategoryIndex])
+                User.CurrentLevel.Stars = ProgressBar.ActivatedStarPercentages().Count();
+                if (User.CurrentLevel.Stars == 3)
                 {
-                    numberOfStars += level.Stars;
-                }
-                if (numberOfStars == User.Categories[User.CurrentCategoryIndex].Count * 3)
-                {
-                    if (OnBadgeAchieved != null)
+                    int numberOfStars = 0;
+                    foreach (Level level in User.Categories[User.CurrentCategoryIndex])
                     {
-                        BadgeName achievedBadge = User.Categories[User.CurrentCategoryIndex].Badge;
-                        if (User.Badges.Contains(achievedBadge) == false)
+                        numberOfStars += level.Stars;
+                    }
+                    if (numberOfStars == User.Categories[User.CurrentCategoryIndex].Count * 3)
+                    {
+                        if (OnCategoryCompleted != null)
                         {
-                            User.Badges.Add(achievedBadge);
-                            Players.First((p) => p.PlayerName == User.PlayerName).Badges.Add(achievedBadge);
-                            OnBadgeAchieved(achievedBadge);
+                            BadgeName achievedBadge = User.Categories[User.CurrentCategoryIndex].Badge;
+                            if (User.Badges.Contains(achievedBadge) == false)
+                            {
+                                User.Badges.Add(achievedBadge);
+                                Players.First((p) => p.PlayerName == User.PlayerName).Badges.Add(achievedBadge);
+                                OnSaveLevel(User.CurrentLevel);
+                                OnCategoryCompleted(User.Categories[User.CurrentCategoryIndex]);
+                            }
                         }
                     }
                 }
             }
+            
         }
 
         public void NextLevel()

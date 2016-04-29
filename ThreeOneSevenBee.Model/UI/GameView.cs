@@ -31,6 +31,15 @@ namespace ThreeOneSevenBee.Model.UI
 
         public GameView(GameModel game, double width, double height) : base(width, height)
         {
+            game.OnCategoryCompleted = (c) => 
+            setContent(
+                new CategoryCompletionView(c)
+                {
+                    OnNext = () => game.SetLevel(0, c.categoryIndex + 1),
+                    OnExit = () => ReloadGame(),
+                }
+            );
+
             BackgroundColor = new Color(255, 255, 255);
 
             titleView = new TitleView(game);
