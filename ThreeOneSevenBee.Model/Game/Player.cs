@@ -23,8 +23,8 @@ namespace ThreeOneSevenBee.Model.Game
     {
         brokBadge,
         masterOfAlgebra, 
-        potens,
-        spilDoneBadge,
+        potensBadge,
+        parenthesisBadge,
         tutorialBadge
     }
 }

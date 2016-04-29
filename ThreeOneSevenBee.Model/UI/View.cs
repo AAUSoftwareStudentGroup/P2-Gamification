@@ -11,6 +11,8 @@ namespace ThreeOneSevenBee.Model.UI
         public virtual double Y { get; set; }
         public virtual bool Active { get; set; }
 
+        public double Scaling { get; set; }
+
         public double Baseline { get; set; }
 
         public Color BackgroundColor { get; set; }

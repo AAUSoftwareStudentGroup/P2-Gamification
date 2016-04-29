@@ -5,8 +5,8 @@
         statics: {
             brokBadge: 0,
             masterOfAlgebra: 1,
-            potens: 2,
-            spilDoneBadge: 3,
+            potensBadge: 2,
+            parenthesisBadge: 3,
             tutorialBadge: 4
         },
         $enum: true
@@ -39,7 +39,7 @@
             this.gameAPI.isAuthenticated(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f1));
         },
         loadGameData: function () {
-            this.gameAPI.getCurrentPlayer(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f8));
+            this.gameAPI.getCurrentPlayer(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f9));
         }
     });
     
@@ -86,7 +86,10 @@
         f7: function () {
             this.gameAPI.logout(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f6));
         },
-        f8: function (u) {
+        f8: function () {
+            this.loadGameData();
+        },
+        f9: function (u) {
             this.gameAPI.getPlayers(Bridge.fn.bind(this, function (p) {
                 this.gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
                     onSaveLevel: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f3),
@@ -94,9 +97,9 @@
                 } );
     
                 this.gameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.GameView(this.gameModel, this.context.getWidth(), this.context.getHeight()), {
-                    setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f7)
+                    setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f7),
+                    setReloadGame: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f8)
                 } );
-    
                 this.context.setContentView(this.gameView);
             }));
         }
@@ -158,6 +161,7 @@
                 this.progressBar.add(starExpressionBase.getSize());
             }
             this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel("constructor", this.getUser().categories.getItem(category).getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f2), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commonPowerParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseCommonPowerParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).splittingFractions, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productParenthesis, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseProductParenthesis, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).parenthesisPowerRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).fractionToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).squareRootRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).removeParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productOfConstantAndFraction, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).factorizeUnaryMinus, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).factorizationRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).multiplyOneRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionWithCommonDenominatorRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).removeNull, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).multiplyByNull, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).calculateVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).calculateBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).multiplyMinusRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divisionEqualsOneRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productOfFractions]));
+            this.updateBadges();
             this.onExpressionChanged(this.getExprModel());
         },
         restartLevel: function () {
@@ -168,10 +172,32 @@
             this.progressBar.currentValue = model.getExpression().getSize();
             this.getUser().getCurrentLevel().currentExpression = model.getExpression().toString();
             if (Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() > this.getUser().getCurrentLevel().stars) {
-                this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
+                this.updateBadges();
             }
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged(this);
+            }
+        },
+        updateBadges: function () {
+            var $t;
+            this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
+            if (this.getUser().getCurrentLevel().stars === 3) {
+                var numberOfStars = 0;
+                $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategoryIndex));
+                while ($t.moveNext()) {
+                    var level = $t.getCurrent();
+                    numberOfStars += level.stars;
+                }
+                if (numberOfStars === this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getCount() * 3) {
+                    if (Bridge.hasValue(this.onBadgeAchieved)) {
+                        var achievedBadge = this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getBadge();
+                        if (this.getUser().badges.contains(achievedBadge) === false) {
+                            this.getUser().badges.add(achievedBadge);
+                            Bridge.Linq.Enumerable.from(this.getPlayers()).first(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f3)).badges.add(achievedBadge);
+                            this.onBadgeAchieved(achievedBadge);
+                        }
+                    }
+                }
             }
         },
         nextLevel: function () {
@@ -210,6 +236,9 @@
         },
         f2: function (m) {
             this.onExpressionChanged(m);
+        },
+        f3: function (p) {
+            return p.getPlayerName() === this.getUser().getPlayerName();
         }
     });
     
@@ -224,22 +253,53 @@
         levelIndex: 0,
         categoryIndex: 0,
         stars: 0,
-        constructor$2: function (startExpression, currentExpression, stars, description, starExpressions) {
-            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, -1, startExpression, stars, currentExpression, description, starExpressions);
+        config: {
+            init: function () {
+                this.descriptions = Bridge.merge(new Bridge.Dictionary$2(Bridge.Int,String)(), [
+        [109, "For at lægge to, eller flere, elementer sammen, skal der trykkes på de elementer, \n der ønskes sammenlagt. Det samme gælder for gange og minus."],
+        [128, "For at udregne potensudtryk, trykkes på grundtallet (nederste del) \n og eksponenten (øverste del)."],
+        [129, "For at fjerne et udtryks parentes (hvis det er muligt), \n trykkes på parentesen."],
+        [131, "Hvis tæller og nævner i en brøk, har samme værdi, \n kan det omskrives til 1, ved at trykke på brøkstregen."],
+        [88, "For at gange et udtryk ind i en brøk, \n trykkes på udtrykket og brøkstregen."],
+        [60, "For at lægge to, eller flere, brøker sammen, \n trykkes der på begge (alle) brøkstreger. \n For at splitte dem igen, trykkes der igen på brøkstregen."],
+        [147, "For at gange et udtryk med en parentes, \n trykkes på udtrykket og paretesen."],
+        [112, "Hvis to, eller flere, potensudtryk har samme eksponent, \n og er ganget sammen, kan der enten trykkes på eksponenterne eller på grundtallene."],
+        [56, "Hvis der er ens udtryk i flere led, kan man markere de ens variable/tal, \n for at trække dem uden for en parentes."],
+        [95, "Parentesen udregnes først, derefter ganges resultatet."],
+        [113, "Parentesen udregnes først, derefter ganges resultatet."],
+        [136, "Når der kun er gangetegn i en parentes, kan den ophæves."],
+        [118, "Minusparentes skal ophæves, derefter ganges parenteserne. \n Til sidst udregnes udtrykket."],
+        [89, "Et grundtal opløftet i 1., er altid grundtallet selv: n^1 = n."],
+        [125, "Et grundtal opløftet i 0., er altid 1: n^0 = 1."],
+        [90, "Hvis et grundtal er opløftet i to, eller flere, eksponenter, \n laves det om til én eksponent, som består af alle eksponenter ganget sammen: (n^2)^3 = n^2*3 = n^6"],
+        [9, "Hvis grundtallet for to potenser ganget sammen er ens, \n kan eksponenterne lægges sammen, ved at trykke på begge grundtal, eller begge eksponenter."],
+        [138, "For at omskrive en kvadratrod, trykkes på kvadratroden. "]
+    ] ) || null;
+            }
+        },
+        constructor$2: function (startExpression, currentExpression, stars, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, -1, startExpression, stars, currentExpression, starExpressions);
     
         },
-        constructor$1: function (levelID, startExpression, stars, currentExpression, description, starExpressions) {
-            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, levelID, -1, -1, startExpression, stars, currentExpression, description, starExpressions);
+        constructor$1: function (levelID, startExpression, stars, currentExpression, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, levelID, -1, -1, startExpression, stars, currentExpression, starExpressions);
     
         },
-        constructor: function (levelID, levelIndex, categoryIndex, startExpression, stars, currentExpression, description, starExpressions) {
+        constructor: function (levelID, levelIndex, categoryIndex, startExpression, stars, currentExpression, starExpressions) {
             var $t;
             this.levelID = levelID;
             this.levelIndex = levelIndex;
             this.categoryIndex = categoryIndex;
             this.startExpression = startExpression;
             this.currentExpression = currentExpression;
-            this.description = description;
+    
+            if (this.descriptions.containsKey(levelID)) {
+                this.description = this.descriptions.get(levelID);
+            }
+            else  {
+                this.description = "";
+            }
+    
             this.stars = stars;
             this.starExpressions = new Bridge.List$1(String)();
             $t = Bridge.getEnumerator(starExpressions);
@@ -335,9 +395,10 @@
                 init: function () {
                     this.categoryBadges = Bridge.merge(new Bridge.Dictionary$2(String,ThreeOneSevenBee.Model.Game.BadgeName)(), [
         ["Tutorial", ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge],
-        ["Potenser", ThreeOneSevenBee.Model.Game.BadgeName.potens],
+        ["Potenser", ThreeOneSevenBee.Model.Game.BadgeName.potensBadge],
         ["Brøker", ThreeOneSevenBee.Model.Game.BadgeName.brokBadge],
-        ["Master of Algebra", ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra]
+        ["Master of Algebra", ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra],
+        ["Parenteser", ThreeOneSevenBee.Model.Game.BadgeName.parenthesisBadge]
     ] ) || null;
                 }
             }

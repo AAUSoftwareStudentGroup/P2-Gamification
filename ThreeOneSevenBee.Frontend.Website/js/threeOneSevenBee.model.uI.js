@@ -12,6 +12,7 @@
                 X: 0,
                 Y: 0,
                 Active: false,
+                Scaling: 0,
                 Baseline: 0,
                 BackgroundColor: null,
                 Visible: false
@@ -649,7 +650,7 @@
             var minusExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
             if (Bridge.hasValue(minusExpression)) {
                 var view = this.buildView(minusExpression.getExpression(), model);
-                view.setBackgroundColor(model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
+                view.setBackgroundColor(model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 240, 240, 240) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
                 var operatorView = new ThreeOneSevenBee.Model.UI.OperatorView(minusExpression.getType());
                 operatorView.setWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
                 operatorView.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
@@ -666,7 +667,7 @@
                     [view]
                 ] );
                 minusView.setBaseline(view.getBaseline());
-                minusView.setBackgroundColor(model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
+                minusView.setBackgroundColor(model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 240, 240, 240) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
                 return minusView;
             }
             var operatorExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
@@ -695,7 +696,7 @@
                             [right]
                         ] );
                         fraction.setBaseline(operatorView1.getY() + operatorView1.getHeight() / 2);
-                        fraction.setBackgroundColor(model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
+                        fraction.setBackgroundColor(model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 240, 240, 240) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
                         return fraction;
                     case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power: 
                         right.setX(left.getWidth());
@@ -705,7 +706,7 @@
                             [right]
                         ] );
                         exponent.setBaseline(left.getY() + left.getBaseline());
-                        exponent.setBackgroundColor(model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
+                        exponent.setBackgroundColor(model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 240, 240, 240) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
                         return exponent;
                 }
             }
@@ -726,7 +727,7 @@
                             if (variadicExpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add && Bridge.hasValue(minus)) {
                                 operatorView2 = new ThreeOneSevenBee.Model.UI.OperatorView(ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract);
                                 operand = this.buildView(minus.getExpression(), model);
-                                operand.setBackgroundColor(model.getSelected() === expr ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
+                                operand.setBackgroundColor(model.getSelected() === expr ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 240, 240, 240) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
                                 operatorView2.setBackgroundColor(operand.getBackgroundColor());
                                 operatorView2.onClick = function () {
                                     model.select(minus);
@@ -749,7 +750,7 @@
                             operand = this.buildView(expr, model);
                         }
                         if (expr.getParent() === model.getSelected() && (expr.getSelected() || Bridge.Linq.Enumerable.from(expr.getNodesRecursive()).any($_.ThreeOneSevenBee.Model.UI.ExpressionView.f1))) {
-                            operand.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230));
+                            operand.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 240, 240, 240));
                         }
     
                         maxBaseline = Math.max(maxBaseline, operand.getBaseline());
@@ -800,7 +801,7 @@
                 left1.setLineColor(expression.getSelected() ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 175, 100) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0));
                 right1.setLineColor(expression.getSelected() ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 175, 100) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0));
                 compositeView.setBaseline(view2.getY() + view2.getBaseline());
-                compositeView.setBackgroundColor(model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
+                compositeView.setBackgroundColor(model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 240, 240, 240) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
                 return compositeView;
             }
             var functionExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.FunctionExpression);
@@ -823,7 +824,7 @@
                     [view3]
                 ] );
                 compositeView1.setBaseline(view3.getBaseline() + sqrtView.getTopHeight());
-                compositeView1.setBackgroundColor(model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
+                compositeView1.setBackgroundColor(model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 240, 240, 240) : new ThreeOneSevenBee.Model.UI.Color("constructor"));
                 return compositeView1;
             }
             return Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(expression.toString()), {
@@ -834,7 +835,7 @@
                 setHeight: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE,
                 setBaseline: Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2,
                 setTextColor: expression.getSelected() ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 39, 174, 97) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0),
-                setBackgroundColor: model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230) : new ThreeOneSevenBee.Model.UI.Color("constructor")
+                setBackgroundColor: model.getSelected() === expression ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 240, 240, 240) : new ThreeOneSevenBee.Model.UI.Color("constructor")
             } );
         },
         build: function (model) {
@@ -868,7 +869,8 @@
         levelSelectView: null,
         config: {
             properties: {
-                OnExit: null
+                OnExit: null,
+                ReloadGame: null
             }
         },
         constructor: function (game, width, height) {
@@ -876,7 +878,7 @@
     
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
     
-            this.titleView = new ThreeOneSevenBee.Model.UI.TitleView(game.getUser(), game.getPlayers());
+            this.titleView = new ThreeOneSevenBee.Model.UI.TitleView(game);
     
             this.levelView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LevelView(game), {
                 setOnExit: Bridge.fn.bind(this, function () {
@@ -932,7 +934,7 @@
     
     Bridge.apply($_.ThreeOneSevenBee.Model.UI.GameView, {
         f1: function () {
-            this.setContent(this.titleView);
+            this.getReloadGame()();
         },
         f2: function () {
             this.setContent(this.levelView);
@@ -962,12 +964,12 @@
                     var indexCopy = index;
                     var expressionView = new ThreeOneSevenBee.Model.UI.ExpressionView("constructor");
                     var view = expressionView.buildView(identities.getItem(index).suggestion, model);
-                    view.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 230, 230, 230));
-                    var frameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor$3", this.getWidth() / identities.getCount(), this.getHeight(), view, 4), {
-                        setPropagateClick: false
+                    var frameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.FrameView("constructor$3", (this.getWidth() - 20 * (identities.getCount() - 1)) / identities.getCount(), this.getHeight(), view, 4), {
+                        setPropagateClick: false,
+                        setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 240, 240, 240)
                     } );
                     frameView.setX(x);
-                    x += frameView.getWidth();
+                    x += frameView.getWidth() + 20;
                     frameView.onClick = function () {
                         model.applyIdentity(identities.getItem(indexCopy).result);
                     };
@@ -1350,47 +1352,45 @@
                 setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255)
             } );
     
-            this.restartButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("restart.png", 30, 30), {
+            this.restartButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView("restart.png", 50, 50), {
                 onClick: function () {
                     game.restartLevel();
                 },
                 setX: 110,
-                setY: 10,
+                setY: 0,
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 192, 57, 43)
             } );
     
-            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView(game.getUser().getCurrentLevel().description, 300, 300), {
+            this.toolTipView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ToolTipView(game.getUser().getCurrentLevel().description, 300, 50), {
                 setX: this.getWidth() - 300,
                 setY: 50,
                 setVisible: false,
                 onClick: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.LevelView.f3)
             } );
-            this.toolTipView.setArrowPosition(165);
+            this.toolTipView.setArrowPosition(155);
     
             this.helpButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("?", Bridge.fn.bind(this, function () {
                 if (game.getUser().getCurrentLevel().description !== "") {
                     if (this.toolTipView.getVisible() === true) {
                         this.helpButton.setText("?");
                         this.toolTipView.setVisible(false);
-                        this.helpButton.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130));
                     }
                     else  {
-                        this.helpButton.setText("x");
+                        this.helpButton.setText(" Luk ");
                         this.toolTipView.setVisible(true);
-                        this.helpButton.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 192, 57, 43));
                     }
                 }
             })), {
-                setX: this.getWidth() - 140,
-                setY: 10,
-                setWidth: 30,
-                setHeight: 30,
+                setX: this.getWidth() - 160,
+                setY: 0,
+                setWidth: 50,
+                setHeight: 50,
                 setBackgroundColor: game.getUser().getCurrentLevel().description === "" ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 190, 190, 190) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130),
                 setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255)
             } );
     
-            this.progressbar = Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(game.progressBar, this.getWidth() - 300, 30), {
-                setX: 150,
+            this.progressbar = Bridge.merge(new ThreeOneSevenBee.Model.UI.ProgressbarStarView(game.progressBar, this.getWidth() - 340, 30), {
+                setX: 170,
                 setY: 10
             } );
     
@@ -1427,7 +1427,6 @@
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged();
             }
-            console.log(game.getUser().getCurrentLevel());
         }
     });
     
@@ -1510,9 +1509,9 @@
                 this.badgeDictionary = Bridge.merge(new Bridge.Dictionary$2(ThreeOneSevenBee.Model.Game.BadgeName,String)(), [
         [ThreeOneSevenBee.Model.Game.BadgeName.brokBadge, "brøkbadge.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.masterOfAlgebra, "master_of_algebrabadge.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.potens, "potens_badge.png"],
+        [ThreeOneSevenBee.Model.Game.BadgeName.potensBadge, "potens_badge.png"],
         [ThreeOneSevenBee.Model.Game.BadgeName.tutorialBadge, "tutorial_badge.png"],
-        [ThreeOneSevenBee.Model.Game.BadgeName.spilDoneBadge, "parenthesis_badge.png"]
+        [ThreeOneSevenBee.Model.Game.BadgeName.parenthesisBadge, "parenthesis_badge.png"]
     ] ) || null;
             }
         },
@@ -1532,7 +1531,7 @@
             this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
             var offsetY = 5;
     
-            $t = Bridge.getEnumerator(players);
+            $t = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(players).take(10));
             while ($t.moveNext()) {
                 var player = $t.getCurrent();
                 var badgesWidth = (this.badgeDictionary.getCount() - 1) * 15;
@@ -1642,10 +1641,15 @@
                 this.playerView = new ThreeOneSevenBee.Model.UI.PlayerListView("constructor$1", 1, 1) || null;
             }
         },
-        constructor: function (user, players) {
+        constructor: function (game) {
             ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, 420, 220);
-            var $t;
     
+            this.build(game);
+        },
+        build: function (game) {
+            var $t;
+            var user = game.getUser();
+            var players = game.getPlayers();
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
             this.welcomeText = Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView("Velkommen " + user.getPlayerName()), {
                 setX: 10,
@@ -1697,7 +1701,6 @@
             this.playButton.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 39, 174, 97));
             this.playButton.setX(10);
             this.playButton.setY(this.badgesView.getY() + this.badgesView.getHeight());
-            console.log(this.badgesView.getY() + "og " + this.badgesView.getWidth());
             var levelIcon1 = Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 100, 100), [
                 [20, 20],
                 [45, 20],
@@ -1730,6 +1733,7 @@
             levelIcon2.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
             levelIcon3.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
             levelIcon4.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
+    
             this.levelButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(100, 100), [
                 [levelIcon1],
                 [levelIcon2],
@@ -1752,7 +1756,7 @@
                 [this.playButton],
                 [this.badgesView]
             ] );
-    }
+        }
     });
     
     Bridge.ns("ThreeOneSevenBee.Model.UI.TitleView", $_)
@@ -1813,7 +1817,7 @@
             return this.getlabelView().getText();
         },
         setText: function (value) {
-            this.getlabelView().setText(value);
+            this.getlabelView().setText(" " + value.split(String.fromCharCode(10)).join(" \n ") + " ");
         },
         getArrowPosition: function () {
             return this.arrowPosition;
@@ -1850,34 +1854,34 @@
             switch (this.arrowDirection) {
                 case ThreeOneSevenBee.Model.UI.Direction.top: 
                     this.setarrow(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 20, 10), [
-                        [0, 10],
+                        [0, 11],
                         [10, 0],
-                        [20, 10]
+                        [20, 11]
                     ] ));
                     this.getlabelView().setY(10);
                     this.getlabelView().setHeight(this.getHeight() - 10);
                     break;
                 case ThreeOneSevenBee.Model.UI.Direction.right: 
                     this.setarrow(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(this.getWidth() - 10, 0, 10, 20), [
-                        [0, 0],
+                        [-1, 0],
                         [10, 10],
-                        [0, 20]
+                        [-1, 20]
                     ] ));
                     this.getlabelView().setWidth(this.getWidth() - 10);
                     break;
                 case ThreeOneSevenBee.Model.UI.Direction.left: 
                     this.setarrow(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 10, 20), [
-                        [10, 0],
+                        [11, 0],
                         [0, 10],
-                        [10, 20]
+                        [11, 20]
                     ] ));
                     this.getlabelView().setX(10);
                     this.getlabelView().setWidth(this.getWidth() - 10);
                     break;
                 case ThreeOneSevenBee.Model.UI.Direction.bottom: 
                     this.setarrow(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, this.getHeight() - 10, 20, 10), [
-                        [0, 0],
-                        [20, 0],
+                        [0, -1],
+                        [20, -1],
                         [10, 10]
                     ] ));
                     this.getlabelView().setHeight(this.getHeight() - 10);

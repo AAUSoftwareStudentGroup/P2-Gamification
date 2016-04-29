@@ -17,6 +17,13 @@ namespace ThreeOneSevenBee.ModelConsole
             model.Selection.ForEach((selected) => selected.PrettyPrint());
             model.Identities.ForEach((id) => id.Result.PrettyPrint());
 
+
+            // Template for testing Size
+            ExpressionModel model2 = new ExpressionModel("a*(1-b)");
+            model2.Expression.PrettyPrint();
+            Console.WriteLine(model2.Expression.Size);
+            //
+
             Console.WriteLine("Done");
             Console.ReadKey();
         }

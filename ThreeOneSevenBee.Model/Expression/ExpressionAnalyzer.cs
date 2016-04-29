@@ -209,61 +209,44 @@ namespace ThreeOneSevenBee.Model.Expression
                 }
 
                 toBeReplacedSelection = toBeReplaced.GetNodesRecursive().Where((n) => n.Selected == true).ToList();
-                int c = 0;
                 foreach (ExpressionRule rule in rules)
                 {
-                   
-					#if BRIDGE
-					var start = new Date().GetTime();
-					#endif
-                    
                     ExpressionBase suggestion = rule(toBeReplaced, toBeReplacedSelection);
-
-					#if BRIDGE
-					var end = new Date().GetTime();
-                    var time = end - start;
-                    Console.WriteLine(c++ + " " + time);
-					#endif
-
-
-                    if (suggestion != null)
+                    if (identities.Select((i) => i.Suggestion).Contains(suggestion) == false && suggestion != commonParent)
                     {
-                        ExpressionBase result;
-                        if (variadicParent.Count == selectedOperands.Count)
+                        if (suggestion != null)
                         {
-                            result = suggestion;
+                            ExpressionBase result;
+                            if (variadicParent.Count == selectedOperands.Count)
+                            {
+                                result = suggestion;
+                            }
+                            else
+                            {
+                                VariadicOperatorExpression variadicResult = new VariadicOperatorExpression(variadicParent.Type, new NumericExpression(-1), new NumericExpression(-1));
+                                variadicResult.Add(operandsLeftOfSelection.Select((o) => o.Clone()).ToList());
+                                variadicResult.Add(WrapInDelimiterIfNeccessary(suggestion.Clone(), variadicResult));
+                                variadicResult.Add(operandsRightOfSelection.Select((o) => o.Clone()).ToList());
+                                variadicResult.RemoveAt(0);
+                                variadicResult.RemoveAt(0);
+                                result = variadicResult;
+                            }
+                            identities.Add(new Identity(suggestion, WrapInDelimiterIfNeccessary(result, commonParent.Parent)));
                         }
-                        else
-                        {
-                            VariadicOperatorExpression variadicResult = new VariadicOperatorExpression(variadicParent.Type, new NumericExpression(-1), new NumericExpression(-1));
-                            variadicResult.Add(operandsLeftOfSelection.Select((o) => o.Clone()).ToList());
-                            variadicResult.Add(WrapInDelimiterIfNeccessary(suggestion.Clone(), variadicResult));
-                            variadicResult.Add(operandsRightOfSelection.Select((o) => o.Clone()).ToList());
-                            variadicResult.RemoveAt(0);
-                            variadicResult.RemoveAt(0);
-                            result = variadicResult;
-                        }
-                        identities.Add(new Identity(suggestion, WrapInDelimiterIfNeccessary(result, commonParent.Parent)));
                     }
                 }
             }
             else
             {
-                int c = 0;
                 foreach (ExpressionRule rule in rules)
                 {
-					#if BRIDGE
-					var start = new Date().GetTime();
-					#endif
 					ExpressionBase suggestion = WrapInDelimiterIfNeccessary(rule(commonParent, selection), commonParent.Parent);
-					#if BRIDGE
-					var end = new Date().GetTime();
-                    var time = end - start;
-					Console.WriteLine(c++ + " " + time);
-					#endif
-                    if (suggestion != null)
+                    if (identities.Select((i) => i.Suggestion).Contains(suggestion) == false && suggestion != commonParent)
                     {
-                        identities.Add(new Identity(suggestion, suggestion));
+                        if (suggestion != null)
+                        {
+                            identities.Add(new Identity(suggestion, suggestion));
+                        }
                     }
                 }
             }

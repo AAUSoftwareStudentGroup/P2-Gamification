@@ -13,9 +13,9 @@ namespace ThreeOneSevenBee.Model.UI
         {
             {BadgeName.brokBadge, "brøkbadge.png"},
             {BadgeName.masterOfAlgebra, "master_of_algebrabadge.png"},
-            {BadgeName.potens, "potens_badge.png"},
+            {BadgeName.potensBadge, "potens_badge.png"},
             {BadgeName.tutorialBadge, "tutorial_badge.png" },
-            {BadgeName.spilDoneBadge, "parenthesis_badge.png"}
+            {BadgeName.parenthesisBadge, "parenthesis_badge.png"}
 
         };
         public void Build(IEnumerable<Player> players)
@@ -23,7 +23,7 @@ namespace ThreeOneSevenBee.Model.UI
             Children = new List<View>();
             int offsetY = 5;
 
-            foreach (Player player in players)
+            foreach (Player player in players.Take(10))
             {
                 int badgesWidth = (badgeDictionary.Count - 1) * 15;
                 double labelWidth = Width - badgesWidth - 25;

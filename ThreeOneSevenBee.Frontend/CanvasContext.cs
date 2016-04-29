@@ -13,7 +13,7 @@ namespace ThreeOneSevenBee.Frontend
 
         CanvasRenderingContext2D context;
         InputElement input;
-
+        bool cleared;
 
         public CanvasContext(CanvasElement canvas, InputElement input) : base(canvas.Width, canvas.Height)
         {
@@ -21,7 +21,7 @@ namespace ThreeOneSevenBee.Frontend
 
             this.input = input;
             input.Type = InputType.Text;
-            input.Focus();
+            input.Value = "A";
             input.OnInput = (e) =>
             {
                 if(input.Value == "")
@@ -79,6 +79,7 @@ namespace ThreeOneSevenBee.Frontend
 
         public override void Clear()
         {
+            cleared = true;
             context.ClearRect(0, 0, (int)Width, (int)Height);
         }
 
@@ -150,14 +151,18 @@ namespace ThreeOneSevenBee.Frontend
             else
             {
                 ImageElement img = new ImageElement();
-                img.Src = "img/" + fileName;
+                cleared = false;
                 img.OnLoad = (e) =>
                 {
-                    context.FillStyle = "transparent";
-                    context.DrawImage(img, x, y, width, height);
-                    context.FillStyle = "#000000";
+                    if (cleared == false)
+                    {
+                        context.FillStyle = "transparent";
+                        context.DrawImage(img, x, y, width, height);
+                        context.FillStyle = "#000000";
+                    }
                     imageCache[fileName] = img;
                 };
+                img.Src = "img/" + fileName;
             }
         }
 

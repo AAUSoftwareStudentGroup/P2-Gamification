@@ -61,13 +61,18 @@ namespace ThreeOneSevenBee.Model.Game
                     gameModel = new GameModel(u, p)
                     {
                         OnSaveLevel = (level) =>
+                        {
                             gameAPI.SaveUserLevelProgress
                             (
                                 level.LevelID,
                                 level.CurrentExpression,
                                 level.Stars,
-                                (IsSaved) => Console.WriteLine(IsSaved ? "Level saved" : "Could not save")
-                            ),
+                                (IsSaved) => 
+                                {
+                                    Console.WriteLine(IsSaved ? "Level saved" : "Could not save");
+                                }
+                            );
+                        },
                         OnBadgeAchieved = (badge) =>
                             gameAPI.UserAddBadge(
                                 badge,
@@ -84,9 +89,9 @@ namespace ThreeOneSevenBee.Model.Game
                                 Console.WriteLine(success ? "Logout success" : "Logout failed");
                                 Start();
                             });
-                        }
+                        },
+                        ReloadGame = () => loadGameData()
                     };
-
                     context.SetContentView(gameView);
                 });
             });

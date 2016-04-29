@@ -41,16 +41,12 @@ namespace ThreeOneSevenBee.Frontend
                                 (string)levelData["initial_expression"],
                                 int.Parse((string)levelData["stars"] ?? "0"),
                                 (string)levelData["current_expression"],
-                                "Test",
                                 (levelData["star_expressions"] as object[]).Select((o) => (string)o).ToArray());
                             levelCategory.Add(level);
                         }
                         categories.Add(levelCategory);
                     }
-                    categories.Add(new LevelCategory("Test")
-                    {
-                        new Level("{a/b}*{c/d}*{e/f}", "{a/b}*{c/d}*{e/f}", 1, "testDescription", new string[] { "{a*c*e}/{b*d*f}" })
-                    });
+
                     callback(categories);
                 }
             );
@@ -69,7 +65,7 @@ namespace ThreeOneSevenBee.Frontend
                 {
                     var jdata = JSON.Parse((string)data);
                     CurrentPlayer currentPlayer = new CurrentPlayer((string)jdata["data"]["name"]);
-                    currentPlayer.Badges = ((string[])jdata["data"]["badges"]).Select((b) => (BadgeName)int.Parse(b)).ToList();
+                    currentPlayer.Badges = ((string[])jdata["data"]["badges"]).Where((b) => b != "").Select((b) => (BadgeName)int.Parse(b)).ToList();
                     getCategories((categories) =>
                     {
                         foreach (LevelCategory category in categories)
@@ -94,7 +90,6 @@ namespace ThreeOneSevenBee.Frontend
                 (data, textStatus, request) =>
                 {
                     var jdata = JSON.Parse((string)data);
-                    Console.WriteLine(jdata);
                     List<Player> result = (jdata["data"] as object[]).Select((s) =>
                         new Player((string)s["name"])
                         {

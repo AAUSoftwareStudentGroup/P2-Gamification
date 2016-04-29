@@ -98,8 +98,8 @@
                 if (Bridge.hasValue(binaryexpression) && binaryexpression.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                     var numericexpression = Bridge.as(binaryexpression.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression);
                     var power = Bridge.as(binaryexpression.getRight(), ThreeOneSevenBee.Model.Expression.Expressions.BinaryExpression);
-                    if (Bridge.hasValue(numericexpression) && numericexpression.getValue() === "1" && Bridge.hasValue(power)) {
-                        var unaryminus = new ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression(power.getRight());
+                    if (Bridge.hasValue(numericexpression) && numericexpression.getValue() === "1" && Bridge.hasValue(power) && power.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
+                        var unaryminus = new ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression(power.getRight().clone());
                         var mysuggestion = new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(power.getLeft().clone(), unaryminus.clone(), ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power);
                         return mysuggestion;
                     }
@@ -458,7 +458,6 @@
                 var fraction = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
                 if (Bridge.hasValue(fraction) && fraction.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
                     if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(fraction.getLeft(), fraction.getRight())) {
-                        console.log(fraction);
                         var suggestion = new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(1);
                         return suggestion;
                     }
@@ -551,11 +550,16 @@
                     if (Bridge.hasValue(leftNumber) && Bridge.hasValue(rightNumber)) {
     
                         if (binary.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
-                            var sum = 1;
-                            for (var n = 0; n < Bridge.Nullable.getValue(rightNumber); n++) {
-                                sum *= Bridge.Nullable.getValue(leftNumber);
+                            if (Bridge.Nullable.getValue(rightNumber) > 0) {
+                                var sum = 1;
+                                for (var n = 0; n < Bridge.Nullable.getValue(rightNumber); n++) {
+                                    sum *= Bridge.Nullable.getValue(leftNumber);
+                                }
+                                return Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).toNumeric(sum);
                             }
-                            return Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).toNumeric(sum);
+                            else  {
+                                return null;
+                            }
                         }
                         else  {
                             if (binary.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide && Bridge.Nullable.getValue(leftNumber) % Bridge.Nullable.getValue(rightNumber) === 0) {
@@ -643,6 +647,14 @@
                     if (item.toString() === "0" || item.toString() === "-{0}") {
                         return new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(0);
                     }
+                }
+                return null;
+            },
+            commutativeRule: function (expression, selection) {
+                var variadicExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+    
+                if (Bridge.hasValue(variadicExpression) && variadicExpression.getCount() === 2) {
+                    return new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", variadicExpression.getType(), variadicExpression.getItem(1).clone(), variadicExpression.getItem(0).clone());
                 }
                 return null;
             },

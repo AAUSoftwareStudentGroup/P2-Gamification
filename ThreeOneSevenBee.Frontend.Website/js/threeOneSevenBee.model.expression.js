@@ -156,50 +156,39 @@
                 }
     
                 toBeReplacedSelection = Bridge.Linq.Enumerable.from(toBeReplaced.getNodesRecursive()).where($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f1).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase);
-                var c = 0;
                 $t2 = Bridge.getEnumerator(this.rules);
                 while ($t2.moveNext()) {
                     var rule = $t2.getCurrent();
-    
-                    var start = new Date().getTime();
-    
                     var suggestion = rule(toBeReplaced, toBeReplacedSelection);
-    
-                    var end = new Date().getTime();
-                    var time = end - start;
-                    console.log(c++ + " " + time);
-    
-    
-                    if (Bridge.hasValue(suggestion)) {
-                        var result;
-                        if (variadicParent.getCount() === selectedOperands.getCount()) {
-                            result = suggestion;
+                    if (Bridge.Linq.Enumerable.from(identities).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f2).contains(suggestion) === false && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Inequality(suggestion, commonParent)) {
+                        if (Bridge.hasValue(suggestion)) {
+                            var result;
+                            if (variadicParent.getCount() === selectedOperands.getCount()) {
+                                result = suggestion;
+                            }
+                            else  {
+                                var variadicResult = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", variadicParent.getType(), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(-1), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(-1));
+                                variadicResult.add$1(Bridge.Linq.Enumerable.from(operandsLeftOfSelection).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f3).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
+                                variadicResult.add(this.wrapInDelimiterIfNeccessary(suggestion.clone(), variadicResult));
+                                variadicResult.add$1(Bridge.Linq.Enumerable.from(operandsRightOfSelection).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f3).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
+                                variadicResult.removeAt(0);
+                                variadicResult.removeAt(0);
+                                result = variadicResult;
+                            }
+                            identities.add(new ThreeOneSevenBee.Model.Expression.Identity(suggestion, this.wrapInDelimiterIfNeccessary(result, commonParent.getParent())));
                         }
-                        else  {
-                            var variadicResult = new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", variadicParent.getType(), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(-1), new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(-1));
-                            variadicResult.add$1(Bridge.Linq.Enumerable.from(operandsLeftOfSelection).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f2).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
-                            variadicResult.add(this.wrapInDelimiterIfNeccessary(suggestion.clone(), variadicResult));
-                            variadicResult.add$1(Bridge.Linq.Enumerable.from(operandsRightOfSelection).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f2).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase));
-                            variadicResult.removeAt(0);
-                            variadicResult.removeAt(0);
-                            result = variadicResult;
-                        }
-                        identities.add(new ThreeOneSevenBee.Model.Expression.Identity(suggestion, this.wrapInDelimiterIfNeccessary(result, commonParent.getParent())));
                     }
                 }
             }
             else  {
-                var c1 = 0;
                 $t3 = Bridge.getEnumerator(this.rules);
                 while ($t3.moveNext()) {
                     var rule1 = $t3.getCurrent();
-                    var start1 = new Date().getTime();
                     var suggestion1 = this.wrapInDelimiterIfNeccessary(rule1(commonParent, selection), commonParent.getParent());
-                    var end1 = new Date().getTime();
-                    var time1 = end1 - start1;
-                    console.log(c1++ + " " + time1);
-                    if (Bridge.hasValue(suggestion1)) {
-                        identities.add(new ThreeOneSevenBee.Model.Expression.Identity(suggestion1, suggestion1));
+                    if (Bridge.Linq.Enumerable.from(identities).select($_.ThreeOneSevenBee.Model.Expression.ExpressionAnalyzer.f2).contains(suggestion1) === false && ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Inequality(suggestion1, commonParent)) {
+                        if (Bridge.hasValue(suggestion1)) {
+                            identities.add(new ThreeOneSevenBee.Model.Expression.Identity(suggestion1, suggestion1));
+                        }
                     }
                 }
             }
@@ -216,7 +205,10 @@
         f1: function (n) {
             return n.getSelected() === true;
         },
-        f2: function (o) {
+        f2: function (i) {
+            return i.suggestion;
+        },
+        f3: function (o) {
             return o.clone();
         }
     });

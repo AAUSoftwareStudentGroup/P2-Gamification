@@ -148,9 +148,9 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 NumericExpression numericexpression = binaryexpression.Left as NumericExpression;
                 BinaryExpression power = binaryexpression.Right as BinaryExpression;
-                if (numericexpression != null && numericexpression.Value == "1" && power != null)
+                if (numericexpression != null && numericexpression.Value == "1" && power != null && power.Type == OperatorType.Power)
                 {
-                    UnaryMinusExpression unaryminus = new UnaryMinusExpression(power.Right);
+                    UnaryMinusExpression unaryminus = new UnaryMinusExpression(power.Right.Clone());
                     BinaryExpression mysuggestion = new BinaryOperatorExpression(power.Left.Clone(), unaryminus.Clone(), OperatorType.Power);
                     return mysuggestion;
                 }
@@ -584,7 +584,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 if (fraction.Left == fraction.Right)
                 {
-                    Console.WriteLine(fraction);
                     NumericExpression suggestion = new NumericExpression(1);
                     return suggestion;
                 }
@@ -707,12 +706,19 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
                     if (binary.Type == OperatorType.Power)
                     {
-                        int sum = 1;
-                        for (int n = 0; n < (int)rightNumber; n++)
+                        if ((int)rightNumber > 0)
                         {
-                            sum *= (int)leftNumber;
+                            int sum = 1;
+                            for (int n = 0; n < (int)rightNumber; n++)
+                            {
+                                sum *= (int)leftNumber;
+                            }
+                            return ToNumeric(sum);
                         }
-                        return ToNumeric(sum);
+                        else
+                        {
+                            return null;
+                        }
                     }
                     else if (binary.Type == OperatorType.Divide && (int)leftNumber % (int)rightNumber == 0)
                     {
@@ -821,6 +827,19 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                 {
                     return new NumericExpression(0);
                 }
+            }
+            return null;
+        }
+
+        //a*b = b*a
+        //a+b = b+a
+        public static ExpressionBase CommutativeRule(ExpressionBase expression, List<ExpressionBase> selection)
+        {
+            VariadicOperatorExpression variadicExpression = expression as VariadicOperatorExpression;
+
+            if(variadicExpression != null && variadicExpression.Count == 2)
+            {
+                return new VariadicOperatorExpression(variadicExpression.Type, variadicExpression[1].Clone(), variadicExpression[0].Clone());
             }
             return null;
         }
