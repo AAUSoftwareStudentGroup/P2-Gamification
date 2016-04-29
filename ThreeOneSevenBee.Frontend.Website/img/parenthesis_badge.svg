@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1024"
+   height="1024"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   inkscape:export-filename="/home/study/school/p2/p2_software/ThreeOneSevenBee.Frontend.Website/img/parenthesis_badge_V3.png"
+   inkscape:export-xdpi="22.5"
+   inkscape:export-ydpi="22.5"
+   sodipodi:docname="parenthesis_badge.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient5191"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop5193" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.37476659"
+     inkscape:cx="461.04839"
+     inkscape:cy="431.39195"
+     inkscape:document-units="px"
+     inkscape:current-layer="g5671"
+     showgrid="false"
+     inkscape:window-width="1155"
+     inkscape:window-height="1027"
+     inkscape:window-x="746"
+     inkscape:window-y="24"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer7"
+     inkscape:label="base_border"
+     style="display:inline">
+    <path
+       sodipodi:type="star"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="path5745"
+       sodipodi:sides="6"
+       sodipodi:cx="136.0847"
+       sodipodi:cy="204.82347"
+       sodipodi:r1="528.43665"
+       sodipodi:r2="457.63956"
+       sodipodi:arg1="0.52359878"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 593.72426,469.0418 136.0847,733.26012 -321.55486,469.04179 l 0,-528.436644 457.63956,-264.218316 457.63956,264.21832 z"
+       transform="matrix(0.94618678,0,0,0.94618722,383.23846,318.19864)" />
+  </g>
+  <g
+     inkscape:label="base"
+     id="g5671"
+     inkscape:groupmode="layer"
+     style="display:inline">
+    <path
+       sodipodi:type="star"
+       style="fill:#e73030;fill-opacity:1;fill-rule:nonzero;stroke:none;display:inline"
+       id="path5745-8"
+       sodipodi:sides="6"
+       sodipodi:cx="136.0847"
+       sodipodi:cy="204.82347"
+       sodipodi:r1="528.43665"
+       sodipodi:r2="457.63956"
+       sodipodi:arg1="0.52359878"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 593.72426,469.0418 136.0847,733.26012 -321.55486,469.04179 l 0,-528.436644 457.63956,-264.218316 457.63956,264.21832 z"
+       transform="matrix(0.87044469,0,0,0.8704451,393.5463,333.71241)" />
+    <path
+       transform="matrix(0.79464649,0,0,0.79464686,403.86128,349.23767)"
+       d="M 593.72426,469.0418 136.0847,733.26012 -321.55486,469.04179 l 0,-528.436644 457.63956,-264.218316 457.63956,264.21832 z"
+       inkscape:randomized="0"
+       inkscape:rounded="0"
+       inkscape:flatsided="true"
+       sodipodi:arg2="1.0471976"
+       sodipodi:arg1="0.52359878"
+       sodipodi:r2="457.63956"
+       sodipodi:r1="528.43665"
+       sodipodi:cy="204.82347"
+       sodipodi:cx="136.0847"
+       sodipodi:sides="6"
+       id="path5904"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;display:inline"
+       sodipodi:type="star" />
+    <path
+       sodipodi:type="star"
+       style="fill:#e73030;fill-opacity:1;fill-rule:nonzero;stroke:none;display:inline"
+       id="path5917"
+       sodipodi:sides="6"
+       sodipodi:cx="136.0847"
+       sodipodi:cy="204.82347"
+       sodipodi:r1="528.43665"
+       sodipodi:r2="457.63956"
+       sodipodi:arg1="0.52359878"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 593.72426,469.0418 136.0847,733.26012 -321.55486,469.04179 l 0,-528.436644 457.63956,-264.218316 457.63956,264.21832 z"
+       transform="matrix(0.70375599,0,0,0.70375632,416.23009,367.85419)" />
+    <text
+       xml:space="preserve"
+       style="font-size:200px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"
+       x="510.3075"
+       y="638.98291"
+       id="text5919"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5921"
+         x="510.3075"
+         y="638.98291"
+         style="font-size:400px;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">(z)</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer9"
+     inkscape:label="text"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:183.29580688px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
+       x="242.37886"
+       y="664.47797"
+       id="text5683"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5685"
+         x="242.37886"
+         y="664.47797"
+         style="font-size:400px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Latin Modern Math;-inkscape-font-specification:Latin Modern Math">(y)</tspan></text>
+  </g>
+</svg>
