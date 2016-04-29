@@ -21,12 +21,23 @@ namespace ThreeOneSevenBee.Model.UI
         public void Build(IEnumerable<Player> players)
         {
             Children = new List<View>();
-            int offsetY = 5;
 
-            foreach (Player player in players.Take(10))
+            int badgesWidth = (badgeDictionary.Count - 1) * 15;
+            double labelWidth = Width - badgesWidth - 25;
+
+            LabelView topListTextView = new LabelView("Top 7")
             {
-                int badgesWidth = (badgeDictionary.Count - 1) * 15;
-                double labelWidth = Width - badgesWidth - 25;
+                X = 5,
+                Width = Width - 10,
+                Height = 15,
+                Y = 5,
+            };
+
+            double offsetY = 25;
+
+            foreach (Player player in players.Take(7))
+            {
+
                 CompositeView row = new CompositeView(Width, 20)
                     {
                         new LabelView(" " + player.PlayerName + " ")
@@ -55,8 +66,10 @@ namespace ThreeOneSevenBee.Model.UI
                 row.BackgroundColor = new Color(239, 239, 239);
                 Children.Add(row);
 
+
                 offsetY += 25;
             }
+            Children.Add(topListTextView);
         }
 
         public void Update(IEnumerable<Player> players)

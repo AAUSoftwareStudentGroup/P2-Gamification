@@ -632,7 +632,8 @@
             properties: {
                 Category: null,
                 NextCategory: null,
-                OnExit: null
+                OnExit: null,
+                OnNext: null
             }
         },
         constructor: function (category) {
@@ -691,7 +692,6 @@
             } );
             this.children.add(MenuButton);
             this.children.add(nextCategory);
-    
         }
     });
     
@@ -701,10 +701,14 @@
     
     Bridge.apply($_.ThreeOneSevenBee.Model.UI.CategoryCompletionView, {
         f1: function () {
-            this.getOnExit()();
+            if (Bridge.hasValue(this.getOnExit())) {
+                this.getOnExit()();
+            }
         },
         f2: function () {
-            this.getNextCategory()();
+            if (Bridge.hasValue(this.getOnNext())) {
+                this.getOnNext()();
+            }
         }
     });
     
@@ -955,6 +959,15 @@
         },
         constructor: function (game, width, height) {
             ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
+    
+            game.onCategoryCompleted = Bridge.fn.combine(game.onCategoryCompleted, Bridge.fn.bind(this, function (c) {
+                this.setContent(Bridge.merge(new ThreeOneSevenBee.Model.UI.CategoryCompletionView(c), {
+                    setOnNext: function () {
+                        game.setLevel(0, c.categoryIndex + 1);
+                    },
+                    setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1)
+                } ));
+            }));
     
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
     
@@ -1612,13 +1625,23 @@
         build: function (players) {
             var $t, $t1;
             this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
-            var offsetY = 5;
     
-            $t = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(players).take(10));
+            var badgesWidth = (this.badgeDictionary.getCount() - 1) * 15;
+            var labelWidth = this.getWidth() - badgesWidth - 25;
+    
+            var topListTextView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView("Top 7"), {
+                setX: 5,
+                setWidth: this.getWidth() - 10,
+                setHeight: 15,
+                setY: 5
+            } );
+    
+            var offsetY = 25;
+    
+            $t = Bridge.getEnumerator(Bridge.Linq.Enumerable.from(players).take(7));
             while ($t.moveNext()) {
                 var player = $t.getCurrent();
-                var badgesWidth = (this.badgeDictionary.getCount() - 1) * 15;
-                var labelWidth = this.getWidth() - badgesWidth - 25;
+    
                 var row = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(this.getWidth(), 20), [
                     [Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView(" " + player.getPlayerName() + " "), {
                         setWidth: labelWidth,
@@ -1645,8 +1668,10 @@
                 row.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 239, 239, 239));
                 this.children.add(row);
     
+    
                 offsetY += 25;
             }
+            this.children.add(topListTextView);
         },
         update: function (players) {
             this.build(players);
