@@ -247,22 +247,53 @@
         levelIndex: 0,
         categoryIndex: 0,
         stars: 0,
-        constructor$2: function (startExpression, currentExpression, stars, description, starExpressions) {
-            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, -1, startExpression, stars, currentExpression, description, starExpressions);
+        config: {
+            init: function () {
+                this.descriptions = Bridge.merge(new Bridge.Dictionary$2(Bridge.Int,String)(), [
+        [109, "For at lægge to, eller flere, elementer sammen, skal der trykkes på de elementer, \n der ønskes sammenlagt. Det samme gælder for gange og minus."],
+        [128, "For at udregne potensudtryk, trykkes på grundtallet (nederste del) \n og eksponenten (øverste del)."],
+        [129, "For at fjerne et udtryks parentes (hvis det er muligt), \n trykkes på parentesen."],
+        [131, "Hvis tæller og nævner i en brøk, har samme værdi, \n kan det omskrives til 1, ved at trykke på brøkstregen."],
+        [88, "For at gange et udtryk ind i en brøk, \n trykkes på udtrykket og brøkstregen."],
+        [60, "For at lægge to, eller flere, brøker sammen, \n trykkes der på begge (alle) brøkstreger. \n For at splitte dem igen, trykkes der igen på brøkstregen."],
+        [147, "For at gange et udtryk med en parentes, \n trykkes på udtrykket og paretesen."],
+        [112, "Hvis to, eller flere, potensudtryk har samme eksponent, \n og er ganget sammen, kan der enten trykkes på eksponenterne eller på grundtallene."],
+        [56, "Hvis der er ens udtryk i flere led, \n kan man markere de ens variable/tal, for at trække dem uden for en parentes."],
+        [95, "Parentesen udregnes først, derefter ganges resultatet."],
+        [113, "Parentesen udregnes først, derefter ganges resultatet."],
+        [136, "Når der kun er gangetegn i en parentes, kan den ophæves."],
+        [118, "Minusparentes skal ophæves, derefter ganges parenteserne. Til sidst udregnes udtrykket."],
+        [89, "Et grundtal opløftet i 1., er altid grundtallet selv: n^1 = n."],
+        [125, "Et grundtal opløftet i 0., er altid 1: n^0 = 1."],
+        [90, "Hvis et grundtal er opløftet i to, eller flere, eksponenter, \n laves det om til én eksponent, som består af alle eksponenter ganget sammen: (n^2)^3 = n^2*3 = n^6"],
+        [9, "Hvis grundtallet for to potenser ganget sammen er ens, \n kan eksponenterne lægges sammen, ved at trykke på begge grundtal, eller begge eksponenter."],
+        [138, "For at omskrive en kvadratrod, trykkes på kvadratroden. "]
+    ] ) || null;
+            }
+        },
+        constructor$2: function (startExpression, currentExpression, stars, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, -1, -1, -1, startExpression, stars, currentExpression, starExpressions);
     
         },
-        constructor$1: function (levelID, startExpression, stars, currentExpression, description, starExpressions) {
-            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, levelID, -1, -1, startExpression, stars, currentExpression, description, starExpressions);
+        constructor$1: function (levelID, startExpression, stars, currentExpression, starExpressions) {
+            ThreeOneSevenBee.Model.Game.Level.prototype.$constructor.call(this, levelID, -1, -1, startExpression, stars, currentExpression, starExpressions);
     
         },
-        constructor: function (levelID, levelIndex, categoryIndex, startExpression, stars, currentExpression, description, starExpressions) {
+        constructor: function (levelID, levelIndex, categoryIndex, startExpression, stars, currentExpression, starExpressions) {
             var $t;
             this.levelID = levelID;
             this.levelIndex = levelIndex;
             this.categoryIndex = categoryIndex;
             this.startExpression = startExpression;
             this.currentExpression = currentExpression;
-            this.description = description;
+    
+            if (this.descriptions.containsKey(levelID)) {
+                this.description = this.descriptions.get(levelID);
+            }
+            else  {
+                this.description = "";
+            }
+    
             this.stars = stars;
             this.starExpressions = new Bridge.List$1(String)();
             $t = Bridge.getEnumerator(starExpressions);
