@@ -181,7 +181,8 @@ namespace ThreeOneSevenBee.Frontend
                 {
                     action = "user_logout",
                     token = token
-                },
+                }, 
+
                 (data, textStatus, request) =>
                 {
                     var jdata = JSON.Parse((string)data);
