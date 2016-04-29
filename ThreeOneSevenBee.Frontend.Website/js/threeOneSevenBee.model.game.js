@@ -76,8 +76,8 @@
         f4: function (IsAdded) {
             console.log(IsAdded ? "Badge added" : "Badge not added");
         },
-        f5: function (badge) {
-            this.gameAPI.userAddBadge(badge, $_.ThreeOneSevenBee.Model.Game.Game.f4);
+        f5: function (c) {
+            this.gameAPI.userAddBadge(c.getBadge(), $_.ThreeOneSevenBee.Model.Game.Game.f4);
         },
         f6: function (success) {
             console.log(success ? "Logout success" : "Logout failed");
@@ -104,7 +104,7 @@
             this.gameAPI.getPlayers(Bridge.fn.bind(this, function (p) {
                 this.gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
                     onSaveLevel: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f3),
-                    onBadgeAchieved: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f5)
+                    onCategoryCompleted: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f5)
                 } );
     
                 this.gameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.GameView(this.gameModel, this.context.getWidth(), this.context.getHeight()), {
@@ -118,7 +118,7 @@
     
     Bridge.define('ThreeOneSevenBee.Model.Game.GameModel', {
         onChanged: null,
-        onBadgeAchieved: null,
+        onCategoryCompleted: null,
         onSaveLevel: null,
         progressBar: null,
         config: {
@@ -202,26 +202,30 @@
         },
         updateLevelData: function () {
             var $t;
-            this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
-            this.getNextLevel().unlocked = true;
-            if (this.getUser().getCurrentLevel().stars === 3) {
-                var numberOfStars = 0;
-                $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategoryIndex));
-                while ($t.moveNext()) {
-                    var level = $t.getCurrent();
-                    numberOfStars += level.stars;
-                }
-                if (numberOfStars === this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getCount() * 3) {
-                    if (Bridge.hasValue(this.onBadgeAchieved)) {
-                        var achievedBadge = this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getBadge();
-                        if (this.getUser().badges.contains(achievedBadge) === false) {
-                            this.getUser().badges.add(achievedBadge);
-                            Bridge.Linq.Enumerable.from(this.getPlayers()).first(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f3)).badges.add(achievedBadge);
-                            this.onBadgeAchieved(achievedBadge);
+            if (Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() > this.getUser().getCurrentLevel().stars) {
+                this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
+                this.getNextLevel().unlocked = true;
+                if (this.getUser().getCurrentLevel().stars === 3) {
+                    var numberOfStars = 0;
+                    $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategoryIndex));
+                    while ($t.moveNext()) {
+                        var level = $t.getCurrent();
+                        numberOfStars += level.stars;
+                    }
+                    if (numberOfStars === this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getCount() * 3) {
+                        if (Bridge.hasValue(this.onCategoryCompleted)) {
+                            var achievedBadge = this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getBadge();
+                            if (this.getUser().badges.contains(achievedBadge) === false) {
+                                this.getUser().badges.add(achievedBadge);
+                                Bridge.Linq.Enumerable.from(this.getPlayers()).first(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f3)).badges.add(achievedBadge);
+                                this.onSaveLevel(this.getUser().getCurrentLevel());
+                                this.onCategoryCompleted(this.getUser().categories.getItem(this.getUser().currentCategoryIndex));
+                            }
                         }
                     }
                 }
             }
+    
         },
         nextLevel: function () {
             if (this.getIsGameCompleted()) {

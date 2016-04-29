@@ -700,6 +700,33 @@
                 }
     
                 return new ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression(suggestionNumerator, suggestionDenominator, ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide);
+            },
+            variablesEqualNull: function (expression, selection) {
+                var variadicExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
+    
+                if (!Bridge.hasValue(variadicExpression) || variadicExpression.getType() !== ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add || variadicExpression.getCount() !== 2) {
+                    return null;
+                }
+    
+                var minusExpression;
+    
+                if (Bridge.is(variadicExpression.getItem(0), ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression)) {
+                    minusExpression = Bridge.as(variadicExpression.getItem(0), ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
+    
+                    if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(minusExpression.getExpression(), variadicExpression.getItem(1))) {
+                        return new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(0);
+                    }
+                }
+                else  {
+                    if (Bridge.is(variadicExpression.getItem(1), ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression)) {
+                        minusExpression = Bridge.as(variadicExpression.getItem(1), ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
+    
+                        if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Equality(minusExpression.getExpression(), variadicExpression.getItem(0))) {
+                            return new ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression(0);
+                        }
+                    }
+                }
+                return null;
             }
         }
     });

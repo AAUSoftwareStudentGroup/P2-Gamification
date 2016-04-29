@@ -87,9 +87,9 @@ namespace ThreeOneSevenBee.Model.Game
                                 }
                             );
                         },
-                        OnBadgeAchieved = (badge) =>
+                        OnCategoryCompleted = (c) =>
                             gameAPI.UserAddBadge(
-                                badge,
+                                c.Badge,
                                 (IsAdded) => Console.WriteLine(IsAdded ? "Badge added" : "Badge not added")
                             )
                     };

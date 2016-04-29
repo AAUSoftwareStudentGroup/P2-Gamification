@@ -632,7 +632,8 @@
             properties: {
                 Category: null,
                 NextCategory: null,
-                OnExit: null
+                OnExit: null,
+                OnNext: null
             }
         },
         constructor: function (category) {
@@ -691,7 +692,6 @@
             } );
             this.children.add(MenuButton);
             this.children.add(nextCategory);
-    
         }
     });
     
@@ -701,10 +701,14 @@
     
     Bridge.apply($_.ThreeOneSevenBee.Model.UI.CategoryCompletionView, {
         f1: function () {
-            this.getOnExit()();
+            if (Bridge.hasValue(this.getOnExit())) {
+                this.getOnExit()();
+            }
         },
         f2: function () {
-            this.getNextCategory()();
+            if (Bridge.hasValue(this.getOnNext())) {
+                this.getOnNext()();
+            }
         }
     });
     
@@ -955,6 +959,15 @@
         },
         constructor: function (game, width, height) {
             ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
+    
+            game.onCategoryCompleted = Bridge.fn.combine(game.onCategoryCompleted, Bridge.fn.bind(this, function (c) {
+                this.setContent(Bridge.merge(new ThreeOneSevenBee.Model.UI.CategoryCompletionView(c), {
+                    setOnNext: function () {
+                        game.setLevel(0, c.categoryIndex + 1);
+                    },
+                    setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1)
+                } ));
+            }));
     
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
     

@@ -11,6 +11,7 @@ namespace ThreeOneSevenBee.Model.UI
         public LevelCategory Category { get; private set; }
         public Action NextCategory { get; set; }
         public Action OnExit { get; set; }
+        public Action OnNext { get; set; }
         public CategoryCompletionView(LevelCategory category) : base(600, 400)
         {
             this.Category = category;
@@ -54,16 +55,16 @@ namespace ThreeOneSevenBee.Model.UI
                 Children.Add(badgeView);
             }
 
-            ButtonView MenuButton = new ButtonView("Menu", () => OnExit())
+            ButtonView MenuButton = new ButtonView("Menu", () => { if (OnExit != null) OnExit(); })
             {
                 X = badgeView.X + (badgeView.Width / 2) - 115,
                 Y = Height - 50,
                 Width = 105,
                 Height = 35,
                 BackgroundColor = new Color(192, 57, 43),
-                TextColor = new Color(255, 255, 255),
+                TextColor = new Color(255, 255, 255)
             };
-            ButtonView nextCategory = new ButtonView("Næste", () => NextCategory())
+            ButtonView nextCategory = new ButtonView("Næste", () => { if (OnNext != null) OnNext(); })
             {
                 X = badgeView.X + (badgeView.Width / 2) + 10,
                 Y = Height - 50,
@@ -74,7 +75,6 @@ namespace ThreeOneSevenBee.Model.UI
             };
             Children.Add(MenuButton);
             Children.Add(nextCategory);
-
         }
 
     }
