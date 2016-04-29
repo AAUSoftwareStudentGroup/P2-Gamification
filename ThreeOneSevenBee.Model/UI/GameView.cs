@@ -31,7 +31,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public GameView(GameModel game, double width, double height) : base(width, height)
         {
-            game.OnCategoryCompleted = (c) => 
+            game.OnCategoryCompleted += (c) => 
             setContent(
                 new CategoryCompletionView(c)
                 {

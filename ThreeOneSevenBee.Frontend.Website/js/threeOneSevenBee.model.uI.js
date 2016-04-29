@@ -960,14 +960,14 @@
         constructor: function (game, width, height) {
             ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
     
-            game.onCategoryCompleted = Bridge.fn.bind(this, function (c) {
+            game.onCategoryCompleted = Bridge.fn.combine(game.onCategoryCompleted, Bridge.fn.bind(this, function (c) {
                 this.setContent(Bridge.merge(new ThreeOneSevenBee.Model.UI.CategoryCompletionView(c), {
                     setOnNext: function () {
                         game.setLevel(0, c.categoryIndex + 1);
                     },
                     setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1)
                 } ));
-            });
+            }));
     
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
     
