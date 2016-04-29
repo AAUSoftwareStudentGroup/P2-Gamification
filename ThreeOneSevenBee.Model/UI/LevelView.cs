@@ -50,11 +50,12 @@ namespace ThreeOneSevenBee.Model.UI
                 BackgroundColor = new Color(192, 57, 43)
             };
 
-            toolTipView = new ToolTipView(game.User.CurrentLevel.Description, 300, 300)
+            toolTipView = new ToolTipView(game.User.CurrentLevel.Description, 300, 50)
             {
                 X = Width - 300,
                 Y = 50,
                 Visible = false,
+                
                 OnClick = () =>
                 {
                     if (helpButton.OnClick != null && toolTipView.Visible == true)
