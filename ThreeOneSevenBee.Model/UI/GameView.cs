@@ -23,7 +23,7 @@ namespace ThreeOneSevenBee.Model.UI
         {
             levelView.Update(game);
             levelSelectView.Update(game.User);
-            if (OnChanged != null)
+            if(OnChanged != null)
             {
                 OnChanged();
             }
@@ -62,10 +62,7 @@ namespace ThreeOneSevenBee.Model.UI
                     Update(game);
                     game.SetLevel(level.LevelIndex, level.CategoryIndex);
                 },
-                OnExit = () =>
-                {
-                    ReloadGame();
-                }
+                OnExit = () => ReloadGame()
             };
 
             titleView.PlayButton.OnClick = () => setContent(levelView);
@@ -88,7 +85,7 @@ namespace ThreeOneSevenBee.Model.UI
         public override void setContent(View content)
         {
             base.setContent(content);
-            if (OnChanged != null)
+            if(OnChanged != null)
             {
                 OnChanged();
             }

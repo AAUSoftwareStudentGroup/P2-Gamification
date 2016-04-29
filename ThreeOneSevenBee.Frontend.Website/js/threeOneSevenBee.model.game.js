@@ -161,6 +161,7 @@
                 this.progressBar.add(starExpressionBase.getSize());
             }
             this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel("constructor", this.getUser().categories.getItem(category).getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f2), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commonPowerParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseCommonPowerParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).splittingFractions, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productParenthesis, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseProductParenthesis, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).parenthesisPowerRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).fractionToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).squareRootRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).removeParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productOfConstantAndFraction, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).factorizeUnaryMinus, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).factorizationRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).multiplyOneRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionWithCommonDenominatorRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).removeNull, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).multiplyByNull, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).calculateVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).calculateBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).multiplyMinusRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divisionEqualsOneRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productOfFractions]));
+            this.updateBadges();
             this.onExpressionChanged(this.getExprModel());
         },
         restartLevel: function () {
@@ -168,11 +169,19 @@
             this.setLevel(this.getUser().currentLevelIndex, this.getUser().currentCategoryIndex);
         },
         onExpressionChanged: function (model) {
-            var $t;
             this.progressBar.currentValue = model.getExpression().getSize();
             this.getUser().getCurrentLevel().currentExpression = model.getExpression().toString();
             if (Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() > this.getUser().getCurrentLevel().stars) {
-                this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
+                this.updateBadges();
+            }
+            if (Bridge.hasValue(this.onChanged)) {
+                this.onChanged(this);
+            }
+        },
+        updateBadges: function () {
+            var $t;
+            this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
+            if (this.getUser().getCurrentLevel().stars === 3) {
                 var numberOfStars = 0;
                 $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategoryIndex));
                 while ($t.moveNext()) {
@@ -189,9 +198,6 @@
                         }
                     }
                 }
-            }
-            if (Bridge.hasValue(this.onChanged)) {
-                this.onChanged(this);
             }
         },
         nextLevel: function () {
@@ -258,11 +264,11 @@
         [60, "For at lægge to, eller flere, brøker sammen, \n trykkes der på begge (alle) brøkstreger. \n For at splitte dem igen, trykkes der igen på brøkstregen."],
         [147, "For at gange et udtryk med en parentes, \n trykkes på udtrykket og paretesen."],
         [112, "Hvis to, eller flere, potensudtryk har samme eksponent, \n og er ganget sammen, kan der enten trykkes på eksponenterne eller på grundtallene."],
-        [56, "Hvis der er ens udtryk i flere led, \n kan man markere de ens variable/tal, for at trække dem uden for en parentes."],
+        [56, "Hvis der er ens udtryk i flere led, kan man markere de ens variable/tal, \n for at trække dem uden for en parentes."],
         [95, "Parentesen udregnes først, derefter ganges resultatet."],
         [113, "Parentesen udregnes først, derefter ganges resultatet."],
         [136, "Når der kun er gangetegn i en parentes, kan den ophæves."],
-        [118, "Minusparentes skal ophæves, derefter ganges parenteserne. Til sidst udregnes udtrykket."],
+        [118, "Minusparentes skal ophæves, derefter ganges parenteserne. \n Til sidst udregnes udtrykket."],
         [89, "Et grundtal opløftet i 1., er altid grundtallet selv: n^1 = n."],
         [125, "Et grundtal opløftet i 0., er altid 1: n^0 = 1."],
         [90, "Hvis et grundtal er opløftet i to, eller flere, eksponenter, \n laves det om til én eksponent, som består af alle eksponenter ganget sammen: (n^2)^3 = n^2*3 = n^6"],

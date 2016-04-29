@@ -65,22 +65,22 @@ namespace ThreeOneSevenBee.Development.Desktop
 			context = new DesktopContext(graphics, spriteBatch, font, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
 
 			Stream stream;
-			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/star.png")).BaseStream;
+			stream = new StreamReader (Path.GetFullPath (@"../../../ThreeOneSevenBee.Frontend.Website/img/star.png")).BaseStream;
 			context.imageCache.Add("star.png", Texture2D.FromStream (GraphicsDevice, stream));
-			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/masterofalgebra.png")).BaseStream;
-			context.imageCache.Add("masterofalgebra.png", Texture2D.FromStream (GraphicsDevice, stream));
-			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/potensv2.png")).BaseStream;
-			context.imageCache.Add("potensv2.png", Texture2D.FromStream (GraphicsDevice, stream));
-			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/brøkbadge.png")).BaseStream;
+			stream = new StreamReader (Path.GetFullPath (@"../../../ThreeOneSevenBee.Frontend.Website/img/master_of_algebrabadge.png")).BaseStream;
+			context.imageCache.Add("master_of_algebrabadge.png", Texture2D.FromStream (GraphicsDevice, stream));
+			stream = new StreamReader (Path.GetFullPath (@"../../../ThreeOneSevenBee.Frontend.Website/img/potens_badge.png")).BaseStream;
+			context.imageCache.Add("potens_badge.png", Texture2D.FromStream (GraphicsDevice, stream));
+			stream = new StreamReader (Path.GetFullPath (@"../../../ThreeOneSevenBee.Frontend.Website/img/brøkbadge.png")).BaseStream;
 			context.imageCache.Add("brøkbadge.png", Texture2D.FromStream (GraphicsDevice, stream));
-			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/restart.png")).BaseStream;
+			stream = new StreamReader (Path.GetFullPath (@"../../../ThreeOneSevenBee.Frontend.Website/img/restart.png")).BaseStream;
 			context.imageCache.Add("restart.png", Texture2D.FromStream (GraphicsDevice, stream));
-			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/star_activated.png")).BaseStream;
+			stream = new StreamReader (Path.GetFullPath (@"../../../ThreeOneSevenBee.Frontend.Website/img/star_activated.png")).BaseStream;
 			context.imageCache.Add("star_activated.png", Texture2D.FromStream (GraphicsDevice, stream));
-			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/spildonebadge.png")).BaseStream;
-			context.imageCache.Add("spildonebadge.png", Texture2D.FromStream (GraphicsDevice, stream));
-			stream = new StreamReader (Path.GetFullPath (@"../../Content/img/tutorialbadge.png")).BaseStream;
-			context.imageCache.Add("tutorialbadge.png", Texture2D.FromStream (GraphicsDevice, stream));
+			stream = new StreamReader (Path.GetFullPath (@"../../../ThreeOneSevenBee.Frontend.Website/img/parenthesis_badge.png")).BaseStream;
+			context.imageCache.Add("parenthesis_badge.png", Texture2D.FromStream (GraphicsDevice, stream));
+			stream = new StreamReader (Path.GetFullPath (@"../../../ThreeOneSevenBee.Frontend.Website/img/tutorial_badge.png")).BaseStream;
+			context.imageCache.Add("tutorial_badge.png", Texture2D.FromStream (GraphicsDevice, stream));
 
 			TOSBGame.IGameAPI gameAPI = new DesktopGameAPI();
 
@@ -120,17 +120,35 @@ namespace ThreeOneSevenBee.Development.Desktop
 					}
 				}
 				if(!brk) {
-					string keys;
+					string keys = null;
+					int a;
+					if (keys == null && key.ToString ().StartsWith ("D")) {
+						try {
+							if (Int32.TryParse (key.ToString ().Substring (1), out a)) {
+								keys = key.ToString ().Substring (1);
+							}
+						} catch (FormatException) {
+							// Nope.
+						}
+					}
+					if(keys == null && key.ToString().StartsWith("NumPad")) {
+						try {
+							if (Int32.TryParse (key.ToString ().Substring (6), out a))
+								keys = key.ToString ().Substring (6);
+						} catch (FormatException) {
+							// Also nope.
+						}
+					}
 					// Add special keys here
-					if (key.ToString ().Length == 1) {
+					if (keys == null && key.ToString ().Length == 1) {
 						if (upperCase)
 							keys = key.ToString ().ToUpper ();
 						else
 							keys = key.ToString ().ToLower ();
-					} else
+					} else if(keys == null)
 						keys = key.ToString ();
+					
 					context.ContentView.KeyPressed (keys, context);
-
 				}
 			}
 			lastKeys = state.GetPressedKeys ();

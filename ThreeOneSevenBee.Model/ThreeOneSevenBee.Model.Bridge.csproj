@@ -76,6 +76,7 @@
     <Compile Include="Polygon\PolygonRelation.cs" />
     <Compile Include="Polygon\PolygonSide.cs" />
     <Compile Include="UI\ButtonView.cs" />
+    <Compile Include="UI\CategoryCompletionView.cs" />
     <Compile Include="UI\Color.cs" />
     <Compile Include="UI\CompositeView.cs" />
     <Compile Include="UI\Context.cs" />
