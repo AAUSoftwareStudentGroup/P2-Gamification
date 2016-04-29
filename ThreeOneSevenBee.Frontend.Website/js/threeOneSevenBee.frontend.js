@@ -43,6 +43,7 @@
         imageCache: null,
         context: null,
         input: null,
+        cleared: false,
         constructor: function (canvas, input) {
             ThreeOneSevenBee.Model.UI.Context.prototype.$constructor.call(this, canvas.width, canvas.height);
     
@@ -94,6 +95,7 @@
             this.draw();
         },
         clear: function () {
+            this.cleared = true;
             this.context.clearRect(0, 0, Bridge.Int.trunc(this.getWidth()), Bridge.Int.trunc(this.getHeight()));
         },
         click: function (x, y) {
@@ -153,13 +155,16 @@
             }
             else  {
                 var img = new Image();
-                img.src = "img/" + fileName;
+                this.cleared = false;
                 img.onload = Bridge.fn.bind(this, function (e) {
-                    this.context.fillStyle = "transparent";
-                    this.context.drawImage(img, x, y, width, height);
-                    this.context.fillStyle = "#000000";
+                    if (this.cleared === false) {
+                        this.context.fillStyle = "transparent";
+                        this.context.drawImage(img, x, y, width, height);
+                        this.context.fillStyle = "#000000";
+                    }
                     this.imageCache.set(fileName, img);
                 });
+                img.src = "img/" + fileName;
             }
         },
         getTextDimensions: function (text, maxWidth, maxHeight) {

@@ -173,19 +173,21 @@
             this.getUser().getCurrentLevel().currentExpression = model.getExpression().toString();
             if (Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() > this.getUser().getCurrentLevel().stars) {
                 this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
-                var numberOfStars = 0;
-                $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategoryIndex));
-                while ($t.moveNext()) {
-                    var level = $t.getCurrent();
-                    numberOfStars += level.stars;
-                }
-                if (numberOfStars === this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getCount() * 3) {
-                    if (Bridge.hasValue(this.onBadgeAchieved)) {
-                        var achievedBadge = this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getBadge();
-                        if (this.getUser().badges.contains(achievedBadge) === false) {
-                            this.getUser().badges.add(achievedBadge);
-                            Bridge.Linq.Enumerable.from(this.getPlayers()).first(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f3)).badges.add(achievedBadge);
-                            this.onBadgeAchieved(achievedBadge);
+                if (this.getUser().getCurrentLevel().stars === 3) {
+                    var numberOfStars = 0;
+                    $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategoryIndex));
+                    while ($t.moveNext()) {
+                        var level = $t.getCurrent();
+                        numberOfStars += level.stars;
+                    }
+                    if (numberOfStars === this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getCount() * 3) {
+                        if (Bridge.hasValue(this.onBadgeAchieved)) {
+                            var achievedBadge = this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getBadge();
+                            if (this.getUser().badges.contains(achievedBadge) === false) {
+                                this.getUser().badges.add(achievedBadge);
+                                Bridge.Linq.Enumerable.from(this.getPlayers()).first(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f3)).badges.add(achievedBadge);
+                                this.onBadgeAchieved(achievedBadge);
+                            }
                         }
                     }
                 }

@@ -148,7 +148,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             {
                 NumericExpression numericexpression = binaryexpression.Left as NumericExpression;
                 BinaryExpression power = binaryexpression.Right as BinaryExpression;
-                if (numericexpression != null && numericexpression.Value == "1" && power != null)
+                if (numericexpression != null && numericexpression.Value == "1" && power != null && power.Type == OperatorType.Power)
                 {
                     UnaryMinusExpression unaryminus = new UnaryMinusExpression(power.Right.Clone());
                     BinaryExpression mysuggestion = new BinaryOperatorExpression(power.Left.Clone(), unaryminus.Clone(), OperatorType.Power);

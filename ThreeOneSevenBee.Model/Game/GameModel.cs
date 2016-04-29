@@ -96,21 +96,24 @@ namespace ThreeOneSevenBee.Model.Game
             if (ProgressBar.ActivatedStarPercentages().Count() > User.CurrentLevel.Stars)
             {
                 User.CurrentLevel.Stars = ProgressBar.ActivatedStarPercentages().Count();
-                int numberOfStars = 0;
-                foreach(Level level in User.Categories[User.CurrentCategoryIndex])
+                if (User.CurrentLevel.Stars == 3)
                 {
-                    numberOfStars += level.Stars;
-                }
-                if (numberOfStars == User.Categories[User.CurrentCategoryIndex].Count * 3)
-                {
-                    if(OnBadgeAchieved != null)
+                    int numberOfStars = 0;
+                    foreach (Level level in User.Categories[User.CurrentCategoryIndex])
                     {
-                        BadgeName achievedBadge = User.Categories[User.CurrentCategoryIndex].Badge;
-                        if (User.Badges.Contains(achievedBadge) == false)
+                        numberOfStars += level.Stars;
+                    }
+                    if (numberOfStars == User.Categories[User.CurrentCategoryIndex].Count * 3)
+                    {
+                        if (OnBadgeAchieved != null)
                         {
-                            User.Badges.Add(achievedBadge);
-                            Players.First((p) => p.PlayerName == User.PlayerName).Badges.Add(achievedBadge);
-                            OnBadgeAchieved(achievedBadge);
+                            BadgeName achievedBadge = User.Categories[User.CurrentCategoryIndex].Badge;
+                            if (User.Badges.Contains(achievedBadge) == false)
+                            {
+                                User.Badges.Add(achievedBadge);
+                                Players.First((p) => p.PlayerName == User.PlayerName).Badges.Add(achievedBadge);
+                                OnBadgeAchieved(achievedBadge);
+                            }
                         }
                     }
                 }
