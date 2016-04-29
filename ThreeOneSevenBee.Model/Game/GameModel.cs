@@ -125,7 +125,11 @@ namespace ThreeOneSevenBee.Model.Game
             if (ProgressBar.ActivatedStarPercentages().Count() > User.CurrentLevel.Stars)
             {
             User.CurrentLevel.Stars = ProgressBar.ActivatedStarPercentages().Count();
-            GetNextLevel().Unlocked = true;
+            if(GetNextLevel() != null)
+            {
+                    GetNextLevel().Unlocked = true;
+            }
+            
             if (User.CurrentLevel.Stars == 3)
             {
                 int numberOfStars = 0;

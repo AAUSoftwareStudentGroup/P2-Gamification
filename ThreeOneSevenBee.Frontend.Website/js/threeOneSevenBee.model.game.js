@@ -204,7 +204,10 @@
             var $t;
             if (Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() > this.getUser().getCurrentLevel().stars) {
                 this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
-                this.getNextLevel().unlocked = true;
+                if (Bridge.hasValue(this.getNextLevel())) {
+                    this.getNextLevel().unlocked = true;
+                }
+    
                 if (this.getUser().getCurrentLevel().stars === 3) {
                     var numberOfStars = 0;
                     $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategoryIndex));

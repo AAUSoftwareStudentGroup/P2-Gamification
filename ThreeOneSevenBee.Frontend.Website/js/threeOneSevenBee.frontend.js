@@ -239,7 +239,7 @@
             });
         },
         saveUserLevelProgress: function (levelID, currentExpression, stars, callback) {
-            $.post("/api/", { action: "save_user_level_progress", debug: 1, level_id: levelID, current_expression: currentExpression, stars: stars, token: this.token }, function (data, textStatus, request) {
+            $.post("/api/", { action: "save_user_level_progress", level_id: levelID, current_expression: currentExpression, stars: stars, token: this.token }, function (data, textStatus, request) {
                 var jdata = JSON.parse(Bridge.cast(data, String));
                 callback(Bridge.cast(jdata.success, String) === "true");
             });
