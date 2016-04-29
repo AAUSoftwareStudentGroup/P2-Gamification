@@ -77,7 +77,7 @@ namespace ThreeOneSevenBee.Model.UI
 
             game.OnChanged = Update;
 
-			setContent(titleView);
+			setContent(new CategoryCompletionView(game.User.Categories[0]));
         }
 
         public override void setContent(View content)
