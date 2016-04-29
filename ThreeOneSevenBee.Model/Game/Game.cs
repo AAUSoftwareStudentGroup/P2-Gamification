@@ -56,6 +56,20 @@ namespace ThreeOneSevenBee.Model.Game
         {
             gameAPI.GetCurrentPlayer((u) =>
             {
+                bool unlocked = true;
+                for (int index = 0; index < u.Categories.Count; index++)
+                {
+                    for (int i = 0; i < u.Categories[index].Count; i++)
+                    {
+                        u.Categories[index][i].Unlocked = unlocked;
+                        if(u.Categories[index][i].Stars == 0 && unlocked == true)
+                        {
+                            unlocked = false;
+                            u.CurrentCategoryIndex = index;
+                            u.CurrentLevelIndex = 0;
+                        }
+                    }
+                }
                 gameAPI.GetPlayers((p) =>
                 {
                     gameModel = new GameModel(u, p)

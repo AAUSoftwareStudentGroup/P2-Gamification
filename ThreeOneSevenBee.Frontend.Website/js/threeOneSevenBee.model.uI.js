@@ -978,9 +978,11 @@
                     this.levelSelectView.update(game.getUser());
                 }),
                 onLevelSelect: Bridge.fn.bind(this, function (level) {
-                    this.setContent(this.levelView);
-                    this.update$1(game);
-                    game.setLevel(level.levelIndex, level.categoryIndex);
+                    if (level.unlocked) {
+                        this.setContent(this.levelView);
+                        this.update$1(game);
+                        game.setLevel(level.levelIndex, level.categoryIndex);
+                    }
                 }),
                 setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1)
             } );
@@ -1323,12 +1325,12 @@
                         }),
                         setX: levelNumber % Bridge.Int.trunc(Math.sqrt(numberOfLevels)) * 50 + 5,
                         setY: Bridge.Int.div(levelNumber, Bridge.Int.trunc(Math.sqrt(numberOfLevels))) * 50 + 5,
-                        setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 130, 120)
+                        setBackgroundColor: level.unlocked ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 130, 120) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 190, 190, 190)
                     } );
                     levelButton.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView((levelNumber + 1).toString()), {
                         setWidth: levelButton.getWidth(),
                         setHeight: levelButton.getWidth() * 0.75,
-                        setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 130, 120),
+                        setBackgroundColor: level.unlocked ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 130, 120) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 190, 190, 190),
                         setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255)
                     } ));
                     var starsize = levelButton.getWidth() * 0.25;

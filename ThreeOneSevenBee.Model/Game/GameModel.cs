@@ -47,6 +47,22 @@ namespace ThreeOneSevenBee.Model.Game
             }
         }
 
+        public Level GetNextLevel()
+        {
+            if(IsGameCompleted == false)
+            {
+                if(IsCategoryCompleted == true)
+                {
+                    return User.Categories[User.CurrentCategoryIndex + 1][0];
+                }
+                else
+                {
+                    return User.Categories[User.CurrentCategoryIndex][User.CurrentLevelIndex + 1];
+                }
+            }
+            return null;
+        }
+
         public bool IsGameCompleted
         {
             get
@@ -80,7 +96,7 @@ namespace ThreeOneSevenBee.Model.Game
                 Rules.RemoveParenthesisRule, Rules.ProductOfConstantAndFraction, Rules.FactorizeUnaryMinus, Rules.FactorizationRule,
                 Rules.MultiplyOneRule, Rules.AddFractionWithCommonDenominatorRule, Rules.RemoveNull, Rules.MultiplyByNull,
                 Rules.CalculateVariadicRule, Rules.CalculateBinaryRule, Rules.MultiplyMinusRule, Rules.DivisionEqualsOneRule, Rules.ProductOfFractions);
-            updateBadges();
+            UpdateLevelData();
             onExpressionChanged(ExprModel);
         }
 
@@ -96,7 +112,7 @@ namespace ThreeOneSevenBee.Model.Game
             User.CurrentLevel.CurrentExpression = model.Expression.ToString();
             if (ProgressBar.ActivatedStarPercentages().Count() > User.CurrentLevel.Stars)
             {
-                updateBadges();
+                UpdateLevelData();
             }
             if (OnChanged != null)
             {
@@ -104,9 +120,10 @@ namespace ThreeOneSevenBee.Model.Game
             }
         }
 
-        private void updateBadges()
+        private void UpdateLevelData()
         {
             User.CurrentLevel.Stars = ProgressBar.ActivatedStarPercentages().Count();
+            GetNextLevel().Unlocked = true;
             if (User.CurrentLevel.Stars == 3)
             {
                 int numberOfStars = 0;
@@ -140,7 +157,6 @@ namespace ThreeOneSevenBee.Model.Game
             {
                 User.CurrentCategoryIndex++;
                 User.CurrentLevelIndex = 0;
-
             }
             else if (IsLevelCompleted)
             {

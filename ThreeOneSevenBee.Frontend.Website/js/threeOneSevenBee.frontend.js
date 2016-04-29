@@ -203,7 +203,6 @@
                     var levelCategory = new ThreeOneSevenBee.Model.Game.LevelCategory(Bridge.cast(categoryData.name, String));
                     var levelsData = Bridge.as(categoryData.levels, Array);
     
-    
                     $t1 = Bridge.getEnumerator(levelsData);
                     while ($t1.moveNext()) {
                         var levelData = $t1.getCurrent();

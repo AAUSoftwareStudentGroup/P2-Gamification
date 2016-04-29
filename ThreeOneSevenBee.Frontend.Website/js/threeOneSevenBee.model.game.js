@@ -90,6 +90,17 @@
             this.loadGameData();
         },
         f9: function (u) {
+            var unlocked = true;
+            for (var index = 0; index < u.categories.getCount(); index++) {
+                for (var i = 0; i < u.categories.getItem(index).getCount(); i++) {
+                    u.categories.getItem(index).getItem(i).unlocked = unlocked;
+                    if (u.categories.getItem(index).getItem(i).stars === 0 && unlocked === true) {
+                        unlocked = false;
+                        u.currentCategoryIndex = index;
+                        u.currentLevelIndex = 0;
+                    }
+                }
+            }
             this.gameAPI.getPlayers(Bridge.fn.bind(this, function (p) {
                 this.gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
                     onSaveLevel: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f3),
@@ -142,6 +153,17 @@
         getIsGameCompleted: function () {
             return this.getIsCategoryCompleted() && this.getUser().currentCategoryIndex === this.getUser().categories.getCount() - 1;
         },
+        getNextLevel: function () {
+            if (this.getIsGameCompleted() === false) {
+                if (this.getIsCategoryCompleted() === true) {
+                    return this.getUser().categories.getItem(this.getUser().currentCategoryIndex + 1).getItem(0);
+                }
+                else  {
+                    return this.getUser().categories.getItem(this.getUser().currentCategoryIndex).getItem(this.getUser().currentLevelIndex + 1);
+                }
+            }
+            return null;
+        },
         setLevel: function (level, category) {
             var $t;
             this.getUser().currentLevelIndex = level;
@@ -161,7 +183,7 @@
                 this.progressBar.add(starExpressionBase.getSize());
             }
             this.setExprModel(new ThreeOneSevenBee.Model.Expression.ExpressionModel("constructor", this.getUser().categories.getItem(category).getItem(level).currentExpression, Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.GameModel.f2), [Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productToExponentRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).variableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseVariableWithNegativeExponent, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).exponentProduct, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).commonPowerParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseCommonPowerParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).splittingFractions, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productParenthesis, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).reverseProductParenthesis, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).parenthesisPowerRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).fractionToProductRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).squareRootRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).removeParenthesisRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productOfConstantAndFraction, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).factorizeUnaryMinus, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).factorizationRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).multiplyOneRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).addFractionWithCommonDenominatorRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).removeNull, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).multiplyByNull, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).calculateVariadicRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).calculateBinaryRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).multiplyMinusRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).divisionEqualsOneRule, Bridge.get(ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules).productOfFractions]));
-            this.updateBadges();
+            this.updateLevelData();
             this.onExpressionChanged(this.getExprModel());
         },
         restartLevel: function () {
@@ -172,15 +194,16 @@
             this.progressBar.currentValue = model.getExpression().getSize();
             this.getUser().getCurrentLevel().currentExpression = model.getExpression().toString();
             if (Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count() > this.getUser().getCurrentLevel().stars) {
-                this.updateBadges();
+                this.updateLevelData();
             }
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged(this);
             }
         },
-        updateBadges: function () {
+        updateLevelData: function () {
             var $t;
             this.getUser().getCurrentLevel().stars = Bridge.Linq.Enumerable.from(this.progressBar.activatedStarPercentages()).count();
+            this.getNextLevel().unlocked = true;
             if (this.getUser().getCurrentLevel().stars === 3) {
                 var numberOfStars = 0;
                 $t = Bridge.getEnumerator(this.getUser().categories.getItem(this.getUser().currentCategoryIndex));
@@ -208,7 +231,6 @@
                 if (this.getIsCategoryCompleted()) {
                     this.getUser().currentCategoryIndex++;
                     this.getUser().currentLevelIndex = 0;
-    
                 }
                 else  {
                     if (this.getIsLevelCompleted()) {
@@ -253,6 +275,7 @@
         levelIndex: 0,
         categoryIndex: 0,
         stars: 0,
+        unlocked: false,
         config: {
             init: function () {
                 this.descriptions = Bridge.merge(new Bridge.Dictionary$2(Bridge.Int,String)(), [
@@ -288,6 +311,7 @@
         constructor: function (levelID, levelIndex, categoryIndex, startExpression, stars, currentExpression, starExpressions) {
             var $t;
             this.levelID = levelID;
+            this.unlocked = false;
             this.levelIndex = levelIndex;
             this.categoryIndex = categoryIndex;
             this.startExpression = startExpression;

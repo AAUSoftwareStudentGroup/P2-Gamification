@@ -18,6 +18,8 @@ namespace ThreeOneSevenBee.Model.Game
         public int CategoryIndex;
         public int Stars;
 
+        public bool Unlocked;
+
         //Dictionary over lvl_id and level descriptions
         private Dictionary<int, string> descriptions = new Dictionary<int, string>()
         {
@@ -55,6 +57,7 @@ namespace ThreeOneSevenBee.Model.Game
         public Level(int levelID, int levelIndex, int categoryIndex, string startExpression, int stars, string currentExpression, string[] starExpressions)
         {
             LevelID = levelID;
+            Unlocked = false;
             LevelIndex = levelIndex;
             CategoryIndex = categoryIndex;
             StartExpression = startExpression;

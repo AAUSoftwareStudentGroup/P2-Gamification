@@ -153,14 +153,14 @@ namespace ThreeOneSevenBee.Model.UI
                 {   OnClick = () => OnLevelSelect(level),
                     X = levelNumber % (int)Math.Sqrt(numberOfLevels) * 50 + 5,
                     Y = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50 + 5,
-                    BackgroundColor = new Color(40, 130, 120)
+                    BackgroundColor = level.Unlocked ? new Color(40, 130, 120) : new Color(190, 190, 190) 
                 };
                 levelButton.Add(
                     new LabelView((levelNumber + 1).ToString())
                     {
                         Width = levelButton.Width,
                         Height = levelButton.Width * 0.75,
-                        BackgroundColor = new Color(40, 130, 120),
+                        BackgroundColor = level.Unlocked ? new Color(40, 130, 120) : new Color(190, 190, 190),
                         TextColor = new Color(255, 255, 255),
                     });
                 double starsize = levelButton.Width * 0.25;

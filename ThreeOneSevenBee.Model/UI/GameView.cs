@@ -58,9 +58,12 @@ namespace ThreeOneSevenBee.Model.UI
                 },
                 OnLevelSelect = (level) =>
                 {
-                    setContent(levelView);
-                    Update(game);
-                    game.SetLevel(level.LevelIndex, level.CategoryIndex);
+                    if (level.Unlocked)
+                    {
+                        setContent(levelView);
+                        Update(game);
+                        game.SetLevel(level.LevelIndex, level.CategoryIndex);
+                    }
                 },
                 OnExit = () => ReloadGame()
             };
