@@ -105,7 +105,6 @@ namespace ThreeOneSevenBee.Frontend
                 "/api/",
                 new {
                     action = "save_user_level_progress",
-                    debug = 1,
                     level_id = levelID,
                     current_expression = currentExpression,
                     stars = stars,
