@@ -628,6 +628,11 @@
     
     Bridge.define('ThreeOneSevenBee.Model.UI.CategoryCompletionView', {
         inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
+        congratulationView: null,
+        descriptionView: null,
+        badgeView: null,
+        menuButton: null,
+        nextCategory: null,
         config: {
             properties: {
                 Category: null,
@@ -645,53 +650,53 @@
         build: function () {
             var offSetY = 5;
             this.children = new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)();
-            var congratulationView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView("Tillykke !!!"), {
+            this.congratulationView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView("Tillykke !!!"), {
                 setX: (this.getWidth() * 0.5) - ((this.getWidth() * 0.65) / 2),
                 setY: offSetY,
                 setWidth: this.getWidth() * 0.65,
                 setHeight: this.getHeight() * 0.2
             } );
     
-            var descriptionView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView("Du har gennemført kategorien: " + this.getCategory().name), {
-                setX: (this.getWidth() * 0.5) - ((congratulationView.getWidth() * 0.75) * 0.5),
-                setY: offSetY + congratulationView.getHeight(),
-                setWidth: congratulationView.getWidth() * 0.75,
-                setHeight: congratulationView.getHeight() / 2
+            this.descriptionView = Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView("Du har gennemført kategorien: " + this.getCategory().name), {
+                setX: (this.getWidth() * 0.5) - ((this.congratulationView.getWidth() * 0.75) * 0.5),
+                setY: offSetY + this.congratulationView.getHeight(),
+                setWidth: this.congratulationView.getWidth() * 0.75,
+                setHeight: this.congratulationView.getHeight() / 2
             } );
-            this.children.add(congratulationView);
-            this.children.add(descriptionView);
+            this.children.add(this.congratulationView);
+            this.children.add(this.descriptionView);
     
     
     
             var badgeDic = new ThreeOneSevenBee.Model.UI.PlayerListView("constructor$1", this.getWidth(), this.getHeight());
     
-            var badgeView = null;
+            this.badgeView = null;
             if (badgeDic.badgeDictionary.containsKey(this.getCategory().getBadge())) {
-                badgeView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(badgeDic.badgeDictionary.get(this.getCategory().getBadge()), this.getWidth() * 0.25, this.getWidth() * 0.25), {
+                this.badgeView = Bridge.merge(new ThreeOneSevenBee.Model.UI.ImageView(badgeDic.badgeDictionary.get(this.getCategory().getBadge()), this.getWidth() * 0.25, this.getWidth() * 0.25), {
                     setX: this.getWidth() / 2 - ((this.getWidth() * 0.25) / 2),
                     setY: this.getHeight() * 0.4
                 } );
-                this.children.add(badgeView);
+                this.children.add(this.badgeView);
             }
     
-            var MenuButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("Menu", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.CategoryCompletionView.f1)), {
-                setX: badgeView.getX() + (badgeView.getWidth() / 2) - 115,
+            this.menuButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("Menu", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.CategoryCompletionView.f1)), {
+                setX: this.badgeView.getX() + (this.badgeView.getWidth() / 2) - 115,
                 setY: this.getHeight() - 50,
                 setWidth: 105,
                 setHeight: 35,
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 192, 57, 43),
                 setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255)
             } );
-            var nextCategory = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("Næste", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.CategoryCompletionView.f2)), {
-                setX: badgeView.getX() + (badgeView.getWidth() / 2) + 10,
+            this.nextCategory = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("Næste", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.CategoryCompletionView.f2)), {
+                setX: this.badgeView.getX() + (this.badgeView.getWidth() / 2) + 10,
                 setY: this.getHeight() - 50,
                 setWidth: 105,
                 setHeight: 35,
                 setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255),
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130)
             } );
-            this.children.add(MenuButton);
-            this.children.add(nextCategory);
+            this.children.add(this.menuButton);
+            this.children.add(this.nextCategory);
         }
     });
     
@@ -950,6 +955,7 @@
         inherits: [ThreeOneSevenBee.Model.UI.FrameView],
         titleView: null,
         levelView: null,
+        categoryCompletionView: null,
         levelSelectView: null,
         config: {
             properties: {
@@ -960,14 +966,19 @@
         constructor: function (game, width, height) {
             ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
     
+            this.categoryCompletionView = null;
             game.onCategoryCompleted = Bridge.fn.combine(game.onCategoryCompleted, Bridge.fn.bind(this, function (c) {
-                this.setContent(Bridge.merge(new ThreeOneSevenBee.Model.UI.CategoryCompletionView(c), {
-                    setOnNext: function () {
+                this.categoryCompletionView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CategoryCompletionView(c), {
+                    setOnNext: Bridge.fn.bind(this, function () {
                         game.setLevel(0, c.categoryIndex + 1);
-                    },
+                        this.setContent(this.levelView);
+                    }),
                     setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.GameView.f1)
-                } ));
+                } );
+                this.setContent(this.categoryCompletionView);
             }));
+    
+    
     
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
     
@@ -1521,6 +1532,7 @@
             this.identityMenu.update(game.getExprModel().getIdentities(), game.getExprModel());
             this.expression.update$1(game.getExprModel());
             this.nextButton.setBackgroundColor(game.getIsLevelCompleted() ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 190, 190, 190));
+            this.helpButton.setBackgroundColor(game.getUser().getCurrentLevel().description === "" ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 190, 190, 190) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 120, 130));
             this.toolTipView.setText(game.getUser().getCurrentLevel().description);
             if (Bridge.hasValue(this.onChanged)) {
                 this.onChanged();

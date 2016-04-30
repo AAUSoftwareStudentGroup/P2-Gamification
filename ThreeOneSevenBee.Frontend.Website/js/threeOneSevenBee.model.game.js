@@ -168,6 +168,7 @@
             var $t;
             this.getUser().currentLevelIndex = level;
             this.getUser().currentCategoryIndex = category;
+            console.log("Hello Next button");
             var serializer = new ThreeOneSevenBee.Model.Expression.ExpressionSerializer();
             var endValue = serializer.deserialize(Bridge.Linq.Enumerable.from(this.getUser().categories.getItem(category).getItem(level).starExpressions).last()).getSize();
             var startValue = serializer.deserialize(this.getUser().categories.getItem(category).getItem(level).startExpression).getSize();

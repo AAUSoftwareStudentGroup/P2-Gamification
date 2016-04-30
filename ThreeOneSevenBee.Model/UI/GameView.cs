@@ -13,6 +13,7 @@ namespace ThreeOneSevenBee.Model.UI
     {
         TitleView titleView;
         LevelView levelView;
+        CategoryCompletionView categoryCompletionView;
         LevelSelectView levelSelectView;
 
         public Action OnExit { get; set; }
@@ -31,14 +32,18 @@ namespace ThreeOneSevenBee.Model.UI
 
         public GameView(GameModel game, double width, double height) : base(width, height)
         {
-            game.OnCategoryCompleted += (c) => 
-            setContent(
-                new CategoryCompletionView(c)
+            categoryCompletionView = null;
+            game.OnCategoryCompleted += (c) =>
+            {
+                categoryCompletionView = new CategoryCompletionView(c)
                 {
-                    OnNext = () => game.SetLevel(0, c.categoryIndex + 1),
+                    OnNext = () => { game.SetLevel(0, c.categoryIndex + 1); setContent(levelView); },
                     OnExit = () => ReloadGame(),
-                }
-            );
+                };
+                setContent(categoryCompletionView);
+            };
+
+
 
             BackgroundColor = new Color(255, 255, 255);
 

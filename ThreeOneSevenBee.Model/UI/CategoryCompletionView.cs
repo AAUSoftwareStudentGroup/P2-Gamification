@@ -12,6 +12,13 @@ namespace ThreeOneSevenBee.Model.UI
         public Action NextCategory { get; set; }
         public Action OnExit { get; set; }
         public Action OnNext { get; set; }
+
+        private LabelView congratulationView;
+        private LabelView descriptionView;
+        private ImageView badgeView;
+        private ButtonView MenuButton;
+        private ButtonView nextCategory;
+
         public CategoryCompletionView(LevelCategory category) : base(600, 400)
         {
             this.Category = category;
@@ -22,7 +29,7 @@ namespace ThreeOneSevenBee.Model.UI
         {
             int offSetY = 5;
             Children = new List<View>();
-            LabelView congratulationView = new LabelView("Tillykke !!!")
+            congratulationView = new LabelView("Tillykke !!!")
             {
                 X = (Width * 0.5) - ((this.Width * 0.65) / 2),
                 Y = offSetY,
@@ -30,7 +37,7 @@ namespace ThreeOneSevenBee.Model.UI
                 Height = this.Height * 0.20
             };
 
-            LabelView descriptionView = new LabelView("Du har gennemført kategorien: " + Category.Name)
+            descriptionView = new LabelView("Du har gennemført kategorien: " + Category.Name)
             {
                 X = (Width * 0.5) - ((congratulationView.Width * 0.75) * 0.5),
                 Y = offSetY + congratulationView.Height,
@@ -44,7 +51,7 @@ namespace ThreeOneSevenBee.Model.UI
 
             PlayerListView badgeDic = new PlayerListView(Width, Height);
 
-            ImageView badgeView = null;
+            badgeView = null;
             if (badgeDic.badgeDictionary.ContainsKey(Category.Badge))
             {
                 badgeView = new ImageView(badgeDic.badgeDictionary[Category.Badge], Width * 0.25, Width * 0.25)
@@ -55,7 +62,7 @@ namespace ThreeOneSevenBee.Model.UI
                 Children.Add(badgeView);
             }
 
-            ButtonView MenuButton = new ButtonView("Menu", () => { if (OnExit != null) OnExit(); })
+            MenuButton = new ButtonView("Menu", () => { if (OnExit != null) OnExit(); })
             {
                 X = badgeView.X + (badgeView.Width / 2) - 115,
                 Y = Height - 50,
@@ -64,7 +71,7 @@ namespace ThreeOneSevenBee.Model.UI
                 BackgroundColor = new Color(192, 57, 43),
                 TextColor = new Color(255, 255, 255)
             };
-            ButtonView nextCategory = new ButtonView("Næste", () => { if (OnNext != null) OnNext(); })
+            nextCategory = new ButtonView("Næste", () => { if (OnNext != null) OnNext(); })
             {
                 X = badgeView.X + (badgeView.Width / 2) + 10,
                 Y = Height - 50,
@@ -76,6 +83,5 @@ namespace ThreeOneSevenBee.Model.UI
             Children.Add(MenuButton);
             Children.Add(nextCategory);
         }
-
     }
 }

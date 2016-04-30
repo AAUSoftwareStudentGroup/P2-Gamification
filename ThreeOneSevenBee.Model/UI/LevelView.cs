@@ -135,6 +135,7 @@ namespace ThreeOneSevenBee.Model.UI
             identityMenu.Update(game.ExprModel.Identities, game.ExprModel);
             expression.Update(game.ExprModel);
             nextButton.BackgroundColor = game.IsLevelCompleted ? new Color(40, 120, 130) : new Color(190, 190, 190);
+            helpButton.BackgroundColor = game.User.CurrentLevel.Description == "" ? new Color(190, 190, 190) : new Color(40, 120, 130);
             toolTipView.Text = game.User.CurrentLevel.Description;
             if (OnChanged != null)
             {
