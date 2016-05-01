@@ -18,10 +18,13 @@ namespace ThreeOneSevenBee.Model.UI
         private ImageView badgeView;
         private ButtonView MenuButton;
         private ButtonView nextCategory;
+        private bool isLastCategory;
+        
 
-        public CategoryCompletionView(LevelCategory category) : base(600, 400)
+        public CategoryCompletionView(LevelCategory category, bool isLastCategory) : base(600, 400)
         {
             this.Category = category;
+            this.isLastCategory = isLastCategory;
             Build();
         }
 
@@ -37,7 +40,7 @@ namespace ThreeOneSevenBee.Model.UI
                 Height = this.Height * 0.20
             };
 
-            descriptionView = new LabelView("Du har gennemført kategorien: " + Category.Name)
+            descriptionView = new LabelView("Du har gennemført kategorien: " + Category.Name + (isLastCategory ? " \nog dermed gennemført hele spillet!" : ""))
             {
                 X = (Width * 0.5) - ((congratulationView.Width * 0.75) * 0.5),
                 Y = offSetY + congratulationView.Height,
@@ -71,17 +74,20 @@ namespace ThreeOneSevenBee.Model.UI
                 BackgroundColor = new Color(192, 57, 43),
                 TextColor = new Color(255, 255, 255)
             };
-            nextCategory = new ButtonView("Næste", () => { if (OnNext != null) OnNext(); })
+            if (isLastCategory == false)
             {
-                X = badgeView.X + (badgeView.Width / 2) + 10,
-                Y = Height - 50,
-                Width = 105,
-                Height = 35,
-                TextColor = new Color(255, 255, 255),
-                BackgroundColor = new Color(40, 120, 130)
-            };
+                nextCategory = new ButtonView("Næste", () => { if (OnNext != null) OnNext(); })
+                {
+                    X = badgeView.X + (badgeView.Width / 2) + 10,
+                    Y = Height - 50,
+                    Width = 105,
+                    Height = 35,
+                    TextColor = new Color(255, 255, 255),
+                    BackgroundColor = new Color(40, 120, 130)
+                };
+                Children.Add(nextCategory);
+            }
             Children.Add(MenuButton);
-            Children.Add(nextCategory);
         }
     }
 }

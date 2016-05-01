@@ -24,28 +24,28 @@ namespace ThreeOneSevenBee.Model.Game
         private Dictionary<int, string> descriptions = new Dictionary<int, string>()
         {
             //Tutorial
-            { 109, "For at lægge to, eller flere, elementer sammen, skal der trykkes på de elementer, \n der ønskes sammenlagt. Det samme gælder for gange og minus." },
-            { 128, "For at udregne potensudtryk, trykkes på grundtallet (nederste del) \n og eksponenten (øverste del)." },
-            { 129, "For at fjerne et udtryks parentes (hvis det er muligt), \n trykkes på parentesen." },
-            { 131, "Hvis tæller og nævner i en brøk, har samme værdi, \n kan det omskrives til 1, ved at trykke på brøkstregen." },
-            { 88, "For at gange et udtryk ind i en brøk, \n trykkes på udtrykket og brøkstregen." },
-            { 60, "For at lægge to, eller flere, brøker sammen, \n trykkes der på begge (alle) brøkstreger. \n For at splitte dem igen, trykkes der igen på brøkstregen." },
-            { 147, "For at gange et udtryk med en parentes, \n trykkes på udtrykket og paretesen." },
-            { 112, "Hvis to, eller flere, potensudtryk har samme eksponent, \n og er ganget sammen, kan der enten trykkes på eksponenterne eller på grundtallene." },
-            { 56, "Hvis der er ens udtryk i flere led, kan man markere de ens variable/tal, \n for at trække dem uden for en parentes." },
+            { 109, "For at lægge to, eller flere, elementer sammen,\n skal der trykkes på de elementer,\n  der ønskes sammenlagt. Det samme gælder\n for gange og minus." },
+            { 128, "For at udregne potensudtryk, trykkes på\n grundtallet (nederste del) og\n eksponenten (øverste del)." },
+            { 129, "For at fjerne et udtryks parentes (hvis det  er muligt),\n  trykkes på parentesen." },
+            { 131, "Hvis tæller og nævner i en brøk, har samme værdi,\n  kan det omskrives til 1,\n ved at trykke på brøkstregen." },
+            { 88, "For at gange et udtryk ind i en brøk,  trykkes\n på udtrykket og brøkstregen." },
+            { 60, "For at lægge to, eller flere, brøker sammen,\n  trykkes der på begge (alle) brøkstreger.\n  For at splitte dem igen, trykkes der igen på brøkstregen." },
+            { 147, "For at gange et udtryk med en parentes,\n  trykkes på udtrykket og paretesen." },
+            { 112, "Hvis to, eller flere, potensudtryk har samme eksponent,\n  og er ganget sammen, kan der enten trykkes\n på eksponenterne eller på grundtallene." },
+            { 56, "Hvis der er ens udtryk i flere led,\n kan man markere de ens variable/tal,\n  for at trække dem uden for en parentes." },
 
             //Parentes
-            { 95, "Parentesen udregnes først, derefter ganges resultatet." },
-            { 113, "Parentesen udregnes først, derefter ganges resultatet." },
-            { 136, "Når der kun er gangetegn i en parentes, kan den ophæves." },
-            { 118, "Minusparentes skal ophæves, derefter ganges parenteserne. \n Til sidst udregnes udtrykket." },
+            { 95, "Parentesen udregnes først,\n derefter ganges resultatet." },
+            { 113, "Parentesen udregnes først,\n derefter ganges resultatet." },
+            { 136, "Hvis indholdet i en parentes er et produkt\n kan det ophæves hvis det indgår i et produkt." },
+            { 118, "Minusparentes skal ophæves,\n derefter ganges (-1) ind i parentesen." },
 
             //Potenser
-            { 89, "Et grundtal opløftet i 1., er altid grundtallet selv: n^1 = n." },
-            { 125, "Et grundtal opløftet i 0., er altid 1: n^0 = 1." },
-            { 90, "Hvis et grundtal er opløftet i to, eller flere, eksponenter, \n laves det om til én eksponent, som består af alle eksponenter ganget sammen: (n^2)^3 = n^2*3 = n^6" },
-            { 9, "Hvis grundtallet for to potenser ganget sammen er ens, \n kan eksponenterne lægges sammen, ved at trykke på begge grundtal, eller begge eksponenter." },
-            { 138, "For at omskrive en kvadratrod, trykkes på kvadratroden. " },
+            { 89, "Et grundtal opløftet i 1.,\n er altid grundtallet selv: n^1 = n." },
+            { 125, "Et grundtal opløftet i 0.,\n er altid 1: n^0 = 1." },
+            { 90, "Hvis et grundtal er opløftet i to,\n eller flere, eksponenter,\n  laves det om til én eksponent,\n som består af alle eksponenter ganget\n sammen: (n^2)^3 = n^2*3 = n^6" },
+            { 9, "Hvis grundtallet for to potenser ganget sammen er ens,\n kan eksponenterne lægges sammen,\n ved at trykke på begge grundtal,\n eller begge eksponenter." },
+            { 138, "For at omskrive en kvadratrod,\n trykkes på kvadratroden. " },
         };
 
         public Level(string startExpression, string currentExpression, int stars, string[] starExpressions) : this(-1, -1, -1, startExpression, stars, currentExpression, starExpressions)

@@ -461,10 +461,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
         public static ExpressionBase ReverseCommonPowerParenthesisRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
-            if (selection.Count != 2)
-            {
-                return null;
-            }
             var binaryExpression = expression as BinaryOperatorExpression;
             List<ExpressionBase> itemsInParenthesis = new List<ExpressionBase>();
             VariadicOperatorExpression suggestion;

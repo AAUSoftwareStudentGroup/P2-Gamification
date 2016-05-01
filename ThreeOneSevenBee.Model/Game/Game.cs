@@ -41,6 +41,7 @@ namespace ThreeOneSevenBee.Model.Game
                             else
                             {
                                 loginView.ShowLoginError();
+                                context.Draw();
                             }
                         });
                     };

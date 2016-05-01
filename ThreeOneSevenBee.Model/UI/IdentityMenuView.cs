@@ -23,7 +23,7 @@ namespace ThreeOneSevenBee.Model.UI
                 FrameView frameView = new FrameView((Width - 20 * (identities.Count - 1)) / identities.Count, Height, view, 4)
                 {
                     PropagateClick = false,
-                    BackgroundColor = new Color(240, 240, 240)
+                    BackgroundColor = new Color(230, 230, 230)
                 };
                 frameView.X = x;
                 x += frameView.Width + 20;

@@ -47,6 +47,22 @@ namespace ThreeOneSevenBee.Model.Game
             }
         }
 
+        public bool IsLastCategory
+        {
+            get
+            {
+                return User.CurrentCategoryIndex == User.Categories.Count - 1;
+            }
+        }
+
+        public bool IsLastLevel
+        {
+            get
+            {
+                return IsLastCategory && User.CurrentLevelIndex == User.Categories[User.CurrentCategoryIndex].Count - 1;
+            }
+        }
+
         public Level GetNextLevel()
         {
             if(IsGameCompleted == false)

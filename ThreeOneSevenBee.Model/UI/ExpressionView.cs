@@ -15,13 +15,15 @@ namespace ThreeOneSevenBee.Model.UI
     public class ExpressionView : FrameView
     {
         public static double NUMVAR_SIZE = 20;
+        public Color SelectionBackgroundColor;
+        public Color SelectionTextColor;
         public View BuildView(ExpressionBase expression, ExpressionModel model)
         {
             UnaryMinusExpression minusExpression = expression as UnaryMinusExpression;
             if(minusExpression != null)
             {
                 View view = BuildView(minusExpression.Expression, model);
-                view.BackgroundColor = ReferenceEquals(model.Selected, expression) ? new Color(240, 240, 240) : new Color(); 
+                view.BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color(); 
                 OperatorView operatorView = new OperatorView(minusExpression.Type);
                 operatorView.Width = NUMVAR_SIZE / 2;
                 operatorView.Height = NUMVAR_SIZE;
@@ -33,7 +35,7 @@ namespace ThreeOneSevenBee.Model.UI
                 operatorView.Y = view.Baseline - operatorView.Baseline;
                 View minusView = new CompositeView(operatorView.Width + view.Width, view.Height) { operatorView, view };
                 minusView.Baseline = view.Baseline;
-                minusView.BackgroundColor = ReferenceEquals(model.Selected, expression) ? new Color(240, 240, 240) : new Color();
+                minusView.BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color();
                 return minusView;
             }
             BinaryOperatorExpression operatorExpression = expression as BinaryOperatorExpression;
@@ -63,7 +65,7 @@ namespace ThreeOneSevenBee.Model.UI
                             right
                         };
                         fraction.Baseline = operatorView.Y + operatorView.Height / 2;
-                        fraction.BackgroundColor = ReferenceEquals(model.Selected, expression) ? new Color(240, 240, 240) : new Color();
+                        fraction.BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color();
                         return fraction;
                     case OperatorType.Power:
                         right.X = left.Width;
@@ -74,7 +76,7 @@ namespace ThreeOneSevenBee.Model.UI
                             right
                         };
                         exponent.Baseline = left.Y + left.Baseline;
-                        exponent.BackgroundColor = ReferenceEquals(model.Selected, expression) ? new Color(240, 240, 240) : new Color();
+                        exponent.BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color();
                         return exponent;
                 }
             }
@@ -96,10 +98,10 @@ namespace ThreeOneSevenBee.Model.UI
                         {
                             operatorView = new OperatorView(OperatorType.Subtract);
                             operand = BuildView(minus.Expression, model);
-                            operand.BackgroundColor = ReferenceEquals(model.Selected, expr) ? new Color(240, 240, 240) : new Color();
+                            operand.BackgroundColor = ReferenceEquals(model.Selected, expr) ? SelectionBackgroundColor : new Color();
                             operatorView.BackgroundColor = operand.BackgroundColor;
                             operatorView.OnClick = () => model.Select(minus);
-                            operatorView.LineColor = minus.Selected ? new Color(40, 175, 100) : new Color(0, 0, 0);
+                            operatorView.LineColor = minus.Selected ? SelectionTextColor : new Color(0, 0, 0);
                         }
                         else
                         {
@@ -120,7 +122,7 @@ namespace ThreeOneSevenBee.Model.UI
                     }
                     if (ReferenceEquals(expr.Parent, model.Selected) && (expr.Selected || expr.GetNodesRecursive().Any((n) => n.Selected)))
                     {
-                        operand.BackgroundColor = new Color(240, 240, 240);
+                        operand.BackgroundColor = SelectionBackgroundColor;
                     }
 
                     maxBaseline = System.Math.Max(maxBaseline, operand.Baseline);
@@ -152,10 +154,10 @@ namespace ThreeOneSevenBee.Model.UI
                 };
                 left.LineWidth = NUMVAR_SIZE / 15;
                 right.LineWidth = NUMVAR_SIZE / 15;
-                left.LineColor = expression.Selected ? new Color(40, 175, 100) : new Color(0, 0, 0);
-                right.LineColor = expression.Selected ? new Color(40, 175, 100) : new Color(0, 0, 0);
+                left.LineColor = expression.Selected ? SelectionTextColor : new Color(0, 0, 0);
+                right.LineColor = expression.Selected ? SelectionTextColor : new Color(0, 0, 0);
                 compositeView.Baseline = view.Y + view.Baseline;
-                compositeView.BackgroundColor = ReferenceEquals(model.Selected, expression) ? new Color(240, 240, 240) : new Color();
+                compositeView.BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color();
                 return compositeView;
             }
             FunctionExpression functionExpression = expression as FunctionExpression;
@@ -168,7 +170,7 @@ namespace ThreeOneSevenBee.Model.UI
                 sqrtView.TopHeight = NUMVAR_SIZE / 2;
                 sqrtView.LineWidth = NUMVAR_SIZE / 12;
                 sqrtView.Width = view.Width + sqrtView.SignWidth + NUMVAR_SIZE / 4;
-                sqrtView.LineColor = expression.Selected ? new Color(40, 175, 100) : new Color(0, 0, 0);
+                sqrtView.LineColor = expression.Selected ? SelectionTextColor : new Color(0, 0, 0);
                 sqrtView.Height = view.Height + sqrtView.TopHeight;
                 view.X = sqrtView.SignWidth + NUMVAR_SIZE / 8;
                 view.Y = sqrtView.TopHeight;
@@ -178,7 +180,7 @@ namespace ThreeOneSevenBee.Model.UI
                     view,
                 };
                 compositeView.Baseline = view.Baseline + sqrtView.TopHeight;
-                compositeView.BackgroundColor = ReferenceEquals(model.Selected, expression) ? new Color(240, 240, 240) : new Color();
+                compositeView.BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color();
                 return compositeView;
             }
             return new LabelView(expression.ToString())
@@ -188,7 +190,7 @@ namespace ThreeOneSevenBee.Model.UI
                 Height = NUMVAR_SIZE,
                 Baseline = NUMVAR_SIZE / 2,
                 TextColor = expression.Selected ? new Color(39, 174, 97) : new Color(0, 0, 0),
-                BackgroundColor = ReferenceEquals(model.Selected, expression) ? new Color(240, 240, 240) : new Color()
+                BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color()
         };
         }
 
@@ -219,6 +221,8 @@ namespace ThreeOneSevenBee.Model.UI
         public ExpressionView(ExpressionModel model, double width, double height, double maxScale) : base(width, height)
         {
             MaxScale = maxScale;
+            SelectionTextColor = new Color(40, 175, 100);
+            SelectionBackgroundColor = new Color(230, 230, 230);
             Build(model);
         }
     }

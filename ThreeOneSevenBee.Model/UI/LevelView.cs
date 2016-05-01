@@ -38,7 +38,7 @@ namespace ThreeOneSevenBee.Model.UI
                 X = Width - 100,
                 Width = 100,
                 Height = 50,
-                BackgroundColor = game.IsLevelCompleted ? new Color(40, 120, 130) : new Color(190, 190, 190),
+                BackgroundColor = game.IsLastLevel || game.IsLevelCompleted == false ? new Color(190, 190, 190) : new Color(40, 120, 130),
                 TextColor = new Color(255, 255, 255),
             };
 
@@ -50,7 +50,7 @@ namespace ThreeOneSevenBee.Model.UI
                 BackgroundColor = new Color(192, 57, 43)
             };
 
-            toolTipView = new ToolTipView(game.User.CurrentLevel.Description, 300, 50)
+            toolTipView = new ToolTipView(game.User.CurrentLevel.Description, 300, 100)
             {
                 X = Width - 300,
                 Y = 50,
@@ -134,9 +134,11 @@ namespace ThreeOneSevenBee.Model.UI
             progressbar.Update(game.ProgressBar);
             identityMenu.Update(game.ExprModel.Identities, game.ExprModel);
             expression.Update(game.ExprModel);
-            nextButton.BackgroundColor = game.IsLevelCompleted ? new Color(40, 120, 130) : new Color(190, 190, 190);
+            nextButton.BackgroundColor = game.IsLastLevel || game.IsLevelCompleted == false ? new Color(190, 190, 190) : new Color(40, 120, 130);
             helpButton.BackgroundColor = game.User.CurrentLevel.Description == "" ? new Color(190, 190, 190) : new Color(40, 120, 130);
             toolTipView.Text = game.User.CurrentLevel.Description;
+            toolTipView.Visible = false;
+            helpButton.Text = "?";
             if (OnChanged != null)
             {
                 OnChanged();

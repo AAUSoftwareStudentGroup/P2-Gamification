@@ -35,9 +35,16 @@ namespace ThreeOneSevenBee.Model.UI
             categoryCompletionView = null;
             game.OnCategoryCompleted += (c) =>
             {
-                categoryCompletionView = new CategoryCompletionView(c)
+                categoryCompletionView = new CategoryCompletionView(c, game.IsLastCategory)
                 {
-                    OnNext = () => { game.SetLevel(0, c.categoryIndex + 1); setContent(levelView); },
+                    OnNext = () => 
+                    {
+                        if (game.IsLastCategory == false)
+                        {
+                            game.SetLevel(0, c.categoryIndex + 1);
+                            setContent(levelView);
+                        }
+                    },
                     OnExit = () => ReloadGame(),
                 };
                 setContent(categoryCompletionView);
@@ -58,8 +65,11 @@ namespace ThreeOneSevenBee.Model.UI
                 },
                 OnNextLevel = () =>
                 {
-                    game.SaveLevel();
-                    game.NextLevel();
+                    if (game.IsLastLevel == false)
+                    {
+                        game.SaveLevel();
+                        game.NextLevel();
+                    }
                 }
             };
 

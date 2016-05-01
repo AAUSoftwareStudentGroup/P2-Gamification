@@ -117,7 +117,7 @@ namespace ThreeOneSevenBee.Frontend
             string[] lines = text.Split('\n');
             context.TextBaseline = CanvasTypes.CanvasTextBaselineAlign.Middle;
             context.FillStyle = ColorToString(textColor);
-            double minFontSize = height;
+            double minFontSize = height / lines.Length;
 
             foreach (string line in lines)
             {

@@ -361,9 +361,6 @@
             },
             reverseCommonPowerParenthesisRule: function (expression, selection) {
                 var $t, $t1;
-                if (selection.getCount() !== 2) {
-                    return null;
-                }
                 var binaryExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
                 var itemsInParenthesis = new Bridge.List$1(ThreeOneSevenBee.Model.Expression.ExpressionBase)();
                 var suggestion;

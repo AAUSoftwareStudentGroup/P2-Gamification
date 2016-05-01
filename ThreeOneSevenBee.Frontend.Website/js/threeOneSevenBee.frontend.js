@@ -128,7 +128,7 @@
             var lines = text.split(String.fromCharCode(10));
             this.context.textBaseline = "middle";
             this.context.fillStyle = this.colorToString(textColor);
-            var minFontSize = height;
+            var minFontSize = height / lines.length;
     
             $t = Bridge.getEnumerator(lines);
             while ($t.moveNext()) {
