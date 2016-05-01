@@ -792,11 +792,11 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
             if (variadicExpression[0].ToString() == "0" || variadicExpression[0].ToString() == "-{0}")
             {
-                return variadicExpression[1];
+                return variadicExpression[1].Clone();
             }
             else if (variadicExpression[1].ToString() == "0" || variadicExpression[1].ToString() == "-{0}")
             {
-                return variadicExpression[0];
+                return variadicExpression[0].Clone();
             }
             else
             {

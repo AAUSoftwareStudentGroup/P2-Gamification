@@ -618,11 +618,11 @@
                 }
     
                 if (variadicExpression.getItem(0).toString() === "0" || variadicExpression.getItem(0).toString() === "-{0}") {
-                    return variadicExpression.getItem(1);
+                    return variadicExpression.getItem(1).clone();
                 }
                 else  {
                     if (variadicExpression.getItem(1).toString() === "0" || variadicExpression.getItem(1).toString() === "-{0}") {
-                        return variadicExpression.getItem(0);
+                        return variadicExpression.getItem(0).clone();
                     }
                     else  {
                         return null;
