@@ -1581,7 +1581,6 @@
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
     
             var username = new ThreeOneSevenBee.Model.UI.Inputbox("constructor", "Username");
-            username.setText("Morten R");
             username.setX(75);
             username.setY(100);
             username.setWidth(450);
@@ -1589,7 +1588,6 @@
             username.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var password = new ThreeOneSevenBee.Model.UI.Inputbox("constructor$1", "Password", true);
-            password.setText("morten");
             password.setX(75);
             password.setY(160);
             password.setWidth(450);
