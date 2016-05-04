@@ -79,7 +79,13 @@ namespace ThreeOneSevenBee.Model.UI
                 {
                     OnLogout();
                 }
-            });
+            })
+            {
+                Width = 50,
+                Height = 15,
+                TextColor = new Color(255, 255, 255),
+                BackgroundColor = new Color(193, 57, 43)
+            };
 
             playIcon.BackgroundColor = new Color(255, 255, 255);
             PlayButton = new CompositeView(100, 100)
@@ -144,6 +150,7 @@ namespace ThreeOneSevenBee.Model.UI
             };
 
             Children = new List<View>(){
+                LogoutButton,
                 WelcomeText,
                 LevelButton,
                 PlayerList,

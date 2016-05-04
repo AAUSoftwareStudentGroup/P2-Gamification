@@ -1578,7 +1578,10 @@
             ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
     
     
+            this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
+    
             var username = new ThreeOneSevenBee.Model.UI.Inputbox("constructor", "Username");
+            username.setText("Morten R");
             username.setX(75);
             username.setY(100);
             username.setWidth(450);
@@ -1586,6 +1589,7 @@
             username.setAlign(ThreeOneSevenBee.Model.UI.TextAlignment.left);
     
             var password = new ThreeOneSevenBee.Model.UI.Inputbox("constructor$1", "Password", true);
+            password.setText("morten");
             password.setX(75);
             password.setY(160);
             password.setWidth(450);
@@ -1828,7 +1832,12 @@
                 [25, 75]
             ] );
     
-            this.logoutButton = new ThreeOneSevenBee.Model.UI.ButtonView("Log ud", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.TitleView.f1));
+            this.logoutButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("Log ud", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.TitleView.f1)), {
+                setWidth: 50,
+                setHeight: 15,
+                setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255),
+                setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 193, 57, 43)
+            } );
     
             playIcon.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
             this.playButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(100, 100), [
@@ -1886,6 +1895,7 @@
             } );
     
             this.children = Bridge.merge(new Bridge.List$1(ThreeOneSevenBee.Model.UI.View)(), [
+                [this.logoutButton],
                 [this.welcomeText],
                 [this.levelButton],
                 [this.playerList],
