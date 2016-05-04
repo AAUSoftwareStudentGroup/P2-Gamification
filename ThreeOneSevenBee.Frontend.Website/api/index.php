@@ -325,8 +325,9 @@ class API {
                         $level_id,
                         $user_id
             );
-            $db->query("INSERT INTO gamedb.user_level_progress (user_id,level_id,progress,stars)
-                        VALUES (?,?,?,?);",
+
+            $db->query("INSERT INTO gamedb.user_level_progress (user_id,level_id,progress,stars,updated_at)
+                        VALUES (?,?,?,?,UNIX_TIMESTAMP());",
                         $user_id,
                         $level_id,
                         $state,
