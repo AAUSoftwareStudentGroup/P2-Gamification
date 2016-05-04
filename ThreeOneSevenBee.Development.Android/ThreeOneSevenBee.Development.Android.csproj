@@ -66,6 +66,13 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\Icon.png" />
+    <AndroidResource Include="Resources\drawable\brøkbadge.png" />
+    <AndroidResource Include="Resources\drawable\master_of_algebrabadge.png" />
+    <AndroidResource Include="Resources\drawable\parenthesis_badge_V3.png" />
+    <AndroidResource Include="Resources\drawable\tutorial_badge.png" />
+    <AndroidResource Include="Resources\drawable\potens_badge_V2.png" />
+    <AndroidResource Include="Resources\drawable\star.png" />
+    <AndroidResource Include="Resources\drawable\star_activated.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

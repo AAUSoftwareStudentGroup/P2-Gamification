@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
+using Android;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -12,26 +14,75 @@ using Android.Widget;
 using ThreeOneSevenBee.Model.Euclidean;
 using ThreeOneSevenBee.Model.UI;
 using Android.Graphics;
+using Android.Views.InputMethods;
+using Android.InputMethodServices;
+using Android.Text;
 
 namespace ThreeOneSevenBee.AndroidFrontend
 {
-    public class AndroidContext : A.View, IContext
+    public class AndroidContext : EditText, IContext
     {
-        View contentView;
+        FrameView contentView;
         Canvas canvas;
+        InputMethodManager input;
         double width, height;
+        Dictionary<string, Bitmap> imageCache;
 
-        public AndroidContext(Android.Content.Context context, double width, double height) : base(context)
+        public Action<double, double> OnResize { get; set; }
+
+        public AndroidContext(Android.Content.Context context, InputMethodManager input, double width, double height) : base(context)
         {
             contentView = null;
             this.width = width;
             this.height = height;
+            this.input = input;
+
+            imageCache = new Dictionary<string, Bitmap>()
+            {
+                {"icon.png", BitmapFactory.DecodeResource(Resources, Resource.Drawable.Icon) },
+                {"brøkbadge.png", BitmapFactory.DecodeResource(Resources, Resource.Drawable.brokbadge) },
+                {"master_of_algebrabadge.png", BitmapFactory.DecodeResource(Resources, Resource.Drawable.master_of_algebrabadge) },
+                {"parenthesis_badge.png", BitmapFactory.DecodeResource(Resources, Resource.Drawable.parenthesis_badge) },
+                {"star.png", BitmapFactory.DecodeResource(Resources, Resource.Drawable.star) },
+                {"star_activated.png", BitmapFactory.DecodeResource(Resources, Resource.Drawable.star_activated) },
+                {"tutorial_badge.png", BitmapFactory.DecodeResource(Resources, Resource.Drawable.tutorial_badge) },
+                {"restart.png", BitmapFactory.DecodeResource(Resources, Resource.Drawable.restart) },
+                {"potens_badge.png", BitmapFactory.DecodeResource(Resources, Resource.Drawable.potens_badge) }
+            };
+
+            Text = "";
+            Append("webmat");
+            this.TextChanged += (obj, args) =>
+            {
+                Console.WriteLine(this.Text);
+                if (args.Text.ToString() == "webma")
+                {
+                    contentView.KeyPressed("Back", this);
+                    Text = "";
+                    Append("webmat");
+                }
+                else if(args.Text.ToString().Length > "webmat".Length)
+                {
+                    contentView.KeyPressed(args.Text.Last() + "", this);
+                    Text = "";
+                    Append("webmat");
+                }
+            };
         }
 
         public override bool OnTouchEvent(A.MotionEvent e)
         {
-            contentView.Click(e.GetX(), e.GetY());
-            return base.OnTouchEvent(e);
+            contentView.Click(e.GetX(), e.GetY(), this);
+            if (contentView.Active)
+            {
+                input.ShowSoftInput(this, ShowFlags.Forced);
+            }
+            else
+            {
+                input.HideSoftInputFromWindow(this.WindowToken, 0);
+            }
+            Draw();
+            return false;
         }
 
         public override void Draw(Canvas canvas)
@@ -93,10 +144,10 @@ namespace ThreeOneSevenBee.AndroidFrontend
             Paint paint = new Paint();
             paint.Color = new Android.Graphics.Color((byte)fillColor.Red, (byte)fillColor.Green, (byte)fillColor.Blue, (byte)(fillColor.Alpha * 255));
             paint.StrokeWidth = (float)lineWidth;
-            paint.SetStyle(Paint.Style.Fill);
+            paint.SetStyle(Android.Graphics.Paint.Style.Fill);
             canvas.DrawPath(polygonPath, paint);
             paint.Color = new Android.Graphics.Color((byte)lineColor.Red, (byte)lineColor.Green, (byte)lineColor.Blue, (byte)(lineColor.Alpha * 255));
-            paint.SetStyle(Paint.Style.Stroke);
+            paint.SetStyle(Android.Graphics.Paint.Style.Stroke);
             canvas.DrawPath(polygonPath, paint);
         }
 
@@ -112,25 +163,70 @@ namespace ThreeOneSevenBee.AndroidFrontend
             canvas.DrawRect((float)x, (float)y, (float)(x + width), (float)(y + height), paint);
         }
 
-        public void DrawText(double x, double y, double width, double height, string text, Model.UI.Color textColor)
+        public void DrawText(double x, double y, double width, double height, string text, Model.UI.Color textColor, Model.UI.TextAlignment alignment)
         {
             Paint paint = new Paint();
-            paint.TextAlign = Paint.Align.Center;
-            paint.TextSize = (float)(height);
-            if(paint.MeasureText(text) > width)
+            switch (alignment)
             {
-                paint.TextSize *= (float)(width / paint.MeasureText(text));
+                case Model.UI.TextAlignment.Left:
+                    paint.TextAlign = Android.Graphics.Paint.Align.Left;
+                    break;
+                case Model.UI.TextAlignment.Right:
+                    paint.TextAlign = Android.Graphics.Paint.Align.Right;
+                    break;
+                case Model.UI.TextAlignment.Centered:
+                    paint.TextAlign = Android.Graphics.Paint.Align.Center;
+                    break;
+                default:
+                    break;
             }
-            paint.AntiAlias = true;
             
+            string[] lines = text.Split('\n');
+            double minFontSize = height / lines.Length;
+            paint.AntiAlias = true;
             paint.Color = new Android.Graphics.Color((byte)textColor.Red, (byte)textColor.Green, (byte)textColor.Blue, (byte)(textColor.Alpha * 255));
-            canvas.DrawText(text, (float)(x + width / 2), (float)(y + height / 2 + paint.TextSize / 2), paint);
+            foreach (string line in lines)
+            {
+                paint.TextSize = (float)(height/ lines.Length);
+                if (paint.MeasureText(line) > width)
+                {
+                    minFontSize = Math.Min(minFontSize, width / paint.MeasureText(line) * (height / lines.Length));
+                }
+            }
+            paint.TextSize = (float)minFontSize;
+            for (int index = 0; index < lines.Length; index++)
+            {
+                canvas.DrawText(lines[index], (float)(x + (alignment == Model.UI.TextAlignment.Centered ? width / 2 : 0)), (float)(y + height - paint.Descent() - ((height / lines.Length) * (0.5 - index + lines.Length - 1) - paint.TextSize / 2)), paint);
+            }
+
         }
 
-        public void SetContentView(Model.UI.View view)
+        public void SetContentView(Model.UI.FrameView view)
         {
             contentView = view;
-            Invalidate();
+            Draw();
+        }
+
+        public void DrawPNGImage(string fileName, double x, double y, double width, double height)
+        {
+            Paint paint = new Paint();
+            paint.AntiAlias = true;
+            
+            canvas.DrawBitmap(imageCache[fileName], null, new Rect((int)x, (int)y, (int)(x + width), (int)(y + height)), paint);
+        }
+
+        public Vector2 GetTextDimensions(string text, double maxWidth, double maxHeight)
+        {
+            Paint paint = new Paint();
+            double minFontSize = maxHeight;
+            paint.AntiAlias = true;
+            paint.TextAlign = Android.Graphics.Paint.Align.Left;
+            paint.TextSize = (float)minFontSize;
+            if (paint.MeasureText(text) > maxWidth)
+            {
+                minFontSize = Math.Min(minFontSize, maxWidth / paint.MeasureText(text) * maxHeight);
+            }
+            return new Vector2(paint.MeasureText(text), minFontSize);
         }
     }
 }

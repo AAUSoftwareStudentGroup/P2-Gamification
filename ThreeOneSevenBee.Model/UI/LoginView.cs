@@ -18,7 +18,10 @@ namespace ThreeOneSevenBee.Model.UI
         public LoginView(double width, double height) : base(width, height)
         {
 
+            BackgroundColor = new Color(255, 255, 255);
+
             Inputbox username = new Inputbox("Username");
+            username.Text = "Morten R";
             username.X = 75;
             username.Y = 100;
             username.Width = 450;
@@ -26,6 +29,7 @@ namespace ThreeOneSevenBee.Model.UI
             username.Align = TextAlignment.Left;
 
             Inputbox password = new Inputbox("Password", true);
+            password.Text = "morten";
             password.X = 75;
             password.Y = 160;
             password.Width = 450;
