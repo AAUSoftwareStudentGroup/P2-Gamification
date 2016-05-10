@@ -29,7 +29,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 int result = 3;
                 foreach (ExpressionBase expression in this)
                 {
-                    // Count-1 gets the total number of * signs in the variadic expression
+                    // Count-1 so we don't count the operator in the variadic expression
                     UnaryMinusExpression minus = expression as UnaryMinusExpression;
                     if(minus != null)
                     {
