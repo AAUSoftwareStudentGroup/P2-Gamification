@@ -21,14 +21,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             get
             {
-                if (Expression is NumericExpression)
-                {
-                    return Expression.Size;
-                }
-                else
-                {
-                    return 3 + Expression.Size;
-                }
+               return 1 + Expression.Size;     
             }
         }
 
