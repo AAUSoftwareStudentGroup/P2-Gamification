@@ -16,7 +16,12 @@ namespace ThreeOneSevenBee.Development.Desktop
 		private string token = null;
 
 		public void logout(Action<bool> callback) {
-			callback (true);
+			JObject response = MakeRequest ("http://webmat.cs.aau.dk/api/?action=user_logout", true);
+			if (string.Compare (response.Value<string> ("success"), "true") == 0) {
+				callback (true);
+			}
+			else
+				callback (false);
 		}
 
 		public void IsAuthenticated(Action<bool> callback)
@@ -154,6 +159,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 		private JObject MakeRequest(string URL, bool authed)
 		{
+			Console.WriteLine ("Request: "+URL);
 			WebRequest request = HttpWebRequest.Create(URL+(authed == true ? "&token="+token : ""));
 			request.ContentType = "application/json";
 			request.Method = "GET";

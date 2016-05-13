@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ThreeOneSevenBee.Model.UI;
+
+using ThreeOneSevenBee.Model.Expression;
 #if BRIDGE
 using Bridge.Html5;
 #endif
@@ -62,6 +64,18 @@ namespace ThreeOneSevenBee.Model.Game
                 {
                     for (int i = 0; i < u.Categories[index].Count; i++)
                     {
+							ExpressionSerializer s = new ExpressionSerializer();
+							int largeSize = s.Deserialize(u.Categories[index][i].StartExpression).Size;
+							int smallSize = 0;
+							for(int j = 0; j < u.Categories[index][i].StarExpressions.Count; j++) {
+								smallSize = s.Deserialize(u.Categories[index][i].StarExpressions[j]).Size;
+
+								if(smallSize > largeSize) {
+									Console.WriteLine ("Error in [{0}-{1}-{2}] : {3}", u.Categories[index].Name, i+1, j, u.Categories[index][i].StarExpressions[j]);
+								}
+								else
+									largeSize = smallSize;
+							}
                         u.Categories[index][i].Unlocked = unlocked;
                         if(u.Categories[index][i].Stars == 0 && unlocked == true)
                         {
