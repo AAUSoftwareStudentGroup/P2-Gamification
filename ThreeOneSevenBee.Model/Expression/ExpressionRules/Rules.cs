@@ -352,7 +352,16 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                     VariadicOperatorExpression suggestion = variadicContent.Clone() as VariadicOperatorExpression;
                     for (int i = 0; i < suggestion.Count; i++)
                     {
-                        suggestion[i].Replace(new VariadicOperatorExpression(OperatorType.Multiply, other, suggestion[i].Clone()));
+                        Console.WriteLine(suggestion[i]);
+                        UnaryMinusExpression minusOperand = suggestion[i] as UnaryMinusExpression;
+                        if (minusOperand != null)
+                        {
+                            minusOperand.Expression.Replace(new VariadicOperatorExpression(OperatorType.Multiply, other, minusOperand.Expression.Clone()));
+                        }
+                        else
+                        { 
+                            suggestion[i].Replace(new VariadicOperatorExpression(OperatorType.Multiply, other, suggestion[i].Clone()));
+                        }
                     }
                     return suggestion;
                 }

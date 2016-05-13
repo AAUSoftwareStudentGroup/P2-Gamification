@@ -268,7 +268,14 @@
                     if (Bridge.hasValue(variadicContent) && variadicContent.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add) {
                         var suggestion = Bridge.as(variadicContent.clone(), ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression);
                         for (var i = 0; i < suggestion.getCount(); i++) {
-                            suggestion.getItem(i).replace(new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, other, suggestion.getItem(i).clone()));
+                            console.log(suggestion.getItem(i));
+                            var minusOperand = Bridge.as(suggestion.getItem(i), ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
+                            if (Bridge.hasValue(minusOperand)) {
+                                minusOperand.getExpression().replace(new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, other, minusOperand.getExpression().clone()));
+                            }
+                            else  {
+                                suggestion.getItem(i).replace(new ThreeOneSevenBee.Model.Expression.Expressions.VariadicOperatorExpression("constructor", ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply, other, suggestion.getItem(i).clone()));
+                            }
                         }
                         return suggestion;
                     }
