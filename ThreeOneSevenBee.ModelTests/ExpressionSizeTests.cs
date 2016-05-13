@@ -13,59 +13,53 @@ namespace ThreeOneSevenBee.ModelTests
         [TestMethod]
         public void ExpressionSizeTest()
         {
-            ExpressionModel model = new ExpressionModel("3*a+3*b-1*a");
-            ExpressionModel model2 = new ExpressionModel("2 ^ 2 ^ 2 * 3 * 5 + sqrt(4)");
-            ExpressionModel model3 = new ExpressionModel("2");
-            ExpressionModel model4 = new ExpressionModel("2/4");
-            ExpressionModel model5 = new ExpressionModel("----1");
-            ExpressionModel model6 = new ExpressionModel("a^{3+2}");
-            ExpressionModel model7 = new ExpressionModel("a^2*a");
-            ExpressionModel model8 = new ExpressionModel("a*a*a");
-            ExpressionModel model9 = new ExpressionModel("a + a");
-            ExpressionModel model10 = new ExpressionModel("2a");
-            ExpressionModel model11 = new ExpressionModel("(a)");
-            ExpressionModel model12 = new ExpressionModel("a");
-            ExpressionModel model13 = new ExpressionModel("a * b + a * c");
-            ExpressionModel model14 = new ExpressionModel("a*(b+c)");
-            ExpressionModel model15 = new ExpressionModel("sqrt(4)");
-            ExpressionModel model16 = new ExpressionModel("2");
-            ExpressionModel model17 = new ExpressionModel("--a");
-            ExpressionModel model18 = new ExpressionModel("a");
-            ExpressionModel model19 = new ExpressionModel("1/2");
-            ExpressionModel model20 = new ExpressionModel("2/4");
-        
+            ExpressionModel model = new ExpressionModel("a+a");
+            ExpressionModel model2 = new ExpressionModel("2*a");
+            ExpressionModel model3 = new ExpressionModel("a*a");
+            ExpressionModel model4 = new ExpressionModel("a^2");
+            ExpressionModel model5 = new ExpressionModel("a*a*a");
+            ExpressionModel model6 = new ExpressionModel("a^2*a");
+            ExpressionModel model7 = new ExpressionModel("a*b+a*c");
+            ExpressionModel model8 = new ExpressionModel("a*(b+c)");
+            ExpressionModel model9 = new ExpressionModel("(a)");
+            ExpressionModel model10 = new ExpressionModel("a");
+            ExpressionModel model11 = new ExpressionModel("--a");
+            ExpressionModel model12 = new ExpressionModel("1*{a/b}");
+            ExpressionModel model13 = new ExpressionModel("a/b");
+            ExpressionModel model14 = new ExpressionModel("a^2*b^2");
+            ExpressionModel model15 = new ExpressionModel("(a*b)^2");
+            ExpressionModel model16 = new ExpressionModel("1*a");
+            ExpressionModel model17 = new ExpressionModel("sqrt{4}");
+            ExpressionModel model18 = new ExpressionModel("2");
+            ExpressionModel model19 = new ExpressionModel("a/a");
+            ExpressionModel model20 = new ExpressionModel("1");
+            ExpressionModel model21 = new ExpressionModel("2+2+2+2+2");
+            ExpressionModel model22 = new ExpressionModel("2*5");
 
-            Assert.AreEqual(model.Expression.Size, 36, "Is True");
-            Assert.AreEqual(model2.Expression.Size, 28, "Is True");
-            Assert.AreEqual(model3.Expression.Size, 1, "Is True");
-            Assert.AreEqual(model4.Expression.Size, 5, "Is True");
-            Assert.AreEqual(model5.Expression.Size, 13, "Is True");
-            Assert.AreEqual(model6.Expression.Size, 10, "Is True");
-            Assert.AreEqual(model7.Expression.Size, 11, "Is True");
-  
-            // a^2*a < a * a * a
-            Assert.IsTrue(model7.Expression.Size < model8.Expression.Size, "Is True");
-            // a + a > 2a
-            Assert.IsTrue(model9.Expression.Size > model10.Expression.Size);
+            // a + a > 2 * a
+            Assert.IsTrue(model.Expression.Size > model2.Expression.Size, "Is True");
+            // a * a > a^2
+            Assert.IsTrue(model3.Expression.Size > model4.Expression.Size);
+            // a * a * a > a^2 * a
+            Assert.IsTrue(model5.Expression.Size > model6.Expression.Size);
+            // a * b + a * c > a * (b + c)
+            Assert.IsTrue(model7.Expression.Size > model8.Expression.Size);
             // (a) > a
-            Assert.IsTrue(model11.Expression.Size > model12.Expression.Size);
-            // a * b + a * c > a * (b+c)
-            Assert.IsTrue(model13.Expression.Size > model14.Expression.Size);
-            // sqrt(4) > 2 
-            Assert.IsTrue(model15.Expression.Size > model16.Expression.Size);
+            Assert.IsTrue(model9.Expression.Size > model10.Expression.Size);
             // --a > a 
+            Assert.IsTrue(model11.Expression.Size > model10.Expression.Size);
+            // 1 * {a / b} > a / b
+            Assert.IsTrue(model12.Expression.Size > model13.Expression.Size);
+            // a^2 * b^2 > (a * b)^2
+            Assert.IsTrue(model14.Expression.Size > model15.Expression.Size);
+            // 1*a > a
+            Assert.IsTrue(model16.Expression.Size > model10.Expression.Size);
+            // sqrt{4} > 2
             Assert.IsTrue(model17.Expression.Size > model18.Expression.Size);
-            // 1/2 < 2/4
-            Assert.IsTrue(model19.Expression.Size < model20.Expression.Size);
-
-
-
-
-
-
-
-
-
+            // a / a > 1
+            Assert.IsTrue(model19.Expression.Size > model20.Expression.Size);
+            // 2+2+2+2+2 > 2 * 5
+            Assert.IsTrue(model21.Expression.Size > model22.Expression.Size);
 
         }
     }

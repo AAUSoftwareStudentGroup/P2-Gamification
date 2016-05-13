@@ -26,21 +26,21 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             get
             {
-                int result = 3;
+                int result = 0;
                 foreach (ExpressionBase expression in this)
                 {
-                    // Count-1 gets the total number of * signs in the variadic expression
+                    // Count-1 gets all operators in the variadic expression
                     UnaryMinusExpression minus = expression as UnaryMinusExpression;
                     if(minus != null)
                     {
-                        result += minus.Expression.Size + (Count - 1);
+                        result += minus.Expression.Size;
                     }
                     else
                     {
-                        result += expression.Size + (Count - 1);
+                        result += expression.Size;
                     }
                 }
-                return result;
+                return result + (Count - 1);
             }
         }
 
