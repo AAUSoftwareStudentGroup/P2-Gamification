@@ -10,11 +10,10 @@ namespace ThreeOneSevenBee.Model.UI
     {
         double Width { get; }
         double Height { get; }
-        Action<double, double> OnResize { get; set; }
         void Clear();
         void SetContentView(FrameView view);
-        void Draw();
 
+        void Draw();
         void DrawPNGImage(string fileName, double x, double y, double width, double height);
         void DrawRectangle(double x, double y, double width, double height, Color fillColor);
         void DrawLine(Vector2 first, Vector2 second, Color lineColor, double lineWidth);

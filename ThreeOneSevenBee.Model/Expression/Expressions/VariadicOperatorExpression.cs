@@ -29,7 +29,6 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                 int result = 0;
                 foreach (ExpressionBase expression in this)
                 {
-                    // Count-1 gets all operators in the variadic expression
                     UnaryMinusExpression minus = expression as UnaryMinusExpression;
                     if(minus != null)
                     {
@@ -40,6 +39,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                         result += expression.Size;
                     }
                 }
+                // Count is equal to number of operands and Count - 1 is therefore number of operatorsigns.
                 return result + (Count - 1);
             }
         }
