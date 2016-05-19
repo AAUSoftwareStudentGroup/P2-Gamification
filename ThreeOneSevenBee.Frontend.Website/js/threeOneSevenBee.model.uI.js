@@ -256,7 +256,6 @@
             properties: {
                 Width: 0,
                 Height: 0,
-                OnResize: null,
                 ContentView$1: null
             }
         },

@@ -57,7 +57,7 @@ namespace ThreeOneSevenBee.ModelTests
                 selection1 = Make.New(2),
                 selection2 = Make.New(2));
 
-            suggestion = Rules.NumericVariadicRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            suggestion = Rules.CalculateVariadicRule(parent, new List<ExpressionBase>() { selection1, selection2 });
             Assert.IsNotNull(suggestion);
             Assert.AreEqual(Make.New(4), suggestion);
 
@@ -66,7 +66,7 @@ namespace ThreeOneSevenBee.ModelTests
                 selection1 = Make.New(3),
                 selection2 = Make.New(3));
 
-            suggestion = Rules.NumericVariadicRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            suggestion = Rules.CalculateVariadicRule(parent, new List<ExpressionBase>() { selection1, selection2 });
             Assert.IsNotNull(suggestion);
             Assert.AreEqual(Make.New(9), suggestion);
         }
@@ -83,7 +83,7 @@ namespace ThreeOneSevenBee.ModelTests
                 selection1 = Make.New(2),
                 selection2 = Make.New(2));
 
-            var suggestion = Rules.NumericBinaryRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            var suggestion = Rules.CalculateBinaryRule(parent, new List<ExpressionBase>() { selection1, selection2 });
             Assert.IsNotNull(suggestion);
             Assert.AreEqual(Make.New(0), suggestion);
 
@@ -101,7 +101,7 @@ namespace ThreeOneSevenBee.ModelTests
                 selection1 = Make.New(3),
                 selection2 = Make.New(3));
 
-            suggestion = Rules.NumericBinaryRule(parent, new List<ExpressionBase>() { selection1, selection2 });
+            suggestion = Rules.CalculateBinaryRule(parent, new List<ExpressionBase>() { selection1, selection2 });
             Assert.IsNotNull(suggestion);
             Assert.AreEqual(Make.New(27), suggestion);
         }
@@ -229,20 +229,19 @@ namespace ThreeOneSevenBee.ModelTests
         selection1 = Make.Divide(Make.New("a"), Make.New("b")),
         selection2 = Make.Divide(Make.New("c"), Make.New("b")));
  
-        var suggestion = Rules.AddFractionsWithSameNumerators(parent, new List<ExpressionBase>() { selection1, selection2});
+        var suggestion = Rules.AddFractionWithCommonDenominatorRule(parent, new List<ExpressionBase>() { selection1, selection2});
         Assert.IsNotNull(suggestion);
         Assert.AreEqual(Make.Divide(Make.Add(Make.New("a"), Make.New("c")), Make.New("b")), suggestion);
  
-        // a/x - y/x + b/x + 3 = {a-y+b}/x + 3
+        // a/x - y/x + b/x = {a-y+b}/x
         parent = Make.Add(
             selection1 = Make.Divide(Make.New("a"), Make.New("x")),
             selection2 = Make.Divide(Make.Minus(Make.New("y")), Make.New("x")),
-            selection3 = Make.Divide(Make.New("b"), Make.New("x")),
-            Make.New(3));
+            selection3 = Make.Divide(Make.New("b"), Make.New("x")));
 
-         suggestion = Rules.AddFractionsWithSameNumerators(parent, new List<ExpressionBase>() { selection1, selection2, selection3});
+         suggestion = Rules.AddFractionWithCommonDenominatorRule(parent, new List<ExpressionBase>() { selection1, selection2, selection3});
          Assert.IsNotNull(suggestion);
-         Assert.AreEqual(Make.Add(Make.Divide(Make.Add(Make.New("a"), Make.Minus(Make.New("y")), Make.New("b")), Make.New("x")), Make.New(3)), suggestion);
+         Assert.AreEqual(Make.Divide(Make.Add(Make.New("a"), Make.Minus(Make.New("y")), Make.New("b")), Make.New("x")), suggestion);
         }
 
         [TestMethod]

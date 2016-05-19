@@ -15,8 +15,6 @@ namespace ThreeOneSevenBee.Model.Game
     {
         IGameAPI gameAPI;
         IContext context;
-        GameModel gameModel;
-        GameView gameView;
 
         public Game(IContext context, IGameAPI gameAPI)
         {
@@ -57,37 +55,25 @@ namespace ThreeOneSevenBee.Model.Game
 
         private void loadGameData()
         {
-            gameAPI.GetCurrentPlayer((u) =>
+            gameAPI.GetCurrentPlayer((user) =>
             {
                 bool unlocked = true;
-                for (int index = 0; index < u.Categories.Count; index++)
+                for (int index = 0; index < user.Categories.Count; index++)
                 {
-                    for (int i = 0; i < u.Categories[index].Count; i++)
+                    for (int i = 0; i < user.Categories[index].Count; i++)
                     {
-							ExpressionSerializer s = new ExpressionSerializer();
-							int largeSize = s.Deserialize(u.Categories[index][i].StartExpression).Size;
-							int smallSize = 0;
-							for(int j = 0; j < u.Categories[index][i].StarExpressions.Count; j++) {
-								smallSize = s.Deserialize(u.Categories[index][i].StarExpressions[j]).Size;
-
-								if(smallSize > largeSize) {
-									Console.WriteLine ("Error in [{0}-{1}-{2}] : {3}", u.Categories[index].Name, i+1, j, u.Categories[index][i].StarExpressions[j]);
-								}
-								else
-									largeSize = smallSize;
-							}
-                        u.Categories[index][i].Unlocked = unlocked;
-                        if(u.Categories[index][i].Stars == 0 && unlocked == true)
+                        user.Categories[index][i].Unlocked = unlocked;
+                        if(user.Categories[index][i].Stars == 0 && unlocked == true)
                         {
                             unlocked = false;
-                            u.CurrentCategoryIndex = index;
-                            u.CurrentLevelIndex = 0;
+                            user.CurrentCategoryIndex = index;
+                            user.CurrentLevelIndex = 0;
                         }
                     }
                 }
-                gameAPI.GetPlayers((p) =>
+                gameAPI.GetPlayers((players) =>
                 {
-                    gameModel = new GameModel(u, p)
+                    GameModel gameModel = new GameModel(user, players)
                     {
                         OnSaveLevel = (level) =>
                         {
@@ -102,14 +88,14 @@ namespace ThreeOneSevenBee.Model.Game
                                 }
                             );
                         },
-                        OnCategoryCompleted = (c) =>
+                        OnCategoryCompleted = (completedCategory) =>
                             gameAPI.UserAddBadge(
-                                c.Badge,
+                                completedCategory.Badge,
                                 (IsAdded) => Console.WriteLine(IsAdded ? "Badge added" : "Badge not added")
                             )
                     };
 
-                    gameView = new GameView(gameModel, context.Width, context.Height)
+                    GameView gameView = new GameView(gameModel, context.Width, context.Height)
                     {
                         OnExit = () =>
                         {

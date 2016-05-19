@@ -7,9 +7,16 @@ using ThreeOneSevenBee.Model.Expression;
 
 namespace ThreeOneSevenBee.ModelTests
 {
+
     [TestClass]
     public class ExpressionSizeTests
     {
+        public ExpressionBase expr(string expression)
+        {
+            ExpressionSerializer serializer = new ExpressionSerializer();
+            return serializer.Deserialize(expression);
+        }
+
         [TestMethod]
         public void ExpressionSizeTest()
         {
@@ -37,29 +44,29 @@ namespace ThreeOneSevenBee.ModelTests
             ExpressionModel model22 = new ExpressionModel("2*5");
 
             // a + a > 2 * a
-            Assert.IsTrue(model.Expression.Size > model2.Expression.Size, "Is True");
+            Assert.IsTrue(expr("a+a").Size > expr("2*a").Size, "failed: a + a > 2 * a");
             // a * a > a^2
-            Assert.IsTrue(model3.Expression.Size > model4.Expression.Size);
+            Assert.IsTrue(expr("a*a").Size > expr("a^2").Size, "failed: a * a > a^2");
             // a * a * a > a^2 * a
-            Assert.IsTrue(model5.Expression.Size > model6.Expression.Size);
+            Assert.IsTrue(expr("a*a*a").Size > expr("a^2*a").Size, "failed: a * a * a > a^2 * a");
             // a * b + a * c > a * (b + c)
-            Assert.IsTrue(model7.Expression.Size > model8.Expression.Size);
+            Assert.IsTrue(expr("a*b+a*c").Size > expr("a*(b+c)").Size, "failed: a * b + a * c > a * (b + c)");
             // (a) > a
-            Assert.IsTrue(model9.Expression.Size > model10.Expression.Size);
+            Assert.IsTrue(expr("(a)").Size > expr("a").Size, "failed: (a) > a ");
             // --a > a 
-            Assert.IsTrue(model11.Expression.Size > model10.Expression.Size);
+            Assert.IsTrue(expr("--a").Size > expr("a").Size, "failed: --a > a ");
             // 1 * {a / b} > a / b
-            Assert.IsTrue(model12.Expression.Size > model13.Expression.Size);
+            Assert.IsTrue(expr("1*{a/b}").Size > expr("a/a").Size, "failed: 1 * {a / b} > a / b");
             // a^2 * b^2 > (a * b)^2
-            Assert.IsTrue(model14.Expression.Size > model15.Expression.Size);
+            Assert.IsTrue(expr("a^2*b^2").Size > expr("(a*b)^2").Size, "failed: a^2 * b^2 > (a * b)^2");
             // 1*a > a
-            Assert.IsTrue(model16.Expression.Size > model10.Expression.Size);
+            Assert.IsTrue(expr("1*a").Size > expr("a").Size, "failed: 1*a > a");
             // sqrt{4} > 2
-            Assert.IsTrue(model17.Expression.Size > model18.Expression.Size);
+            Assert.IsTrue(expr("sqrt{4}").Size > expr("2").Size, "failed: sqrt{4} > 2");
             // a / a > 1
-            Assert.IsTrue(model19.Expression.Size > model20.Expression.Size);
+            Assert.IsTrue(expr("a/a").Size > expr("1").Size, "failed: a / a > 1");
             // 2+2+2+2+2 > 2 * 5
-            Assert.IsTrue(model21.Expression.Size > model22.Expression.Size);
+            Assert.IsTrue(expr("2+2+2+2+2").Size > expr("2*5").Size, "failed:  2+2+2+2+2 > 2 * 5");
 
         }
     }

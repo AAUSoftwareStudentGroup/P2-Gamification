@@ -12,14 +12,14 @@ namespace ThreeOneSevenBee.Model.UI
     {
         public Context(double width, double height)
         {
-            ContentView = new FrameView(0,0);
+            ContentView = new FrameView(0, 0);
             Width = width;
             Height = height;
         }
 
         public virtual double Width { get; set; }
         public virtual double Height { get; set; }
-        public FrameView ContentView { get; set; }
+        public virtual FrameView ContentView { get; private set; }
 
         public abstract void Clear();
 
