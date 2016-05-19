@@ -20,29 +20,6 @@ namespace ThreeOneSevenBee.ModelTests
         [TestMethod]
         public void ExpressionSizeTest()
         {
-            ExpressionModel model = new ExpressionModel("a+a");
-            ExpressionModel model2 = new ExpressionModel("2*a");
-            ExpressionModel model3 = new ExpressionModel("a*a");
-            ExpressionModel model4 = new ExpressionModel("a^2");
-            ExpressionModel model5 = new ExpressionModel("a*a*a");
-            ExpressionModel model6 = new ExpressionModel("a^2*a");
-            ExpressionModel model7 = new ExpressionModel("a*b+a*c");
-            ExpressionModel model8 = new ExpressionModel("a*(b+c)");
-            ExpressionModel model9 = new ExpressionModel("(a)");
-            ExpressionModel model10 = new ExpressionModel("a");
-            ExpressionModel model11 = new ExpressionModel("--a");
-            ExpressionModel model12 = new ExpressionModel("1*{a/b}");
-            ExpressionModel model13 = new ExpressionModel("a/b");
-            ExpressionModel model14 = new ExpressionModel("a^2*b^2");
-            ExpressionModel model15 = new ExpressionModel("(a*b)^2");
-            ExpressionModel model16 = new ExpressionModel("1*a");
-            ExpressionModel model17 = new ExpressionModel("sqrt{4}");
-            ExpressionModel model18 = new ExpressionModel("2");
-            ExpressionModel model19 = new ExpressionModel("a/a");
-            ExpressionModel model20 = new ExpressionModel("1");
-            ExpressionModel model21 = new ExpressionModel("2+2+2+2+2");
-            ExpressionModel model22 = new ExpressionModel("2*5");
-
             // a + a > 2 * a
             Assert.IsTrue(expr("a+a").Size > expr("2*a").Size, "failed: a + a > 2 * a");
             // a * a > a^2
@@ -67,7 +44,6 @@ namespace ThreeOneSevenBee.ModelTests
             Assert.IsTrue(expr("a/a").Size > expr("1").Size, "failed: a / a > 1");
             // 2+2+2+2+2 > 2 * 5
             Assert.IsTrue(expr("2+2+2+2+2").Size > expr("2*5").Size, "failed:  2+2+2+2+2 > 2 * 5");
-
         }
     }
 }

@@ -190,10 +190,8 @@ namespace ThreeOneSevenBee.ModelTests
             // binary
             // - add
             Assert.IsTrue(Make.Add(Make.New(1), Make.New("a")) == Make.Add(Make.New(1), Make.New("a")), "1+a == 1+a");
-            Assert.IsTrue(Make.Add(Make.New(1), Make.New("a")) == Make.Add(Make.New("a"), Make.New(1)), "1+a == a+1");
             // - mult
             Assert.IsTrue(Make.Multiply(Make.New(1), Make.New("a")) == Make.Multiply(Make.New(1), Make.New("a")), "1*a == 1*a");
-            Assert.IsTrue(Make.Multiply(Make.New(1), Make.New("a")) == Make.Multiply(Make.New("a"), Make.New(1)), "1*a == a*1");
             // - sub
             Assert.IsTrue(Make.Subtract(Make.New(1), Make.New("a")) == Make.Subtract(Make.New(1), Make.New("a")), "1-a == 1-a");
             Assert.IsTrue(Make.Subtract(Make.New(1), Make.New("a")) != Make.Subtract(Make.New("a"), Make.New(1)), "1-a != a-1");
@@ -205,10 +203,7 @@ namespace ThreeOneSevenBee.ModelTests
             Assert.IsTrue(Make.Power(Make.New(1), Make.New("a")) != Make.Power(Make.New("a"), Make.New(1)), "1 ^ a != a ^ 1");
 
             // variadic
-            Assert.IsTrue(Make.Multiply(Make.New("a"), Make.New("b"), Make.New("c")) == Make.Multiply(Make.New("c"), Make.New("a"), Make.New("b")), "a*b*c == c*a*b");
-            Assert.IsTrue(Make.Multiply(Make.New("a"), Make.Multiply(Make.New("b"), Make.Multiply(Make.New("c"), Make.New("d")))) == Make.Multiply(Make.New("a"), Make.Multiply(Make.New("b"), Make.Multiply(Make.New("d"), Make.New("c")))), "a*(b*(c*d)) == a*(b*(d*c))");
-            Assert.IsFalse(Make.Multiply(Make.New("a"), Make.Multiply(Make.New("b"), Make.Multiply(Make.New("c"), Make.New("d")))) == Make.Multiply(Make.New("a"), Make.New("b"), Make.New("c"), Make.New("d")), "a*(b*(c*d)) != a*b*c*d");
-            Assert.IsTrue(Make.Multiply(Make.New(ConstantType.Pi), Make.New(1)) == Make.Multiply(Make.New(1), Make.New(ConstantType.Pi)), "pi*1 == 1*pi");
+            Assert.IsTrue(Make.Multiply(Make.New("a"), Make.Multiply(Make.New("b"), Make.Multiply(Make.New("c"), Make.New("d")))) == Make.Multiply(Make.New("a"), Make.New("b"), Make.New("c"), Make.New("d")), "a*{b*{c*d}} == a*b*c*d");
 
             // function
             Assert.IsTrue(Make.Sqrt(Make.New("a")) == Make.Sqrt(Make.New("a")));

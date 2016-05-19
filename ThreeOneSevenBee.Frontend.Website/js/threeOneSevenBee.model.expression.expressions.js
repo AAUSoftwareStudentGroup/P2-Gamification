@@ -142,7 +142,7 @@
             return "(" + this.getExpression().toString() + ")";
         },
         getSize: function () {
-            return 2 + this.getExpression().getSize();
+            return 1 + this.getExpression().getSize();
         },
         replace$1: function (old, replacement, doRecursively) {
             var hasReplaced = false;
