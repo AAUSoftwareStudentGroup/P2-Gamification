@@ -33,6 +33,7 @@ namespace ThreeOneSevenBee.Model.UI
         public GameView(GameModel game, double width, double height) : base(width, height)
         {
             categoryCompletionView = null;
+
             game.OnCategoryCompleted += (c) =>
             {
                 categoryCompletionView = new CategoryCompletionView(c, game.IsLastCategory)
@@ -49,8 +50,6 @@ namespace ThreeOneSevenBee.Model.UI
                 };
                 setContent(categoryCompletionView);
             };
-
-
 
             BackgroundColor = new Color(255, 255, 255);
 

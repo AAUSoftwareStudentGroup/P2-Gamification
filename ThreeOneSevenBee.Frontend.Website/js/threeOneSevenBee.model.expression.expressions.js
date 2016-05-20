@@ -142,7 +142,7 @@
             return "(" + this.getExpression().toString() + ")";
         },
         getSize: function () {
-            return 3 + this.getExpression().getSize();
+            return 1 + this.getExpression().getSize();
         },
         replace$1: function (old, replacement, doRecursively) {
             var hasReplaced = false;
@@ -241,7 +241,7 @@
             return this.getFunction() + this.getExpression();
         },
         getSize: function () {
-            return 3 + this.getExpression().getSize();
+            return 1 + this.getExpression().getSize();
         },
         canCalculate: function () {
             if (Bridge.get(ThreeOneSevenBee.Model.Expression.Expressions.FunctionExpression).functions.containsKey(this.getFunction())) {
@@ -702,21 +702,7 @@
             return this.getLeft().getValue() + this.getSymbol() + this.getRight().getValue();
         },
         getSize: function () {
-            var result = 0;
-            if (this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
-                if (Bridge.is(this.getLeft(), ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression)) {
-                    result = 1 + (Bridge.Int.div(this.getLeft().getSize(), 2)) + this.getRight().getSize();
-                }
-                else  {
-                    result = 1 + this.getLeft().getSize() + this.getRight().getSize();
-                }
-            }
-            else  {
-                if (this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.add || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.subtract || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.minus || this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.multiply) {
-                    result = 3 + this.getLeft().getSize() + this.getRight().getSize();
-                }
-            }
-            return result;
+            return 1 + this.getLeft().getSize() + this.getRight().getSize();
         },
         canCalculate: function () {
             switch (this.getType()) {
@@ -817,12 +803,7 @@
             return "-" + this.getExpression();
         },
         getSize: function () {
-            if (Bridge.is(this.getExpression(), ThreeOneSevenBee.Model.Expression.Expressions.NumericExpression)) {
-                return this.getExpression().getSize();
-            }
-            else  {
-                return 3 + this.getExpression().getSize();
-            }
+            return 1 + this.getExpression().getSize();
         },
         canCalculate: function () {
             return this.getExpression().canCalculate();
@@ -884,20 +865,20 @@
         },
         getSize: function () {
             var $t;
-            var result = 3;
+            var result = 0;
             $t = Bridge.getEnumerator(this);
             while ($t.moveNext()) {
                 var expression = $t.getCurrent();
-                // Count-1 gets the total number of * signs in the variadic expression
                 var minus = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
                 if (Bridge.hasValue(minus)) {
-                    result += minus.getExpression().getSize() + (this.getCount() - 1);
+                    result += minus.getExpression().getSize();
                 }
                 else  {
-                    result += expression.getSize() + (this.getCount() - 1);
+                    result += expression.getSize();
                 }
             }
-            return result;
+            // Count is equal to number of operands and Count - 1 is therefore number of operatorsigns.
+            return result + (this.getCount() - 1);
         },
         canCalculate: function () {
             var $t;

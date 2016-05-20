@@ -29,8 +29,6 @@
     Bridge.define('ThreeOneSevenBee.Model.Game.Game', {
         gameAPI: null,
         context: null,
-        gameModel: null,
-        gameView: null,
         constructor: function (context, gameAPI) {
             this.gameAPI = gameAPI;
             this.context = context;
@@ -77,8 +75,8 @@
         f4: function (IsAdded) {
             console.log(IsAdded ? "Badge added" : "Badge not added");
         },
-        f5: function (c) {
-            this.gameAPI.userAddBadge(c.getBadge(), $_.ThreeOneSevenBee.Model.Game.Game.f4);
+        f5: function (completedCategory) {
+            this.gameAPI.userAddBadge(completedCategory.getBadge(), $_.ThreeOneSevenBee.Model.Game.Game.f4);
         },
         f6: function (success) {
             console.log(success ? "Logout success" : "Logout failed");
@@ -90,29 +88,29 @@
         f8: function () {
             this.loadGameData();
         },
-        f9: function (u) {
+        f9: function (user) {
             var unlocked = true;
-            for (var index = 0; index < u.categories.getCount(); index++) {
-                for (var i = 0; i < u.categories.getItem(index).getCount(); i++) {
-                    u.categories.getItem(index).getItem(i).unlocked = unlocked;
-                    if (u.categories.getItem(index).getItem(i).stars === 0 && unlocked === true) {
+            for (var index = 0; index < user.categories.getCount(); index++) {
+                for (var i = 0; i < user.categories.getItem(index).getCount(); i++) {
+                    user.categories.getItem(index).getItem(i).unlocked = unlocked;
+                    if (user.categories.getItem(index).getItem(i).stars === 0 && unlocked === true) {
                         unlocked = false;
-                        u.currentCategoryIndex = index;
-                        u.currentLevelIndex = 0;
+                        user.currentCategoryIndex = index;
+                        user.currentLevelIndex = 0;
                     }
                 }
             }
-            this.gameAPI.getPlayers(Bridge.fn.bind(this, function (p) {
-                this.gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(u, p), {
+            this.gameAPI.getPlayers(Bridge.fn.bind(this, function (players) {
+                var gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(user, players), {
                     onSaveLevel: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f3),
                     onCategoryCompleted: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f5)
                 } );
     
-                this.gameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.GameView(this.gameModel, this.context.getWidth(), this.context.getHeight()), {
+                var gameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.GameView(gameModel, this.context.getWidth(), this.context.getHeight()), {
                     setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f7),
                     setReloadGame: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f8)
                 } );
-                this.context.setContentView(this.gameView);
+                this.context.setContentView(gameView);
             }));
         }
     });

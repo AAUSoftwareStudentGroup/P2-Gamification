@@ -43,7 +43,7 @@ namespace ThreeOneSevenBee.Frontend
             context.Canvas.AddEventListener(EventType.Click,
                 (e) =>
                 {
-                    click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
+                    Click(e.As<MouseEvent>().ClientX + Document.Body.ScrollLeft - (int)canvasLeft,
                         e.As<MouseEvent>().ClientY + Document.Body.ScrollTop - (int)canvasRight);
                     if (ContentView.Active == true)
                     {
@@ -83,13 +83,13 @@ namespace ThreeOneSevenBee.Frontend
             context.ClearRect(0, 0, (int)Width, (int)Height);
         }
 
-        private void click(double x, double y)
+        public void Click(double x, double y)
         {
             ContentView.Click(x, y, this);
             Draw();
         }
 
-        private void KeyPressed(string text)
+        public void KeyPressed(string text)
         {
             ContentView.KeyPressed(text, this);
             Draw();

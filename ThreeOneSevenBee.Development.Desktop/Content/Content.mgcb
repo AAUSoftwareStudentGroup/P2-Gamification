@@ -19,3 +19,9 @@
 /processorParam:TextureFormat=Compressed
 /build:Georgia.spritefont
 
+#begin Arial.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Arial.spritefont
+

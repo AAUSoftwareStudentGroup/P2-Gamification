@@ -64,6 +64,7 @@
     <Compile Include="DesktopContext.cs" />
     <Compile Include="DesktopGameAPI.cs" />
     <Compile Include="Primitives2D.cs" />
+    <Compile Include="MouseDevice.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

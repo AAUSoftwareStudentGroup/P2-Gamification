@@ -25,10 +25,13 @@ namespace ThreeOneSevenBee.Development.Desktop
 		SpriteFont font;
 		MouseState oldMouseState, currentMouseState;
 		Keys[] lastKeys;
+		MouseDevice mouseDevice;
 
 		public Webmat ()
 		{
 			this.IsMouseVisible = true;
+			this.Window.AllowUserResizing = true;
+
 			graphics = new GraphicsDeviceManager (this);
 			Content.RootDirectory = "Content";
 		}
@@ -44,9 +47,9 @@ namespace ThreeOneSevenBee.Development.Desktop
 		protected override void Initialize ()
 		{
 			// TODO: Add your initialization logic here
-			graphics.PreferredBackBufferWidth = 1360;  // set this value to the desired width of your window
-			graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
-			graphics.ApplyChanges();
+			//graphics.PreferredBackBufferWidth = 1360;  // set this value to the desired width of your window
+			//graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
+			//graphics.ApplyChanges();
 
 			base.Initialize ();
 		}
@@ -60,9 +63,15 @@ namespace ThreeOneSevenBee.Development.Desktop
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch (GraphicsDevice);
 //			textBatch = new TextBatch (GraphicsDevice);
-			font = Content.Load<SpriteFont>("Georgia");
+			font = Content.Load<SpriteFont>("Arial");
 
 			context = new DesktopContext(graphics, spriteBatch, font, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+			this.Window.ClientSizeChanged += (sender, e) => {
+				context.ContentView.Width = context.Width = Window.ClientBounds.Width;
+				context.ContentView.Height = context.Height = Window.ClientBounds.Height;
+
+			};
+
 
 			Stream stream;
 			stream = new StreamReader (Path.GetFullPath (@"../../../ThreeOneSevenBee.Frontend.Website/img/star.png")).BaseStream;
@@ -86,6 +95,11 @@ namespace ThreeOneSevenBee.Development.Desktop
 
 			TOSBGame.Game game = new TOSBGame.Game (context, gameAPI);
 			game.Start ();
+			mouseDevice = new MouseDevice (GraphicsDevice);
+			mouseDevice.ButtonReleased += (button, state) => {
+				if (button == MouseButtons.Left)
+					context.ContentView.Click (state.X, state.Y, context);
+			};
 		}
 
 		/// <summary>
@@ -101,12 +115,15 @@ namespace ThreeOneSevenBee.Development.Desktop
 			if (GamePad.GetState (PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState ().IsKeyDown (Keys.Escape))
 				Exit ();
 			#endif
+			mouseDevice.Update ();
 
+			/*
 			oldMouseState = currentMouseState;
 			currentMouseState = Mouse.GetState();
 			if (currentMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton == ButtonState.Released) {
-				context.ContentView.Click (currentMouseState.Position.X, currentMouseState.Position.Y, context);
+				context.ContentView.Click (currentMouseState.X, currentMouseState.Y, context);
 			}
+			*/
 			KeyboardState state = Keyboard.GetState();
 			foreach(Keys key in state.GetPressedKeys () ) {
 				bool brk = false;

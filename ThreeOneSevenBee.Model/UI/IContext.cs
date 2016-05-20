@@ -10,9 +10,9 @@ namespace ThreeOneSevenBee.Model.UI
     {
         double Width { get; }
         double Height { get; }
-        Action<double, double> OnResize { get; set; }
         void Clear();
         void SetContentView(FrameView view);
+
         void Draw();
 
         void DrawPNGImage(string fileName, double x, double y, double width, double height);

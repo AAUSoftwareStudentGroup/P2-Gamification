@@ -37,8 +37,18 @@ namespace ThreeOneSevenBee.AndroidFrontend
             request.AddParameter("action", "get_levels");
             request.AddParameter("token", token);
 
-            string data = client.Execute(request).Content;
-            Console.WriteLine(data);
+            string data;
+
+            try
+            {
+                data = client.Execute(request).Content;
+            }
+            catch (TimeoutException)
+            {
+                getCategories(callback);
+                return;
+            }
+
             JSONObject json = new JSONObject(data);
             JSONArray jsonArray = json.GetJSONArray("data");
             for (int index = 0; index < jsonArray.Length(); index++)
@@ -76,8 +86,18 @@ namespace ThreeOneSevenBee.AndroidFrontend
             request.AddParameter("action", "get_current_user");
             request.AddParameter("token", token);
 
-            string data = client.Execute(request).Content;
-            Console.WriteLine(data);
+            string data;
+
+            try
+            {
+                data = client.Execute(request).Content;
+            }
+            catch (TimeoutException)
+            {
+                GetCurrentPlayer(callback);
+                return;
+            }
+
             JSONObject json = new JSONObject(data);
             JSONObject jsonData = json.GetJSONObject("data");
             CurrentPlayer currentPlayer = new CurrentPlayer(jsonData.GetString("name"));
@@ -113,7 +133,18 @@ namespace ThreeOneSevenBee.AndroidFrontend
             request.AddParameter("action", "get_users");
             request.AddParameter("token", token);
 
-            string data = client.Execute(request).Content;
+            string data;
+
+            try
+            {
+                data = client.Execute(request).Content;
+            }
+            catch (TimeoutException)
+            {
+                GetPlayers(callback);
+                return;
+            }
+
             JSONObject json = new JSONObject(data);
             JSONArray jsonArray = json.GetJSONArray("data");
             for (int index = 0; index < jsonArray.Length(); index++)
@@ -143,7 +174,18 @@ namespace ThreeOneSevenBee.AndroidFrontend
 
             request.AddParameter("action", "is_authenticated");
 
-            string data = client.Execute(request).Content;
+            string data;
+
+            try
+            {
+                data = client.Execute(request).Content;
+            }
+            catch (TimeoutException)
+            {
+                IsAuthenticated(callback);
+                return;
+            }
+
             Console.WriteLine(data);
             JSONObject json = new JSONObject(data);
             bool success = json.GetString("success") == "true";
@@ -163,7 +205,18 @@ namespace ThreeOneSevenBee.AndroidFrontend
             request.AddParameter("action", "user_logout");
             request.AddParameter("token", token);
 
-            string data = client.Execute(request).Content;
+            string data;
+
+            try
+            {
+                data = client.Execute(request).Content;
+            }
+            catch (TimeoutException)
+            {
+                logout(callback);
+                return;
+            }
+
             Console.WriteLine(data);
             JSONObject json = new JSONObject(data);
             bool success = json.GetString("success") == "true";
@@ -180,8 +233,18 @@ namespace ThreeOneSevenBee.AndroidFrontend
             request.AddParameter("username", username);
             request.AddParameter("password", password);
 
-            string data = client.Execute(request).Content;
-            Console.WriteLine(data);
+            string data;
+
+            try
+            {
+                data = client.Execute(request).Content;
+            }
+            catch (TimeoutException)
+            {
+                Authenticate(username, password, callback);
+                return;
+            }
+
             JSONObject json = new JSONObject(data);
             token = json.GetJSONObject("data").GetString("token");
             bool success = json.GetString("success") == "true";
@@ -200,8 +263,18 @@ namespace ThreeOneSevenBee.AndroidFrontend
             request.AddParameter("current_expression", currentExpression);
             request.AddParameter("stars", stars.ToString());
 
-            string data = client.Execute(request).Content;
-            Console.WriteLine(data);
+            string data;
+
+            try
+            {
+                data = client.Execute(request).Content;
+            }
+            catch (TimeoutException)
+            {
+                SaveUserLevelProgress(levelID, currentExpression, stars, callback);
+                return;
+            }
+
             JSONObject json = new JSONObject(data);
             bool success = json.GetString("success") == "true";
             callback(success);
@@ -212,13 +285,23 @@ namespace ThreeOneSevenBee.AndroidFrontend
             var client = new RestClient("http://webmat.cs.aau.dk/api/");
 
             var request = new RestRequest(Method.POST);
-
+            
             request.AddParameter("action", "user_add_badge");
             request.AddParameter("token", token);
             request.AddParameter("badge_id", (int)badge);
 
-            string data = client.Execute(request).Content;
-            Console.WriteLine(data);
+            string data;
+
+            try
+            {
+                data = client.Execute(request).Content;
+            }
+            catch(TimeoutException)
+            {
+                UserAddBadge(badge, callback);
+                return;
+            }
+
             JSONObject json = new JSONObject(data);
             bool success = json.GetString("success") == "true";
             callback(success);

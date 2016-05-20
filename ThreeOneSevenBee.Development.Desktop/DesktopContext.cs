@@ -68,7 +68,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 		public override void DrawPolygon(Vector2[] path, Color fillColor, Color lineColor, double lineWidth)
 		{
 			for (int i = 0; i < path.Length-1; i++) {
-				this.DrawLine (path [i], path [i + 1], fillColor, lineWidth);
+				this.DrawLine (path [i], path [i + 1], lineColor, lineWidth);
 			}
 
 			VertexPositionColor[] _vertices = new VertexPositionColor[path.Length];
@@ -108,7 +108,7 @@ namespace ThreeOneSevenBee.Development.Desktop
 			}
 
 			spriteBatch.Begin ();
-			spriteBatch.DrawString (font, text, new XNA.Vector2 ((float)(x + xAlignmentOffset), (float)y), ConvertColor (textColor), 0, new XNA.Vector2 (0, 0), scale, SpriteEffects.None, 0.5f); 
+			spriteBatch.DrawString (font, text, new XNA.Vector2 ((float)(x + xAlignmentOffset), (float)y+((float)height-stringSize.Y*scale)/2), ConvertColor (textColor), 0, new XNA.Vector2 (0, 0), scale, SpriteEffects.None, 0.5f); 
 			spriteBatch.End ();
 		}
 
