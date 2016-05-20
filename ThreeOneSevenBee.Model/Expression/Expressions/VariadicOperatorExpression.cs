@@ -26,10 +26,11 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             get
             {
-                int result = 0;
+                // Count-1 gets all operators in the variadic expression
+                int result = (Count - 1);
                 foreach (ExpressionBase expression in this)
                 {
-                    // Count-1 gets all operators in the variadic expression
+                    // Cast to get what is behind the unaryminus
                     UnaryMinusExpression minus = expression as UnaryMinusExpression;
                     if(minus != null)
                     {
@@ -40,7 +41,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
                         result += expression.Size;
                     }
                 }
-                return result + (Count - 1);
+                return result;
             }
         }
 
