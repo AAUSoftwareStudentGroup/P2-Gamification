@@ -241,7 +241,7 @@
             return this.getFunction() + this.getExpression();
         },
         getSize: function () {
-            return 3 + this.getExpression().getSize();
+            return 1 + this.getExpression().getSize();
         },
         canCalculate: function () {
             if (Bridge.get(ThreeOneSevenBee.Model.Expression.Expressions.FunctionExpression).functions.containsKey(this.getFunction())) {
@@ -702,16 +702,7 @@
             return this.getLeft().getValue() + this.getSymbol() + this.getRight().getValue();
         },
         getSize: function () {
-            var result = 0;
-            if (this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power) {
-                result = 1 + this.getLeft().getSize() + this.getRight().getSize();
-            }
-            else  {
-                if (this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
-                    result = 1 + this.getLeft().getSize() + this.getRight().getSize();
-                }
-            }
-            return result;
+            return 1 + this.getLeft().getSize() + this.getRight().getSize();
         },
         canCalculate: function () {
             switch (this.getType()) {
