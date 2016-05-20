@@ -708,7 +708,7 @@
             }
             else  {
                 if (this.getType() === ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide) {
-                    result = 3 + this.getLeft().getSize() + this.getRight().getSize();
+                    result = 1 + this.getLeft().getSize() + this.getRight().getSize();
                 }
             }
             return result;
