@@ -192,7 +192,7 @@ namespace ThreeOneSevenBee.Model.UI
                 Baseline = NUMVAR_SIZE / 2,
                 TextColor = expression.Selected ? new Color(39, 174, 97) : new Color(0, 0, 0),
                 BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color()
-        };
+            };
         }
 
         public void Build(ExpressionModel model)

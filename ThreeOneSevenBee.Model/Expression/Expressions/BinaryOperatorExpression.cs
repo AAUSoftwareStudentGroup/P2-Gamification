@@ -21,16 +21,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             get
             {
-                int result = 0;
-                if (Type == OperatorType.Power)
-                {
-                    result = 1 + Left.Size + Right.Size;  
-                }
-                else if (Type == OperatorType.Divide)
-                {
-                    result = 3 + Left.Size + Right.Size;
-                }
-                return result;
+                return 1 + Left.Size + Right.Size;
             }
         }
 

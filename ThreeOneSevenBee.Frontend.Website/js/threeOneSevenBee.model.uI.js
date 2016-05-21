@@ -256,7 +256,6 @@
             properties: {
                 Width: 0,
                 Height: 0,
-                OnResize: null,
                 ContentView$1: null
             }
         },
@@ -975,6 +974,7 @@
             ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
     
             this.categoryCompletionView = null;
+    
             game.onCategoryCompleted = Bridge.fn.combine(game.onCategoryCompleted, Bridge.fn.bind(this, function (c) {
                 this.categoryCompletionView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CategoryCompletionView(c, game.getIsLastCategory()), {
                     setOnNext: Bridge.fn.bind(this, function () {
@@ -987,8 +987,6 @@
                 } );
                 this.setContent(this.categoryCompletionView);
             }));
-    
-    
     
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
     

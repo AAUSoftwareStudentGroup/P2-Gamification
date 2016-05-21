@@ -59,7 +59,7 @@ namespace ThreeOneSevenBee.Model.Expression.Expressions
         {
             get
             {
-                return 2 + Expression.Size;
+                return 1 + Expression.Size;
             }
         }
 

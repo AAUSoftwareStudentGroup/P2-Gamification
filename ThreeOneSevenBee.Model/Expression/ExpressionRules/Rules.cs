@@ -240,7 +240,6 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
 
         // a * b + a * c = a * (b + c)
         // a * b - a * c = a * (b - c)
-        // a * b + a*c + 3
         public static ExpressionBase ProductParenthesis(ExpressionBase expression, List<ExpressionBase> selection)
         {
             VariadicOperatorExpression sum = expression as VariadicOperatorExpression;
