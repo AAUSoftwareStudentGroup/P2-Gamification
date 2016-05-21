@@ -865,10 +865,12 @@
         },
         getSize: function () {
             var $t;
-            var result = 0;
+            // Count-1 gets all operators in the variadic expression
+            var result = (this.getCount() - 1);
             $t = Bridge.getEnumerator(this);
             while ($t.moveNext()) {
                 var expression = $t.getCurrent();
+                // Cast to get what is behind the unaryminus
                 var minus = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
                 if (Bridge.hasValue(minus)) {
                     result += minus.getExpression().getSize();
@@ -877,8 +879,7 @@
                     result += expression.getSize();
                 }
             }
-            // Count is equal to number of operands and Count - 1 is therefore number of operatorsigns.
-            return result + (this.getCount() - 1);
+            return result;
         },
         canCalculate: function () {
             var $t;
