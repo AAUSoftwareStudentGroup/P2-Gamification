@@ -63,7 +63,7 @@ namespace ThreeOneSevenBee.Model.Game
         private void loadGameData()
         {
             // TODO: Needs comments.
-            gameAPI.GetCurrentPlayer((u) =>
+            gameAPI.GetCurrentPlayer((user) =>
             {
                 bool unlocked = true;
                 for (int index = 0; index < user.Categories.Count; index++)
