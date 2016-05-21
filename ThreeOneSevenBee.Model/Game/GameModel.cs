@@ -63,6 +63,9 @@ namespace ThreeOneSevenBee.Model.Game
             }
         }
 
+        /// <summary>
+        /// Gets the next level based on the users current progress.
+        /// </summary>
         public Level GetNextLevel()
         {
             if(IsGameCompleted == false)
@@ -87,6 +90,11 @@ namespace ThreeOneSevenBee.Model.Game
             }
         }
 
+        /// <summary>
+        /// Sets up the model to complete the level.
+        /// </summary>
+        /// <param name="level">The desired level.</param>
+        /// <param name="category">The desired category.</param>
         public void SetLevel(int level, int category)
         {
             User.CurrentLevelIndex = level;
@@ -116,6 +124,9 @@ namespace ThreeOneSevenBee.Model.Game
             onExpressionChanged(ExprModel);
         }
 
+        /// <summary>
+        /// Restarts the current level.
+        /// </summary>
         public void RestartLevel()
         {
             User.CurrentLevel.CurrentExpression = User.CurrentLevel.StartExpression;
@@ -172,6 +183,9 @@ namespace ThreeOneSevenBee.Model.Game
             
         }
 
+        /// <summary>
+        /// Swithces to the next level.
+        /// </summary>
         public void NextLevel()
         {
             if (IsGameCompleted)
@@ -194,6 +208,9 @@ namespace ThreeOneSevenBee.Model.Game
             SetLevel(User.CurrentLevelIndex, User.CurrentCategoryIndex);
         }
 
+        /// <summary>
+        /// Saves the state of the current level.
+        /// </summary>
         public void SaveLevel()
         {
             if(OnSaveLevel != null)

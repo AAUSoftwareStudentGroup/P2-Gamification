@@ -28,6 +28,7 @@ namespace ThreeOneSevenBee.Model.UI
             Build();
         }
 
+        // TODO: Needs comments?
         public void Build()
         {
             int offSetY = 5;

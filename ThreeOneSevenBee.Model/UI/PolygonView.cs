@@ -17,6 +17,7 @@ namespace ThreeOneSevenBee.Model.UI
         public string fillStyle;
         public PolygonView(PolygonModel model, string fillStyle, double x, double y, double width, double height) : base(x, y, width, height)
         {
+            // TODO: Needs comments.
             this.fillStyle = fillStyle;
             cornerPositions = new List<Vector2>();
             Vector2 vector = new Vector2(0,0);

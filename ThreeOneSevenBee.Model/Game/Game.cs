@@ -24,12 +24,17 @@ namespace ThreeOneSevenBee.Model.Game
             this.context = context;
         }
 
+        /// <summary>
+        /// Starts the game, making sure the user is authenticated and if so, loads up the game.
+        /// </summary>
         public void Start()
         {
+            // first we check if we are authenticated with the server
             gameAPI.IsAuthenticated((isAuthenticated) =>
             {
                 if (isAuthenticated == false)
                 {
+                    // if we are not, we display the login view, and get the user to connect
                     LoginView loginView = new LoginView(context.Width, context.Height);
                     context.SetContentView(loginView);
                     loginView.OnLogin = (username, password) =>
@@ -38,6 +43,7 @@ namespace ThreeOneSevenBee.Model.Game
                         {
                             if (authenticateSuccess)
                             {
+                                // on succesful login, we load up the game data
                                 loadGameData();
                             }
                             else
@@ -50,6 +56,7 @@ namespace ThreeOneSevenBee.Model.Game
                 }
                 else
                 {
+                    // if we are, we load up the game data
                     loadGameData();
                 }
             });
@@ -57,6 +64,7 @@ namespace ThreeOneSevenBee.Model.Game
 
         private void loadGameData()
         {
+            // TODO: Needs comments.
             gameAPI.GetCurrentPlayer((u) =>
             {
                 bool unlocked = true;

@@ -38,6 +38,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public void Build(CurrentPlayer user)
         {
+            // TODO: Needs comments.
             MenuButton = new ButtonView("Menu", () => { if (OnExit != null) { OnExit(); } })
             {
                 Width = 75,
@@ -136,6 +137,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public void Update(CurrentPlayer user)
         {
+            // TODO: Needs comments.
             CategoryName.Text = user.Categories[Category].Name;
             ArrowLeft.Visible = Category > 0;
             ArrowRight.Visible = Category < user.Categories.Count - 1;

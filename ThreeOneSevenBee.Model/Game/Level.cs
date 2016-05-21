@@ -20,7 +20,9 @@ namespace ThreeOneSevenBee.Model.Game
 
         public bool Unlocked;
 
-        //Dictionary over lvl_id and level descriptions
+        /// <summary>
+        /// Danish tips for the different levels.
+        /// </summary>
         private Dictionary<int, string> descriptions = new Dictionary<int, string>()
         {
             //Tutorial
@@ -63,6 +65,7 @@ namespace ThreeOneSevenBee.Model.Game
             StartExpression = startExpression;
             CurrentExpression = currentExpression;
 
+            // check for existing description, using the collection of Danish tips.
             if (descriptions.ContainsKey(levelID))
             {
                 Description = descriptions[levelID];

@@ -25,6 +25,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public virtual void Build(GameModel game)
         {
+            // TODO: Needs comments.
             menuButton = new ButtonView("Menu", () => OnExit())
             {
                 Width = 100,

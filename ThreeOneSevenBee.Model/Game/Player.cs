@@ -5,6 +5,7 @@ using System.Text;
 
 namespace ThreeOneSevenBee.Model.Game
 {
+    // Needs comments?
    public class Player {
         public List<BadgeName> Badges;
 

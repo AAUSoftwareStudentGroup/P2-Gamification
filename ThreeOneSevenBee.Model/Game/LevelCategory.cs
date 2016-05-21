@@ -9,6 +9,7 @@ using Bridge.Html5;
 
 namespace ThreeOneSevenBee.Model.Game
 {
+    // TODO: Needs comments.
     public class LevelCategory : IEnumerable<Level>
     {
         public static Dictionary<string, BadgeName> CategoryBadges = new Dictionary<string, BadgeName>()
