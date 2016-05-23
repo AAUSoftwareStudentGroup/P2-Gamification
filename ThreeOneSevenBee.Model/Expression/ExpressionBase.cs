@@ -144,7 +144,7 @@ namespace ThreeOneSevenBee.Model.Expression
         /// </summary>
         public void PrettyPrint()
         {
-            this.TreePrint("", true);
+            this.TreePrint(String.Empty, true);
         }
     }
 }

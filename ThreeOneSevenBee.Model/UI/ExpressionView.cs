@@ -200,7 +200,7 @@ namespace ThreeOneSevenBee.Model.UI
             if (model != null)
             {
                 View content = BuildView(model.Expression, model);
-                setContent(content);
+                SetContent(content);
             }
         }
 
