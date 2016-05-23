@@ -484,6 +484,7 @@
         constructor$1: function (model, fillStyle, x, y, width, height) {
             ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, x, y, width, height);
     
+            // TODO: Needs comments.
             this.fillStyle = fillStyle;
             this.setcornerPositions(new Bridge.List$1(ThreeOneSevenBee.Model.Euclidean.Vector2)());
             var vector = new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 0);
@@ -745,6 +746,7 @@
         },
         buildView: function (expression, model) {
             var $t, $t1;
+            // TODO: Needs comments.
             var minusExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
             if (Bridge.hasValue(minusExpression)) {
                 var view = this.buildView(minusExpression.getExpression(), model);
@@ -973,6 +975,7 @@
         constructor: function (game, width, height) {
             ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
     
+            // TODO: Needs comments.
             this.categoryCompletionView = null;
     
             game.onCategoryCompleted = Bridge.fn.combine(game.onCategoryCompleted, Bridge.fn.bind(this, function (c) {
@@ -1259,6 +1262,7 @@
             this.build(user);
         },
         build: function (user) {
+            // TODO: Needs comments.
             this.setMenuButton(Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("Menu", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.LevelSelectView.f1)), {
                 setWidth: 75,
                 setHeight: 30,
@@ -1338,6 +1342,7 @@
         },
         update: function (user) {
             var $t;
+            // TODO: Needs comments.
             this.getCategoryName().setText(user.categories.getItem(this.getCategory()).name);
             this.getArrowLeft().setVisible(this.getCategory() > 0);
             this.getArrowRight().setVisible(this.getCategory() < user.categories.getCount() - 1);
@@ -1456,6 +1461,7 @@
             this.build(game);
         },
         build: function (game) {
+            // TODO: Needs comments.
             this.menuButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("Menu", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.LevelView.f1)), {
                 setWidth: 100,
                 setHeight: 50,
@@ -1575,7 +1581,7 @@
         constructor: function (width, height) {
             ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
     
-    
+            // TODO: Needs comments.
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
     
             var username = new ThreeOneSevenBee.Model.UI.Inputbox("constructor", "Username");
@@ -1719,6 +1725,7 @@
         },
         build: function (progressbar) {
             var $t;
+            // TODO: Needs comments.
             this.progress = Bridge.merge(new ThreeOneSevenBee.Model.UI.View(0, 0, Math.min(this.getWidth(), Math.max(0, this.getWidth() * progressbar.getPercentage())), this.getHeight()), {
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 175, 100)
             } );
@@ -1924,6 +1931,7 @@
         constructor: function (text, width, height) {
             ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
     
+            // TODO: Needs comments.
             this.setarrow(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 20, 11), [
                 [0, 11],
                 [10, 0],
@@ -1987,6 +1995,7 @@
             return this.arrowDirection;
         },
         setArrowDirection: function (value) {
+            // TODO: Needs comments.
             this.arrowDirection = value;
             this.arrowPosition = 0;
             this.getlabelView().setX(0);

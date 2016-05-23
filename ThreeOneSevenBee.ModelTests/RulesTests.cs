@@ -291,7 +291,7 @@ namespace ThreeOneSevenBee.ModelTests
             selection1.Selected = true;
             selection2.Selected = true;
             ExpressionBase suggestion = Rules.ProductParenthesis(parent, new List<ExpressionBase>() { selection1, selection2 });
-            Assert.AreEqual(new ExpressionSerializer().Deserialize("(y+z)*x"), suggestion);
+            Assert.AreEqual(new ExpressionSerializer().Deserialize("(y+z)*x"), suggestion, parent.ToString());
         }
     }
 }

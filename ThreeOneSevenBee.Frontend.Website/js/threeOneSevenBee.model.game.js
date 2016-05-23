@@ -33,10 +33,21 @@
             this.gameAPI = gameAPI;
             this.context = context;
         },
+        /**
+         * Starts the game, making sure the user is authenticated and if so, loads up the game.
+         *
+         * @instance
+         * @public
+         * @this ThreeOneSevenBee.Model.Game.Game
+         * @memberof ThreeOneSevenBee.Model.Game.Game
+         * @return  {void}
+         */
         start: function () {
+            // first we check if we are authenticated with the server
             this.gameAPI.isAuthenticated(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f1));
         },
         loadGameData: function () {
+            // TODO: Needs comments.
             this.gameAPI.getCurrentPlayer(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f9));
         }
     });
@@ -48,11 +59,13 @@
     Bridge.apply($_.ThreeOneSevenBee.Model.Game.Game, {
         f1: function (isAuthenticated) {
             if (isAuthenticated === false) {
+                // if we are not, we display the login view, and get the user to connect
                 var loginView = new ThreeOneSevenBee.Model.UI.LoginView(this.context.getWidth(), this.context.getHeight());
                 this.context.setContentView(loginView);
                 loginView.onLogin = Bridge.fn.bind(this, function (username, password) {
                     this.gameAPI.authenticate(username, password, Bridge.fn.bind(this, function (authenticateSuccess) {
                         if (authenticateSuccess) {
+                            // on succesful login, we load up the game data
                             this.loadGameData();
                         }
                         else  {
@@ -63,6 +76,7 @@
                 });
             }
             else  {
+                // if we are, we load up the game data
                 this.loadGameData();
             }
         },
@@ -158,6 +172,15 @@
         getIsGameCompleted: function () {
             return this.getIsCategoryCompleted() && this.getUser().currentCategoryIndex === this.getUser().categories.getCount() - 1;
         },
+        /**
+         * Gets the next level based on the users current progress.
+         *
+         * @instance
+         * @public
+         * @this ThreeOneSevenBee.Model.Game.GameModel
+         * @memberof ThreeOneSevenBee.Model.Game.GameModel
+         * @return  {ThreeOneSevenBee.Model.Game.Level}
+         */
         getNextLevel: function () {
             if (this.getIsGameCompleted() === false) {
                 if (this.getIsCategoryCompleted() === true) {
@@ -169,6 +192,17 @@
             }
             return null;
         },
+        /**
+         * Sets up the model to complete the level.
+         *
+         * @instance
+         * @public
+         * @this ThreeOneSevenBee.Model.Game.GameModel
+         * @memberof ThreeOneSevenBee.Model.Game.GameModel
+         * @param   {number}    level       The desired level.
+         * @param   {number}    category    The desired category.
+         * @return  {void}
+         */
         setLevel: function (level, category) {
             var $t;
             this.getUser().currentLevelIndex = level;
@@ -191,6 +225,15 @@
             this.updateLevelData();
             this.onExpressionChanged(this.getExprModel());
         },
+        /**
+         * Restarts the current level.
+         *
+         * @instance
+         * @public
+         * @this ThreeOneSevenBee.Model.Game.GameModel
+         * @memberof ThreeOneSevenBee.Model.Game.GameModel
+         * @return  {void}
+         */
         restartLevel: function () {
             this.getUser().getCurrentLevel().currentExpression = this.getUser().getCurrentLevel().startExpression;
             this.setLevel(this.getUser().currentLevelIndex, this.getUser().currentCategoryIndex);
@@ -235,6 +278,15 @@
             }
     
         },
+        /**
+         * Swithces to the next level.
+         *
+         * @instance
+         * @public
+         * @this ThreeOneSevenBee.Model.Game.GameModel
+         * @memberof ThreeOneSevenBee.Model.Game.GameModel
+         * @return  {void}
+         */
         nextLevel: function () {
             if (this.getIsGameCompleted()) {
     
@@ -255,6 +307,15 @@
             }
             this.setLevel(this.getUser().currentLevelIndex, this.getUser().currentCategoryIndex);
         },
+        /**
+         * Saves the state of the current level.
+         *
+         * @instance
+         * @public
+         * @this ThreeOneSevenBee.Model.Game.GameModel
+         * @memberof ThreeOneSevenBee.Model.Game.GameModel
+         * @return  {void}
+         */
         saveLevel: function () {
             if (Bridge.hasValue(this.onSaveLevel)) {
                 this.onSaveLevel(this.getUser().getCurrentLevel());
@@ -329,6 +390,7 @@
             this.startExpression = startExpression;
             this.currentExpression = currentExpression;
     
+            // check for existing description, using the collection of Danish tips.
             if (this.descriptions.containsKey(levelID)) {
                 this.description = this.descriptions.get(levelID);
             }
