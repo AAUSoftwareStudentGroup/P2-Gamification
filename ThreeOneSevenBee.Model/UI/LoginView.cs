@@ -20,14 +20,14 @@ namespace ThreeOneSevenBee.Model.UI
             // TODO: Needs comments.
             BackgroundColor = new Color(255, 255, 255);
 
-            Inputbox username = new Inputbox("Username");
+            Inputbox username = new Inputbox("Brugernavn");
             username.X = 75;
             username.Y = 100;
             username.Width = 450;
             username.Height = 36;
             username.Align = TextAlignment.Left;
 
-            Inputbox password = new Inputbox("Password", true);
+            Inputbox password = new Inputbox("Kode", true);
             password.X = 75;
             password.Y = 160;
             password.Width = 450;
