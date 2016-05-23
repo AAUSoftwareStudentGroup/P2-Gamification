@@ -224,7 +224,7 @@ namespace ThreeOneSevenBee.Model.UI
             StarTextView.Text = userStarsInCategory + " / " + totalStars;
             levelButtons.Width = (int)Math.Sqrt(numberOfLevels) * 50;
             levelButtons.Height = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50;
-            Levels.setContent(levelButtons);
+            Levels.SetContent(levelButtons);
 
         }
 

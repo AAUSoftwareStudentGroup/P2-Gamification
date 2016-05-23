@@ -37,6 +37,8 @@ namespace ThreeOneSevenBee.AndroidFrontend
             this.height = height;
             this.input = input;
 
+            this.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
+
             imageCache = new Dictionary<string, Bitmap>()
             {
                 {"icon.png", BitmapFactory.DecodeResource(Resources, Resource.Drawable.Icon) },
@@ -68,6 +70,19 @@ namespace ThreeOneSevenBee.AndroidFrontend
                     Append("webmat");
                 }
             };
+        }
+
+        protected override void OnFocusChanged(bool gainFocus, [GeneratedEnum] A.FocusSearchDirection direction, Rect previouslyFocusedRect)
+        {
+            base.OnFocusChanged(gainFocus, direction, previouslyFocusedRect);
+            ImeOptions = (ImeAction)ImeFlags.NoExtractUi;
+        }
+    
+
+         public override IInputConnection OnCreateInputConnection(EditorInfo outAttrs)
+        {
+            outAttrs.ImeOptions = ImeFlags.NoFullscreen;
+            return base.OnCreateInputConnection(outAttrs);
         }
 
         public override bool OnTouchEvent(A.MotionEvent e)

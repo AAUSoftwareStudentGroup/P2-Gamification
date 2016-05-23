@@ -46,12 +46,12 @@ namespace ThreeOneSevenBee.Model.UI
                         if (game.IsLastCategory == false)
                         {
                             game.SetLevel(0, c.categoryIndex + 1);
-                            setContent(levelView);
+                            SetContent(levelView);
                         }
                     },
                     OnExit = () => ReloadGame(),
                 };
-                setContent(categoryCompletionView);
+                SetContent(categoryCompletionView);
             };
 
             BackgroundColor = new Color(255, 255, 255);
@@ -63,7 +63,7 @@ namespace ThreeOneSevenBee.Model.UI
                 OnExit = () =>
                 {
                     game.SaveLevel();
-                    setContent(levelSelectView);
+                    SetContent(levelSelectView);
                 },
                 OnNextLevel = () =>
                 {
@@ -78,7 +78,7 @@ namespace ThreeOneSevenBee.Model.UI
             levelSelectView = new LevelSelectView(game.User)
             {
                 OnChanged = () => {
-                    setContent(levelSelectView);
+                    SetContent(levelSelectView);
                     Update(game);
                     levelSelectView.Update(game.User);
                 },
@@ -86,7 +86,7 @@ namespace ThreeOneSevenBee.Model.UI
                 {
                     if (level.Unlocked)
                     {
-                        setContent(levelView);
+                        SetContent(levelView);
                         Update(game);
                         game.SetLevel(level.LevelIndex, level.CategoryIndex);
                     }
@@ -94,9 +94,9 @@ namespace ThreeOneSevenBee.Model.UI
                 OnExit = () => ReloadGame()
             };
 
-            titleView.PlayButton.OnClick = () => setContent(levelView);
+            titleView.PlayButton.OnClick = () => SetContent(levelView);
 
-            titleView.LevelButton.OnClick = () => setContent(levelSelectView);
+            titleView.LevelButton.OnClick = () => SetContent(levelSelectView);
 
             titleView.OnLogout = () =>
             {
@@ -108,12 +108,12 @@ namespace ThreeOneSevenBee.Model.UI
 
             game.OnChanged = Update;
 
-			setContent(titleView);
+			SetContent(titleView);
         }
 
-        public override void setContent(View content)
+        public override void SetContent(View content)
         {
-            base.setContent(content);
+            base.SetContent(content);
             if(OnChanged != null)
             {
                 OnChanged();

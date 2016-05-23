@@ -246,8 +246,11 @@ namespace ThreeOneSevenBee.AndroidFrontend
             }
 
             JSONObject json = new JSONObject(data);
-            token = json.GetJSONObject("data").GetString("token");
             bool success = json.GetString("success") == "true";
+            if (success)
+            {
+                token = json.GetJSONObject("data").GetString("token");
+            }
             callback(success);
         }
 
