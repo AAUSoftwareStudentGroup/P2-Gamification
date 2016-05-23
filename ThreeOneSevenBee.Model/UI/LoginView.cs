@@ -52,7 +52,7 @@ namespace ThreeOneSevenBee.Model.UI
             Status.Height = 30;
             Status.TextColor = new Color(200, 0, 0);
 
-            setContent(new CompositeView(600, 400)
+            SetContent(new CompositeView(600, 400)
             {
                 Children = new List<View>() {
                     username,

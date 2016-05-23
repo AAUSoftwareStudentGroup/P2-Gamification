@@ -58,7 +58,7 @@ namespace ThreeOneSevenBee.Model.UI
 
         public double MaxScale;
 
-        public virtual void setContent(View content)
+        public virtual void SetContent(View content)
         {
             Content = Align(Fit(content));
         }
