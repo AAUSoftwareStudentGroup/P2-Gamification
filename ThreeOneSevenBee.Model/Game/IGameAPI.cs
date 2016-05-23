@@ -27,7 +27,6 @@ namespace ThreeOneSevenBee.Model.Game
         /// <param name="callback">A callback to get the result.</param>
         void Authenticate(string username, string password, Action<bool> callback);
 
-        // TODO: Is this correct?
         /// <summary>
         /// Gets a list of players for the leaderboard.
         /// </summary>
@@ -49,7 +48,6 @@ namespace ThreeOneSevenBee.Model.Game
         /// <param name="callback">A callback to get the result.</param>
         void GetCurrentPlayer(Action<CurrentPlayer> callback);
 
-        //TODO: Is this correct?
         /// <summary>
         /// Adds a badge to the currently connected player.
         /// </summary>

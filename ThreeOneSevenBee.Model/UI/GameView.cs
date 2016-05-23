@@ -9,6 +9,9 @@ using Bridge.Html5;
 
 namespace ThreeOneSevenBee.Model.UI
 {
+    /// <summary>
+    /// GameView is a visual representation of the data in GameModel
+    /// </summary>
     public class GameView : FrameView
     {
         TitleView titleView;
@@ -32,7 +35,6 @@ namespace ThreeOneSevenBee.Model.UI
 
         public GameView(GameModel game, double width, double height) : base(width, height)
         {
-            // TODO: Needs comments.
             categoryCompletionView = null;
 
             game.OnCategoryCompleted += (c) =>

@@ -11,6 +11,9 @@ namespace ThreeOneSevenBee.Model.UI
 {
     public class LevelView : CompositeView
     {
+        /// <summary>
+        ///  Builds the view necessary to play a leve
+        /// </summary>
         public Action OnExit { get; set; }
         public Action OnNextLevel { get; set; }
 
@@ -25,7 +28,6 @@ namespace ThreeOneSevenBee.Model.UI
 
         public virtual void Build(GameModel game)
         {
-            // TODO: Needs comments.
             menuButton = new ButtonView("Menu", () => OnExit())
             {
                 Width = 100,

@@ -1,6 +1,14 @@
 ﻿(function (globals) {
     "use strict";
 
+    /** @namespace System */
+    
+    /**
+     * @memberof System
+     * @callback System.Action
+     * @return  {void}
+     */
+    
     Bridge.define('ThreeOneSevenBee.Model.UI.View', {
         onClick: null,
         onKeyPressed: null,
@@ -472,83 +480,6 @@
         }
     });
     
-    Bridge.define('ThreeOneSevenBee.Model.UI.PolygonView', {
-        inherits: [ThreeOneSevenBee.Model.UI.View],
-        fillStyle: null,
-        config: {
-            properties: {
-                model: null,
-                cornerPositions: null
-            }
-        },
-        constructor$1: function (model, fillStyle, x, y, width, height) {
-            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, x, y, width, height);
-    
-            // TODO: Needs comments.
-            this.fillStyle = fillStyle;
-            this.setcornerPositions(new Bridge.List$1(ThreeOneSevenBee.Model.Euclidean.Vector2)());
-            var vector = new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", 0, 0);
-            if (Bridge.Linq.Enumerable.from(model.getcorners()).count() < 3) {
-                throw new Bridge.Exception("[Polygonview]: Model has less than 3 corners");
-            }
-            var totalAngle = Math.PI * (Bridge.Linq.Enumerable.from(model.getcorners()).count() - 2);
-            var angle = totalAngle / Bridge.Linq.Enumerable.from(model.getcorners()).count();
-            angle = Math.PI - angle;
-            console.log("Angle: " + angle);
-            this.getcornerPositions().add(vector.$clone());
-            for (var i = 1; i < Bridge.Linq.Enumerable.from(model.getcorners()).count(); i++) {
-                vector.x += Math.cos(angle * i);
-                vector.y += Math.sin(angle * i);
-                this.getcornerPositions().add(vector.$clone());
-            }
-            this.setcornerPositions(this.getcornerPositions());
-            this.centerAndScale(width, height);
-        },
-        constructor: function (model, cornerPositions, fillStyle, x, y, width, height) {
-            ThreeOneSevenBee.Model.UI.View.prototype.$constructor.call(this, x, y, width, height);
-    
-            this.fillStyle = fillStyle;
-            // Draw model per specifications
-            if (Bridge.Linq.Enumerable.from(model.getcorners()).count() !== Bridge.Linq.Enumerable.from(cornerPositions).count()) {
-                throw new Bridge.ArgumentException("Non-equal amounts of cornerpositions(" + Bridge.Linq.Enumerable.from(cornerPositions).count() + ") and corners(" + Bridge.Linq.Enumerable.from(model.getcorners()).count() + ")!");
-            }
-    
-            this.setcornerPositions(cornerPositions);
-            this.centerAndScale(width, height);
-        },
-        centerAndScale: function (width, height) {
-            var $t;
-            var min = new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", Number.MAX_VALUE, Number.MAX_VALUE);
-            var max = new ThreeOneSevenBee.Model.Euclidean.Vector2("constructor$1", Number.MIN_VALUE, Number.MIN_VALUE);
-            $t = Bridge.getEnumerator(this.getcornerPositions());
-            while ($t.moveNext()) {
-                var corner = $t.getCurrent();
-                if (corner.x < min.x) {
-                    min.x = corner.x;
-                }
-                if (corner.x > max.x) {
-                    max.x = corner.x;
-                }
-                if (corner.y > max.y) {
-                    max.y = corner.y;
-                }
-                if (corner.y < min.y) {
-                    min.y = corner.y;
-                }
-            }
-            max = ThreeOneSevenBee.Model.Euclidean.Vector2.op_Subtraction(max.$clone(), min.$clone());
-            var scale = (max.x - width < max.y - height) ? height / max.y : width / max.x;
-            for (var i = 0; i < Bridge.Linq.Enumerable.from(this.getcornerPositions()).count(); i++) {
-                this.getcornerPositions().setItem(i, ThreeOneSevenBee.Model.Euclidean.Vector2.op_Subtraction(this.getcornerPositions().getItem(i), min.$clone()));
-                this.getcornerPositions().setItem(i, ThreeOneSevenBee.Model.Euclidean.Vector2.op_Multiply$1(this.getcornerPositions().getItem(i), scale)); //  Take the biggest offset and scale accordingly
-            }
-    
-        },
-        drawWithContext: function (context, offsetX, offsetY) {
-    
-        }
-    });
-    
     Bridge.define('ThreeOneSevenBee.Model.UI.SqrtView', {
         inherits: [ThreeOneSevenBee.Model.UI.View],
         config: {
@@ -626,6 +557,15 @@
         }
     });
     
+    /** @namespace ThreeOneSevenBee.Model.UI */
+    
+    /**
+     * Contains the views for the Completionview which is shown when the user have optained all stars in a category.
+     *
+     * @public
+     * @class ThreeOneSevenBee.Model.UI.CategoryCompletionView
+     * @augments ThreeOneSevenBee.Model.UI.CompositeView
+     */
     Bridge.define('ThreeOneSevenBee.Model.UI.CategoryCompletionView', {
         inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
         congratulationView: null,
@@ -746,7 +686,7 @@
         },
         buildView: function (expression, model) {
             var $t, $t1;
-            // TODO: Needs comments.
+            // TODO: Needs comments. Pihl should comment this
             var minusExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
             if (Bridge.hasValue(minusExpression)) {
                 var view = this.buildView(minusExpression.getExpression(), model);
@@ -960,6 +900,13 @@
         }
     });
     
+    /**
+     * GameView is a visual representation of the data in GameModel
+     *
+     * @public
+     * @class ThreeOneSevenBee.Model.UI.GameView
+     * @augments ThreeOneSevenBee.Model.UI.FrameView
+     */
     Bridge.define('ThreeOneSevenBee.Model.UI.GameView', {
         inherits: [ThreeOneSevenBee.Model.UI.FrameView],
         titleView: null,
@@ -975,7 +922,6 @@
         constructor: function (game, width, height) {
             ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
     
-            // TODO: Needs comments.
             this.categoryCompletionView = null;
     
             game.onCategoryCompleted = Bridge.fn.combine(game.onCategoryCompleted, Bridge.fn.bind(this, function (c) {
@@ -1236,6 +1182,12 @@
         }
     });
     
+    /**
+     * Builds a view for selecting levels in the selected category
+     *
+     * @class ThreeOneSevenBee.Model.UI.LevelSelectView
+     * @augments ThreeOneSevenBee.Model.UI.CompositeView
+     */
     Bridge.define('ThreeOneSevenBee.Model.UI.LevelSelectView', {
         inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
         onLevelSelect: null,
@@ -1262,7 +1214,6 @@
             this.build(user);
         },
         build: function (user) {
-            // TODO: Needs comments.
             this.setMenuButton(Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("Menu", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.LevelSelectView.f1)), {
                 setWidth: 75,
                 setHeight: 30,
@@ -1340,9 +1291,18 @@
     
             this.update(user);
         },
+        /**
+         * Updates the view based on the selected category.
+         *
+         * @instance
+         * @public
+         * @this ThreeOneSevenBee.Model.UI.LevelSelectView
+         * @memberof ThreeOneSevenBee.Model.UI.LevelSelectView
+         * @param   {ThreeOneSevenBee.Model.Game.CurrentPlayer}    user
+         * @return  {void}
+         */
         update: function (user) {
             var $t;
-            // TODO: Needs comments.
             this.getCategoryName().setText(user.categories.getItem(this.getCategory()).name);
             this.getArrowLeft().setVisible(this.getCategory() > 0);
             this.getArrowRight().setVisible(this.getCategory() < user.categories.getCount() - 1);
@@ -1357,6 +1317,7 @@
             while ($t.moveNext()) {
                 (function () {
                     var level = $t.getCurrent();
+                    // adds a button for each level in category
                     userStarsInCategory += level.stars;
                     var levelButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(40, 40), {
                         onClick: Bridge.fn.bind(this, function () {
@@ -1366,6 +1327,7 @@
                         setY: Bridge.Int.div(levelNumber, Bridge.Int.trunc(Math.sqrt(numberOfLevels))) * 50 + 5,
                         setBackgroundColor: level.unlocked ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 130, 120) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 190, 190, 190)
                     } );
+                    // gives each levelbutton a level number
                     levelButton.add(Bridge.merge(new ThreeOneSevenBee.Model.UI.LabelView((levelNumber + 1).toString()), {
                         setWidth: levelButton.getWidth(),
                         setHeight: levelButton.getWidth() * 0.75,
@@ -1373,6 +1335,7 @@
                         setTextColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255)
                     } ));
                     var starsize = levelButton.getWidth() * 0.25;
+                    // Centeres the stars horizontally
                     var startPostition = (levelButton.getWidth() - (starsize)) / 2;
                     if (level.stars === 2) {
                         startPostition = levelButton.getWidth() / 2 - starsize;
@@ -1391,7 +1354,7 @@
                     }
                     levelButtons.add(levelButton);
                     levelNumber += 1;
-    
+                    // finds the badge associated with the specific category
                     switch (user.categories.getItem(this.getCategory()).name) {
                         case "Tutorial": 
                             this.getBadgeView().setImage("tutorial_badge.png");
@@ -1414,6 +1377,7 @@
     
                 }).call(this);
             }
+            // shows how many start the user have out of the total amount of start possible
             this.getStarTextView().setText(userStarsInCategory + " / " + totalStars);
             levelButtons.setWidth(Bridge.Int.trunc(Math.sqrt(numberOfLevels)) * 50);
             levelButtons.setHeight(Bridge.Int.div(levelNumber, Bridge.Int.trunc(Math.sqrt(numberOfLevels))) * 50);
@@ -1450,6 +1414,27 @@
         toolTipView: null,
         config: {
             properties: {
+                /**
+                 * Builds the view necessary to play a leve
+                 *
+                 * @instance
+                 * @public
+                 * @this ThreeOneSevenBee.Model.UI.LevelView
+                 * @memberof ThreeOneSevenBee.Model.UI.LevelView
+                 * @function getOnExit
+                 * @return  {System.Action}
+                 */
+                /**
+                 * Builds the view necessary to play a leve
+                 *
+                 * @instance
+                 * @public
+                 * @this ThreeOneSevenBee.Model.UI.LevelView
+                 * @memberof ThreeOneSevenBee.Model.UI.LevelView
+                 * @function setOnExit
+                 * @param   {System.Action}    value
+                 * @return  {void}
+                 */
                 OnExit: null,
                 OnNextLevel: null
             }
@@ -1461,7 +1446,6 @@
             this.build(game);
         },
         build: function (game) {
-            // TODO: Needs comments.
             this.menuButton = Bridge.merge(new ThreeOneSevenBee.Model.UI.ButtonView("Menu", Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.UI.LevelView.f1)), {
                 setWidth: 100,
                 setHeight: 50,
@@ -1581,7 +1565,6 @@
         constructor: function (width, height) {
             ThreeOneSevenBee.Model.UI.FrameView.prototype.$constructor.call(this, width, height);
     
-            // TODO: Needs comments.
             this.setBackgroundColor(new ThreeOneSevenBee.Model.UI.Color("constructor$1", 255, 255, 255));
     
             var username = new ThreeOneSevenBee.Model.UI.Inputbox("constructor", "Username");
@@ -1712,6 +1695,13 @@
         }
     });
     
+    /**
+     * A view of the stars based on a progressbar
+     *
+     * @public
+     * @class ThreeOneSevenBee.Model.UI.ProgressbarStarView
+     * @augments ThreeOneSevenBee.Model.UI.CompositeView
+     */
     Bridge.define('ThreeOneSevenBee.Model.UI.ProgressbarStarView', {
         inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
         progress: null,
@@ -1725,7 +1715,6 @@
         },
         build: function (progressbar) {
             var $t;
-            // TODO: Needs comments.
             this.progress = Bridge.merge(new ThreeOneSevenBee.Model.UI.View(0, 0, Math.min(this.getWidth(), Math.max(0, this.getWidth() * progressbar.getPercentage())), this.getHeight()), {
                 setBackgroundColor: new ThreeOneSevenBee.Model.UI.Color("constructor$1", 40, 175, 100)
             } );
@@ -1918,6 +1907,13 @@
         }
     });
     
+    /**
+     * Class for drawing different tooltips
+     *
+     * @public
+     * @class ThreeOneSevenBee.Model.UI.ToolTipView
+     * @augments ThreeOneSevenBee.Model.UI.CompositeView
+     */
     Bridge.define('ThreeOneSevenBee.Model.UI.ToolTipView', {
         inherits: [ThreeOneSevenBee.Model.UI.CompositeView],
         arrowPosition: 0,
@@ -1931,7 +1927,6 @@
         constructor: function (text, width, height) {
             ThreeOneSevenBee.Model.UI.CompositeView.prototype.$constructor.call(this, width, height);
     
-            // TODO: Needs comments.
             this.setarrow(Bridge.merge(new ThreeOneSevenBee.Model.UI.VectorImageView(0, 0, 20, 11), [
                 [0, 11],
                 [10, 0],
@@ -1995,7 +1990,6 @@
             return this.arrowDirection;
         },
         setArrowDirection: function (value) {
-            // TODO: Needs comments.
             this.arrowDirection = value;
             this.arrowPosition = 0;
             this.getlabelView().setX(0);

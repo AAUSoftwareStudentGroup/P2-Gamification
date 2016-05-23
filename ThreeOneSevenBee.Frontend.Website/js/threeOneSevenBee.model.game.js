@@ -47,7 +47,6 @@
             this.gameAPI.isAuthenticated(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f1));
         },
         loadGameData: function () {
-            // TODO: Needs comments.
             this.gameAPI.getCurrentPlayer(Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f9));
         }
     });
@@ -105,6 +104,7 @@
         f9: function (user) {
             var unlocked = true;
             for (var index = 0; index < user.categories.getCount(); index++) {
+                // Runs through the levels unlocking all levels where the user have optained atleast 1 star
                 for (var i = 0; i < user.categories.getItem(index).getCount(); i++) {
                     user.categories.getItem(index).getItem(i).unlocked = unlocked;
                     if (user.categories.getItem(index).getItem(i).stars === 0 && unlocked === true) {
@@ -115,11 +115,12 @@
                 }
             }
             this.gameAPI.getPlayers(Bridge.fn.bind(this, function (players) {
+                // loads top 7 players for leaderboard
                 var gameModel = Bridge.merge(new ThreeOneSevenBee.Model.Game.GameModel(user, players), {
                     onSaveLevel: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f3),
                     onCategoryCompleted: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f5)
                 } );
-    
+                // Creates the gameview for the user
                 var gameView = Bridge.merge(new ThreeOneSevenBee.Model.UI.GameView(gameModel, this.context.getWidth(), this.context.getHeight()), {
                     setOnExit: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f7),
                     setReloadGame: Bridge.fn.bind(this, $_.ThreeOneSevenBee.Model.Game.Game.f8)
@@ -486,6 +487,15 @@
         }
     });
     
+    /** @namespace ThreeOneSevenBee.Model.Game */
+    
+    /**
+     * A collection of levels for a particular category
+     *
+     * @public
+     * @class ThreeOneSevenBee.Model.Game.LevelCategory
+     * @implements  Bridge.IEnumerable$1
+     */
     Bridge.define('ThreeOneSevenBee.Model.Game.LevelCategory', {
         inherits: [Bridge.IEnumerable$1(ThreeOneSevenBee.Model.Game.Level)],
         statics: {

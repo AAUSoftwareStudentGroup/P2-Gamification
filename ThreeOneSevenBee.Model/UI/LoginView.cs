@@ -17,7 +17,6 @@ namespace ThreeOneSevenBee.Model.UI
 
         public LoginView(double width, double height) : base(width, height)
         {
-            // TODO: Needs comments.
             BackgroundColor = new Color(255, 255, 255);
 
             Inputbox username = new Inputbox("Username");

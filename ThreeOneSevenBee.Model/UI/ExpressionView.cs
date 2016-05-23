@@ -19,7 +19,7 @@ namespace ThreeOneSevenBee.Model.UI
         public Color SelectionTextColor;
         public View BuildView(ExpressionBase expression, ExpressionModel model)
         {
-            // TODO: Needs comments.
+            // TODO: Needs comments. Pihl should comment this
             UnaryMinusExpression minusExpression = expression as UnaryMinusExpression;
             if(minusExpression != null)
             {
