@@ -17,7 +17,7 @@ using Android.Views.InputMethods;
 
 namespace ThreeOneSevenBee.AndroidFrontend
 {
-    [Activity(Label = "A317b Webmat", WindowSoftInputMode = SoftInput.AdjustResize, MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "A317b Webmat", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation, WindowSoftInputMode = SoftInput.AdjustResize, MainLauncher = true, Icon = "@drawable/master_of_algebrabadge", ScreenOrientation = Android.Content.PM.ScreenOrientation.Landscape)]
     public class MainActivity : Activity
     {
         protected override void OnCreate(Bundle bundle)
