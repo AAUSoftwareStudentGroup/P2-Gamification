@@ -686,30 +686,38 @@
         },
         buildView: function (expression, model) {
             var $t, $t1;
-            // TODO: Needs comments. Pihl should comment this
+            // Find the type of the root of the expression-tree
+    
+            // Only the first case is commented fully. The rest is only commented if they do something special
+            // To check if the root is a type, we try to cast it and check if its null
             var minusExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
             if (Bridge.hasValue(minusExpression)) {
-                var view = this.buildView(minusExpression.getExpression(), model);
-                view.setBackgroundColor(model.getSelected() === expression ? this.selectionBackgroundColor : new ThreeOneSevenBee.Model.UI.Color("constructor"));
-                var operatorView = new ThreeOneSevenBee.Model.UI.OperatorView(minusExpression.getType());
-                operatorView.setWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
+                var view = this.buildView(minusExpression.getExpression(), model); // Call BuildView recursively with next level of expression
+                view.setBackgroundColor(model.getSelected() === expression ? this.selectionBackgroundColor : new ThreeOneSevenBee.Model.UI.Color("constructor")); // set backgoundcolor
+    
+                var operatorView = new ThreeOneSevenBee.Model.UI.OperatorView(minusExpression.getType()); // Instantiate a operatorView with a minus, to be rendered to screen
+                operatorView.setWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2); // Position and size after preset constants
                 operatorView.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE);
                 operatorView.setBaseline(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
                 operatorView.onClick = function () {
                     model.select(minusExpression);
-                };
+                }; // When minus is clicked, select it
                 operatorView.setLineColor(expression.getSelected() ? new ThreeOneSevenBee.Model.UI.Color("constructor$1", 39, 174, 97) : new ThreeOneSevenBee.Model.UI.Color("constructor$1", 0, 0, 0));
                 operatorView.setLineWidth(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 15);
-                view.setX(operatorView.getWidth());
+    
+                view.setX(operatorView.getWidth()); // Put rest of expression on the right of the minus
                 operatorView.setY(view.getBaseline() - operatorView.getBaseline());
+    
                 var minusView = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(operatorView.getWidth() + view.getWidth(), view.getHeight()), [
                     [operatorView],
                     [view]
-                ] );
-                minusView.setBaseline(view.getBaseline());
-                minusView.setBackgroundColor(model.getSelected() === expression ? this.selectionBackgroundColor : new ThreeOneSevenBee.Model.UI.Color("constructor"));
+                ] ); // Join the minus and the rest of the expressionView
+                minusView.setBaseline(view.getBaseline()); // Minus has same baseline as the rest
+                minusView.setBackgroundColor(model.getSelected() === expression ? this.selectionBackgroundColor : new ThreeOneSevenBee.Model.UI.Color("constructor")); // If minus is selected it has another backgroundcolor
+    
                 return minusView;
             }
+    
             var operatorExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.BinaryOperatorExpression);
             if (Bridge.hasValue(operatorExpression)) {
                 var left = this.buildView(operatorExpression.getLeft(), model);
@@ -717,6 +725,7 @@
                 var operatorView1 = new ThreeOneSevenBee.Model.UI.OperatorView(operatorExpression.getType());
                 switch (operatorExpression.getType()) {
                     case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.divide: 
+                        // Divide needs to place right under left and put a line between.
                         var width = Math.max(left.getWidth(), right.getWidth()) + Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE;
                         operatorView1.setWidth(width);
                         operatorView1.setHeight(Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 1.5);
@@ -739,8 +748,9 @@
                         fraction.setBackgroundColor(model.getSelected() === expression ? this.selectionBackgroundColor : new ThreeOneSevenBee.Model.UI.Color("constructor"));
                         return fraction;
                     case ThreeOneSevenBee.Model.Expression.Expressions.OperatorType.power: 
+                        // Power lifts right a bit
                         right.setX(left.getWidth());
-                        left.setY(right.getHeight() - Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2);
+                        left.setY(right.getHeight() - Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2); // Lift right
                         var exponent = Bridge.merge(new ThreeOneSevenBee.Model.UI.CompositeView(right.getX() + right.getWidth(), left.getY() + left.getHeight()), [
                             [left],
                             [right]
@@ -756,6 +766,7 @@
                 var offsetX = 0;
                 var height = 0;
                 var maxBaseline = Bridge.get(ThreeOneSevenBee.Model.UI.ExpressionView).nUMVAR_SIZE / 2;
+                // Variadic may have more than 2 "sides"
                 $t = Bridge.getEnumerator(variadicExpression);
                 while ($t.moveNext()) {
                     (function () {
@@ -810,6 +821,7 @@
                     setBaseline: maxBaseline
                 } );
             }
+            // TODO: Comment this
             var delimiterExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.DelimiterExpression);
             if (Bridge.hasValue(delimiterExpression)) {
                 var view2 = this.buildView(delimiterExpression.getExpression(), model);
@@ -844,6 +856,7 @@
                 compositeView.setBackgroundColor(model.getSelected() === expression ? this.selectionBackgroundColor : new ThreeOneSevenBee.Model.UI.Color("constructor"));
                 return compositeView;
             }
+            // TODO: Comment this
             var functionExpression = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.FunctionExpression);
             if (Bridge.hasValue(functionExpression) && functionExpression.getFunction() === "sqrt") {
                 var view3 = this.buildView(functionExpression.getExpression(), model);
