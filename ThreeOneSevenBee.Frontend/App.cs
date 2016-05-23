@@ -4,7 +4,6 @@ using ThreeOneSevenBee.Model;
 using ThreeOneSevenBee.Model.UI;
 using ThreeOneSevenBee.Model.Expression;
 using ThreeOneSevenBee.Model.Expression.ExpressionRules;
-using ThreeOneSevenBee.Model.Geometry;
 using System.Collections.Generic;
 using ThreeOneSevenBee.Model.Euclidean;
 using ThreeOneSevenBee.Model.Game;

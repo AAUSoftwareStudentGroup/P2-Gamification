@@ -17,15 +17,9 @@ using Android.Views.InputMethods;
 
 namespace ThreeOneSevenBee.AndroidFrontend
 {
-    [Activity(Label = "ThreeOneSevenBee.AndroidFrontend", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "A317b Webmat", WindowSoftInputMode = SoftInput.AdjustResize, MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
-        public override bool OnKeyDown([GeneratedEnum] Keycode keyCode, KeyEvent e)
-        {
-            Console.WriteLine("wat");
-            return base.OnKeyDown(keyCode, e);
-        }
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);

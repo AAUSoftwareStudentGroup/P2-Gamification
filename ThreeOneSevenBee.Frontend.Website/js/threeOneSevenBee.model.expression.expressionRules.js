@@ -233,10 +233,10 @@
                             nonSelectedProductOperands = Bridge.Linq.Enumerable.from(product).where($_.ThreeOneSevenBee.Model.Expression.ExpressionRules.Rules.f3).toList(ThreeOneSevenBee.Model.Expression.ExpressionBase);
                         }
                         var allEqual = true;
-                        //Determine if all selected operands of the product are equal to the commen product operands.
+                        //Determine if all selected operands of the product are equal and in same order to the commen product operands.
                         if (commonProductOperands.getCount() === 0 || commonProductOperands.getCount() === selectedProductOperands.getCount()) {
                             for (var index = 0; index < commonProductOperands.getCount(); index++) {
-                                if (selectedProductOperands.contains(commonProductOperands.getItem(index))) {
+                                if (ThreeOneSevenBee.Model.Expression.ExpressionBase.op_Inequality(commonProductOperands.getItem(index), selectedProductOperands.getItem(index))) {
                                     allEqual = false;
                                 }
                             }

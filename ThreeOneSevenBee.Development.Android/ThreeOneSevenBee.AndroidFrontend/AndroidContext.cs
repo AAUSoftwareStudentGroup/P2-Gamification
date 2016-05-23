@@ -70,6 +70,12 @@ namespace ThreeOneSevenBee.AndroidFrontend
             };
         }
 
+        public override IInputConnection OnCreateInputConnection(EditorInfo outAttrs)
+        {
+            outAttrs.ImeOptions = ImeFlags.NoExtractUi;
+            return base.OnCreateInputConnection(outAttrs);
+        }
+
         public override bool OnTouchEvent(A.MotionEvent e)
         {
             contentView.Click(e.GetX(), e.GetY(), this);
