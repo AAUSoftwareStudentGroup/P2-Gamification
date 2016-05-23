@@ -557,7 +557,7 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
             return null;
         }
 
-        //
+        //(a^n)^m = a^{n*m}
         public static ExpressionBase ParenthesisPowerRule(ExpressionBase expression, List<ExpressionBase> selection)
         {
             //If expression is a power
