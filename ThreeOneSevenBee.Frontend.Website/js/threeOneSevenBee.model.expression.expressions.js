@@ -865,19 +865,12 @@
         },
         getSize: function () {
             var $t;
-            // Count-1 gets all operators in the variadic expression
+            // Count-1 gets number of operators in the variadic expression
             var result = (this.getCount() - 1);
             $t = Bridge.getEnumerator(this);
             while ($t.moveNext()) {
                 var expression = $t.getCurrent();
-                // Cast to get what is behind the unaryminus
-                var minus = Bridge.as(expression, ThreeOneSevenBee.Model.Expression.Expressions.UnaryMinusExpression);
-                if (Bridge.hasValue(minus)) {
-                    result += minus.getExpression().getSize();
-                }
-                else  {
-                    result += expression.getSize();
-                }
+                result += expression.getSize();
             }
             return result;
         },

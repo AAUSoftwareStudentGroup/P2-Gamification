@@ -294,12 +294,12 @@ namespace ThreeOneSevenBee.Model.Expression.ExpressionRules
                         nonSelectedProductOperands = product.Where((o) => o.Selected == false && o.GetNodesRecursive().Any((n) => n.Selected) == false).ToList();
                     }
                     bool allEqual = true;
-                    //Determine if all selected operands of the product are equal to the commen product operands.
+                    //Determine if all selected operands of the product are equal and in same order to the commen product operands.
                     if (commonProductOperands.Count == 0 || commonProductOperands.Count == selectedProductOperands.Count)
                     {
                         for (int index = 0; index < commonProductOperands.Count; index++)
                         {
-                            if (selectedProductOperands.Contains(commonProductOperands[index]))
+                            if (commonProductOperands[index] != selectedProductOperands[index])
                             {
                                 allEqual = false;
                             }
