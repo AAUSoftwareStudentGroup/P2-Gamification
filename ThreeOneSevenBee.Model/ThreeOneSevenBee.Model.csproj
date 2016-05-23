@@ -76,10 +76,6 @@
     <Compile Include="Game\LevelCategory.cs" />
     <Compile Include="Game\Player.cs" />
     <Compile Include="Game\ProgressbarStar.cs" />
-    <Compile Include="Polygon\PolygonCorner.cs" />
-    <Compile Include="Polygon\PolygonModel.cs" />
-    <Compile Include="Polygon\PolygonRelation.cs" />
-    <Compile Include="Polygon\PolygonSide.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\ButtonView.cs" />
@@ -99,7 +95,6 @@
     <Compile Include="UI\OperatorView.cs" />
     <Compile Include="UI\ParenthesisView.cs" />
     <Compile Include="UI\PlayerListView.cs" />
-    <Compile Include="UI\PolygonView.cs" />
     <Compile Include="UI\ProgressbarCircle.cs" />
     <Compile Include="UI\ProgressbarStarView.cs" />
     <Compile Include="UI\SqrtView.cs" />
