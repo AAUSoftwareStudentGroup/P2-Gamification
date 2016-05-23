@@ -62,12 +62,12 @@ namespace ThreeOneSevenBee.Model.Game
 
         private void loadGameData()
         {
-            // TODO: Needs comments.
             gameAPI.GetCurrentPlayer((user) =>
             {
                 bool unlocked = true;
                 for (int index = 0; index < user.Categories.Count; index++)
                 {
+                    // Runs through the levels unlocking all levels where the user have optained atleast 1 star
                     for (int i = 0; i < user.Categories[index].Count; i++)
                     {
                         user.Categories[index][i].Unlocked = unlocked;
@@ -81,6 +81,7 @@ namespace ThreeOneSevenBee.Model.Game
                 }
                 gameAPI.GetPlayers((players) =>
                 {
+                    // loads top 7 players for leaderboard
                     GameModel gameModel = new GameModel(user, players)
                     {
                         OnSaveLevel = (level) =>
@@ -102,7 +103,7 @@ namespace ThreeOneSevenBee.Model.Game
                                 (IsAdded) => Console.WriteLine(IsAdded ? "Badge added" : "Badge not added")
                             )
                     };
-
+                    // Creates the gameview for the user
                     GameView gameView = new GameView(gameModel, context.Width, context.Height)
                     {
                         OnExit = () =>

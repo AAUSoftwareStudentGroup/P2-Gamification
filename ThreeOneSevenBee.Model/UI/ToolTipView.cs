@@ -6,6 +6,9 @@ using ThreeOneSevenBee.Model.Euclidean;
 
 namespace ThreeOneSevenBee.Model.UI
 {
+    /// <summary>
+    /// Class for drawing different tooltips
+    /// </summary>
     public class ToolTipView : CompositeView
     {
         public Color BoxColor
@@ -83,7 +86,6 @@ namespace ThreeOneSevenBee.Model.UI
 
         public ToolTipView(string text, double width, double height) : base(width, height)
         {
-            // TODO: Needs comments.
             arrow = new VectorImageView(0, 0, 20, 11)
             {
                 { 0, 11 },
@@ -114,7 +116,6 @@ namespace ThreeOneSevenBee.Model.UI
             }
             set
             {
-                // TODO: Needs comments.
                 arrowDirection = value;
                 arrowPosition = 0;
                 labelView.X = 0;

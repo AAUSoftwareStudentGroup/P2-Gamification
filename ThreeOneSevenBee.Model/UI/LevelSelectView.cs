@@ -10,6 +10,9 @@ using Bridge.Html5;
 
 namespace ThreeOneSevenBee.Model.UI
 {
+    /// <summary>
+    /// Builds a view for selecting levels in the selected category
+    /// </summary>
     class LevelSelectView : CompositeView
     {
         public Action<Level> OnLevelSelect;
@@ -38,7 +41,6 @@ namespace ThreeOneSevenBee.Model.UI
 
         public void Build(CurrentPlayer user)
         {
-            // TODO: Needs comments.
             MenuButton = new ButtonView("Menu", () => { if (OnExit != null) { OnExit(); } })
             {
                 Width = 75,
@@ -134,10 +136,12 @@ namespace ThreeOneSevenBee.Model.UI
 
             Update(user);
         }
-
+        /// <summary>
+        /// Updates the view based on the selected category. 
+        /// </summary>
+        /// <param name="user"></param>
         public void Update(CurrentPlayer user)
         {
-            // TODO: Needs comments.
             CategoryName.Text = user.Categories[Category].Name;
             ArrowLeft.Visible = Category > 0;
             ArrowRight.Visible = Category < user.Categories.Count - 1;
@@ -150,6 +154,7 @@ namespace ThreeOneSevenBee.Model.UI
             int numberOfLevels = user.Categories[Category].Count;
             foreach (Level level in user.Categories[Category])
             {
+                // adds a button for each level in category
                 userStarsInCategory += level.Stars;
                 CompositeView levelButton = new CompositeView(40, 40)
                 {   OnClick = () => OnLevelSelect(level),
@@ -157,6 +162,7 @@ namespace ThreeOneSevenBee.Model.UI
                     Y = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50 + 5,
                     BackgroundColor = level.Unlocked ? new Color(40, 130, 120) : new Color(190, 190, 190) 
                 };
+                // gives each levelbutton a level number
                 levelButton.Add(
                     new LabelView((levelNumber + 1).ToString())
                     {
@@ -166,6 +172,7 @@ namespace ThreeOneSevenBee.Model.UI
                         TextColor = new Color(255, 255, 255),
                     });
                 double starsize = levelButton.Width * 0.25;
+                // Centeres the stars horizontally
                 double startPostition = (levelButton.Width - (starsize)) / 2;
                 if (level.Stars == 2)
                 {
@@ -186,7 +193,7 @@ namespace ThreeOneSevenBee.Model.UI
                 }
                 levelButtons.Add(levelButton);
                 levelNumber += 1;
-
+                // finds the badge associated with the specific category
                 switch (user.Categories[Category].Name)
                 {
                     case "Tutorial":
@@ -213,6 +220,7 @@ namespace ThreeOneSevenBee.Model.UI
                 }
 
             }
+            // shows how many start the user have out of the total amount of start possible
             StarTextView.Text = userStarsInCategory + " / " + totalStars;
             levelButtons.Width = (int)Math.Sqrt(numberOfLevels) * 50;
             levelButtons.Height = levelNumber / (int)Math.Sqrt(numberOfLevels) * 50;

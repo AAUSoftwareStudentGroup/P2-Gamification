@@ -7,6 +7,9 @@ using ThreeOneSevenBee.Model.Game;
 
 namespace ThreeOneSevenBee.Model.UI
 {
+    /// <summary>
+    /// A view of the stars based on a progressbar
+    /// </summary>
     public class ProgressbarStarView : CompositeView
     {
         View progress;
@@ -14,7 +17,6 @@ namespace ThreeOneSevenBee.Model.UI
 
         public void Build(ProgressbarStar progressbar)
         {
-            // TODO: Needs comments.
             progress = new View(0, 0, Math.Min(Width, Math.Max(0, Width * progressbar.Percentage)), Height) { BackgroundColor = new Color(40, 175, 100) };
             stars = new List<ImageView>();
             stars.AddRange(progressbar.ActivatedStarPercentages().Select(

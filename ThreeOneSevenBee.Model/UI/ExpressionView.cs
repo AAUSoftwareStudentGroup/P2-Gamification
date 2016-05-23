@@ -19,35 +19,44 @@ namespace ThreeOneSevenBee.Model.UI
         public Color SelectionTextColor;
         public View BuildView(ExpressionBase expression, ExpressionModel model)
         {
-            // TODO: Needs comments.
+			// Find the type of the root of the expression-tree
+
+			// Only the first case is commented fully. The rest is only commented if they do something special
+			// To check if the root is a type, we try to cast it and check if its null
             UnaryMinusExpression minusExpression = expression as UnaryMinusExpression;
-            if(minusExpression != null)
+            if(minusExpression != null) // Root is minus-expression
             {
-                View view = BuildView(minusExpression.Expression, model);
-                view.BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color(); 
-                OperatorView operatorView = new OperatorView(minusExpression.Type);
-                operatorView.Width = NUMVAR_SIZE / 2;
+                View view = BuildView(minusExpression.Expression, model); // Call BuildView recursively with next level of expression
+                view.BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color();  // set backgoundcolor
+                
+				OperatorView operatorView = new OperatorView(minusExpression.Type); // Instantiate a operatorView with a minus, to be rendered to screen
+                operatorView.Width = NUMVAR_SIZE / 2; // Position and size after preset constants
                 operatorView.Height = NUMVAR_SIZE;
                 operatorView.Baseline = NUMVAR_SIZE / 2;
-                operatorView.OnClick = () => model.Select(minusExpression);
+                operatorView.OnClick = () => model.Select(minusExpression); // When minus is clicked, select it
                 operatorView.LineColor = expression.Selected ? new Color(39, 174, 97) : new Color(0, 0, 0);
                 operatorView.LineWidth = NUMVAR_SIZE / 15;
-                view.X = operatorView.Width;
+
+                view.X = operatorView.Width; // Put rest of expression on the right of the minus
                 operatorView.Y = view.Baseline - operatorView.Baseline;
-                View minusView = new CompositeView(operatorView.Width + view.Width, view.Height) { operatorView, view };
-                minusView.Baseline = view.Baseline;
-                minusView.BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color();
-                return minusView;
+                
+				View minusView = new CompositeView(operatorView.Width + view.Width, view.Height) { operatorView, view }; // Join the minus and the rest of the expressionView
+                minusView.Baseline = view.Baseline; // Minus has same baseline as the rest
+                minusView.BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color(); // If minus is selected it has another backgroundcolor
+                
+				return minusView;
             }
+
             BinaryOperatorExpression operatorExpression = expression as BinaryOperatorExpression;
             if (operatorExpression != null)
             {
                 View left = BuildView(operatorExpression.Left, model);
                 View right = BuildView(operatorExpression.Right, model);
                 OperatorView operatorView = new OperatorView(operatorExpression.Type);
-                switch (operatorExpression.Type)
+                switch (operatorExpression.Type) //Switch on the type of operator
                 {
                     case OperatorType.Divide:
+					    // Divide needs to place right under left and put a line between.
                         double width = System.Math.Max(left.Width, right.Width) + NUMVAR_SIZE;
                         operatorView.Width = width;
                         operatorView.Height = NUMVAR_SIZE / 1.5;
@@ -56,9 +65,11 @@ namespace ThreeOneSevenBee.Model.UI
                         operatorView.OnClick = () => model.Select(expression);
                         operatorView.LineWidth = NUMVAR_SIZE / 12;
                         operatorView.LineColor = expression.Selected ? new Color(39, 174, 97) : new Color(0, 0, 0);
-                        right.Y = left.Height + operatorView.Height;
+                        
+					    right.Y = left.Height + operatorView.Height;
                         left.X = (width - left.Width) / 2;
                         right.X = (width - right.Width) / 2;
+
                         CompositeView fraction = new CompositeView(width, left.Height + operatorView.Height + right.Height)
                         {
                             left,
@@ -69,8 +80,9 @@ namespace ThreeOneSevenBee.Model.UI
                         fraction.BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color();
                         return fraction;
                     case OperatorType.Power:
+						// Power lifts right a bit
                         right.X = left.Width;
-                        left.Y = right.Height - NUMVAR_SIZE / 2;
+                        left.Y = right.Height - NUMVAR_SIZE / 2; // Lift right
                         CompositeView exponent = new CompositeView(right.X + right.Width, left.Y + left.Height)
                         {
                             left,
@@ -88,6 +100,7 @@ namespace ThreeOneSevenBee.Model.UI
                 double offsetX = 0;
                 double height = 0;
                 double maxBaseline = NUMVAR_SIZE / 2;
+				// Variadic may have more than 2 "sides"
                 foreach (ExpressionBase expr in variadicExpression)
                 {
                     View operand;
@@ -131,13 +144,14 @@ namespace ThreeOneSevenBee.Model.UI
                     offsetX += operand.Width;
                     views.Add(operand);
                 }
-                foreach (View view in views)
+                foreach (View view in views) // Join all the views
                 {
                     view.Y = maxBaseline - view.Baseline;
                     height = System.Math.Max(height, view.Y + view.Height);
                 }
                 return new CompositeView(offsetX, height) { Children = views, Baseline = maxBaseline };
             }
+			// TODO: Comment this
             DelimiterExpression delimiterExpression = expression as DelimiterExpression;
             if(delimiterExpression != null)
             {
@@ -160,7 +174,8 @@ namespace ThreeOneSevenBee.Model.UI
                 compositeView.Baseline = view.Y + view.Baseline;
                 compositeView.BackgroundColor = ReferenceEquals(model.Selected, expression) ? SelectionBackgroundColor : new Color();
                 return compositeView;
-            }
+			}
+			// TODO: Comment this
             FunctionExpression functionExpression = expression as FunctionExpression;
             if(functionExpression != null && functionExpression.Function == "sqrt")
             {

@@ -6,6 +6,9 @@ using ThreeOneSevenBee.Model.Game;
 
 namespace ThreeOneSevenBee.Model.UI
 {
+    /// <summary>
+    /// Contains the views for the Completionview which is shown when the user have optained all stars in a category.
+    /// </summary>
     public class CategoryCompletionView : CompositeView
     {
         public LevelCategory Category { get; private set; }
@@ -28,7 +31,6 @@ namespace ThreeOneSevenBee.Model.UI
             Build();
         }
 
-        // TODO: Needs comments?
         public void Build()
         {
             int offSetY = 5;

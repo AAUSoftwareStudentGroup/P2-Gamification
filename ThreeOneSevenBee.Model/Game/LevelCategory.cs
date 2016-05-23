@@ -9,9 +9,12 @@ using Bridge.Html5;
 
 namespace ThreeOneSevenBee.Model.Game
 {
-    // TODO: Needs comments.
+    /// <summary>
+    ///  A collection of levels for a particular category
+    /// </summary>
     public class LevelCategory : IEnumerable<Level>
     {
+        // dictionary for mapping names to badges
         public static Dictionary<string, BadgeName> CategoryBadges = new Dictionary<string, BadgeName>()
         {
             { "Tutorial", BadgeName.tutorialBadge },
@@ -28,6 +31,7 @@ namespace ThreeOneSevenBee.Model.Game
             }
         }
         public string Name;
+        // each category contains a specific badge
         public BadgeName Badge
         {
             get
@@ -36,6 +40,7 @@ namespace ThreeOneSevenBee.Model.Game
             }
         }
         public int categoryIndex;
+
         public int CategoryIndex {
             get
             { return categoryIndex; }
